@@ -35,7 +35,7 @@ export default function SiteHeader() {
             </Link>
           </div>
 
-          <nav className="mt-2 flex items-center justify-center gap-8 text-[18px] font-bold tracking-wide text-[var(--brand-gold)] sm:text-[20px]">
+          <nav className="mt-2 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[17px] font-bold tracking-wide text-[var(--brand-gold)] sm:gap-x-8 sm:text-[20px]">
             <Link className="hover:opacity-90" href="/recipes">
               Recipes
             </Link>
@@ -51,6 +51,12 @@ export default function SiteHeader() {
             <Link className="hover:opacity-90" href="/contact">
               Contact
             </Link>
+            <a
+              href="https://vegan-masala.kit.com/7271084c33?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=header"
+              className="rounded-xl bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white shadow transition hover:-translate-y-0.5 hover:opacity-95 sm:text-base"
+            >
+              Free Dinner Plan
+            </a>
           </nav>
         </div>
       </div>
