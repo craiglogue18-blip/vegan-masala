@@ -6,6 +6,7 @@ import Link from "next/link";
 import localFont from "next/font/local";
 
 import SiteHeader from "@/components/SiteHeader";
+import AdSenseScript from "@/components/AdSenseScript";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -195,6 +196,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${rajdhani.variable} scroll-pt-[140px]`}>
       <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+        <AdSenseScript />
         <div className="relative min-h-screen">
           <div
             aria-hidden="true"

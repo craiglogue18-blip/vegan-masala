@@ -12,7 +12,7 @@ export default function CookiesPage() {
       </h1>
 
       <p className="mt-6 text-[var(--text-soft)] leading-7">
-        Last updated: {new Date().toLocaleDateString()}
+        Last updated: 18 August 2026
       </p>
 
       <section className="mt-10 space-y-6 text-[var(--text-soft)] leading-7">
@@ -70,6 +70,19 @@ export default function CookiesPage() {
               choices) to improve your experience.
             </p>
           </div>
+
+          <div>
+            <h3 className="font-extrabold text-[var(--brand-gold)]">
+              Advertising cookies (optional)
+            </h3>
+            <p className="mt-2">
+              Following approval, Google AdSense and its partners may use cookies or
+              similar technologies to deliver and measure adverts, prevent fraud and
+              limit how often an advert is shown. With your permission, these may also
+              be used to personalise advertising. If you decline, eligible adverts may
+              be non-personalised or limited.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -86,6 +99,12 @@ export default function CookiesPage() {
           <p>
             Blocking some cookies may impact your experience and parts of the site
             may not function as intended.
+          </p>
+          <p>
+            Visitors shown our consent message can choose “Consent”, “Do not consent”
+            or “Manage options”. You can change your decision later through the site&apos;s
+            privacy controls. Browser controls can also block or delete cookies, but
+            they do not replace choices made through the consent message.
           </p>
         </div>
       </section>
