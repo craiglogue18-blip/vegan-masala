@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { recipeEditorialCopy } from "@/lib/recipeEditorial";
 
 export const RECIPES_DIR = path.join(process.cwd(), "content", "recipes");
 
@@ -174,6 +175,12 @@ function buildRecipeFromFile(file: string): Recipe | null {
     raw,
     content,
   };
+
+  const editorialCopy = recipeEditorialCopy[slug];
+  if (editorialCopy) {
+    recipe.description = editorialCopy.description;
+    if (editorialCopy.introNote) recipe.introNote = editorialCopy.introNote;
+  }
 
   recipe.ingredientsMarkdown = extractSection(content, [
     "Ingredients",
