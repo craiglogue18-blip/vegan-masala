@@ -37,6 +37,9 @@ function GuideImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+const amazonSearch = (query: string) =>
+  `https://www.amazon.co.uk/s?k=${encodeURIComponent(query)}&tag=veganmasala03-21`;
+
 const equipment = [
   {
     name: "Tadka pan (tempering pan)",
@@ -44,6 +47,7 @@ const equipment = [
     alt: "Small tadka pan for tempering spices in oil",
     why: "Perfect for blooming spices in oil (tadka) and pouring over dal, chana, and curries.",
     tip: "Keep it small — spices bloom fast and can burn.",
+    shopQuery: "Indian tadka tempering pan",
   },
   {
     name: "Kadai / Karahi (wok-like pan)",
@@ -51,6 +55,7 @@ const equipment = [
     alt: "Kadai (karahi) pan",
     why: "Great for stir-frying, bhaji-style dishes, and quick curries.",
     tip: "Hot pan + quick movement = better flavour and texture.",
+    shopQuery: "Indian kadai karahi pan",
   },
   {
     name: "Tawa (flat griddle)",
@@ -58,6 +63,7 @@ const equipment = [
     alt: "Tawa for cooking rotis and flatbreads",
     why: "Essential for rotis, chapatis, parathas, and toasting spices.",
     tip: "Heat until a sprinkle of water dances; don’t oil for chapati.",
+    shopQuery: "cast iron tawa chapati pan",
   },
   {
     name: "Heavy-bottom pot / Dutch oven",
@@ -65,6 +71,7 @@ const equipment = [
     alt: "Heavy-bottom pot or Dutch oven on a stovetop",
     why: "Best for curries and dals: even heat prevents sticking and scorching.",
     tip: "Use medium heat and stir after adding tomatoes or purées.",
+    shopQuery: "heavy bottom casserole pot",
   },
   {
     name: "Pressure cooker / Instant Pot",
@@ -72,6 +79,7 @@ const equipment = [
     alt: "Pressure cooker used for lentils and beans",
     why: "Speeds up lentils, chickpeas, and beans — weeknight game-changer.",
     tip: "Finish with tadka for best flavour.",
+    shopQuery: "electric pressure cooker Instant Pot",
   },
   {
     name: "Spice grinder / coffee grinder",
@@ -79,6 +87,7 @@ const equipment = [
     alt: "Spice grinder with whole spices",
     why: "Fresh-ground spices taste dramatically better (cumin, coriander, pepper).",
     tip: "Grind small batches and keep in a sealed jar.",
+    shopQuery: "electric spice grinder",
   },
   {
     name: "Mortar & pestle",
@@ -86,6 +95,7 @@ const equipment = [
     alt: "Mortar and pestle for crushing spices",
     why: "Crush ginger/garlic, chilli, and whole spices for pastes and marinades.",
     tip: "A rough paste is often better than perfectly smooth.",
+    shopQuery: "granite mortar and pestle",
   },
   {
     name: "Fine mesh strainer (sieve)",
@@ -93,6 +103,7 @@ const equipment = [
     alt: "Fine mesh sieve",
     why: "Great for rinsing lentils and straining chai or stocks.",
     tip: "Rinse lentils until water runs clearer for cleaner flavour.",
+    shopQuery: "fine mesh kitchen sieve",
   },
   {
     name: "Wooden spoon",
@@ -100,6 +111,7 @@ const equipment = [
     alt: "Wooden spoon for stirring curries",
     why: "Simple but essential — great for stirring without scratching pans.",
     tip: "Stir after adding tomatoes to prevent catching at the bottom.",
+    shopQuery: "wooden cooking spoon",
   },
 ];
 
@@ -140,6 +152,13 @@ export default function EquipmentGuidePage() {
           Start with a heavy pot, a good pan, and one way to grind spices. Add a pressure cooker later if you want speed.
         </p>
 
+        <div className="mt-5 max-w-3xl rounded-2xl border border-[var(--brand-gold)]/35 bg-[var(--surface)] px-5 py-4 text-sm leading-6 text-[var(--brand-ink)]/75">
+          <span className="font-bold text-[var(--brand-ink)]">Affiliate disclosure:</span>{" "}
+          The Amazon links below are paid links. If you make a qualifying purchase,
+          Vegan Masala may earn a commission at no extra cost to you. The links open
+          useful search results rather than claiming one untested product is best.
+        </div>
+
         <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {equipment.map((e) => (
             <article
@@ -158,6 +177,15 @@ export default function EquipmentGuidePage() {
                 <p className="mt-3 text-sm text-[var(--brand-ink)]/70">
                   <span className="font-medium text-[var(--brand-ink)]">Tip:</span> {e.tip}
                 </p>
+                <a
+                  href={amazonSearch(e.shopQuery)}
+                  target="_blank"
+                  rel="sponsored nofollow noopener noreferrer"
+                  className="mt-5 inline-flex rounded-xl bg-[var(--brand-teal)] px-4 py-2 text-sm font-bold text-white transition hover:opacity-90"
+                  aria-label={`Browse ${e.name} on Amazon UK — paid link`}
+                >
+                  Browse on Amazon UK <span className="ml-1 font-normal">(paid link)</span>
+                </a>
               </div>
             </article>
           ))}

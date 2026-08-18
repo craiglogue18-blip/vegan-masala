@@ -121,6 +121,11 @@ function SiteFooter() {
                     Contact
                   </Link>
                 </li>
+                <li>
+                  <Link href="/affiliate-disclosure" className="hover:text-[var(--brand-gold)]">
+                    Affiliate Disclosure
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -185,7 +190,8 @@ function SiteFooter() {
         </div>
 
         <div className="mt-10 border-t border-[var(--border)] pt-6 text-xs text-[var(--text-soft)]/70">
-          © {new Date().getFullYear()} Vegan Masala • Cooked with ♥ • Vegan-Masala.com
+          <p>© {new Date().getFullYear()} Vegan Masala • Cooked with ♥ • Vegan-Masala.com</p>
+          <p className="mt-2">As an Amazon Associate I earn from qualifying purchases.</p>
         </div>
       </div>
     </footer>
