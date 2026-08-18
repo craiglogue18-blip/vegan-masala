@@ -134,7 +134,7 @@ export async function GET() {
   try {
     return NextResponse.json({
       ok: true,
-      items: allQueueItems(),
+      items: await allQueueItems(),
     });
   } catch (err: any) {
     return NextResponse.json(
@@ -334,7 +334,7 @@ export async function POST(req: Request) {
     const normalizedVideoUrl = preflight.normalized.videoUrl || undefined;
     const normalizedBoard = preflight.normalized.board || null;
 
-    const item = addQueueItem({
+    const item = await addQueueItem({
       slug,
       title,
       platform,
@@ -377,7 +377,7 @@ export async function PATCH(req: Request) {
       );
     }
 
-    const existing = findQueueItemById(id);
+    const existing = await findQueueItemById(id);
 
     if (!existing) {
       return NextResponse.json(
@@ -387,17 +387,17 @@ export async function PATCH(req: Request) {
     }
 
     if (action === "delete") {
-      deleteQueueItem(id);
+      await deleteQueueItem(id);
       return NextResponse.json({ ok: true, message: "Queue item removed" });
     }
 
     if (action === "retry") {
-      retryQueueItem(id);
+      await retryQueueItem(id);
       return NextResponse.json({ ok: true, message: "Failed item moved back to queued" });
     }
 
     if (action === "post-now") {
-      rescheduleQueueItemNow(id);
+      await rescheduleQueueItemNow(id);
       return NextResponse.json({
         ok: true,
         message: "Queue item rescheduled for immediate posting",
@@ -428,13 +428,13 @@ export async function DELETE(req: Request) {
     }
 
     if (id) {
-      deleteQueueItem(id);
+      await deleteQueueItem(id);
       return NextResponse.json({ ok: true, message: "Queue item removed" });
     }
 
-    const items = allQueueItems();
+    const items = await allQueueItems();
     for (const item of items) {
-      deleteQueueItem(item.id);
+      await deleteQueueItem(item.id);
     }
 
     return NextResponse.json({ ok: true, message: "Queue cleared" });

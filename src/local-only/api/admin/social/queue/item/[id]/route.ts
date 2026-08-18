@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const item = findQueueItemById(id);
+    const item = await findQueueItemById(id);
 
     if (!item) {
       return NextResponse.json(
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     }
 
     if (action === "delete") {
-      deleteQueueItem(id);
+      await deleteQueueItem(id);
 
       return NextResponse.json({
         ok: true,
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     }
 
     if (action === "retry") {
-      retryQueueItem(id);
+      await retryQueueItem(id);
 
       return NextResponse.json({
         ok: true,
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     }
 
     if (action === "post-now") {
-      rescheduleQueueItemNow(id);
+      await rescheduleQueueItemNow(id);
 
       return NextResponse.json({
         ok: true,

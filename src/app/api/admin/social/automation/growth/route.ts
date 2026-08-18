@@ -78,7 +78,7 @@ export async function POST(req: Request) {
     let created = 0;
 
     for (const scheduledFor of buildScheduleDates(days)) {
-      addQueueItem({
+      await addQueueItem({
         slug,
         title,
         platform: "pinterest",

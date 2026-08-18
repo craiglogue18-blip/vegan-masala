@@ -17,7 +17,8 @@ from "@/lib/social/core/content";
 
 import {
 buildInstagramCaption,
-buildPinterestCaption
+buildPinterestCaption,
+buildFacebookCaption
 }
 from "@/lib/social/core/captions";
 
@@ -92,19 +93,21 @@ titleFromSlug(slug);
 const url=
 contentUrl(slug,type);
 
-const steps:string[]=[];
+const steps: string[] = [];
+let instagramImageUrl = "";
 
 
 /* GENERATE IMAGES */
 
-if(body.includeImages){
+if (body.includeImages || body.queueInstagram || body.queueFacebook) {
+  const instagramAsset = await generateInstagramBySlug(slug);
+  instagramImageUrl = String(instagramAsset.image || "");
 
-await generateInstagramBySlug(slug);
+  if (body.includeImages || body.queuePinterest) {
+    await generatePinterestBySlug(slug);
+  }
 
-await generatePinterestBySlug(slug);
-
-steps.push("Images generated");
-
+  steps.push("Images generated");
 }
 
 
@@ -135,7 +138,7 @@ return NextResponse.json(
 
 }
 
-addQueueItem({
+await addQueueItem({
 
 slug,
 
@@ -150,7 +153,9 @@ url,
 
 board,
 
-scheduledFor
+scheduledFor,
+contentType:type,
+assetType:"image"
 
 });
 
@@ -163,7 +168,7 @@ steps.push("Pinterest queued");
 
 if(body.queueInstagram){
 
-addQueueItem({
+await addQueueItem({
 
 slug,
 
@@ -178,7 +183,11 @@ url,
 
 board:null,
 
-scheduledFor
+scheduledFor,
+contentType:type,
+assetType:"image",
+imageUrl:instagramImageUrl,
+publishImageUrl:instagramImageUrl
 
 });
 
@@ -191,7 +200,7 @@ steps.push("Instagram queued");
 
 if(body.queueFacebook){
 
-addQueueItem({
+await addQueueItem({
 
 slug,
 
@@ -200,13 +209,17 @@ title,
 platform:"facebook",
 
 caption:
-buildInstagramCaption(slug,type),
+buildFacebookCaption(slug,type),
 
 url,
 
 board:null,
 
-scheduledFor
+scheduledFor,
+contentType:type,
+assetType:"image",
+imageUrl:instagramImageUrl,
+publishImageUrl:instagramImageUrl
 
 });
 
