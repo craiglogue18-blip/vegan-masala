@@ -2,8 +2,8 @@ import { buildFacebookCaption, buildInstagramCaption, buildPinterestCaption } fr
 import { allContent, slugFromFile, titleFromSlug } from "./content";
 import { addQueueItem, allQueueItems, type QueueItem, type QueuePlatform } from "./queue";
 import { contentUrl } from "./urls";
-import { generateInstagramBySlug } from "../generateInstagram";
 import { generatePinterestBySlug } from "../generatePinterest";
+import { buildRecipeVideo } from "../video/buildRecipeVideo";
 
 const PLATFORM_TIMES: Record<QueuePlatform, { hour: number; minute: number }> = {
   pinterest: { hour: 9, minute: 15 },
@@ -139,12 +139,13 @@ export async function planWeeklySocialPosts(options?: {
     );
     if (!missing.length) continue;
 
-    const instagramAsset = await generateInstagramBySlug(slot.slug);
-    const instagramUrl = String(instagramAsset.image || "");
     const pinterestAsset = missing.includes("pinterest")
       ? await generatePinterestBySlug(slot.slug)
       : null;
     const pinterestUrl = String(pinterestAsset?.image || "");
+    const needsVideo = missing.includes("instagram") || missing.includes("facebook");
+    const videoAsset = needsVideo ? await buildRecipeVideo(slot.slug) : null;
+    const videoUrl = String(videoAsset?.video || "");
     const url = contentUrl(slot.slug, "recipe");
 
     for (const platform of missing) {
@@ -154,7 +155,8 @@ export async function planWeeklySocialPosts(options?: {
           : platform === "facebook"
             ? buildFacebookCaption(slot.slug, "recipe")
             : buildInstagramCaption(slot.slug, "recipe");
-      const imageUrl = platform === "pinterest" ? pinterestUrl : instagramUrl;
+      const isVideo = platform === "instagram" || platform === "facebook";
+      const imageUrl = platform === "pinterest" ? pinterestUrl : "";
 
       await addQueueItem({
         slug: slot.slug,
@@ -165,9 +167,10 @@ export async function planWeeklySocialPosts(options?: {
         board: platform === "pinterest" ? board : null,
         scheduledFor: scheduleFor(slot.date, platform),
         contentType: "recipe",
-        assetType: "image",
+        assetType: isVideo ? "video" : "image",
         imageUrl,
         publishImageUrl: imageUrl,
+        videoUrl: isVideo ? videoUrl : "",
       });
       created++;
     }

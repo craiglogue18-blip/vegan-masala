@@ -25,9 +25,10 @@ const WIDTH = 1080;
 const HEIGHT = 1920;
 const FPS = 30;
 
-const INTRO_DURATION = 3;
-const MAIN_DURATION = 6;
+const INTRO_DURATION = 2;
+const MAIN_DURATION = 8;
 const OUTRO_DURATION = 3;
+const TOTAL_DURATION = INTRO_DURATION + MAIN_DURATION + OUTRO_DURATION;
 
 function ensure(dir: string) {
   fs.mkdirSync(dir, { recursive: true });
@@ -669,10 +670,16 @@ async function renderMainOverlay(
 
   const siteSvg = textSvg("vegan-masala.com", font, 30, "#ffffff", 540, 1860, "center");
   const logoSvg = logoImageSvg(logoPath, 760, 1535, 220, 220);
+  const badgeSvg = textSvg("VEGAN INDIAN RECIPE", font, 28, "#ffffff", 104, 92, "left");
+  const promptSvg = textSvg("SAVE  •  COOK  •  SHARE", font, 25, BRAND.gold, 74, 1765, "left");
 
   const svg = `
     <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
       <defs>
+        <linearGradient id="topShade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="black" stop-opacity="0.68"/>
+          <stop offset="70%" stop-color="black" stop-opacity="0"/>
+        </linearGradient>
         <linearGradient id="bottomShade" x1="0" y1="1" x2="0" y2="0">
           <stop offset="0%" stop-color="black" stop-opacity="0.88"/>
           <stop offset="28%" stop-color="black" stop-opacity="0.45"/>
@@ -681,6 +688,7 @@ async function renderMainOverlay(
       </defs>
 
       <rect width="${WIDTH}" height="${HEIGHT}" fill="transparent" />
+      <rect width="${WIDTH}" height="520" fill="url(#topShade)" />
 
       <rect
         x="14"
@@ -702,8 +710,13 @@ async function renderMainOverlay(
         fill="url(#bottomShade)"
       />
 
+      <rect x="72" y="48" width="330" height="72" rx="36" fill="${BRAND.red}" />
+      <rect x="72" y="1828" width="936" height="5" rx="3" fill="${BRAND.gold}" fill-opacity="0.9" />
+
+      ${badgeSvg}
       ${titleSvg}
       ${subSvg}
+      ${promptSvg}
       ${siteSvg}
       ${logoSvg}
     </svg>
@@ -722,7 +735,7 @@ async function still(image: string, out: string, duration: number) {
     "-t",
     String(duration),
     "-vf",
-    `scale=1080:1920,fade=t=in:st=0:d=0.6,fade=t=out:st=${duration - 0.6}:d=0.6,format=yuv420p`,
+    `scale=1200:2134,zoompan=z='min(zoom+0.0008,1.06)':d=${duration * FPS}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS},setsar=1,fade=t=in:st=0:d=0.35,fade=t=out:st=${duration - 0.35}:d=0.35,format=yuv420p`,
     "-r",
     String(FPS),
     "-c:v",
@@ -785,11 +798,8 @@ async function mainClip(
 
   await renderMainOverlay(title, subtitle, overlay, logoPath);
 
-  const texturePath = path.join(process.cwd(), "public", "images", "page-background.jpg");
-  const textureInput = fs.existsSync(texturePath) ? texturePath : image;
-
   const filter = [
-    `[0:v]scale=1500:2667:force_original_aspect_ratio=increase,crop=1080:1920,eq=saturation=0.78:contrast=1.04:brightness=0.04,boxblur=12:6,zoompan=z='min(zoom+0.0012,1.14)':d=${MAIN_DURATION * FPS}:x='iw/2-(iw/zoom/2)+sin(on/10)*16':y='ih/2-(ih/zoom/2)+cos(on/14)*12':s=1080x1920:fps=${FPS}[bg]`,
+    `[0:v]scale=1500:2667:force_original_aspect_ratio=increase,crop=1080:1920,eq=saturation=0.9:contrast=1.08:brightness=-0.02,boxblur=18:8,zoompan=z='min(zoom+0.0009,1.12)':d=${MAIN_DURATION * FPS}:x='iw/2-(iw/zoom/2)+sin(on/14)*10':y='ih/2-(ih/zoom/2)+cos(on/18)*8':s=1080x1920:fps=${FPS}[bg]`,
     `[1:v]format=rgba,colorchannelmixer=aa=1[card]`,
     `[2:v]format=rgba[overlay]`,
     `[bg][card]overlay=(W-w)/2:300[tmp1]`,
@@ -801,7 +811,7 @@ async function mainClip(
     "-loop",
     "1",
     "-i",
-    textureInput,
+    image,
     "-loop",
     "1",
     "-i",
@@ -869,7 +879,7 @@ async function concat(
     musicFile,
     "-shortest",
     "-filter:a",
-    "volume=0.12",
+    `volume=0.11,afade=t=in:st=0:d=0.8,afade=t=out:st=${TOTAL_DURATION - 1}:d=1`,
     "-map",
     "0:v",
     "-map",
@@ -954,5 +964,8 @@ export async function buildRecipeVideo(slug: string) {
   return {
     success: true,
     video: blob.url,
+    localPath: final,
+    durationSeconds: TOTAL_DURATION,
+    format: "1080x1920",
   };
 }
