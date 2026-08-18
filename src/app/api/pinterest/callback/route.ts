@@ -62,19 +62,17 @@ export async function GET(req: Request) {
       );
     }
 
-    await savePinterestToken(tokenData);
+    const saved = await savePinterestToken(tokenData);
 
     return NextResponse.json({
-  ok: true,
-  saved: true,
-  hasAccessToken: !!tokenData?.access_token,
-  hasRefreshToken: !!tokenData?.refresh_token,
-  refreshTokenPreview: tokenData?.refresh_token
-    ? `${tokenData.refresh_token.slice(0, 12)}...${tokenData.refresh_token.slice(-12)}`
-    : null,
-  refreshToken: tokenData?.refresh_token || null,
-  tokenKeys: Object.keys(tokenData || {}),
-});
+      ok: saved,
+      saved,
+      hasAccessToken: Boolean(tokenData?.access_token),
+      hasRefreshToken: Boolean(tokenData?.refresh_token),
+      message: saved
+        ? "Pinterest connected successfully. You can close this page."
+        : "Pinterest authorized, but token storage is unavailable.",
+    }, { status: saved ? 200 : 500 });
 
   } catch (err: any) {
     return NextResponse.json(
