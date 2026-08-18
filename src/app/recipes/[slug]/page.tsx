@@ -14,6 +14,7 @@ import RelatedGuides from "@/components/RelatedGuides";
 import RelatedRecipes from "@/components/RelatedRecipes";
 import StorePromo from "@/components/StorePromo";
 import RecipeEngagement from "@/components/RecipeEngagement";
+import RecipeEquipment, { getRecipeEquipment } from "@/components/RecipeEquipment";
 
 function extractSections(raw: string) {
   const sections: Record<string, string> = {};
@@ -492,6 +493,7 @@ export default async function RecipePage({
   const showCurryHubCallout = isCurryHubRecipe(recipe.slug);
   const showDalHubCallout = isDalHubRecipe(recipe.slug);
   const recipeCollections = getCollectionsForRecipe(recipe);
+  const equipmentRecommendations = getRecipeEquipment(recipe);
 
   const servingIdeas = (() => {
     if (typeof recipe.servingSuggestion === "string" && recipe.servingSuggestion.trim()) {
@@ -727,6 +729,9 @@ export default async function RecipePage({
           <a href="#ingredients" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Ingredients ({ingredients.length})</a>
           <a href="#method" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Method ({instructions.length})</a>
           <a href="#notes" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Notes</a>
+          {equipmentRecommendations.length > 0 && (
+            <a href="#equipment" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Equipment</a>
+          )}
         </div>
       </nav>
 
@@ -753,6 +758,8 @@ export default async function RecipePage({
           <p className="mt-3 leading-7 text-[var(--text-soft)]">{servingIdeas}</p>
         </div>
       </section>
+
+      <RecipeEquipment items={equipmentRecommendations} />
 
       <section className="mt-10 grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
         <div
