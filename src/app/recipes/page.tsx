@@ -1,11 +1,36 @@
-export const dynamic = "force-dynamic";
-
-// src/app/recipes/page.tsx
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
 import { getAllRecipes } from "@/lib/recipes";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
+import { RECIPE_COLLECTIONS } from "@/lib/seo/collections";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+
+export const metadata: Metadata = {
+  title: "Vegan Indian Recipes | Curries, Dal, Rice, Snacks & Sweets",
+  description:
+    "Browse vegan Indian recipes including curries, dals, rice dishes, snacks, flatbreads and sweet recipes. Practical recipes with proper flavour and clear step-by-step methods.",
+  alternates: {
+    canonical: `${siteUrl}/recipes`,
+  },
+  openGraph: {
+    title: "Vegan Indian Recipes | Curries, Dal, Rice, Snacks & Sweets",
+    description:
+      "Browse vegan Indian recipes including curries, dals, rice dishes, snacks, flatbreads and sweet recipes.",
+    url: `${siteUrl}/recipes`,
+    siteName: "Vegan Masala",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vegan Indian Recipes | Curries, Dal, Rice, Snacks & Sweets",
+    description:
+      "Browse vegan Indian recipes including curries, dals, rice dishes, snacks, flatbreads and sweet recipes.",
+  },
+};
 
 function totalMinutes(prep?: number, cook?: number) {
   const t = (prep ?? 0) + (cook ?? 0);
@@ -22,12 +47,15 @@ function norm(input: string) {
 }
 
 function recipeText(r: any) {
-  return `${r.slug ?? ""} ${r.title ?? ""} ${(r.tags ?? []).join(" ")} ${(r.diet ?? []).join(
+  return `${r.slug ?? ""} ${r.title ?? ""} ${r.description ?? ""} ${(r.tags ?? []).join(" ")} ${(r.diet ?? []).join(
     " "
   )}`.toLowerCase();
 }
 
-function buildHref(base: string, params: { tag?: string | null; collection?: string | null }) {
+function buildHref(
+  base: string,
+  params: { tag?: string | null; collection?: string | null }
+) {
   const sp = new URLSearchParams();
   if (params.collection) sp.set("collection", params.collection);
   if (params.tag) sp.set("tag", params.tag);
@@ -71,8 +99,6 @@ function canonicalizeTag(raw: string): string | null {
     urad: "dal-and-lentils",
     masoor: "dal-and-lentils",
 
-    "dal-and-lentils": "dal-and-lentils",
-
     tofu: "tofu",
     paneer: "tofu",
 
@@ -99,6 +125,26 @@ function canonicalizeTag(raw: string): string | null {
     "instant pot": "instant-pot",
     "instant-pot": "instant-pot",
     "pressure cooker": "instant-pot",
+
+    sweet: "sweet",
+    sweets: "sweet",
+    dessert: "sweet",
+    desserts: "sweet",
+    mithai: "sweet",
+    cake: "sweet",
+    cakes: "sweet",
+    pudding: "sweet",
+    puddings: "sweet",
+    halwa: "sweet",
+    kheer: "sweet",
+    barfi: "sweet",
+    burfi: "sweet",
+    ladoo: "sweet",
+    laddu: "sweet",
+    jalebi: "sweet",
+    rasgulla: "sweet",
+    gulab: "sweet",
+    jamun: "sweet",
   };
 
   if (alias[clean]) return alias[clean];
@@ -118,13 +164,17 @@ function canonicalizeTag(raw: string): string | null {
     [/\b(mushroom|mushrooms)\b/i, "mushroom"],
     [/\b(spinach|palak)\b/i, "spinach"],
     [/\b(biryani|rice)\b/i, "rice"],
+    [/\b(sweet|dessert|mithai|halwa|kheer|barfi|burfi|ladoo|laddu|jalebi|rasgulla|gulab\s+jamun|cake|pudding)\b/i, "sweet"],
   ];
 
   for (const [re, key] of containsMap) {
     if (re.test(clean)) return key;
   }
 
-  if (clean.length <= 20 && clean.split(" ").length <= 3) return clean.replace(/\s+/g, "-");
+  if (clean.length <= 20 && clean.split(" ").length <= 3) {
+    return clean.replace(/\s+/g, "-");
+  }
+
   return null;
 }
 
@@ -135,6 +185,7 @@ function recipeCanonicalTags(r: any): string[] {
     const c = canonicalizeTag(String(t));
     if (c) out.add(c);
   }
+
   for (const d of r.diet ?? []) {
     const c = canonicalizeTag(String(d));
     if (c) out.add(c);
@@ -154,7 +205,9 @@ function recipeCanonicalTags(r: any): string[] {
     [/\b(palak|spinach)\b/i, "spinach"],
     [/\b(biryani|rice)\b/i, "rice"],
     [/\b(curry|masala|korma|vindaloo)\b/i, "curries"],
+    [/\b(sweet|dessert|mithai|halwa|kheer|barfi|burfi|ladoo|laddu|jalebi|rasgulla|gulab\s+jamun|cake|pudding)\b/i, "sweet"],
   ];
+
   for (const [re, key] of heuristics) {
     if (re.test(txt)) out.add(key);
   }
@@ -186,8 +239,13 @@ function matchesCollection(r: any, collection: string) {
       const diet = (r.diet ?? []).map((d: string) => norm(String(d)));
       const tags = (r.tags ?? []).map((t: string) => norm(String(t)));
       return (
-        diet.includes("gluten-free") || tags.includes("gluten-free") || txt.includes("gluten-free")
+        diet.includes("gluten-free") ||
+        tags.includes("gluten-free") ||
+        txt.includes("gluten-free")
       );
+    }
+    case "sweet": {
+      return recipeCanonicalTags(r).includes("sweet");
     }
     default:
       return true;
@@ -202,14 +260,11 @@ export default async function RecipesPage({
   const recipes = getAllRecipes();
 
   const sp = (await searchParams) ?? {};
-  const tagRaw = Array.isArray(sp.tag) ? sp.tag?.[0] : sp.tag;
-  const collectionRaw = Array.isArray(sp.collection) ? sp.collection?.[0] : sp.collection;
+  const tagRaw = Array.isArray(sp.tag) ? sp.tag[0] : sp.tag;
+  const collectionRaw = Array.isArray(sp.collection) ? sp.collection[0] : sp.collection;
 
   const selectedTag = tagRaw ? norm(tagRaw) : null;
   const selectedCollection = collectionRaw ? norm(collectionRaw) : null;
-
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -238,6 +293,15 @@ export default async function RecipesPage({
     mushroom: "Mushroom",
     rice: "Rice & Biryani",
     curries: "Curries",
+    sweet: "Sweet",
+  };
+
+  const COLLECTION_LABELS: Record<string, string> = {
+    "30-min": "30 min",
+    "one-pot": "One-pot",
+    dal: "Dal",
+    "gluten-free": "Gluten-free",
+    sweet: "Sweet",
   };
 
   const tagCounts = new Map<string, number>();
@@ -248,6 +312,7 @@ export default async function RecipesPage({
   }
 
   const curatedOrder = [
+    "sweet",
     "instant-pot",
     "one-pot",
     "gluten-free",
@@ -266,11 +331,26 @@ export default async function RecipesPage({
 
   const filterTags = curatedOrder.filter((t) => tagCounts.has(t));
 
+  const collectionOrder = ["30-min", "one-pot", "dal", "gluten-free", "sweet"];
+
+  const collectionCounts = new Map<string, number>();
+  for (const collection of collectionOrder) {
+    collectionCounts.set(
+      collection,
+      recipes.filter((r: any) => matchesCollection(r, collection)).length
+    );
+  }
+
   const filtered = recipes.filter((r: any) => {
     if (selectedCollection && !matchesCollection(r, selectedCollection)) return false;
     if (selectedTag && !recipeCanonicalTags(r).includes(selectedTag)) return false;
     return true;
   });
+
+  const activeLabel =
+    (selectedCollection && COLLECTION_LABELS[selectedCollection]) ||
+    (selectedTag && TAG_LABELS[selectedTag]) ||
+    null;
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-10">
@@ -289,8 +369,8 @@ export default async function RecipesPage({
               Vegan Indian Recipes
             </h1>
             <p className="mt-3 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
-              Browse comforting curries, dals, rice dishes, flatbreads and practical vegan Indian
-              recipes written for real home cooking.
+              Browse comforting curries, dals, rice dishes, flatbreads, snacks and sweet vegan
+              Indian recipes written for real home cooking.
             </p>
           </div>
 
@@ -305,9 +385,68 @@ export default async function RecipesPage({
         </div>
       </section>
 
+      <section className="mt-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
+        <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
+          Quick collections
+        </p>
+
+        <div className="mt-3 flex flex-wrap gap-3">
+          <Link
+            href={buildHref("/recipes", {
+              collection: null,
+              tag: selectedTag,
+            })}
+            className={
+              !selectedCollection
+                ? "rounded-full bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white"
+                : "rounded-full border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
+            }
+          >
+            All collections
+          </Link>
+
+          {collectionOrder
+            .filter((collection) => (collectionCounts.get(collection) ?? 0) > 0)
+            .map((collection) => (
+              <Link
+                key={collection}
+                href={buildHref("/recipes", {
+                  collection,
+                  tag: selectedTag,
+                })}
+                className={
+                  selectedCollection === collection
+                    ? "rounded-full bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white"
+                    : "rounded-full border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
+                }
+              >
+                {COLLECTION_LABELS[collection]} ({collectionCounts.get(collection)})
+              </Link>
+            ))}
+        </div>
+      </section>
+
+      <section className="mt-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
+        <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Explore recipe guides</h2>
+        <p className="mt-2 text-sm text-[var(--text-soft)]">Curated collections with the most useful recipes for each cooking goal.</p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link href="/recipes/vegan-indian-curry-recipes" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)]">Curries</Link>
+          <Link href="/recipes/vegan-indian-dal-recipes" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)]">Dal and lentils</Link>
+          {RECIPE_COLLECTIONS.map((collection) => (
+            <Link key={collection.slug} href={`/recipes/collections/${collection.slug}`} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)]">
+              {collection.title.replace(/^Vegan Indian /, "")}
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {filterTags.length ? (
-        <section className="mt-6">
-          <div className="flex flex-wrap gap-3">
+        <section className="mt-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
+          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
+            Browse by ingredient or type
+          </p>
+
+          <div className="mt-3 flex flex-wrap gap-3">
             <Link
               href={buildHref("/recipes", {
                 collection: selectedCollection,
@@ -319,7 +458,7 @@ export default async function RecipesPage({
                   : "rounded-full border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
               }
             >
-              All
+              All tags
             </Link>
 
             {filterTags.map((tag) => (
@@ -335,12 +474,32 @@ export default async function RecipesPage({
                     : "rounded-full border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
                 }
               >
-                {TAG_LABELS[tag] ?? tag}
+                {TAG_LABELS[tag] ?? tag} ({tagCounts.get(tag)})
               </Link>
             ))}
           </div>
         </section>
       ) : null}
+
+      <section className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
+        <div>
+          <p className="text-sm font-bold text-[var(--brand-gold)]">
+            {activeLabel ? `Showing: ${activeLabel}` : "Showing all recipes"}
+          </p>
+          <p className="mt-1 text-sm text-[var(--text-soft)]">
+            {filtered.length} recipe{filtered.length === 1 ? "" : "s"} found
+          </p>
+        </div>
+
+        {(selectedTag || selectedCollection) && (
+          <Link
+            href="/recipes"
+            className="rounded-full border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
+          >
+            Clear filters
+          </Link>
+        )}
+      </section>
 
       <section className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((r: any) => {
@@ -356,6 +515,8 @@ export default async function RecipesPage({
 
           const placeholder = isPlaceholderImage(baseImg);
           const time = minutesLabel(r.prepMinutes, r.cookMinutes);
+          const canonicalTags = recipeCanonicalTags(r);
+          const isSweet = canonicalTags.includes("sweet");
 
           return (
             <Link
@@ -371,6 +532,14 @@ export default async function RecipesPage({
                   className={placeholder ? "object-contain p-10 opacity-90" : "object-cover"}
                   sizes="(max-width: 1024px) 100vw, 33vw"
                 />
+
+                <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+                  {isSweet && (
+                    <div className="rounded-xl bg-[var(--brand-gold)] px-3 py-1 text-xs font-extrabold text-black shadow">
+                      Sweet
+                    </div>
+                  )}
+                </div>
 
                 {time && (
                   <div className="absolute right-3 top-3 rounded-xl bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white shadow">
@@ -410,7 +579,10 @@ export default async function RecipesPage({
 
       {!filtered.length ? (
         <section className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
-          <p className="text-[var(--text-soft)]">No recipes matched those filters.</p>
+          <h2 className="text-lg font-extrabold text-[var(--brand-gold)]">No recipes matched</h2>
+          <p className="mt-2 text-[var(--text-soft)]">
+            Try clearing the current filters or browsing a different collection.
+          </p>
         </section>
       ) : null}
     </main>

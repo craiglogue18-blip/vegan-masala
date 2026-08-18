@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 
 import {
   dueQueueItems,
-  markQueueItemFailed,
-  markQueueItemPosted,
+  classifyQueueFailure,
+  markQueueItemFailedWithMetadata,
+  markQueueItemPostedWithMetadata,
 } from "@/lib/social/core/queue";
 
 import { generatePinterestBySlug } from "@/lib/social/generatePinterest";
@@ -15,28 +16,27 @@ import { publishFacebook } from "@/lib/social/publishers/publishFacebook";
 
 const ROOT = process.cwd();
 
-export async function POST(req: Request) {
+function platformResponseIdForResult(platform: string, result: any) {
+  if (platform === "pinterest") {
+    return String(result?.id || result?.pinId || "") || null;
+  }
+
+  if (platform === "instagram") {
+    return String(result?.published?.id || result?.containerId || "") || null;
+  }
+
+  if (platform === "facebook") {
+    return (
+      String(result?.photoId || result?.postId || result?.videoId || result?.published?.id || "") ||
+      null
+    );
+  }
+
+  return null;
+}
+
+export async function POST() {
   try {
-    const requiredSecret = process.env.SOCIAL_SCHEDULER_SECRET;
-
-    const providedSecret = req.headers.get("x-scheduler-secret");
-    const cronHeader = req.headers.get("x-vercel-cron");
-
-    const isManualAuthorized =
-      Boolean(requiredSecret) && providedSecret === requiredSecret;
-
-    const isVercelCron = Boolean(cronHeader);
-
-    if (requiredSecret && !isManualAuthorized && !isVercelCron) {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: "Unauthorized scheduler request",
-        },
-        { status: 401 }
-      );
-    }
-
     const due = await dueQueueItems();
     let count = 0;
 
@@ -50,12 +50,10 @@ export async function POST(req: Request) {
     }> = [];
 
     for (const item of due) {
+      const attemptedAt = new Date().toISOString();
+
       try {
         if (item.platform === "pinterest") {
-          if ((item.assetType || "image") === "video") {
-            throw new Error("Pinterest only supports image posts in this workflow");
-          }
-
           if (!item.board) {
             throw new Error("Pinterest board missing");
           }
@@ -77,9 +75,11 @@ export async function POST(req: Request) {
             boardId: item.board,
           });
 
-          console.log("QUEUE PINTEREST RESULT:", result);
-
-          await markQueueItemPosted(item.id);
+          await markQueueItemPostedWithMetadata(item.id, {
+            attemptedAt,
+            completedAt: new Date().toISOString(),
+            platformResponseId: platformResponseIdForResult(item.platform, result),
+          });
           count++;
           results.push({
             id: item.id,
@@ -92,17 +92,21 @@ export async function POST(req: Request) {
         }
 
         if (item.platform === "instagram") {
+          const publishImageUrl = item.publishImageUrl || item.imageUrl;
+
           const result = await publishInstagram({
             slug: item.slug,
             caption: item.caption || "",
             assetType: item.assetType || "image",
-            imageUrl: item.imageUrl,
+            imageUrl: publishImageUrl,
             videoUrl: item.videoUrl,
           });
 
-          console.log("QUEUE INSTAGRAM RESULT:", result);
-
-          await markQueueItemPosted(item.id);
+          await markQueueItemPostedWithMetadata(item.id, {
+            attemptedAt,
+            completedAt: new Date().toISOString(),
+            platformResponseId: platformResponseIdForResult(item.platform, result),
+          });
           count++;
           results.push({
             id: item.id,
@@ -115,17 +119,21 @@ export async function POST(req: Request) {
         }
 
         if (item.platform === "facebook") {
+          const publishImageUrl = item.publishImageUrl || item.imageUrl;
+
           const result = await publishFacebook({
             slug: item.slug,
             caption: item.caption || "",
             assetType: item.assetType || "image",
-            imageUrl: item.imageUrl,
+            imageUrl: publishImageUrl,
             videoUrl: item.videoUrl,
           });
 
-          console.log("QUEUE FACEBOOK RESULT:", result);
-
-          await markQueueItemPosted(item.id);
+          await markQueueItemPostedWithMetadata(item.id, {
+            attemptedAt,
+            completedAt: new Date().toISOString(),
+            platformResponseId: platformResponseIdForResult(item.platform, result),
+          });
           count++;
           results.push({
             id: item.id,
@@ -138,7 +146,13 @@ export async function POST(req: Request) {
         }
 
         const unsupported = `Unsupported platform: ${item.platform}`;
-        await markQueueItemFailed(item.id, unsupported);
+        const classification = classifyQueueFailure(unsupported);
+
+        await markQueueItemFailedWithMetadata(item.id, unsupported, {
+          attemptedAt,
+          completedAt: new Date().toISOString(),
+          ...classification,
+        });
         results.push({
           id: item.id,
           slug: item.slug,
@@ -150,15 +164,13 @@ export async function POST(req: Request) {
       } catch (err: any) {
         const message = err?.message || "Queue run failed";
 
-        console.error("QUEUE ITEM FAILED:", {
-          id: item.id,
-          slug: item.slug,
-          platform: item.platform,
-          assetType: item.assetType,
-          error: message,
-        });
+        const classification = classifyQueueFailure(message);
 
-        await markQueueItemFailed(item.id, message);
+        await markQueueItemFailedWithMetadata(item.id, message, {
+          attemptedAt,
+          completedAt: new Date().toISOString(),
+          ...classification,
+        });
         results.push({
           id: item.id,
           slug: item.slug,

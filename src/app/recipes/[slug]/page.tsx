@@ -4,10 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { getRecipeBySlug } from "@/lib/recipes";
+import { getAllRecipeSlugs, getRecipeBySlug } from "@/lib/recipes";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
+import { isCurryHubRecipe } from "@/lib/seo/curryHub";
+import { isDalHubRecipe } from "@/lib/seo/dalHub";
+import { getCollectionsForRecipe } from "@/lib/seo/collections";
 import PrintButton from "@/components/PrintButton";
 import RelatedGuides from "@/components/RelatedGuides";
+import RelatedRecipes from "@/components/RelatedRecipes";
+import StorePromo from "@/components/StorePromo";
+import RecipeEngagement from "@/components/RecipeEngagement";
 
 function extractSections(raw: string) {
   const sections: Record<string, string> = {};
@@ -72,6 +78,144 @@ function absUrl(siteUrl: string, maybePath: string) {
   if (!maybePath) return maybePath;
   if (maybePath.startsWith("http://") || maybePath.startsWith("https://")) return maybePath;
   return `${siteUrl}${maybePath.startsWith("/") ? "" : "/"}${maybePath}`;
+}
+
+function normaliseText(value: unknown) {
+  return String(value ?? "").trim().toLowerCase();
+}
+
+function recipeSearchText(recipe: any) {
+  return [
+    recipe?.title ?? "",
+    recipe?.slug ?? "",
+    recipe?.description ?? "",
+    recipe?.cuisine ?? "",
+    ...(Array.isArray(recipe?.tags) ? recipe.tags : []),
+    ...(Array.isArray(recipe?.diet) ? recipe.diet : []),
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+
+function buildSeoTypeLabel(recipe: any) {
+  const text = recipeSearchText(recipe);
+
+  if (/\bchana|chickpea|chickpeas|chole\b/.test(text)) {
+    return "Vegan Indian Chickpea Curry";
+  }
+
+  if (/\bdal|dahl|lentil|lentils|masoor|moong|urad|toor\b/.test(text)) {
+    return "Vegan Indian Dal";
+  }
+
+  if (/\bsaag|palak|spinach\b/.test(text) && /\baloo|potato|potatoes\b/.test(text)) {
+    return "Vegan Indian Spinach Potato Curry";
+  }
+
+  if (/\baloo|potato|potatoes\b/.test(text) && /\bcurry|masala\b/.test(text)) {
+    return "Vegan Indian Potato Curry";
+  }
+
+  if (/\btofu\b/.test(text) && /\bbutter\b/.test(text)) {
+    return "Vegan Indian Butter Tofu Curry";
+  }
+
+  if (/\btofu\b/.test(text) && /\bcurry|masala|makhani|korma|vindaloo\b/.test(text)) {
+    return "Vegan Indian Tofu Curry";
+  }
+
+  if (/\brajma|kidney beans?\b/.test(text)) {
+    return "Vegan Indian Kidney Bean Curry";
+  }
+
+  if (/\bbiryani\b/.test(text)) {
+    return "Vegan Indian Biryani";
+  }
+
+  if (/\brice|pulao\b/.test(text)) {
+    return "Vegan Indian Rice Dish";
+  }
+
+  if (/\bnaan|roti|chapati|poori|paratha|flatbread\b/.test(text)) {
+    return "Vegan Indian Bread";
+  }
+
+  if (/\bpakora|bhaji|samosa\b/.test(text)) {
+    return "Vegan Indian Snack";
+  }
+
+  if (/\bcurry|masala|korma|vindaloo|makhani|makhanwala\b/.test(text)) {
+    return "Vegan Indian Curry";
+  }
+
+  return "Vegan Indian Recipe";
+}
+
+function buildSeoTitle(recipe: any) {
+  const title = String(recipe?.title ?? "Recipe").trim();
+  const lowerTitle = title.toLowerCase();
+  const typeLabel = buildSeoTypeLabel(recipe);
+
+  if (lowerTitle.includes("recipe")) {
+    return `${title} | ${typeLabel}`;
+  }
+
+  return `${title} Recipe | ${typeLabel}`;
+}
+
+export function generateStaticParams() {
+  return getAllRecipeSlugs().map((slug) => ({ slug }));
+}
+
+function buildSeoDescription(recipe: any) {
+  const existing = String(recipe?.description ?? "").trim();
+  if (existing) {
+    return existing.length <= 160 ? existing : `${existing.slice(0, 157).trim()}...`;
+  }
+
+  const title = String(recipe?.title ?? "This recipe").trim();
+  const typeLabel = buildSeoTypeLabel(recipe);
+  const total = totalMinutesNumber(recipe?.prepMinutes, recipe?.cookMinutes);
+  const serves =
+    typeof recipe?.servings === "number"
+      ? recipe.servings
+      : typeof recipe?.serves === "number"
+      ? recipe.serves
+      : null;
+
+  let sentence = `${title} is a ${typeLabel.toLowerCase()} with clear step-by-step instructions, proper masala flavour and a vegan-friendly method for home cooks.`;
+
+  if (total && serves) {
+    sentence = `${title} is a ${typeLabel.toLowerCase()} with clear step-by-step instructions, proper masala flavour, ready in about ${total} minutes and serving ${serves}.`;
+  } else if (total) {
+    sentence = `${title} is a ${typeLabel.toLowerCase()} with clear step-by-step instructions, proper masala flavour and a cooking time of about ${total} minutes.`;
+  } else if (serves) {
+    sentence = `${title} is a ${typeLabel.toLowerCase()} with clear step-by-step instructions, proper masala flavour and a recipe yield of ${serves} servings.`;
+  }
+
+  return sentence.length <= 160 ? sentence : `${sentence.slice(0, 157).trim()}...`;
+}
+
+function buildRecipeCategory(recipe: any) {
+  const text = recipeSearchText(recipe);
+
+  if (/\bdal|dahl|lentil|lentils|masoor|moong|urad|toor\b/.test(text)) {
+    return "Vegan Indian Dal";
+  }
+
+  if (/\bbiryani|rice|pulao\b/.test(text)) {
+    return "Vegan Indian Rice Dish";
+  }
+
+  if (/\bnaan|roti|chapati|poori|paratha|flatbread\b/.test(text)) {
+    return "Vegan Indian Bread";
+  }
+
+  if (/\bpakora|bhaji|samosa\b/.test(text)) {
+    return "Vegan Indian Snack";
+  }
+
+  return "Vegan Indian Curry";
 }
 
 function getRelatedGuideTags(recipe: any) {
@@ -214,30 +358,28 @@ export async function generateMetadata({
       : heroBase;
 
   const heroAbs = absUrl(siteUrl, hero);
-
-  const title = recipe?.title ? String(recipe.title) : "Recipe";
-  const description =
-    (recipe?.description ? String(recipe.description) : "").trim() ||
-    "Vegan Indian recipes made simple. Weeknight-friendly and tested.";
-
   const canonical = `${siteUrl}/recipes/${slug}`;
 
+  const seoTitle = buildSeoTitle(recipe);
+  const seoDescription = buildSeoDescription(recipe);
+
   return {
-    title: `${title} | Vegan Masala`,
-    description,
+    title: seoTitle,
+    description: seoDescription,
     alternates: { canonical },
     openGraph: {
-      title: `${title} | Vegan Masala`,
-      description,
+      title: seoTitle,
+      description: seoDescription,
       url: canonical,
       siteName: "Vegan Masala",
       type: "article",
+      publishedTime: recipe.publishedAt || undefined,
       images: heroAbs ? [{ url: heroAbs }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | Vegan Masala`,
-      description,
+      title: seoTitle,
+      description: seoDescription,
       images: heroAbs ? [heroAbs] : undefined,
     },
   };
@@ -337,6 +479,9 @@ export default async function RecipePage({
   const canonicalUrl = `${siteUrl}/recipes/${recipe.slug}`;
   const heroAbs = absUrl(siteUrl, hero);
   const relatedGuideTags = getRelatedGuideTags(recipe);
+  const showCurryHubCallout = isCurryHubRecipe(recipe.slug);
+  const showDalHubCallout = isDalHubRecipe(recipe.slug);
+  const recipeCollections = getCollectionsForRecipe(recipe);
 
   const servingIdeas = (() => {
     if (typeof recipe.servingSuggestion === "string" && recipe.servingSuggestion.trim()) {
@@ -360,6 +505,15 @@ export default async function RecipePage({
 
     return "Serve hot and simply, with sides that let the spices and masala stay at the centre.";
   })();
+
+  const storePromoSlugs = [
+    "jalebi-recipe-traditional-method",
+    "vegan-gulab-jamun",
+    "coconut-ladoo",
+    "kheer",
+    "carrot-halwa",
+    "mango-lassi",
+  ];
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -390,7 +544,7 @@ export default async function RecipePage({
     "@context": "https://schema.org",
     "@type": "Recipe",
     name: recipe.title,
-    description: recipe.description || undefined,
+    description: buildSeoDescription(recipe),
     url: canonicalUrl,
     image: heroAbs || undefined,
     datePublished: recipe.publishedAt || undefined,
@@ -405,7 +559,7 @@ export default async function RecipePage({
       url: siteUrl,
     },
     recipeCuisine: recipe.cuisine || "Indian",
-    recipeCategory: "Vegan Indian Recipes",
+    recipeCategory: buildRecipeCategory(recipe),
     keywords: Array.isArray(recipe.tags) ? recipe.tags.join(", ") : undefined,
     recipeYield:
       typeof recipe.servings === "number"
@@ -470,9 +624,7 @@ export default async function RecipePage({
                 src={hero}
                 alt={recipe.title}
                 fill
-                className={
-                  placeholder ? "object-contain p-8 opacity-90" : "object-cover"
-                }
+                className={placeholder ? "object-contain p-8 opacity-90" : "object-cover"}
                 sizes="(max-width: 1024px) 100vw, 380px"
                 priority
               />
@@ -594,9 +746,7 @@ export default async function RecipePage({
           <h2 className="mt-2 text-xl font-extrabold text-[var(--brand-gold)]">
             Best served simply
           </h2>
-          <p className="mt-3 leading-7 text-[var(--text-soft)]">
-            {servingIdeas}
-          </p>
+          <p className="mt-3 leading-7 text-[var(--text-soft)]">{servingIdeas}</p>
         </div>
       </section>
 
@@ -699,11 +849,68 @@ export default async function RecipePage({
         </div>
       </section>
 
-      <RelatedGuides
-        title="Learn the technique"
-        tags={relatedGuideTags}
-        max={3}
+      {storePromoSlugs.includes(recipe.slug) && <StorePromo />}
+
+      <RecipeEngagement slug={recipe.slug} title={recipe.title} />
+
+      {showCurryHubCallout && (
+        <section className="mt-12 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
+            Topic hub
+          </p>
+          <h2 className="mt-2 text-xl font-extrabold text-[var(--brand-gold)]">
+            Explore Vegan Indian Curry Recipes
+          </h2>
+          <p className="mt-3 max-w-2xl leading-7 text-[var(--text-soft)]">
+            Browse the curated curry hub for related chickpea, dal, potato, tofu and vegetable recipes in one place.
+          </p>
+          <Link
+            href="/recipes/vegan-indian-curry-recipes"
+            className="mt-4 inline-flex rounded-xl bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white transition hover:opacity-90"
+          >
+            Visit the curry hub
+          </Link>
+        </section>
+      )}
+
+      {showDalHubCallout && (
+        <section className="mt-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
+            Topic hub
+          </p>
+          <h2 className="mt-2 text-xl font-extrabold text-[var(--brand-gold)]">
+            Explore Vegan Indian Dal Recipes
+          </h2>
+          <p className="mt-3 max-w-2xl leading-7 text-[var(--text-soft)]">
+            Browse the dal hub for classic dal recipes, lentil curries, and bean-based Indian curries in one place.
+          </p>
+          <Link
+            href="/recipes/vegan-indian-dal-recipes"
+            className="mt-4 inline-flex rounded-xl bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white transition hover:opacity-90"
+          >
+            Visit the dal hub
+          </Link>
+        </section>
+      )}
+
+      <RelatedRecipes
+        title="Cook next"
+        tags={recipe.tags ?? []}
+        excludeSlugs={[recipe.slug]}
+        max={6}
       />
+
+      {recipeCollections.length > 0 && (
+        <nav aria-label="Recipe collections" className="mt-8 flex flex-wrap gap-3">
+          {recipeCollections.map((collection) => (
+            <Link key={collection.slug} href={`/recipes/collections/${collection.slug}`} className="rounded-xl border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-bold text-[var(--brand-gold)] hover:bg-black/20">
+              More {collection.title}
+            </Link>
+          ))}
+        </nav>
+      )}
+
+      <RelatedGuides title="Learn the technique" tags={relatedGuideTags} max={3} />
     </main>
   );
 }
