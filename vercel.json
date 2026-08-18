@@ -4,6 +4,10 @@
     {
       "path": "/api/admin/social/queue/run",
       "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/admin/social/weekly-plan",
+      "schedule": "0 7 * * 1"
     }
   ]
 }
