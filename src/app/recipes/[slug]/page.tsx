@@ -15,6 +15,7 @@ import RelatedRecipes from "@/components/RelatedRecipes";
 import StorePromo from "@/components/StorePromo";
 import RecipeEngagement from "@/components/RecipeEngagement";
 import RecipeEquipment, { getRecipeEquipment } from "@/components/RecipeEquipment";
+import DinnerPlanPromo from "@/components/DinnerPlanPromo";
 
 function extractSections(raw: string) {
   const sections: Record<string, string> = {};
@@ -918,6 +919,10 @@ export default async function RecipePage({
           </Link>
         ) : null}
       </nav>
+
+      <div className="mt-10">
+        <DinnerPlanPromo placement="recipe" compact />
+      </div>
 
       <RelatedRecipes
         title="Cook next"

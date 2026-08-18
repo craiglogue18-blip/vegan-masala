@@ -7,6 +7,7 @@ import { getAllRecipes } from "@/lib/recipes";
 import { getAllGuides } from "@/lib/guides";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import CurrySlider from "@/components/CurrySlider";
+import DinnerPlanPromo from "@/components/DinnerPlanPromo";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
@@ -264,6 +265,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <div className="mt-10">
+        <DinnerPlanPromo placement="homepage" />
+      </div>
 
       {/* FEATURED COLLECTIONS */}
       <section className="mt-12">
