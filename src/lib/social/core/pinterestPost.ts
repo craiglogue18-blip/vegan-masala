@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { getPinterestAccessToken as getStoredPinterestAccessToken } from "./pinterestToken";
 
 export type PostPinterestPinInput = {
   title: string;
@@ -76,6 +77,11 @@ async function refreshPinterestAccessToken(): Promise<{
 }
 
 export async function getPinterestAccessToken(): Promise<string> {
+  // OAuth callbacks persist the latest access/refresh tokens in Redis. Prefer
+  // those over the static environment token, which may have expired.
+  const storedToken = await getStoredPinterestAccessToken();
+  if (storedToken) return storedToken;
+
   const now = Date.now();
 
   if (cachedToken && cachedToken.expiresAt > now + 60_000) {
