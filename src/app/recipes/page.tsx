@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 
 import { getAllRecipes } from "@/lib/recipes";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import { RECIPE_COLLECTIONS } from "@/lib/seo/collections";
+import RecipesClient from "./RecipesClient";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
@@ -35,11 +35,6 @@ export const metadata: Metadata = {
 function totalMinutes(prep?: number, cook?: number) {
   const t = (prep ?? 0) + (cook ?? 0);
   return t > 0 ? t : null;
-}
-
-function minutesLabel(prep?: number, cook?: number) {
-  const t = totalMinutes(prep, cook);
-  return t ? `${t} min` : null;
 }
 
 function norm(input: string) {
@@ -347,10 +342,30 @@ export default async function RecipesPage({
     return true;
   });
 
-  const activeLabel =
-    (selectedCollection && COLLECTION_LABELS[selectedCollection]) ||
-    (selectedTag && TAG_LABELS[selectedTag]) ||
-    null;
+  const searchableRecipes = filtered.map((r: any) => {
+    const baseImage =
+      typeof r.image === "string" && r.image.trim().length > 0
+        ? r.image
+        : getRecipeImage(r.slug);
+    const image =
+      r.imageVersion !== undefined && r.imageVersion !== null
+        ? `${baseImage}${baseImage.includes("?") ? "&" : "?"}v=${r.imageVersion}`
+        : baseImage;
+
+    return {
+      title: r.title,
+      slug: r.slug,
+      description: r.description,
+      cuisine: r.cuisine,
+      prepMinutes: r.prepMinutes,
+      cookMinutes: r.cookMinutes,
+      diet: r.diet,
+      tags: r.tags,
+      publishedAt: r.publishedAt,
+      image,
+      imageIsPlaceholder: isPlaceholderImage(baseImage),
+    };
+  });
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-10">
@@ -384,6 +399,8 @@ export default async function RecipesPage({
           </div>
         </div>
       </section>
+
+      <RecipesClient recipes={searchableRecipes} />
 
       <section className="mt-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
         <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
@@ -481,110 +498,6 @@ export default async function RecipesPage({
         </section>
       ) : null}
 
-      <section className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
-        <div>
-          <p className="text-sm font-bold text-[var(--brand-gold)]">
-            {activeLabel ? `Showing: ${activeLabel}` : "Showing all recipes"}
-          </p>
-          <p className="mt-1 text-sm text-[var(--text-soft)]">
-            {filtered.length} recipe{filtered.length === 1 ? "" : "s"} found
-          </p>
-        </div>
-
-        {(selectedTag || selectedCollection) && (
-          <Link
-            href="/recipes"
-            className="rounded-full border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
-          >
-            Clear filters
-          </Link>
-        )}
-      </section>
-
-      <section className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((r: any) => {
-          const baseImg =
-            typeof r.image === "string" && r.image.trim().length > 0
-              ? r.image
-              : getRecipeImage(r.slug);
-
-          const img =
-            r.imageVersion !== undefined && r.imageVersion !== null
-              ? `${baseImg}${baseImg.includes("?") ? "&" : "?"}v=${r.imageVersion}`
-              : baseImg;
-
-          const placeholder = isPlaceholderImage(baseImg);
-          const time = minutesLabel(r.prepMinutes, r.cookMinutes);
-          const canonicalTags = recipeCanonicalTags(r);
-          const isSweet = canonicalTags.includes("sweet");
-
-          return (
-            <Link
-              key={r.slug}
-              href={`/recipes/${r.slug}`}
-              className="group overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm transition hover:bg-black/20"
-            >
-              <div className="relative h-52 w-full bg-black/25">
-                <Image
-                  src={img}
-                  alt={r.title}
-                  fill
-                  className={placeholder ? "object-contain p-10 opacity-90" : "object-cover"}
-                  sizes="(max-width: 1024px) 100vw, 33vw"
-                />
-
-                <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-                  {isSweet && (
-                    <div className="rounded-xl bg-[var(--brand-gold)] px-3 py-1 text-xs font-extrabold text-black shadow">
-                      Sweet
-                    </div>
-                  )}
-                </div>
-
-                {time && (
-                  <div className="absolute right-3 top-3 rounded-xl bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white shadow">
-                    {time}
-                  </div>
-                )}
-              </div>
-
-              <div className="p-5">
-                <h2 className="text-base font-extrabold text-[var(--brand-gold)] group-hover:underline">
-                  {r.title}
-                </h2>
-
-                {r.description ? (
-                  <p className="mt-2 line-clamp-2 text-sm text-[var(--text-soft)]">
-                    {r.description}
-                  </p>
-                ) : null}
-
-                {Array.isArray(r.tags) && r.tags.length ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {r.tags.slice(0, 3).map((t: string) => (
-                      <span
-                        key={t}
-                        className="rounded-full border border-[var(--border)] bg-black/10 px-3 py-1 text-xs font-bold text-[var(--brand-gold)]/90"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-            </Link>
-          );
-        })}
-      </section>
-
-      {!filtered.length ? (
-        <section className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
-          <h2 className="text-lg font-extrabold text-[var(--brand-gold)]">No recipes matched</h2>
-          <p className="mt-2 text-[var(--text-soft)]">
-            Try clearing the current filters or browsing a different collection.
-          </p>
-        </section>
-      ) : null}
     </main>
   );
 }

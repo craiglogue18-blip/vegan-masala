@@ -395,6 +395,16 @@ export default async function RecipePage({
   const recipe: any = getRecipeBySlug(slug);
   if (!recipe) return notFound();
 
+  const orderedSlugs = [...getAllRecipeSlugs()].sort((a, b) => a.localeCompare(b));
+  const recipeIndex = orderedSlugs.indexOf(slug);
+  const previousSlug = recipeIndex > 0 ? orderedSlugs[recipeIndex - 1] : null;
+  const nextSlug =
+    recipeIndex >= 0 && recipeIndex < orderedSlugs.length - 1
+      ? orderedSlugs[recipeIndex + 1]
+      : null;
+  const previousRecipe = previousSlug ? getRecipeBySlug(previousSlug) : null;
+  const nextRecipe = nextSlug ? getRecipeBySlug(nextSlug) : null;
+
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
 
@@ -701,32 +711,26 @@ export default async function RecipePage({
             ) : null}
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href="#ingredients"
-                className="rounded-xl border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
-              >
-                Ingredients
+              <a href="#ingredients" className="rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-extrabold text-white shadow transition hover:opacity-90">
+                Jump to recipe
               </a>
-              <a
-                href="#method"
-                className="rounded-xl border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
-              >
-                Method
-              </a>
-              <a
-                href="#notes"
-                className="rounded-xl border border-[var(--border)] bg-black/10 px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] transition hover:bg-black/20"
-              >
-                Notes
-              </a>
-
               <PrintButton />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mt-6 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <nav aria-label="On this recipe page" className="sticky top-20 z-20 mt-4 overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)]/95 p-2 shadow-xl backdrop-blur-xl">
+        <div className="flex min-w-max items-center gap-1">
+          <span className="hidden px-3 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65 sm:inline">On this page</span>
+          <a href="#overview" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Overview</a>
+          <a href="#ingredients" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Ingredients ({ingredients.length})</a>
+          <a href="#method" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Method ({instructions.length})</a>
+          <a href="#notes" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Notes</a>
+        </div>
+      </nav>
+
+      <section id="overview" className={`mt-6 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] ${anchorOffsetClass}`}>
         <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)]/95 p-6 shadow-sm">
           <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
             From the kitchen
@@ -753,7 +757,7 @@ export default async function RecipePage({
       <section className="mt-10 grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
         <div
           id="method"
-          className={`relative overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm lg:p-8 ${anchorOffsetClass}`}
+          className={`relative order-2 overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm lg:order-1 lg:p-8 ${anchorOffsetClass}`}
         >
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
 
@@ -786,7 +790,7 @@ export default async function RecipePage({
           </div>
         </div>
 
-        <div className="space-y-8">
+        <div className="order-1 space-y-8 lg:order-2">
           <div
             id="ingredients"
             className={`rounded-[2rem] border border-[var(--border)] bg-[var(--surface)]/95 p-6 shadow-sm ${anchorOffsetClass}`}
@@ -892,6 +896,21 @@ export default async function RecipePage({
           </Link>
         </section>
       )}
+
+      <nav aria-label="Browse neighbouring recipes" className="mt-10 grid gap-4 sm:grid-cols-2">
+        {previousRecipe && previousSlug ? (
+          <Link href={`/recipes/${previousSlug}`} className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 transition hover:border-[var(--brand-gold)]/50 hover:bg-black/20">
+            <span className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">← Previous recipe</span>
+            <span className="mt-2 block font-extrabold text-[var(--brand-gold)] group-hover:underline">{previousRecipe.title}</span>
+          </Link>
+        ) : <span />}
+        {nextRecipe && nextSlug ? (
+          <Link href={`/recipes/${nextSlug}`} className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 text-right transition hover:border-[var(--brand-gold)]/50 hover:bg-black/20">
+            <span className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">Next recipe →</span>
+            <span className="mt-2 block font-extrabold text-[var(--brand-gold)] group-hover:underline">{nextRecipe.title}</span>
+          </Link>
+        ) : null}
+      </nav>
 
       <RelatedRecipes
         title="Cook next"
