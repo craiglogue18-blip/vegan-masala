@@ -21,6 +21,8 @@ import { validateSocialPublishPreflight } from "@/lib/social/core/publishPreflig
 
 const ROOT = process.cwd();
 
+export const maxDuration = 300;
+
 function getSiteBase() {
   return (
     process.env.NEXT_PUBLIC_SITE_URL ||
@@ -113,7 +115,32 @@ function platformResponseIdForResult(platform: string, result: any) {
   return null;
 }
 
-export async function POST() {
+function isAllowedManualRequest(req: Request) {
+  const secret = process.env.CRON_SECRET?.trim();
+  if (secret && req.headers.get("authorization") === `Bearer ${secret}`) {
+    return true;
+  }
+
+  const origin = req.headers.get("origin");
+  if (origin) {
+    try {
+      return new URL(origin).origin === new URL(req.url).origin;
+    } catch {
+      return false;
+    }
+  }
+
+  return process.env.NODE_ENV !== "production";
+}
+
+export async function POST(req: Request) {
+  if (!isAllowedManualRequest(req)) {
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized queue runner" },
+      { status: 401 }
+    );
+  }
+
   try {
     const due = await dueQueueItems();
     let count = 0;
