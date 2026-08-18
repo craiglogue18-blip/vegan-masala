@@ -12,7 +12,7 @@ export default function PrivacyPage() {
       </h1>
 
       <p className="mt-6 text-[var(--text-soft)] leading-7">
-        Last updated: {new Date().toLocaleDateString()}
+        Last updated: 18 August 2026
       </p>
 
       {/* INTRO */}
@@ -45,6 +45,10 @@ export default function PrivacyPage() {
             <li>
               Technical information such as browser type, device type and country.
             </li>
+            <li>
+              Advertising information such as ad impressions, interactions and
+              consent choices when advertising is enabled.
+            </li>
           </ul>
         </div>
       </section>
@@ -73,9 +77,42 @@ export default function PrivacyPage() {
         </h2>
 
         <p className="mt-6 text-[var(--text-soft)] leading-7">
-          This website uses cookies and privacy-friendly analytics to understand how
-          the site is used. These cookies do not personally identify you.
+          This website uses cookies and similar technologies for essential functions,
+          analytics and, following approval, advertising. Optional technologies are
+          controlled through the consent message shown to eligible visitors.
         </p>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">
+          Advertising and Google AdSense
+        </h2>
+
+        <div className="mt-6 space-y-4 text-[var(--text-soft)] leading-7">
+          <p>
+            Vegan Masala may use Google AdSense to fund its free recipes and guides.
+            Google and its advertising partners may use cookies or similar technologies
+            to deliver, measure and limit the repetition of adverts. Depending on your
+            consent and location, adverts may be personalised or based on the content of
+            the page you are viewing.
+          </p>
+          <p>
+            Visitors in the UK, EEA and Switzerland can accept, refuse or manage
+            advertising choices through Google&apos;s certified consent platform. You can
+            revisit those choices through the privacy controls provided on the site.
+          </p>
+          <p>
+            Learn more about how Google uses information from sites that use its
+            services on the{" "}
+            <a
+              href="https://business.safety.google/privacy/"
+              className="underline hover:text-[var(--brand-gold)]"
+            >
+              Google Business Data Responsibility site
+            </a>
+            .
+          </p>
+        </div>
       </section>
 
       {/* DATA SHARING */}
@@ -86,8 +123,9 @@ export default function PrivacyPage() {
 
         <p className="mt-6 text-[var(--text-soft)] leading-7">
           We do not sell, trade, or rent your personal data. We may share limited
-          data with trusted services that help operate the website (such as hosting
-          and analytics providers).
+          data with trusted services that help operate the website, including hosting,
+          analytics, consent-management and advertising providers. These providers may
+          process data in other countries using appropriate legal safeguards.
         </p>
       </section>
 
