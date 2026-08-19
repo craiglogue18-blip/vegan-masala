@@ -12,7 +12,7 @@ export default function CookiesPage() {
       </h1>
 
       <p className="mt-6 text-[var(--text-soft)] leading-7">
-        Last updated: 18 August 2026
+        Last updated: 19 August 2026
       </p>
 
       <section className="mt-10 space-y-6 text-[var(--text-soft)] leading-7">
@@ -81,6 +81,12 @@ export default function CookiesPage() {
               limit how often an advert is shown. With your permission, these may also
               be used to personalise advertising. If you decline, eligible adverts may
               be non-personalised or limited.
+            </p>
+            <p className="mt-2">
+              With your permission, the Meta Pixel also measures visits and completed
+              dinner-plan registrations so we can understand whether our Facebook and
+              Instagram advertising is effective. The Meta Pixel is not activated
+              unless the consent message reports the required advertising consent.
             </p>
           </div>
         </div>
