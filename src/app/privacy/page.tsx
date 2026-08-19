@@ -12,7 +12,7 @@ export default function PrivacyPage() {
       </h1>
 
       <p className="mt-6 text-[var(--text-soft)] leading-7">
-        Last updated: 18 August 2026
+        Last updated: 19 August 2026
       </p>
 
       {/* INTRO */}
@@ -22,6 +22,26 @@ export default function PrivacyPage() {
           your privacy. This policy explains what information we collect, how we use
           it, and your rights under UK and GDPR privacy law.
         </p>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">
+          Meta advertising measurement
+        </h2>
+
+        <div className="mt-6 space-y-4 text-[var(--text-soft)] leading-7">
+          <p>
+            With your permission, Vegan Masala uses the Meta Pixel to measure page
+            visits and completed dinner-plan registrations from Facebook and Instagram
+            advertising. This helps us assess campaign performance and avoid wasting
+            advertising spend.
+          </p>
+          <p>
+            The Meta Pixel is activated only when the site&apos;s consent platform reports
+            the required advertising consent. Meta may process limited device, browser,
+            page and interaction information under its own privacy terms.
+          </p>
+        </div>
       </section>
 
       {/* INFORMATION WE COLLECT */}

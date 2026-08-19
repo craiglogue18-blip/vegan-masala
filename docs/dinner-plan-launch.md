@@ -2,6 +2,25 @@
 
 Landing page: https://vegan-masala.kit.com/7271084c33
 
+## Kit confirmation setup
+
+The website confirmation URL is:
+
+`https://vegan-masala.com/dinner-plan/confirmed`
+
+The dinner-plan PDF is stored at
+`public/downloads/vegan-masala-7-day-dinner-plan.pdf`. After this branch is deployed,
+change the Kit form's post-confirmation action from **Start a download** to
+**Redirect to another page** using the confirmation URL above. The page provides the
+subscriber with a direct download button.
+
+`NEXT_PUBLIC_DINNER_PLAN_DOWNLOAD_URL` remains available as an optional override if the
+PDF is moved to external file hosting later.
+
+The confirmation page fires Meta Pixel `CompleteRegistration` once per browser session
+after the site's consent platform reports advertising consent. Pixel/dataset ID:
+`1942268053118106`.
+
 ## Instagram launch post
 
 Dinner is planned. I have brought together seven flavour-packed vegan Indian dinners, one organised shopping list and practical preparation notes in a free downloadable plan.

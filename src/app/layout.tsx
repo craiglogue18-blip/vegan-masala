@@ -7,6 +7,7 @@ import localFont from "next/font/local";
 
 import SiteHeader from "@/components/SiteHeader";
 import AdSenseScript from "@/components/AdSenseScript";
+import MetaPixel from "@/components/MetaPixel";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -211,6 +212,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${rajdhani.variable} scroll-pt-[140px]`}>
       <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
         <AdSenseScript />
+        <MetaPixel />
         <div className="relative min-h-screen">
           <div
             aria-hidden="true"
