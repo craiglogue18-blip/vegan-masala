@@ -49,6 +49,7 @@ export default function DinnerPlanConfirmedPage() {
             sizes="(min-width: 768px) 45vw, 100vw"
             className="object-cover"
             priority
+            unoptimized
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
         </div>
