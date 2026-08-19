@@ -41,17 +41,16 @@ export default function DinnerPlanConfirmedPage() {
           </p>
         </div>
 
-        <div className="relative min-h-[320px] md:min-h-full">
+        <div className="relative min-h-[320px] bg-black/40 md:min-h-full">
           <Image
             src="/social/dinner-plan-launch/instagram-facebook-dinner-plan.png"
             alt="A selection of vegan Indian dishes from the seven-day dinner plan"
             fill
             sizes="(min-width: 768px) 45vw, 100vw"
-            className="object-cover"
+            className="object-contain p-4 sm:p-6"
             priority
             unoptimized
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
         </div>
       </div>
     </main>
