@@ -8,14 +8,14 @@ The website confirmation URL is:
 
 `https://vegan-masala.com/dinner-plan/confirmed`
 
-The dinner-plan PDF is currently hosted by Kit and is not present in this repository.
-Keep Kit's existing incentive-file delivery enabled until the PDF has a stable public
-download URL. Do not replace a working Kit download with the website redirect alone.
+The dinner-plan PDF is stored at
+`public/downloads/vegan-masala-7-day-dinner-plan.pdf`. After this branch is deployed,
+change the Kit form's post-confirmation action from **Start a download** to
+**Redirect to another page** using the confirmation URL above. The page provides the
+subscriber with a direct download button.
 
-When a stable PDF URL is available, set it as the Vercel environment variable
-`NEXT_PUBLIC_DINNER_PLAN_DOWNLOAD_URL`, redeploy, and then change the Kit form's
-post-confirmation action from **Start a download** to **Redirect to another page** using
-the confirmation URL above. The page will then show a direct download button.
+`NEXT_PUBLIC_DINNER_PLAN_DOWNLOAD_URL` remains available as an optional override if the
+PDF is moved to external file hosting later.
 
 The confirmation page fires Meta Pixel `CompleteRegistration` once per browser session
 after the site's consent platform reports advertising consent. Pixel/dataset ID:

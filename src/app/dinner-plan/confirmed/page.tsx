@@ -7,7 +7,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const downloadUrl = process.env.NEXT_PUBLIC_DINNER_PLAN_DOWNLOAD_URL?.trim();
+const downloadUrl =
+  process.env.NEXT_PUBLIC_DINNER_PLAN_DOWNLOAD_URL?.trim() ||
+  "/downloads/vegan-masala-7-day-dinner-plan.pdf";
 
 export default function DinnerPlanConfirmedPage() {
   return (
@@ -25,27 +27,13 @@ export default function DinnerPlanConfirmedPage() {
             one organised shopping list and practical preparation notes.
           </p>
 
-          {downloadUrl ? (
-            <a
-              href={downloadUrl}
-              className="mt-8 inline-flex rounded-full bg-[var(--brand-gold)] px-7 py-4 text-base font-extrabold text-black transition hover:brightness-110"
-              download
-            >
-              Download the dinner plan
-            </a>
-          ) : (
-            <div className="mt-8 rounded-2xl border border-[var(--border)] bg-black/40 p-5 text-[var(--text-soft)]">
-              <p className="font-bold text-white">Your download is in the Kit confirmation email.</p>
-              <p className="mt-2 leading-7">
-                If it does not arrive, check your spam or promotions folder. Still
-                missing? Email{" "}
-                <a className="font-bold text-[var(--brand-gold)] underline" href="mailto:hello@vegan-masala.com">
-                  hello@vegan-masala.com
-                </a>
-                .
-              </p>
-            </div>
-          )}
+          <a
+            href={downloadUrl}
+            className="mt-8 inline-flex rounded-full bg-[var(--brand-gold)] px-7 py-4 text-base font-extrabold text-black transition hover:brightness-110"
+            download="vegan-masala-7-day-dinner-plan.pdf"
+          >
+            Download the dinner plan
+          </a>
 
           <p className="mt-6 text-sm leading-6 text-[var(--text-soft)]/80">
             You can bookmark this page. We only measure this confirmation when your
