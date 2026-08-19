@@ -112,6 +112,11 @@ export default function CookiesPage() {
             privacy controls. Browser controls can also block or delete cookies, but
             they do not replace choices made through the consent message.
           </p>
+          <p>
+            If the main consent platform is unavailable, Vegan Masala shows a limited
+            first-party choice specifically for Meta advertising measurement. That
+            choice can be revisited using “Privacy choices” in the site footer.
+          </p>
         </div>
       </section>
 

@@ -8,6 +8,7 @@ import localFont from "next/font/local";
 import SiteHeader from "@/components/SiteHeader";
 import AdSenseScript from "@/components/AdSenseScript";
 import MetaPixel from "@/components/MetaPixel";
+import PrivacyChoicesButton from "@/components/PrivacyChoicesButton";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -134,6 +135,9 @@ function SiteFooter() {
                   <Link href="/affiliate-disclosure" className="hover:text-[var(--brand-gold)]">
                     Affiliate Disclosure
                   </Link>
+                </li>
+                <li>
+                  <PrivacyChoicesButton />
                 </li>
               </ul>
             </div>
