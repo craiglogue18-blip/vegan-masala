@@ -92,20 +92,20 @@ export default function RecipeEquipment({ items }: { items: EquipmentRecommendat
 
       <div className={`mt-5 grid gap-4 ${items.length > 1 ? "md:grid-cols-2" : ""}`}>
         {items.map((item) => (
-          <article key={item.name} className="rounded-2xl border border-white/5 bg-black/15 p-5">
-            <h3 className="font-extrabold text-[var(--brand-gold)]">{item.name}</h3>
-            <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">{item.reason}</p>
-            <a
+          <article
+            key={item.name}
+            className="flex flex-col overflow-hidden rounded-2xl border border-[var(--brand-gold)]/35 bg-gradient-to-br from-black/20 to-[var(--brand-gold)]/5"
+          >
+            <AffiliateCard
+              title={item.name}
+              description={item.reason}
               href={amazonSearch(item.query)}
-              target="_blank"
-              rel="sponsored nofollow noopener noreferrer"
-              className="mt-4 inline-flex rounded-xl bg-[var(--brand-teal)] px-4 py-2 text-sm font-extrabold text-white transition hover:opacity-90"
-            >
-              Browse on Amazon UK <span className="ml-1 font-normal">(paid link)</span>
-            </a>
+              category="Vegan Masala recommends"
+            />
           </article>
         ))}
       </div>
     </section>
   );
 }
+import AffiliateCard from "@/components/AffiliateCard";

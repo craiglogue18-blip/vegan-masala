@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import AffiliateCard from "@/components/AffiliateCard";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
@@ -163,30 +164,18 @@ export default function EquipmentGuidePage() {
           {equipment.map((e) => (
             <article
               key={e.name}
-              className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm transition hover:bg-white/5"
+              className="flex flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm transition hover:bg-white/5"
             >
               <div className="p-4">
                 <GuideImage src={e.image} alt={e.alt} />
               </div>
 
-              <div className="px-6 pb-6">
-                <h3 className="text-base font-semibold tracking-tight text-[var(--brand-ink)]">
-                  {e.name}
-                </h3>
-                <p className="mt-2 text-sm text-[var(--brand-ink)]/70">{e.why}</p>
-                <p className="mt-3 text-sm text-[var(--brand-ink)]/70">
-                  <span className="font-medium text-[var(--brand-ink)]">Tip:</span> {e.tip}
-                </p>
-                <a
-                  href={amazonSearch(e.shopQuery)}
-                  target="_blank"
-                  rel="sponsored nofollow noopener noreferrer"
-                  className="mt-5 inline-flex rounded-xl bg-[var(--brand-teal)] px-4 py-2 text-sm font-bold text-white transition hover:opacity-90"
-                  aria-label={`Browse ${e.name} on Amazon UK — paid link`}
-                >
-                  Browse on Amazon UK <span className="ml-1 font-normal">(paid link)</span>
-                </a>
-              </div>
+              <AffiliateCard
+                title={e.name}
+                description={e.why}
+                tip={e.tip}
+                href={amazonSearch(e.shopQuery)}
+              />
             </article>
           ))}
         </div>
