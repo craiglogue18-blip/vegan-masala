@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import GuideAffiliateRecommendations from "@/components/GuideAffiliateRecommendations";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
@@ -224,6 +225,8 @@ export default function SpicesGuide() {
           authentic — what they do, where they shine, and what to use if you’re missing one.
         </p>
       </header>
+
+      <GuideAffiliateRecommendations slug="indian-spices-explained-for-beginners" />
 
       <section className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {spices.map((s) => (

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import RelatedRecipes from "@/components/RelatedRecipes";
+import GuideAffiliateRecommendations from "@/components/GuideAffiliateRecommendations";
 
 import { getAllGuideSlugs, getGuideBySlug } from "@/lib/guides";
 
@@ -544,6 +545,8 @@ export default async function GuidePage({
           </div>
         ))}
       </section>
+
+      <GuideAffiliateRecommendations slug={guide.slug} />
 
       <RelatedRecipes
         title="Recipes to try next"

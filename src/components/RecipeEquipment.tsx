@@ -1,3 +1,5 @@
+import AffiliateCard from "@/components/AffiliateCard";
+
 type RecipeLike = {
   title?: string;
   slug?: string;
@@ -60,12 +62,15 @@ export function getRecipeEquipment(recipe: RecipeLike): EquipmentRecommendation[
   if (/\b(instant pot|pressure cooker)\b/.test(text)) return [tools.pressureCooker, tools.grinder];
   if (/\b(naan|roti|chapati|poori|dosa|paratha|flatbread)\b/.test(text)) return [tools.tawa];
   if (/\b(chutney|lassi)\b/.test(text)) return [tools.blender, tools.grinder];
-  if (/\b(pakora|bhaji|samosa|jalebi|gobi 65|cauliflower 65|vada pav)\b/.test(text)) {
+  if (/\b(pakora|bhaji|samosa|jalebi|gobi 65|cauliflower 65|vada pav|aloo tikki)\b/.test(text)) {
     return [tools.kadai];
   }
   if (/\b(biryani|pulao|pulav|pilau|rice)\b/.test(text)) return [tools.heavyPot, tools.sieve];
   if (/\b(dal|dahl|lentils?|rajma|kidney beans?|blackeye|black-eyed|kala chana)\b/.test(text)) {
     return [tools.heavyPot, tools.pressureCooker];
+  }
+  if (/\b(curry|masala|korma|kurma|vindaloo|makhani|makhanwala|saag|palak|bhuna|dum aloo)\b/.test(text)) {
+    return [tools.heavyPot, tools.grinder];
   }
 
   return [];
@@ -108,4 +113,3 @@ export default function RecipeEquipment({ items }: { items: EquipmentRecommendat
     </section>
   );
 }
-import AffiliateCard from "@/components/AffiliateCard";
