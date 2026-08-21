@@ -28,7 +28,7 @@ OPTIONS
   --latest
   --file <path>
   --slug <slug>
-  --model <name>      Default: gpt-4o-mini
+  --model <name>      Default: OPENAI_RECIPE_MODEL or gpt-5.4-mini
   --dry-run
   --no-write
   --no-backup
@@ -109,14 +109,33 @@ function parseNumbered(block) {
     .filter(Boolean);
 }
 
-function parseJson(text) {
-  const cleaned = String(text)
-    .trim()
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/```$/i, "")
-    .trim();
-  return JSON.parse(cleaned);
+function validateRewrite(rewritten, original) {
+  const description = String(rewritten?.description || "").trim();
+  const ingredients = cleanArray(rewritten?.ingredients);
+  const instructions = cleanArray(rewritten?.instructions);
+  const notes = cleanArray(rewritten?.notes);
+  const introNote = String(rewritten?.introNote || "").trim();
+  const servingSuggestion = String(rewritten?.servingSuggestion || "").trim();
+
+  const problems = [];
+  if (description.length < 50 || description.length > 160) {
+    problems.push("description must be 50–160 characters");
+  }
+  if (ingredients.length !== original.ingredients.length) {
+    problems.push(`ingredient count changed (${original.ingredients.length} → ${ingredients.length})`);
+  }
+  if (instructions.length < Math.max(3, Math.ceil(original.instructions.length * 0.75))) {
+    problems.push("too many method steps were removed");
+  }
+  if (notes.length < 2 || notes.length > 6) problems.push("notes must contain 2–6 useful items");
+  if (introNote.length < 30 || introNote.length > 220) problems.push("introNote must be 30–220 characters");
+  if (servingSuggestion.length < 20 || servingSuggestion.length > 180) {
+    problems.push("servingSuggestion must be 20–180 characters");
+  }
+
+  if (problems.length) die(`OpenAI response failed validation:\n- ${problems.join("\n- ")}`);
+
+  return { description, ingredients, instructions, notes, introNote, servingSuggestion };
 }
 
 function backupFile(filePath) {
@@ -139,7 +158,10 @@ async function main() {
   const writeLive = args.includes("--write-live");
 
   const modelIdx = args.indexOf("--model");
-  const model = modelIdx !== -1 ? args[modelIdx + 1] : "gpt-4o-mini";
+  const model =
+    modelIdx !== -1
+      ? args[modelIdx + 1]
+      : process.env.OPENAI_RECIPE_MODEL?.trim() || "gpt-5.4-mini";
 
   const fileIdx = args.indexOf("--file");
   const slugIdx = args.indexOf("--slug");
@@ -255,6 +277,7 @@ Important writing rules:
 
 Description guidance:
 - Write 2 sentences maximum.
+- Keep the complete description between 50 and 160 characters.
 - Sentence 1 should explain the dish clearly and concretely.
 - Sentence 2 should suggest flavour, texture or serving context in a natural way.
 - Do not use hype language.
@@ -281,7 +304,7 @@ Serving suggestion guidance:
 - Keep it practical and natural.
 - Suggest simple sides or serving context that fits the dish.
 
-Return strict JSON with exactly:
+Return data matching exactly this structure:
 {
   "description": string,
   "ingredients": string[],
@@ -299,7 +322,7 @@ Current recipe data:
 ${JSON.stringify(payload, null, 2)}
 
 Requirements:
-1. Rewrite the description in the Vegan Masala voice.
+1. Rewrite the description in the Vegan Masala voice, using 50 to 160 characters.
 2. Reorder ingredients into order of use.
 3. Rewrite instructions so the first mention of ingredients includes quantities.
 4. Keep the recipe practical and realistic.
@@ -309,7 +332,7 @@ Requirements:
 8. Write a short, unique introNote for the recipe page.
 9. Write a short, practical servingSuggestion.
 
-Return JSON only.
+Return only the requested structured data.
 `;
 
   if (dryRun) {
@@ -325,14 +348,45 @@ Return JSON only.
 
   const res = await client.responses.create({
     model,
+    store: false,
     input: [
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt },
     ],
+    text: {
+      format: {
+        type: "json_schema",
+        name: "vegan_masala_recipe_improvement",
+        strict: true,
+        schema: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            description: { type: "string" },
+            ingredients: { type: "array", items: { type: "string" } },
+            instructions: { type: "array", items: { type: "string" } },
+            notes: { type: "array", items: { type: "string" } },
+            introNote: { type: "string" },
+            servingSuggestion: { type: "string" },
+          },
+          required: [
+            "description",
+            "ingredients",
+            "instructions",
+            "notes",
+            "introNote",
+            "servingSuggestion",
+          ],
+        },
+      },
+    },
   });
 
-  const text = res.output_text;
-  const rewritten = parseJson(text);
+  if (!res.output_text) die("OpenAI returned no recipe content");
+  const rewritten = validateRewrite(JSON.parse(res.output_text), {
+    ingredients,
+    instructions,
+  });
 
   const nextData = {
     ...data,

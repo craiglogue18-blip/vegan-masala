@@ -1,0 +1,78 @@
+name: Recipe content improvement
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Maximum recipes to improve"
+        required: false
+        default: "2"
+      model:
+        description: "OpenAI model"
+        required: false
+        default: "gpt-5.4-mini"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: recipe-content-improvement
+  cancel-in-progress: false
+
+jobs:
+  improve-recipes:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_RECIPE_MODEL: ${{ inputs.model || 'gpt-5.4-mini' }}
+      RECIPE_LIMIT: ${{ inputs.limit || '2' }}
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Check OpenAI configuration
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "OPENAI_API_KEY is not configured as a repository Actions secret."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Improve selected recipes
+        run: node scripts/ai-improve-recipe-content.mjs --limit "$RECIPE_LIMIT" --model "$OPENAI_RECIPE_MODEL"
+
+      - name: Validate production build
+        run: npm run build
+
+      - name: Create review pull request
+        run: |
+          if git diff --quiet -- content/recipes; then
+            echo "No recipe changes were produced."
+            exit 0
+          fi
+
+          branch="automation/recipe-content-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add content/recipes
+          git commit -m "Improve recipe content with OpenAI"
+          git push origin "$branch"
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "Review automated recipe content improvements" \
+            --body "OpenAI improved up to ${RECIPE_LIMIT} recipes selected by deterministic content-quality checks. Please review culinary accuracy, quantities, method order and voice before merging. Nothing is published automatically."
