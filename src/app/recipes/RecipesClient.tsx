@@ -244,20 +244,18 @@ export default function RecipesClient({ recipes }: { recipes: RecipeSummary[] })
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className={placeholder || recipe.imageIsPlaceholder ? "object-contain p-8 opacity-90" : "object-cover transition duration-500 group-hover:scale-[1.04]"}
                 />
+
+                {mins ? (
+                  <span className="absolute right-3 top-3 rounded-xl bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white shadow">
+                    {mins}
+                  </span>
+                ) : null}
               </div>
 
               <div className="p-5">
-                <div className="flex items-start justify-between gap-3">
-                  <h2 className="text-base font-extrabold tracking-wide text-[var(--brand-gold)] group-hover:underline">
-                    {recipe.title}
-                  </h2>
-
-                  {mins ? (
-                    <span className="shrink-0 rounded-xl border border-[var(--border)] bg-black/20 px-3 py-1 text-xs font-bold text-[var(--brand-gold)]">
-                      {mins}
-                    </span>
-                  ) : null}
-                </div>
+                <h2 className="text-base font-extrabold tracking-wide text-[var(--brand-gold)] group-hover:underline">
+                  {recipe.title}
+                </h2>
 
                 {recipe.description ? (
                   <p className="mt-2 line-clamp-2 text-sm text-[var(--text-soft)]">
