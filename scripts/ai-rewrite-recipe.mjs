@@ -268,6 +268,7 @@ Important writing rules:
 - Use restrained warmth. Let family-table feeling come through naturally, without overdoing nostalgia.
 - Ingredients must be listed in the order they are first used.
 - Method steps must mention ingredient quantities when those ingredients are first introduced.
+- Never reuse one measured ingredient quantity in separate steps. If an ingredient is divided between steps, label it "divided" in the ingredients and clearly allocate portions in the method without making their total exceed the listed quantity.
 - Notes should contain real cooking judgment, storage, reheating, texture and serving guidance — not fluff.
 - Do not invent elaborate cultural claims.
 - Do not overclaim authenticity.
@@ -331,6 +332,7 @@ Requirements:
 7. Do not make the tone generic.
 8. Write a short, unique introNote for the recipe page.
 9. Write a short, practical servingSuggestion.
+10. Check that every measured quantity is used only once in total, unless the ingredient is explicitly marked "divided" and its portions are clearly allocated.
 
 Return only the requested structured data.
 `;
