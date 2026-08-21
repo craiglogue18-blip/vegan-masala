@@ -99,8 +99,6 @@ export async function POST(req: Request) {
   }
 
   const url = String(body?.url ?? "").trim();
-  const rewrite = !!body?.rewrite;
-
   if (!url) {
     return NextResponse.json({ ok: false, error: "Missing url" }, { status: 400 });
   }
@@ -142,23 +140,28 @@ export async function POST(req: Request) {
 
   const mdxBefore = fs.readFileSync(createdPath, "utf8");
 
-  if (rewrite) {
-    log += "\nRunning AI rewrite...\n";
+  log += "\nRunning required Vegan Masala quality rewrite...\n";
 
-    const rewriteRes = await run("node", [
-      "scripts/ai-rewrite-recipe.mjs",
-      "--file",
-      createdPath,
-    ]);
+  const rewriteRes = await run("node", [
+    "scripts/ai-rewrite-recipe.mjs",
+    "--file",
+    createdPath,
+    "--write-live",
+    "--no-backup",
+  ]);
 
-    log += rewriteRes.out + "\n";
+  log += rewriteRes.out + "\n";
 
-    if (rewriteRes.code !== 0) {
-      return NextResponse.json(
-        { ok: false, error: "AI rewrite failed", log, mdxBefore },
-        { status: 500 }
-      );
-    }
+  if (rewriteRes.code !== 0) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Recipe quality rewrite or validation failed",
+        log,
+        mdxBefore,
+      },
+      { status: 500 }
+    );
   }
 
   log += "\nRunning Recraft image generation...\n";

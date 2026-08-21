@@ -246,6 +246,18 @@ function mdxFromRecipe(recipe, pageUrl) {
 
   const steps = normalizeHowToSteps(recipe);
 
+  if (ingredients.length < 3) {
+    throw new Error(
+      `Import stopped: only ${ingredients.length} ingredient${ingredients.length === 1 ? " was" : "s were"} found. Choose a source page with a complete recipe.`
+    );
+  }
+
+  if (steps.length < 2) {
+    throw new Error(
+      `Import stopped: only ${steps.length} method step${steps.length === 1 ? " was" : "s were"} found. Choose a source page with complete instructions.`
+    );
+  }
+
   const cuisine = asArray(recipe.recipeCuisine).map(String).find(Boolean) || "Indian";
 
   const keywords = asArray(recipe.keywords)
@@ -304,10 +316,7 @@ ${stepsBlock}
 
 ## Notes
 
-- Rewrite this recipe into the Vegan Masala voice before publishing.
-- Put ingredients in order of use.
-- Make sure the method mentions quantities when ingredients are first used.
-- Replace generic phrases with more specific flavour and technique language.
+- This imported draft must pass the required Vegan Masala quality rewrite before publishing.
 `,
   };
 }
@@ -358,7 +367,7 @@ async function main() {
     console.log(`Captured source image: ${sourceImageMatch[1]}`);
   }
 
-  console.log("Next: run the AI rewrite so the recipe matches the Vegan Masala style.");
+  console.log("Draft ready for the required Vegan Masala quality rewrite.");
 }
 
 main().catch((e) => {

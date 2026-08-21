@@ -65,7 +65,6 @@ type RecipeSlugsResult =
 
 export default function AdminImportPage() {
   const [url, setUrl] = useState("");
-  const [rewrite, setRewrite] = useState(true);
   const [adminToken, setAdminToken] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -200,7 +199,7 @@ export default function AdminImportPage() {
     setImportPreviewUrl(null);
 
     setLog(
-      `Running import...\nURL: ${u}\nRewrite: ${rewrite ? "Yes" : "No"}\nRecraft image: Yes\n`
+      `Running import...\nURL: ${u}\nVegan Masala quality rewrite: Required\nRecraft image: Yes\n`
     );
 
     try {
@@ -210,7 +209,7 @@ export default function AdminImportPage() {
           "content-type": "application/json",
           "x-admin-token": t,
         },
-        body: JSON.stringify({ url: u, rewrite }),
+        body: JSON.stringify({ url: u }),
       });
 
       const data = (await res.json().catch(() => null)) as ImportResult | null;
@@ -475,9 +474,9 @@ export default function AdminImportPage() {
         Admin • Import Recipe
       </h1>
       <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
-        Paste a recipe URL to import it into <code>content/recipes</code>, optionally rewrite it in
-        Vegan Masala style, then automatically generate a Recraft hero image and attach it to the
-        recipe.
+        Paste a recipe URL to import it into <code>content/recipes</code>. It will receive the
+        required Vegan Masala rewrite and validation before a Recraft hero image is generated and
+        attached.
       </p>
 
       <form
@@ -512,15 +511,15 @@ export default function AdminImportPage() {
           />
         </div>
 
-        <label className="flex items-center gap-3 text-sm text-[var(--text-soft)]">
-          <input
-            type="checkbox"
-            checked={rewrite}
-            onChange={(e) => setRewrite(e.target.checked)}
-            className="h-5 w-5 accent-[var(--brand-red)]"
-          />
-          Run AI rewrite after import (OpenAI)
-        </label>
+        <div className="rounded-xl border border-[var(--brand-gold)]/35 bg-[var(--brand-gold)]/10 p-4 text-sm text-[var(--text-soft)]">
+          <div className="font-extrabold text-[var(--brand-gold)]">
+            Recipe quality pass included
+          </div>
+          <p className="mt-1">
+            Every import is rewritten and checked against the current Vegan Masala
+            standards before its image is generated.
+          </p>
+        </div>
 
         <div className="flex flex-wrap items-center gap-4">
           <button
