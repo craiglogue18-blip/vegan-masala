@@ -27,11 +27,12 @@ function ensureHashtags(
 }
 
 function instagramFallbackTags(slug: string) {
-  const slugTags = slug
+  const words = slug
     .split("-")
-    .filter(Boolean)
-    .slice(0, 3)
-    .map((part) => `#${part.replace(/[^a-zA-Z0-9]/g, "").toLowerCase()}`)
+    .map((part) => part.replace(/[^a-zA-Z0-9]/g, "").toLowerCase())
+    .filter((part) => part && !["recipe", "and", "with", "the"].includes(part));
+  const dishTag = words.slice(0, 4).join("");
+  const slugTags = [dishTag ? `#${dishTag}` : "", ...words.slice(0, 2).map((part) => `#${part}`)]
     .filter(Boolean);
 
   return [
@@ -106,6 +107,9 @@ export async function getSocialCopyForSlug(slug: string) {
         instagramImageSubtitle: ai.instagramImageSubtitle || "",
         pinterestImageHook: ai.pinterestImageHook || "",
         pinterestImageSubtitle: ai.pinterestImageSubtitle || "",
+        videoHook: ai.videoHook || "",
+        videoMainLine: ai.videoMainLine || "",
+        videoOutroLine: ai.videoOutroLine || "",
       };
     }
   } catch (err) {
@@ -140,5 +144,8 @@ export async function getSocialCopyForSlug(slug: string) {
     instagramImageSubtitle: "",
     pinterestImageHook: "",
     pinterestImageSubtitle: "",
+    videoHook: "",
+    videoMainLine: "",
+    videoOutroLine: "",
   };
 }

@@ -916,18 +916,21 @@ export async function buildRecipeVideo(slug: string) {
   const socialCopy = await getSocialCopyForSlug(slug);
 
   const introSubtitle = shortenForReel(
-    socialCopy.instagramImageHook?.trim() ||
+    socialCopy.videoHook?.trim() ||
+      socialCopy.instagramImageHook?.trim() ||
       buildNaturalIntroSubtitle(editorial, type, slug),
     80
   );
 
   const mainSubtitle = shortenForReel(
-    socialCopy.instagramImageSubtitle?.trim() ||
+    socialCopy.videoMainLine?.trim() ||
+      socialCopy.instagramImageSubtitle?.trim() ||
       buildNaturalMainSubtitle(editorial, type, slug),
     72
   );
 
-  const outroTitle = buildNaturalOutroTitle(type, slug);
+  const outroTitle =
+    socialCopy.videoOutroLine?.trim() || buildNaturalOutroTitle(type, slug);
 
   const outroSubtitle = shortenForReel(
     type === "guide"
