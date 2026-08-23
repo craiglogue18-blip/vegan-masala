@@ -15,7 +15,7 @@
 }
 :root{
   /* Adjust this number if you change header height */
-  --header-offset: 110px;
+  --header-offset: 88px;
 }
 
 /* Makes anchor jumps land below your sticky header */

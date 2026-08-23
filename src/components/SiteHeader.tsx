@@ -1,41 +1,32 @@
-// src/components/SiteHeader.tsx
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)]">
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0">
+    <>
+      <header className="border-b border-[var(--border)] bg-[#07131d]">
+        <Link
+          href="/"
+          aria-label="Vegan Masala home"
+          className="mx-auto block max-w-[2048px]"
+        >
           <Image
-            src="/images/header/mandala-bg.jpg"
-            alt=""
-            fill
+            src="/images/header/vegan-masala-site-header.png"
+            alt="Vegan Masala — Plant-based Indian recipes, made authentically"
+            width={2048}
+            height={768}
+            priority
             sizes="100vw"
-            className="h-full w-full object-cover"
+            className="min-h-[150px] w-full object-cover object-center sm:min-h-0"
           />
-          <div className="absolute inset-0 bg-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/75" />
-        </div>
+        </Link>
+      </header>
 
-        <div className="relative mx-auto max-w-7xl px-4 py-3">
-          <div className="flex items-center justify-center overflow-hidden">
-            <Link href="/" className="flex items-center justify-center">
-              <Image
-                src="/brand/logo-flat.png"
-                alt="Vegan Masala"
-                width={220}
-                height={90}
-                style={{
-                  height: "clamp(120px, 14vw, 180px)",
-                  width: "auto",
-                  display: "block",
-                }}
-              />
-            </Link>
-          </div>
-
-          <nav className="mt-2 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[17px] font-bold tracking-wide text-[var(--brand-gold)] sm:gap-x-8 sm:text-[20px]">
+      <nav
+        aria-label="Main navigation"
+        className="sticky top-0 z-50 border-b border-[var(--border)] bg-[#0b151c]/95 px-4 py-3 shadow-lg shadow-black/20 backdrop-blur"
+      >
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-5 gap-y-3 text-[17px] font-bold tracking-wide text-[var(--brand-gold)] sm:gap-x-8 sm:text-[20px]">
             <Link className="hover:opacity-90" href="/recipes">
               Recipes
             </Link>
@@ -57,9 +48,8 @@ export default function SiteHeader() {
             >
               Free Dinner Plan
             </a>
-          </nav>
         </div>
-      </div>
-    </header>
+      </nav>
+    </>
   );
 }
