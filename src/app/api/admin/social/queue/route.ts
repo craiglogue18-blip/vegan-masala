@@ -31,6 +31,7 @@ import { renderInstagramEbookPromo } from "@/lib/social/ebook/renderInstagram";
 import { validateSocialPublishPreflight } from "@/lib/social/core/publishPreflight";
 import { renderPinterestEbookPromo } from "@/lib/social/ebook/renderPinterest";
 import { renderInstagramBySlug } from "@/lib/social/instagram/render";
+import { getSocialCopyForSlug } from "@/lib/social/core/socialCopy";
 
 
 function getBaseUrl() {
@@ -119,6 +120,9 @@ function buildCaption(
 
   if (platform === "pinterest") return buildPinterestCaption(slug, type);
   if (platform === "facebook") return buildFacebookCaption(slug, type);
+  if (platform === "tiktok" || platform === "youtube") {
+    return buildInstagramCaption(slug, type);
+  }
   return buildInstagramCaption(slug, type);
 }
 
@@ -210,6 +214,13 @@ export async function POST(req: Request) {
     if (platform === "pinterest" && assetType === "video") {
       return NextResponse.json(
         { ok: false, error: "Pinterest queue only supports still images" },
+        { status: 400 }
+      );
+    }
+
+    if ((platform === "tiktok" || platform === "youtube") && assetType !== "video") {
+      return NextResponse.json(
+        { ok: false, error: `${platform === "tiktok" ? "TikTok" : "YouTube"} queue requires video` },
         { status: 400 }
       );
     }
@@ -334,11 +345,19 @@ export async function POST(req: Request) {
     const normalizedVideoUrl = preflight.normalized.videoUrl || undefined;
     const normalizedBoard = preflight.normalized.board || null;
 
+    let caption = explicitCaption || buildCaption(platform, slug, contentType, kind);
+    if (!explicitCaption && contentType !== "store" && (platform === "tiktok" || platform === "youtube")) {
+      const socialCopy = await getSocialCopyForSlug(slug);
+      caption = platform === "tiktok"
+        ? socialCopy.tiktokCaption
+        : `${socialCopy.youtubeDescription}\n\nFull recipe: ${url}`;
+    }
+
     const item = await addQueueItem({
       slug,
       title,
       platform,
-      caption: explicitCaption || buildCaption(platform, slug, contentType, kind),
+      caption,
       url,
       board: normalizedBoard,
       scheduledFor: new Date(scheduledFor).toISOString(),

@@ -2,7 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { Redis } from "@upstash/redis";
 
-export type QueuePlatform = "instagram" | "pinterest" | "facebook";
+export type QueuePlatform =
+  | "instagram"
+  | "pinterest"
+  | "facebook"
+  | "tiktok"
+  | "youtube";
 export type QueueStatus = "queued" | "posted" | "failed";
 export type QueueAssetType = "image" | "video";
 export type QueueContentType = "recipe" | "guide" | "store";

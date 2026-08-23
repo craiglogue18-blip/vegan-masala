@@ -62,6 +62,14 @@ function pinterestFallbackTags() {
   ];
 }
 
+function tiktokFallbackTags() {
+  return ["#veganindian", "#veganrecipes", "#indianfood", "#veganmasala"];
+}
+
+function youtubeFallbackTags() {
+  return ["#VeganIndian", "#VeganRecipes", "#VeganMasala"];
+}
+
 export async function getSocialCopyForSlug(slug: string) {
   const detected = detectContentTypeBySlug(slug);
   const type = (detected || "recipe") as ContentType;
@@ -102,10 +110,38 @@ export async function getSocialCopyForSlug(slug: string) {
             : buildPinterestCaptionVariants(slug, type)
           ).map((variant) => ensureHashtags(variant, pinterestFallbackTags())),
 
+        tiktokCaption: ensureHashtags(
+          ai.tiktokCaptionVariants[0] || ai.instagramCaptionVariants[0] || buildInstagramCaption(slug, type),
+          tiktokFallbackTags()
+        ),
+        tiktokCaptionVariants:
+          (ai.tiktokCaptionVariants.length > 0
+            ? ai.tiktokCaptionVariants
+            : ai.instagramCaptionVariants.length > 0
+              ? ai.instagramCaptionVariants
+              : buildInstagramCaptionVariants(slug, type)
+          ).slice(0, 2).map((variant) => ensureHashtags(variant, tiktokFallbackTags())),
+
+        youtubeDescription: ensureHashtags(
+          ai.youtubeDescriptionVariants[0] || ai.facebookCaptionVariants[0] || buildFacebookCaption(slug, type),
+          youtubeFallbackTags()
+        ),
+        youtubeDescriptionVariants:
+          (ai.youtubeDescriptionVariants.length > 0
+            ? ai.youtubeDescriptionVariants
+            : ai.facebookCaptionVariants.length > 0
+              ? ai.facebookCaptionVariants
+              : buildFacebookCaptionVariants(slug, type)
+          ).slice(0, 2).map((variant) => ensureHashtags(variant, youtubeFallbackTags())),
+
         instagramImageHook: ai.instagramImageHook || "",
         instagramImageSubtitle: ai.instagramImageSubtitle || "",
         pinterestImageHook: ai.pinterestImageHook || "",
         pinterestImageSubtitle: ai.pinterestImageSubtitle || "",
+        videoTitle: ai.videoTitle || "",
+        videoHook: ai.videoHook || "",
+        videoMainLine: ai.videoMainLine || "",
+        videoOutroLine: ai.videoOutroLine || "",
       };
     }
   } catch (err) {
@@ -135,10 +171,28 @@ export async function getSocialCopyForSlug(slug: string) {
     pinterestCaptionVariants: buildPinterestCaptionVariants(slug, type).map((variant) =>
       ensureHashtags(variant, pinterestFallbackTags())
     ),
+    tiktokCaption: ensureHashtags(
+      buildInstagramCaption(slug, type),
+      tiktokFallbackTags()
+    ),
+    tiktokCaptionVariants: buildInstagramCaptionVariants(slug, type)
+      .slice(0, 2)
+      .map((variant) => ensureHashtags(variant, tiktokFallbackTags())),
+    youtubeDescription: ensureHashtags(
+      buildFacebookCaption(slug, type),
+      youtubeFallbackTags()
+    ),
+    youtubeDescriptionVariants: buildFacebookCaptionVariants(slug, type)
+      .slice(0, 2)
+      .map((variant) => ensureHashtags(variant, youtubeFallbackTags())),
 
     instagramImageHook: "",
     instagramImageSubtitle: "",
     pinterestImageHook: "",
     pinterestImageSubtitle: "",
+    videoTitle: "",
+    videoHook: "",
+    videoMainLine: "",
+    videoOutroLine: "",
   };
 }

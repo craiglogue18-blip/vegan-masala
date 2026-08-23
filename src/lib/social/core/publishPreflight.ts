@@ -1,6 +1,11 @@
 type PreflightStage = "queue" | "publish";
 
-type QueuePlatform = "instagram" | "pinterest" | "facebook";
+type QueuePlatform =
+  | "instagram"
+  | "pinterest"
+  | "facebook"
+  | "tiktok"
+  | "youtube";
 type QueueAssetType = "image" | "video";
 
 type PublishPreflightInput = {
@@ -35,7 +40,13 @@ export type PublishPreflightResult =
   | PublishPreflightSuccess
   | PublishPreflightFailure;
 
-const ALLOWED_PLATFORMS: QueuePlatform[] = ["instagram", "pinterest", "facebook"];
+const ALLOWED_PLATFORMS: QueuePlatform[] = [
+  "instagram",
+  "pinterest",
+  "facebook",
+  "tiktok",
+  "youtube",
+];
 const ALLOWED_ASSET_TYPES: QueueAssetType[] = ["image", "video"];
 
 function normalizePlatform(value: string) {
@@ -177,6 +188,10 @@ export function validateSocialPublishPreflight(
     if (assetType === "video") {
       return fail(input, "Pinterest only supports image posts");
     }
+  }
+
+  if ((platform === "tiktok" || platform === "youtube") && assetType !== "video") {
+    return fail(input, `${platform === "tiktok" ? "TikTok" : "YouTube"} only supports video posts in this workflow`);
   }
 
   const normalizedImageUrl = normalizeUrl(input.imageUrl, input.baseUrl);

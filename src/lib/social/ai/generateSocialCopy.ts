@@ -8,10 +8,13 @@ type SocialCopyResult = {
   instagramCaptionVariants: string[];
   facebookCaptionVariants: string[];
   pinterestCaptionVariants: string[];
+  tiktokCaptionVariants: string[];
+  youtubeDescriptionVariants: string[];
   instagramImageHook: string;
   instagramImageSubtitle: string;
   pinterestImageHook: string;
   pinterestImageSubtitle: string;
+  videoTitle: string;
   videoHook: string;
   videoMainLine: string;
   videoOutroLine: string;
@@ -40,10 +43,13 @@ function extractJson(text: string): SocialCopyResult {
     instagramCaptionVariants: cleanArray(parsed.instagramCaptionVariants).slice(0, 3),
     facebookCaptionVariants: cleanArray(parsed.facebookCaptionVariants).slice(0, 2),
     pinterestCaptionVariants: cleanArray(parsed.pinterestCaptionVariants).slice(0, 2),
+    tiktokCaptionVariants: cleanArray(parsed.tiktokCaptionVariants).slice(0, 2),
+    youtubeDescriptionVariants: cleanArray(parsed.youtubeDescriptionVariants).slice(0, 2),
     instagramImageHook: safeString(parsed.instagramImageHook),
     instagramImageSubtitle: safeString(parsed.instagramImageSubtitle),
     pinterestImageHook: safeString(parsed.pinterestImageHook),
     pinterestImageSubtitle: safeString(parsed.pinterestImageSubtitle),
+    videoTitle: safeString(parsed.videoTitle),
     videoHook: safeString(parsed.videoHook),
     videoMainLine: safeString(parsed.videoMainLine),
     videoOutroLine: safeString(parsed.videoOutroLine),
@@ -121,10 +127,13 @@ JSON shape:
   "instagramCaptionVariants": ["...", "...", "..."],
   "facebookCaptionVariants": ["...", "..."],
   "pinterestCaptionVariants": ["...", "..."],
+  "tiktokCaptionVariants": ["...", "..."],
+  "youtubeDescriptionVariants": ["...", "..."],
   "instagramImageHook": "...",
   "instagramImageSubtitle": "...",
   "pinterestImageHook": "...",
   "pinterestImageSubtitle": "...",
+  "videoTitle": "...",
   "videoHook": "...",
   "videoMainLine": "...",
   "videoOutroLine": "..."
@@ -134,20 +143,25 @@ Rules:
 - Instagram variants: Warm, Practical, Punchy
 - Facebook variants: Warm, Practical
 - Pinterest variants: Search-friendly, Inviting
+- TikTok variants: one punchy hook, one useful dish detail, then a short save/follow call to action
+- YouTube descriptions: a clear two-sentence summary, the full recipe URL placeholder https://www.vegan-masala.com, then relevant hashtags
 - Every Instagram caption variant must end with 8 to 12 relevant hashtags, each on its own line
 - Every Facebook caption variant must end with 3 to 5 relevant hashtags
 - Every Pinterest caption variant must end with 5 to 8 relevant hashtags
+- Every TikTok caption variant must end with 4 to 6 focused hashtags; do not use generic #fyp tags
+- Every YouTube description variant must end with 3 to 5 focused hashtags
 - Always include brand-safe core tags where relevant, such as #veganrecipes #veganindian #indianfood #plantbased #veganmasala
 - Add dish-specific hashtags when relevant, such as ingredient, dish name, or style of cooking
 - instagramImageHook: 1 sentence, premium, elegant, concise
 - instagramImageSubtitle: 1 sentence, service/texture/cooking payoff
 - pinterestImageHook: 1 sentence, more descriptive, more ingredient-led, more explicit
 - pinterestImageSubtitle: 1 sentence, mention serving style, texture, or what the dish contains
-- videoHook: 1 short striking reel opening line, fast and scroll-stopping
-- videoMainLine: 1 short line for the main food section, vivid and dish-specific
-- videoOutroLine: 1 short CTA line for reels, such as save this recipe, cook this tonight, full recipe on Vegan Masala
+- videoTitle: a natural, appetising display name for the dish, maximum 38 characters; remove SEO repetition, pipes, brackets, quote marks and the word "recipe"
+- videoHook: one striking opening line, maximum 56 characters; concrete and dish-specific, with no hashtags or ellipsis
+- videoMainLine: one vivid sensory or practical payoff, maximum 64 characters; no generic praise, hashtags or ellipsis
+- videoOutroLine: one direct CTA, maximum 42 characters; no hashtags or ellipsis
 - Keep image and video text readable on the graphic
-- For video text, prefer shorter, punchier lines than for static posts
+- Treat the video fields as on-screen copy: short, punchy and instantly readable
         `.trim(),
       },
       {

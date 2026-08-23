@@ -18,6 +18,8 @@ import { renderPinterestEbookPromo } from "@/lib/social/ebook/renderPinterest";
 import { publishInstagram } from "@/lib/social/publishers/publishInstagram";
 import { publishFacebook } from "@/lib/social/publishers/publishFacebook";
 import { validateSocialPublishPreflight } from "@/lib/social/core/publishPreflight";
+import { publishTikTok } from "@/lib/social/publishers/publishTikTok";
+import { publishYouTube } from "@/lib/social/publishers/publishYouTube";
 
 const ROOT = process.cwd();
 
@@ -110,6 +112,10 @@ function platformResponseIdForResult(platform: string, result: any) {
       String(result?.photoId || result?.postId || result?.videoId || result?.published?.id || "") ||
       null
     );
+  }
+
+  if (platform === "tiktok" || platform === "youtube") {
+    return String(result?.id || "") || null;
   }
 
   return null;
@@ -306,6 +312,46 @@ export async function POST(req: Request) {
 
           console.log("QUEUE FACEBOOK RESULT:", result);
 
+          await markQueueItemPostedWithMetadata(item.id, {
+            attemptedAt,
+            completedAt: new Date().toISOString(),
+            platformResponseId: platformResponseIdForResult(item.platform, result),
+          });
+          count++;
+          results.push({
+            id: item.id,
+            slug: item.slug,
+            platform: item.platform,
+            assetType: item.assetType,
+            status: "posted",
+          });
+          continue;
+        }
+
+        if (item.platform === "tiktok" || item.platform === "youtube") {
+          const preflight = validateSocialPublishPreflight({
+            platform: item.platform,
+            slug: item.slug,
+            stage: "publish",
+            assetType: item.assetType || "video",
+            videoUrl: item.videoUrl,
+            baseUrl: getSiteBase(),
+          });
+
+          if (!preflight.ok) throw new Error(preflight.reason);
+
+          const result = item.platform === "tiktok"
+            ? await publishTikTok({
+                caption: item.caption || "",
+                videoUrl: preflight.normalized.videoUrl,
+              })
+            : await publishYouTube({
+                title: item.title || item.slug,
+                description: item.caption || "",
+                videoUrl: preflight.normalized.videoUrl,
+              });
+
+          console.log(`QUEUE ${item.platform.toUpperCase()} RESULT:`, result);
           await markQueueItemPostedWithMetadata(item.id, {
             attemptedAt,
             completedAt: new Date().toISOString(),

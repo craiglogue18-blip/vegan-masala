@@ -174,6 +174,39 @@ function shortenForReel(text: string, max = 110) {
   return `${sliced.slice(0, lastSpace > 50 ? lastSpace : max).trim()}…`;
 }
 
+function sentenceForVideo(text: string, max: number) {
+  const cleaned = cleanPromoText(text)
+    .replace(/\.{3,}|…/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (cleaned.length <= max) return cleaned;
+  const words = cleaned.split(" ");
+  let result = "";
+  for (const word of words) {
+    const next = result ? `${result} ${word}` : word;
+    if (next.length > max) break;
+    result = next;
+  }
+  return result.replace(/[,:;\-–—]+$/, "").trim();
+}
+
+function naturalVideoTitle(title: string) {
+  let first = String(title || "")
+    .split("|")[0]
+    .replace(/[“”"']/g, "")
+    .replace(/\([^)]*\)/g, "")
+    .replace(/\b(recipe|easy|authentic|restaurant style)\b/gi, "")
+    .replace(/^veg\b/i, "Vegetable")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  first = first
+    .replace(/^Vegan Indian Butter Chickpeas$/i, "Creamy Butter Chickpeas")
+    .replace(/^Tandoori Gobi$/i, "Tandoori Cauliflower");
+
+  return sentenceForVideo(first || title, 38);
+}
+
 function getEditorialContent(slug: string, type: "recipe" | "guide") {
   if (type === "recipe") {
     const recipe: any = getRecipeBySlug(slug);
@@ -537,11 +570,11 @@ async function renderCard(
 
   const titleBlock = fitVideoTextBlock({
     text: title,
-    baseChars: 16,
-    baseFontSize: 96,
-    baseLineHeight: 108,
-    maxHeight: 340,
-    minFontSize: 52,
+    baseChars: 18,
+    baseFontSize: 88,
+    baseLineHeight: 98,
+    maxHeight: 205,
+    minFontSize: 58,
   });
 
   const subtitleBlock = fitVideoTextBlock({
@@ -549,8 +582,8 @@ async function renderCard(
     baseChars: 24,
     baseFontSize: 48,
     baseLineHeight: 62,
-    maxHeight: 260,
-    minFontSize: 30,
+    maxHeight: 150,
+    minFontSize: 34,
   });
 
   const titleSvg = titleBlock.lines
@@ -561,7 +594,7 @@ async function renderCard(
         titleBlock.fontSize,
         BRAND.gold,
         540,
-        780 + i * titleBlock.lineHeight,
+        760 + i * titleBlock.lineHeight,
         "center"
       )
     )
@@ -575,7 +608,7 @@ async function renderCard(
         subtitleBlock.fontSize,
         BRAND.soft,
         540,
-        1120 + i * subtitleBlock.lineHeight,
+        1040 + i * subtitleBlock.lineHeight,
         "center"
       )
     )
@@ -624,20 +657,20 @@ async function renderMainOverlay(
 
   const titleBlock = fitVideoTextBlock({
     text: title,
-    baseChars: 20,
-    baseFontSize: 72,
-    baseLineHeight: 82,
-    maxHeight: 240,
-    minFontSize: 42,
+    baseChars: 22,
+    baseFontSize: 62,
+    baseLineHeight: 70,
+    maxHeight: 145,
+    minFontSize: 48,
   });
 
   const subtitleBlock = fitVideoTextBlock({
     text: subtitle,
-    baseChars: 28,
-    baseFontSize: 38,
-    baseLineHeight: 48,
-    maxHeight: 190,
-    minFontSize: 24,
+    baseChars: 34,
+    baseFontSize: 36,
+    baseLineHeight: 46,
+    maxHeight: 100,
+    minFontSize: 28,
   });
 
   const titleSvg = titleBlock.lines
@@ -648,7 +681,7 @@ async function renderMainOverlay(
         titleBlock.fontSize,
         BRAND.gold,
         74,
-        215 + i * titleBlock.lineHeight,
+        205 + i * titleBlock.lineHeight,
         "left"
       )
     )
@@ -662,16 +695,21 @@ async function renderMainOverlay(
         subtitleBlock.fontSize,
         BRAND.soft,
         74,
-        1545 + i * subtitleBlock.lineHeight,
+        1515 + i * subtitleBlock.lineHeight,
         "left"
       )
     )
     .join("");
 
-  const siteSvg = textSvg("vegan-masala.com", font, 30, "#ffffff", 540, 1860, "center");
-  const logoSvg = logoImageSvg(logoPath, 760, 1535, 220, 220);
+  const subtitlePanelHeight = Math.max(
+    118,
+    subtitleBlock.lines.length * subtitleBlock.lineHeight + 48
+  );
+
+  const siteSvg = textSvg("vegan-masala.com", font, 27, "#ffffff", 74, 1788, "left");
+  const logoSvg = logoImageSvg(logoPath, 800, 1540, 150, 150);
   const badgeSvg = textSvg("VEGAN INDIAN RECIPE", font, 28, "#ffffff", 104, 92, "left");
-  const promptSvg = textSvg("SAVE  •  COOK  •  SHARE", font, 25, BRAND.gold, 74, 1765, "left");
+  const promptSvg = textSvg("SAVE  •  COOK  •  SHARE", font, 24, BRAND.gold, 74, 1718, "left");
 
   const svg = `
     <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
@@ -711,7 +749,19 @@ async function renderMainOverlay(
       />
 
       <rect x="72" y="48" width="330" height="72" rx="36" fill="${BRAND.red}" />
-      <rect x="72" y="1828" width="936" height="5" rx="3" fill="${BRAND.gold}" fill-opacity="0.9" />
+      <rect
+        x="52"
+        y="1465"
+        width="720"
+        height="${subtitlePanelHeight}"
+        rx="28"
+        fill="#06131b"
+        fill-opacity="0.82"
+        stroke="${BRAND.border}"
+        stroke-opacity="0.65"
+        stroke-width="2"
+      />
+      <rect x="72" y="1818" width="720" height="4" rx="2" fill="${BRAND.gold}" fill-opacity="0.9" />
 
       ${badgeSvg}
       ${titleSvg}
@@ -757,18 +807,18 @@ async function mainClip(
   const overlay = path.join(TEMP_DIR, "main-overlay.png");
 
   const mask = Buffer.from(`
-    <svg width="900" height="980" xmlns="http://www.w3.org/2000/svg">
-      <rect width="900" height="980" rx="34" ry="34" fill="white" />
+    <svg width="900" height="1040" xmlns="http://www.w3.org/2000/svg">
+      <rect width="900" height="1040" rx="34" ry="34" fill="white" />
     </svg>
   `);
 
   const border = Buffer.from(`
-    <svg width="900" height="980" xmlns="http://www.w3.org/2000/svg">
+    <svg width="900" height="1040" xmlns="http://www.w3.org/2000/svg">
       <rect
         x="2"
         y="2"
         width="896"
-        height="976"
+        height="1036"
         rx="34"
         ry="34"
         fill="none"
@@ -779,7 +829,7 @@ async function mainClip(
   `);
 
   await sharp(image)
-    .resize(900, 980, {
+    .resize(900, 1040, {
       fit: "cover",
       position: "centre",
     })
@@ -802,7 +852,7 @@ async function mainClip(
     `[0:v]scale=1500:2667:force_original_aspect_ratio=increase,crop=1080:1920,eq=saturation=0.9:contrast=1.08:brightness=-0.02,boxblur=18:8,zoompan=z='min(zoom+0.0009,1.12)':d=${MAIN_DURATION * FPS}:x='iw/2-(iw/zoom/2)+sin(on/14)*10':y='ih/2-(ih/zoom/2)+cos(on/18)*8':s=1080x1920:fps=${FPS}[bg]`,
     `[1:v]format=rgba,colorchannelmixer=aa=1[card]`,
     `[2:v]format=rgba[overlay]`,
-    `[bg][card]overlay=(W-w)/2:300[tmp1]`,
+    `[bg][card]overlay=(W-w)/2:350[tmp1]`,
     `[tmp1][overlay]overlay=0:0,format=yuv420p[outv]`,
   ].join(";");
 
@@ -843,7 +893,10 @@ async function concat(
   final: string,
   musicFile: string | null
 ) {
-  const temp = path.join(TEMP_DIR, "video-no-audio.mp4");
+  const temp = path.join(
+    TEMP_DIR,
+    `${path.basename(final, path.extname(final))}-no-audio.mp4`
+  );
 
   await run([
     "-y",
@@ -854,7 +907,7 @@ async function concat(
     "-i",
     outro,
     "-filter_complex",
-    "[0:v][1:v][2:v]concat=n=3:v=1:a=0[outv]",
+    "[0:v]setsar=1[v0];[1:v]setsar=1[v1];[2:v]setsar=1[v2];[v0][v1][v2]concat=n=3:v=1:a=0[outv]",
     "-map",
     "[outv]",
     "-c:v",
@@ -892,7 +945,7 @@ async function concat(
   ]);
 }
 
-export async function buildRecipeVideo(slug: string) {
+async function buildRecipeVideoInternal(slug: string) {
   ensure(VIDEO_DIR);
   ensure(TEMP_DIR);
 
@@ -912,22 +965,27 @@ export async function buildRecipeVideo(slug: string) {
   const type = (detectContentTypeBySlug(slug) || "recipe") as "recipe" | "guide";
   const editorial = getEditorialContent(slug, type);
 
-  const title = editorial.title || titleFromSlug(slug);
+  const sourceTitle = editorial.title || titleFromSlug(slug);
   const socialCopy = await getSocialCopyForSlug(slug);
 
-  const introSubtitle = shortenForReel(
-    socialCopy.instagramImageHook?.trim() ||
+  const title = naturalVideoTitle(socialCopy.videoTitle?.trim() || sourceTitle);
+
+  const introSubtitle = sentenceForVideo(
+    socialCopy.videoHook?.trim() ||
       buildNaturalIntroSubtitle(editorial, type, slug),
-    80
+    56
   );
 
-  const mainSubtitle = shortenForReel(
-    socialCopy.instagramImageSubtitle?.trim() ||
+  const mainSubtitle = sentenceForVideo(
+    socialCopy.videoMainLine?.trim() ||
       buildNaturalMainSubtitle(editorial, type, slug),
-    72
+    64
   );
 
-  const outroTitle = buildNaturalOutroTitle(type, slug);
+  const outroTitle = sentenceForVideo(
+    socialCopy.videoOutroLine?.trim() || buildNaturalOutroTitle(type, slug),
+    42
+  );
 
   const outroSubtitle = shortenForReel(
     type === "guide"
@@ -968,4 +1026,18 @@ export async function buildRecipeVideo(slug: string) {
     durationSeconds: TOTAL_DURATION,
     format: "1080x1920",
   };
+}
+
+// Card, overlay and transition files are shared workspace assets. Serializing
+// builds prevents simultaneous admin or scheduler requests from overwriting a
+// clip while another FFmpeg process is still reading it.
+let videoBuildTail: Promise<void> = Promise.resolve();
+
+export function buildRecipeVideo(slug: string) {
+  const build = videoBuildTail.then(() => buildRecipeVideoInternal(slug));
+  videoBuildTail = build.then(
+    () => undefined,
+    () => undefined
+  );
+  return build;
 }

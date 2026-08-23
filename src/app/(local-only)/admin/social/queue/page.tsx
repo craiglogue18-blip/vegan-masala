@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-type QueuePlatform = "instagram" | "pinterest" | "facebook";
+type QueuePlatform = "instagram" | "pinterest" | "facebook" | "tiktok" | "youtube";
 type QueueStatus = "queued" | "posted" | "failed";
 type QueueAssetType = "image" | "video";
 type QueueContentType = "recipe" | "guide" | "store";
@@ -98,6 +98,14 @@ function platformClasses(platform: QueuePlatform) {
 
   if (platform === "pinterest") {
     return "border-red-500/40 bg-red-500/10 text-red-300";
+  }
+
+  if (platform === "tiktok") {
+    return "border-cyan-400/40 bg-cyan-400/10 text-cyan-200";
+  }
+
+  if (platform === "youtube") {
+    return "border-red-400/40 bg-red-400/10 text-red-200";
   }
 
   return "border-blue-500/40 bg-blue-500/10 text-blue-300";
@@ -1080,7 +1088,7 @@ export default function SocialQueuePage() {
                 </label>
 
                 <div className="mt-2 grid grid-cols-3 gap-2">
-                  {(["instagram", "pinterest", "facebook"] as const).map(
+                  {(["instagram", "pinterest", "facebook", "tiktok", "youtube"] as const).map(
                     (platform) => (
                       <button
                         key={platform}
@@ -1089,6 +1097,8 @@ export default function SocialQueuePage() {
                           setQueuePlatform(platform);
                           if (platform === "pinterest" || queueGroup === "store") {
                             setQueueAssetType("image");
+                          } else if (platform === "tiktok" || platform === "youtube") {
+                            setQueueAssetType("video");
                           }
                         }}
                         className={`rounded-xl px-4 py-3 text-sm font-bold capitalize ${
@@ -1112,7 +1122,9 @@ export default function SocialQueuePage() {
                 <div className="mt-2 grid grid-cols-2 gap-2">
                   {(["image", "video"] as const).map((asset) => {
                     const disabled =
-                      queuePlatform === "pinterest" ||
+                      (queuePlatform === "pinterest" && asset === "video") ||
+                      ((queuePlatform === "tiktok" || queuePlatform === "youtube") &&
+                        asset === "image") ||
                       (queueGroup === "store" && asset === "video");
 
                     return (

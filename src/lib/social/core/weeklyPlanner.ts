@@ -4,11 +4,16 @@ import { addQueueItem, allQueueItems, type QueueItem, type QueuePlatform } from 
 import { contentUrl } from "./urls";
 import { generatePinterestBySlug } from "../generatePinterest";
 import { buildRecipeVideo } from "../video/buildRecipeVideo";
+import { getSocialCopyForSlug } from "./socialCopy";
+import { tikTokPublishingConfigured } from "../publishers/publishTikTok";
+import { youtubePublishingConfigured } from "../publishers/publishYouTube";
 
 const PLATFORM_TIMES: Record<QueuePlatform, { hour: number; minute: number }> = {
   pinterest: { hour: 9, minute: 15 },
   instagram: { hour: 12, minute: 15 },
   facebook: { hour: 18, minute: 15 },
+  tiktok: { hour: 15, minute: 15 },
+  youtube: { hour: 17, minute: 15 },
 };
 
 const SLOT_DAYS = [2, 5] as const; // Tuesday and Friday (UTC)
@@ -124,9 +129,18 @@ export async function planWeeklySocialPosts(options?: {
   const enabledPlatforms: QueuePlatform[] = board
     ? ["pinterest", "instagram", "facebook"]
     : ["instagram", "facebook"];
+  if (tikTokPublishingConfigured()) enabledPlatforms.push("tiktok");
+  if (youtubePublishingConfigured()) enabledPlatforms.push("youtube");
+
   const warnings = board
     ? []
     : ["Pinterest skipped because PINTEREST_BOARD_ID is not configured"];
+  if (!tikTokPublishingConfigured()) {
+    warnings.push("TikTok skipped until an approved Direct Post connection is configured");
+  }
+  if (!youtubePublishingConfigured()) {
+    warnings.push("YouTube skipped until OAuth upload credentials are configured");
+  }
 
   if (options?.dryRun) {
     return { dryRun: true, created: 0, slots, enabledPlatforms, warnings };
@@ -143,19 +157,27 @@ export async function planWeeklySocialPosts(options?: {
       ? await generatePinterestBySlug(slot.slug)
       : null;
     const pinterestUrl = String(pinterestAsset?.image || "");
-    const needsVideo = missing.includes("instagram") || missing.includes("facebook");
+    const needsVideo = missing.some((platform) =>
+      ["instagram", "facebook", "tiktok", "youtube"].includes(platform)
+    );
     const videoAsset = needsVideo ? await buildRecipeVideo(slot.slug) : null;
     const videoUrl = String(videoAsset?.video || "");
     const url = contentUrl(slot.slug, "recipe");
+    const socialCopy = missing.some((platform) => platform === "tiktok" || platform === "youtube")
+      ? await getSocialCopyForSlug(slot.slug)
+      : null;
 
     for (const platform of missing) {
-      const caption =
-        platform === "pinterest"
-          ? buildPinterestCaption(slot.slug, "recipe")
-          : platform === "facebook"
-            ? buildFacebookCaption(slot.slug, "recipe")
-            : buildInstagramCaption(slot.slug, "recipe");
-      const isVideo = platform === "instagram" || platform === "facebook";
+      const caption = platform === "pinterest"
+        ? buildPinterestCaption(slot.slug, "recipe")
+        : platform === "facebook"
+          ? buildFacebookCaption(slot.slug, "recipe")
+          : platform === "tiktok"
+            ? socialCopy?.tiktokCaption || buildInstagramCaption(slot.slug, "recipe")
+            : platform === "youtube"
+              ? `${socialCopy?.youtubeDescription || buildFacebookCaption(slot.slug, "recipe")}\n\nFull recipe: ${url}`
+              : buildInstagramCaption(slot.slug, "recipe");
+      const isVideo = platform !== "pinterest";
       const imageUrl = platform === "pinterest" ? pinterestUrl : "";
 
       await addQueueItem({
