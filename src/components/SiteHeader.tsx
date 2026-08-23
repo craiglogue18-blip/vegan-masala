@@ -8,17 +8,37 @@ export default function SiteHeader() {
         <Link
           href="/"
           aria-label="Vegan Masala home"
-          className="mx-auto block max-w-[1200px]"
+          className="relative mx-auto flex h-[200px] max-w-[3000px] items-center justify-center overflow-hidden sm:h-[280px] lg:h-[320px]"
         >
           <Image
-            src="/images/header/vegan-masala-site-header.png"
-            alt="Vegan Masala — Plant-based Indian recipes, made authentically"
-            width={2048}
-            height={768}
+            src="/images/header/vegan-masala-header-background.png"
+            alt=""
+            fill
             priority
             sizes="100vw"
-            className="min-h-[150px] w-full object-cover object-center sm:min-h-0"
+            className="object-cover object-center"
           />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#07131d]/20 to-transparent" />
+
+          <div className="relative flex flex-col items-center px-20 text-center drop-shadow-[0_2px_5px_rgba(0,0,0,0.9)] sm:px-32">
+            <Image
+              src="/brand/logo-primary.png"
+              alt="Vegan Masala"
+              width={454}
+              height={398}
+              priority
+              className="h-auto w-[145px] sm:w-[205px] lg:w-[230px]"
+            />
+            <p className="-mt-1 whitespace-nowrap text-[11px] font-semibold tracking-wide text-white sm:text-base lg:text-lg">
+              Plant-based Indian recipes, made authentically
+            </p>
+            <p className="mt-1 text-xs font-bold tracking-wide text-[var(--brand-gold)] sm:text-base">
+              vegan-masala.com
+            </p>
+            <p className="text-[10px] font-medium tracking-wide text-white/90 sm:text-sm">
+              information@vegan-masala.com
+            </p>
+          </div>
         </Link>
       </header>
 
