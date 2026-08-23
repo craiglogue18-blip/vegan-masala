@@ -8,7 +8,7 @@ export default function SiteHeader() {
         <Link
           href="/"
           aria-label="Vegan Masala home"
-          className="mx-auto block max-w-[2048px]"
+          className="mx-auto block max-w-[1200px]"
         >
           <Image
             src="/images/header/vegan-masala-site-header.png"
