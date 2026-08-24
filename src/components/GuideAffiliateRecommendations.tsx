@@ -1,12 +1,11 @@
 import AffiliateCard from "@/components/AffiliateCard";
+import { amazonUkSearchUrl } from "@/lib/affiliate";
 
 type Recommendation = {
   title: string;
   description: string;
   query: string;
 };
-
-const ASSOCIATES_TAG = "veganmasala03-21";
 
 const recommendationsByGuide: Record<string, Recommendation[]> = {
   "how-to-cook-basmati-rice": [
@@ -83,9 +82,6 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
   ],
 };
 
-const amazonSearch = (query: string) =>
-  `https://www.amazon.co.uk/s?k=${encodeURIComponent(query)}&tag=${ASSOCIATES_TAG}`;
-
 export default function GuideAffiliateRecommendations({ slug }: { slug: string }) {
   const recommendations = recommendationsByGuide[slug] ?? [];
   if (!recommendations.length) return null;
@@ -112,7 +108,7 @@ export default function GuideAffiliateRecommendations({ slug }: { slug: string }
             <AffiliateCard
               title={item.title}
               description={item.description}
-              href={amazonSearch(item.query)}
+              href={amazonUkSearchUrl(item.query)}
               category="Vegan Masala recommends"
             />
           </article>

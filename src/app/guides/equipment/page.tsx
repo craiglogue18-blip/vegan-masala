@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import AffiliateCard from "@/components/AffiliateCard";
+import { amazonUkSearchUrl } from "@/lib/affiliate";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
@@ -37,9 +38,6 @@ function GuideImage({ src, alt }: { src: string; alt: string }) {
     </div>
   );
 }
-
-const amazonSearch = (query: string) =>
-  `https://www.amazon.co.uk/s?k=${encodeURIComponent(query)}&tag=veganmasala03-21`;
 
 const equipment = [
   {
@@ -174,7 +172,7 @@ export default function EquipmentGuidePage() {
                 title={e.name}
                 description={e.why}
                 tip={e.tip}
-                href={amazonSearch(e.shopQuery)}
+                  href={amazonUkSearchUrl(e.shopQuery)}
               />
             </article>
           ))}

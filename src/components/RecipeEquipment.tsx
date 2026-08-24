@@ -1,4 +1,5 @@
 import AffiliateCard from "@/components/AffiliateCard";
+import { amazonUkSearchUrl } from "@/lib/affiliate";
 
 type RecipeLike = {
   title?: string;
@@ -12,8 +13,6 @@ type EquipmentRecommendation = {
   query: string;
   reason: string;
 };
-
-const ASSOCIATES_TAG = "veganmasala03-21";
 
 const tools = {
   pressureCooker: {
@@ -76,9 +75,6 @@ export function getRecipeEquipment(recipe: RecipeLike): EquipmentRecommendation[
   return [];
 }
 
-const amazonSearch = (query: string) =>
-  `https://www.amazon.co.uk/s?k=${encodeURIComponent(query)}&tag=${ASSOCIATES_TAG}`;
-
 export default function RecipeEquipment({ items }: { items: EquipmentRecommendation[] }) {
   if (!items.length) return null;
 
@@ -104,7 +100,7 @@ export default function RecipeEquipment({ items }: { items: EquipmentRecommendat
             <AffiliateCard
               title={item.name}
               description={item.reason}
-              href={amazonSearch(item.query)}
+              href={amazonUkSearchUrl(item.query)}
               category="Vegan Masala recommends"
             />
           </article>

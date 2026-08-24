@@ -1,3 +1,5 @@
+import AffiliateLink from "@/components/AffiliateLink";
+
 type AffiliateCardProps = {
   title: string;
   description: string;
@@ -43,18 +45,17 @@ export default function AffiliateCard({
         )}
 
         <div className="mt-auto pt-6">
-          <a
+          <AffiliateLink
             href={href}
-            target="_blank"
-            rel="sponsored nofollow noopener noreferrer"
+            title={title}
+            category={category}
             className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--brand-gold)] px-5 py-3 text-center text-sm font-extrabold text-[var(--bg)] shadow-[0_8px_24px_rgba(214,178,94,0.18)] transition hover:-translate-y-0.5 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-gold)]"
-            aria-label={`View ${title} on Amazon UK — paid affiliate link`}
           >
             View on Amazon UK
             <span aria-hidden="true" className="ml-2">
               →
             </span>
-          </a>
+          </AffiliateLink>
           <p className="mt-3 text-center text-xs text-[var(--text-soft)]/75">
             Paid affiliate link · No extra cost to you
           </p>
