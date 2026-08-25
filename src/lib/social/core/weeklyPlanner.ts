@@ -126,19 +126,23 @@ export async function planWeeklySocialPosts(options?: {
   }
 
   const board = options?.pinterestBoardId || process.env.PINTEREST_BOARD_ID?.trim() || "";
+  const [tiktokConnected, youtubeConnected] = await Promise.all([
+    tikTokPublishingConfigured(),
+    youtubePublishingConfigured(),
+  ]);
   const enabledPlatforms: QueuePlatform[] = board
     ? ["pinterest", "instagram", "facebook"]
     : ["instagram", "facebook"];
-  if (tikTokPublishingConfigured()) enabledPlatforms.push("tiktok");
-  if (youtubePublishingConfigured()) enabledPlatforms.push("youtube");
+  if (tiktokConnected) enabledPlatforms.push("tiktok");
+  if (youtubeConnected) enabledPlatforms.push("youtube");
 
   const warnings = board
     ? []
     : ["Pinterest skipped because PINTEREST_BOARD_ID is not configured"];
-  if (!tikTokPublishingConfigured()) {
+  if (!tiktokConnected) {
     warnings.push("TikTok skipped until an approved Direct Post connection is configured");
   }
-  if (!youtubePublishingConfigured()) {
+  if (!youtubeConnected) {
     warnings.push("YouTube skipped until OAuth upload credentials are configured");
   }
 

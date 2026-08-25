@@ -49,6 +49,11 @@ type PinterestBoard = {
   name: string;
 };
 
+type PlatformHealth = {
+  youtube?: { configured: boolean; privacyStatus: string };
+  tiktok?: { configured: boolean; directPostEnabled: boolean; privacyLevel: string };
+};
+
 const STORE_OPTIONS: StoreOption[] = [
   {
     slug: "vegan-indian-sweets-mini-ebook",
@@ -153,6 +158,7 @@ export default function SocialQueuePage() {
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [availableSlugs, setAvailableSlugs] = useState<SlugOption[]>([]);
   const [boards, setBoards] = useState<PinterestBoard[]>([]);
+  const [platformHealth, setPlatformHealth] = useState<PlatformHealth>({});
 
   const [queueLoading, setQueueLoading] = useState(false);
   const [slugsLoading, setSlugsLoading] = useState(false);
@@ -293,8 +299,18 @@ export default function SocialQueuePage() {
     }
   }
 
+  async function loadPlatformHealth() {
+    try {
+      const res = await fetch("/api/admin/social/platform-health", { cache: "no-store" });
+      const data = await res.json();
+      setPlatformHealth(data?.ok ? data : {});
+    } catch {
+      setPlatformHealth({});
+    }
+  }
+
   async function refresh() {
-    await Promise.all([loadQueue(), loadSlugs(), loadBoards()]);
+    await Promise.all([loadQueue(), loadSlugs(), loadBoards(), loadPlatformHealth()]);
   }
 
   useEffect(() => {
@@ -991,6 +1007,44 @@ export default function SocialQueuePage() {
           </div>
         </div>
       </div>
+
+      <section className="mt-6 grid gap-4 md:grid-cols-2">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <div className="font-bold text-white">YouTube automation</div>
+              <div className="mt-1 text-sm text-[var(--text-soft)]">
+                {platformHealth.youtube?.configured
+                  ? `Connected · posts ${platformHealth.youtube.privacyStatus}`
+                  : "Waiting for account authorisation"}
+              </div>
+            </div>
+            {!platformHealth.youtube?.configured && (
+              <a href="/api/youtube/connect" className="rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white">
+                Connect
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <div className="font-bold text-white">TikTok automation</div>
+              <div className="mt-1 text-sm text-[var(--text-soft)]">
+                {platformHealth.tiktok?.configured
+                  ? `Connected · ${platformHealth.tiktok.privacyLevel}`
+                  : "Waiting for app approval and account authorisation"}
+              </div>
+            </div>
+            {!platformHealth.tiktok?.configured && (
+              <a href="/api/tiktok/connect" className="rounded-xl bg-cyan-500 px-4 py-2 text-sm font-bold text-black">
+                Connect
+              </a>
+            )}
+          </div>
+        </div>
+      </section>
 
       <section className="mt-8 grid gap-8 xl:grid-cols-[420px_minmax(0,1fr)]">
         <div className="space-y-8">
