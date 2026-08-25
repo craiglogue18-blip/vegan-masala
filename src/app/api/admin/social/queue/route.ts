@@ -367,6 +367,7 @@ export async function POST(req: Request) {
       imageUrl: normalizedImageUrl,
       publishImageUrl: normalizedPublishImageUrl,
       videoUrl: normalizedVideoUrl,
+      requiresApproval: platform === "tiktok",
     });
 
     return NextResponse.json({

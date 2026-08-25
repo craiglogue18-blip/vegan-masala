@@ -44,6 +44,7 @@ export type QueueItem = {
   publishImageUrl?: string;
   videoUrl?: string;
   attemptCount?: number;
+  requiresApproval?: boolean;
 };
 
 export type QueueAttemptMetadata = {
@@ -261,6 +262,7 @@ export async function dueQueueItems(): Promise<QueueItem[]> {
   const due = items
     .filter((item) => {
       if (item.status !== "queued") return false;
+      if (item.requiresApproval) return false;
       return new Date(item.scheduledFor).getTime() <= now;
     })
     .sort(
