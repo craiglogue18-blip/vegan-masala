@@ -149,6 +149,25 @@ export default function PrivacyPage() {
         </p>
       </section>
 
+      <section className="mt-12">
+        <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">
+          Connected social-media accounts
+        </h2>
+
+        <div className="mt-6 space-y-4 text-[var(--text-soft)] leading-7">
+          <p>
+            Vegan Masala administrators may connect authorised social-media accounts,
+            including TikTok and YouTube, to prepare and publish Vegan Masala content.
+            We process the account identifiers and renewable authorisation tokens needed
+            to maintain those connections and do not sell that information.
+          </p>
+          <p>
+            The account owner can revoke a connection through the relevant social
+            platform or by contacting hello@vegan-masala.com.
+          </p>
+        </div>
+      </section>
+
       {/* YOUR RIGHTS */}
       <section className="mt-12">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">
