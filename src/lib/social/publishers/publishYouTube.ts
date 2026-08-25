@@ -1,5 +1,6 @@
 import { Readable } from "node:stream";
 import { google } from "googleapis";
+import { youtubeOauthClient, youtubeRefreshToken } from "../core/youtubeAuth";
 
 type PublishYouTubeInput = {
   title: string;
@@ -7,31 +8,23 @@ type PublishYouTubeInput = {
   videoUrl: string;
 };
 
-function required(name: string) {
-  const value = process.env[name]?.trim();
-  if (!value) throw new Error(`${name} missing; YouTube is not connected`);
-  return value;
-}
-
-export function youtubePublishingConfigured() {
-  return Boolean(
-    process.env.YOUTUBE_CLIENT_ID?.trim() &&
-      process.env.YOUTUBE_CLIENT_SECRET?.trim() &&
-      process.env.YOUTUBE_REFRESH_TOKEN?.trim()
-  );
+export async function youtubePublishingConfigured() {
+  if (!process.env.YOUTUBE_CLIENT_ID?.trim() || !process.env.YOUTUBE_CLIENT_SECRET?.trim()) {
+    return false;
+  }
+  return Boolean(await youtubeRefreshToken());
 }
 
 export async function publishYouTube(input: PublishYouTubeInput) {
-  const clientId = required("YOUTUBE_CLIENT_ID");
-  const clientSecret = required("YOUTUBE_CLIENT_SECRET");
-  const refreshToken = required("YOUTUBE_REFRESH_TOKEN");
+  const refreshToken = await youtubeRefreshToken();
+  if (!refreshToken) throw new Error("YouTube is not connected");
 
   const response = await fetch(input.videoUrl, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`YouTube video download failed: ${response.status}`);
   }
 
-  const oauth = new google.auth.OAuth2(clientId, clientSecret);
+  const oauth = youtubeOauthClient();
   oauth.setCredentials({ refresh_token: refreshToken });
   const youtube = google.youtube({ version: "v3", auth: oauth });
   const privacyStatus = process.env.YOUTUBE_PRIVACY_STATUS?.trim() || "private";
