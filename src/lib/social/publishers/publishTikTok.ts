@@ -61,8 +61,14 @@ export async function publishTikTok(input: PublishTikTokInput) {
     throw new Error("TikTok creator information returned no allowed privacy level");
   }
 
-  const siteBase = (process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://www.vegan-masala.com").replace(/\/+$/, "");
-  const verifiedVideoUrl = `${siteBase}/api/tiktok/media/${encodeURIComponent(input.queueItemId)}`;
+  const verifiedMediaBase = (
+    process.env.TIKTOK_VERIFIED_MEDIA_BASE_URL || "https://www.vegan-masala.com"
+  ).replace(/\/+$/, "");
+  const verifiedOrigin = new URL(verifiedMediaBase);
+  if (verifiedOrigin.protocol !== "https:" || verifiedOrigin.pathname !== "/") {
+    throw new Error("TIKTOK_VERIFIED_MEDIA_BASE_URL must be an HTTPS origin");
+  }
+  const verifiedVideoUrl = `${verifiedMediaBase}/api/tiktok/media/${encodeURIComponent(input.queueItemId)}`;
 
   const result = await tiktokPost("/v2/post/publish/video/init/", token, {
     post_info: {
