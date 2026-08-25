@@ -4,6 +4,7 @@ import { loadSocialToken } from "../core/socialTokenStore";
 type PublishTikTokInput = {
   caption: string;
   videoUrl: string;
+  queueItemId: string;
 };
 
 const API_BASE = "https://open.tiktokapis.com";
@@ -60,12 +61,8 @@ export async function publishTikTok(input: PublishTikTokInput) {
     throw new Error("TikTok creator information returned no allowed privacy level");
   }
 
-  const videoResponse = await fetch(input.videoUrl, { cache: "no-store" });
-  if (!videoResponse.ok) {
-    throw new Error(`TikTok video download failed: ${videoResponse.status}`);
-  }
-  const video = Buffer.from(await videoResponse.arrayBuffer());
-  if (!video.length) throw new Error("TikTok video download was empty");
+  const siteBase = (process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://www.vegan-masala.com").replace(/\/+$/, "");
+  const verifiedVideoUrl = `${siteBase}/api/tiktok/media/${encodeURIComponent(input.queueItemId)}`;
 
   const result = await tiktokPost("/v2/post/publish/video/init/", token, {
     post_info: {
@@ -79,32 +76,14 @@ export async function publishTikTok(input: PublishTikTokInput) {
       is_aigc: process.env.TIKTOK_MARK_AIGC?.trim().toLowerCase() === "true",
     },
     source_info: {
-      source: "FILE_UPLOAD",
-      video_size: video.length,
-      chunk_size: video.length,
-      total_chunk_count: 1,
+      source: "PULL_FROM_URL",
+      video_url: verifiedVideoUrl,
     },
   });
-
-  const uploadUrl = String(result?.data?.upload_url || "");
-  if (!uploadUrl) throw new Error("TikTok upload URL missing from publish response");
-
-  const upload = await fetch(uploadUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": videoResponse.headers.get("content-type") || "video/mp4",
-      "Content-Length": String(video.length),
-      "Content-Range": `bytes 0-${video.length - 1}/${video.length}`,
-    },
-    body: video,
-  });
-  if (!upload.ok) {
-    const detail = await upload.text().catch(() => "");
-    throw new Error(`TikTok video upload failed: ${upload.status}${detail ? ` ${detail}` : ""}`);
-  }
 
   return {
     id: result?.data?.publish_id || null,
     privacyLevel,
+    videoUrl: verifiedVideoUrl,
   };
 }
