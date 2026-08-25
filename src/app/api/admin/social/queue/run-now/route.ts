@@ -351,9 +351,10 @@ export async function POST(req: Request) {
           if (!preflight.ok) throw new Error(preflight.reason);
 
           const result = item.platform === "tiktok"
-            ? await publishTikTok({
+              ? await publishTikTok({
                 caption: item.caption || "",
                 videoUrl: preflight.normalized.videoUrl,
+                queueItemId: item.id,
               })
             : await publishYouTube({
                 title: item.title || item.slug,
