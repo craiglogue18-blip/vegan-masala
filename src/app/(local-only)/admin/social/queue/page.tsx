@@ -28,6 +28,7 @@ type QueueItem = {
   imageUrl?: string;
   publishImageUrl?: string;
   videoUrl?: string;
+  requiresApproval?: boolean;
 };
 
 type SlugOption = {
@@ -154,6 +155,7 @@ export default function SocialQueuePage() {
   const [queueAssetType, setQueueAssetType] = useState<QueueAssetType>("image");
   const [scheduledFor, setScheduledFor] = useState("");
   const [board, setBoard] = useState("");
+  const [queueCaption, setQueueCaption] = useState("");
 
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [availableSlugs, setAvailableSlugs] = useState<SlugOption[]>([]);
@@ -350,6 +352,11 @@ export default function SocialQueuePage() {
       return;
     }
 
+    if (queuePlatform === "tiktok" && !queueCaption.trim()) {
+      setLog("Review and enter the TikTok caption first");
+      return;
+    }
+
     if (queueGroup === "store" && queueAssetType === "video") {
       setLog("Store promos currently support image only");
       return;
@@ -376,6 +383,7 @@ export default function SocialQueuePage() {
               scheduledFor: new Date(scheduledFor).toISOString(),
               board: queuePlatform === "pinterest" ? board : null,
               assetType: queueAssetType,
+              caption: queuePlatform === "tiktok" ? queueCaption.trim() : undefined,
             };
 
       const res = await fetch("/api/admin/social/queue", {
@@ -652,8 +660,20 @@ export default function SocialQueuePage() {
       }
 
       if (action === "post-now") {
+        const selectedItem = queueItems.find((item) => item.id === id);
+        if (selectedItem?.platform === "tiktok") {
+          const approved = confirm(
+            `Approve this private TikTok post now?\n\n${selectedItem.caption}\n\nIt will be published as SELF_ONLY.`
+          );
+          if (!approved) return;
+        }
         const runRes = await fetch("/api/admin/social/queue/run-now", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            itemId: id,
+            confirmTikTok: selectedItem?.platform === "tiktok",
+          }),
         });
 
         const runData = await runRes.json().catch(() => ({}));
@@ -1221,6 +1241,24 @@ export default function SocialQueuePage() {
                       </option>
                     ))}
                   </select>
+                </div>
+              ) : null}
+
+              {queuePlatform === "tiktok" ? (
+                <div>
+                  <label className="text-sm font-bold text-[var(--brand-gold)]">
+                    TikTok caption (review required)
+                  </label>
+                  <textarea
+                    value={queueCaption}
+                    onChange={(e) => setQueueCaption(e.target.value)}
+                    placeholder="Write and review the exact caption that will appear on TikTok"
+                    rows={5}
+                    className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/30 px-4 py-3 text-white"
+                  />
+                  <p className="mt-2 text-xs text-[var(--text-soft)]">
+                    TikTok items await your approval and are never sent by the automatic queue.
+                  </p>
                 </div>
               ) : null}
 

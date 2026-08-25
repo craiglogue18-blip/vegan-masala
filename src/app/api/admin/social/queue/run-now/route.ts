@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 import {
   dueQueueItems,
+  findQueueItemById,
   classifyQueueFailure,
   markQueueItemFailedWithMetadata,
   markQueueItemPostedWithMetadata,
@@ -148,7 +149,16 @@ export async function POST(req: Request) {
   }
 
   try {
-    const due = await dueQueueItems();
+    const body = await req.json().catch(() => ({}));
+    const itemId = typeof body?.itemId === "string" ? body.itemId.trim() : "";
+    const selected = itemId ? await findQueueItemById(itemId) : null;
+    if (itemId && (!selected || selected.status !== "queued")) {
+      return NextResponse.json({ ok: false, error: "Queued item not found" }, { status: 404 });
+    }
+    if (selected?.platform === "tiktok" && body?.confirmTikTok !== true) {
+      return NextResponse.json({ ok: false, error: "TikTok publishing requires explicit approval" }, { status: 400 });
+    }
+    const due = selected ? [selected] : await dueQueueItems();
     let count = 0;
 
     const results: Array<{
