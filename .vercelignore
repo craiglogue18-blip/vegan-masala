@@ -1,6 +1,8 @@
 generated
 public/generated
 *.mp4
+!public/videos/home-hero-desktop.mp4
+!public/videos/home-hero-mobile.mp4
 *.mov
 *.webm
 *.psd
