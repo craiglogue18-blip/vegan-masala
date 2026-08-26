@@ -179,7 +179,7 @@ function SiteFooter() {
                 </li>
                 <li>
                   <a
-                    href="https://www.facebook.com/profile.php?id=61588342679463"
+                    href="https://www.facebook.com/profile.php?id=61576464682288"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-[var(--brand-gold)]"
