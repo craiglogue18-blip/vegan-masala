@@ -11,6 +11,7 @@ import DinnerPlanPromo from "@/components/DinnerPlanPromo";
 import DinnerFinder from "@/components/DinnerFinder";
 import TrendingRecipes from "@/components/TrendingRecipes";
 import RecipeVideoShowcase from "@/components/RecipeVideoShowcase";
+import homeSeasonal from "@/data/homeSeasonal.json";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
@@ -144,31 +145,31 @@ export default function Home() {
       label: "30-minute meals",
       href: "/recipes?collection=30-min",
       desc: "Fast, bold, weeknight-friendly recipes.",
-      image: "/images/recipes/easy-vegan-indian-butter-chickpeas.png",
+      image: "/images/home/collections/quick-meals.webp",
     },
     {
       label: "One-pot favourites",
       href: "/recipes?collection=one-pot",
       desc: "Less washing up, plenty of flavour.",
-      image: "/images/recipes/instant-pot-chickpea-coconut-curry.png",
+      image: "/images/home/collections/one-pot.webp",
     },
     {
       label: "Dal & lentils",
       href: "/recipes?collection=dal",
       desc: "Comforting staples for everyday cooking.",
-      image: "/images/recipes/tarka-dal.png",
+      image: "/images/home/collections/dal-lentils.webp",
     },
     {
       label: "Curries",
       href: "/recipes?tag=curry",
       desc: "Rich masalas and deeply warming sauces.",
-      image: "/images/recipes/vegan-chicken-madras.png",
+      image: "/images/home/collections/curries.webp",
     },
     {
       label: "Snacks & street food",
       href: "/recipes?tag=snacks",
       desc: "Crisp, savoury favourites made for sharing.",
-      image: "/images/recipes/onion-bhaji.png",
+      image: "/images/home/collections/snacks.webp",
     },
   ];
 
@@ -309,6 +310,36 @@ export default function Home() {
       <div className="mt-10">
         <DinnerPlanPromo placement="homepage" />
       </div>
+
+      <section className="vm-rise mt-12 overflow-hidden rounded-3xl border border-[var(--brand-gold)]/45 bg-[var(--surface)] shadow-lg">
+        <div className="grid items-stretch lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="p-7 sm:p-10">
+            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--brand-gold)]/70">
+              {homeSeasonal.eyebrow}
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight text-[var(--brand-gold)] sm:text-4xl">
+              {homeSeasonal.title}
+            </h2>
+            <p className="mt-4 max-w-2xl leading-7 text-[var(--text-soft)]">
+              {homeSeasonal.description}
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2 text-xs font-extrabold text-[var(--brand-gold)]">
+              {['Aubergine', 'Spinach', 'Tomato', 'Chickpeas', 'Warming spices'].map((ingredient) => (
+                <span key={ingredient} className="rounded-full border border-[var(--border)] bg-black/15 px-3 py-2">
+                  {ingredient}
+                </span>
+              ))}
+            </div>
+            <Link href="/recipes?search=aubergine" className="mt-7 inline-flex rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:opacity-95">
+              {homeSeasonal.cta}
+            </Link>
+          </div>
+          <div className="relative min-h-[280px] overflow-hidden bg-black/20 lg:min-h-full">
+            <Image src="/images/home/collections/curries.webp" alt="A warming vegan Indian curry for the changing season" fill className="object-cover transition duration-700 hover:scale-[1.02]" sizes="(max-width: 1024px) 100vw, 48vw" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
+          </div>
+        </div>
+      </section>
 
       {/* FEATURED COLLECTIONS */}
       <section className="mt-12">
