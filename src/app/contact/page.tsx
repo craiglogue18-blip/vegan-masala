@@ -111,7 +111,7 @@ export default function ContactPage() {
                 <Pin size={18} /> Pinterest
               </a>
 
-              <a href="https://www.facebook.com/profile.php?id=61588342679463" target="_blank" className="social">
+              <a href="https://www.facebook.com/profile.php?id=61576464682288" target="_blank" className="social">
                 <Facebook size={18} /> Facebook
               </a>
 
