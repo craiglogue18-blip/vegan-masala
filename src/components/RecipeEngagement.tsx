@@ -1,8 +1,9 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 const storageEvent = "vegan-masala:saved-recipes-change";
+const recordedThisVisit = new Set<string>();
 
 function subscribe(onChange: () => void) {
   window.addEventListener("storage", onChange);
@@ -18,6 +19,17 @@ export default function RecipeEngagement({ slug, title }: { slug: string; title:
     const savedRecipes = JSON.parse(localStorage.getItem("vegan-masala:saved-recipes") || "[]") as string[];
     return savedRecipes.includes(slug);
   }, () => false);
+
+  useEffect(() => {
+    if (recordedThisVisit.has(slug)) return;
+    recordedThisVisit.add(slug);
+    fetch("/api/engagement/recipe-view", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug }),
+      keepalive: true,
+    }).catch(() => undefined);
+  }, [slug]);
 
   function toggleSaved() {
     const current = new Set(JSON.parse(localStorage.getItem("vegan-masala:saved-recipes") || "[]") as string[]);

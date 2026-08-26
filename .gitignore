@@ -64,4 +64,6 @@ public/generated/
 *.mov
 *.webm
 *.psd
+!public/videos/home-hero-desktop.mp4
+!public/videos/home-hero-mobile.mp4
 ebook 1/

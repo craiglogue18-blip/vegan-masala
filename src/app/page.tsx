@@ -9,6 +9,8 @@ import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import CurrySlider from "@/components/CurrySlider";
 import DinnerPlanPromo from "@/components/DinnerPlanPromo";
 import DinnerFinder from "@/components/DinnerFinder";
+import TrendingRecipes from "@/components/TrendingRecipes";
+import RecipeVideoShowcase from "@/components/RecipeVideoShowcase";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
@@ -75,6 +77,13 @@ export default function Home() {
       .join(" ")
       .toLowerCase(),
   }));
+  const trendingRecipes = recipes.slice(0, 40).map((recipe) => ({
+    slug: recipe.slug,
+    title: recipe.title,
+    description: recipe.description || "A flavour-packed recipe from the Vegan Masala kitchen.",
+    image: getRecipeImage(recipe.slug),
+    totalMinutes: (recipe.prepMinutes || 0) + (recipe.cookMinutes || 0),
+  }));
 
   const organizationJsonLd = {
     "@context": "https://schema.org",
@@ -135,21 +144,31 @@ export default function Home() {
       label: "30-minute meals",
       href: "/recipes?collection=30-min",
       desc: "Fast, bold, weeknight-friendly recipes.",
+      image: "/images/recipes/easy-vegan-indian-butter-chickpeas.png",
     },
     {
       label: "One-pot favourites",
       href: "/recipes?collection=one-pot",
       desc: "Less washing up, plenty of flavour.",
+      image: "/images/recipes/instant-pot-chickpea-coconut-curry.png",
     },
     {
       label: "Dal & lentils",
       href: "/recipes?collection=dal",
       desc: "Comforting staples for everyday cooking.",
+      image: "/images/recipes/tarka-dal.png",
     },
     {
-      label: "Gluten-free",
-      href: "/recipes?collection=gluten-free",
-      desc: "Naturally gluten-free Indian favourites.",
+      label: "Curries",
+      href: "/recipes?tag=curry",
+      desc: "Rich masalas and deeply warming sauces.",
+      image: "/images/recipes/vegan-chicken-madras.png",
+    },
+    {
+      label: "Snacks & street food",
+      href: "/recipes?tag=snacks",
+      desc: "Crisp, savoury favourites made for sharing.",
+      image: "/images/recipes/onion-bhaji.png",
     },
   ];
 
@@ -253,14 +272,20 @@ export default function Home() {
           <div className="relative">
             <div className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-black/20 shadow-lg">
               <div className="relative aspect-[4/4.5] w-full">
-                <Image
-                  src="/images/hero-curry.jpg"
-                  alt="Vegan Indian curry in a rich masala sauce"
-                  fill
-                  className="object-cover"
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 460px"
-                />
+                <video
+                  className="h-full w-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  poster="/images/hero-curry.jpg"
+                  aria-label="A montage of colourful vegan Indian dishes"
+                >
+                  <source media="(max-width: 640px)" src="/videos/home-hero-mobile.mp4" type="video/mp4" />
+                  <source src="/videos/home-hero-desktop.mp4" type="video/mp4" />
+                </video>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
               </div>
             </div>
 
@@ -305,23 +330,31 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {collections.map((c) => (
             <Link
               key={c.href}
               href={c.href}
-              className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm transition hover:bg-black/20"
+              className="group overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="text-base font-extrabold text-[var(--brand-gold)]">
-                {c.label}
+              <div className="relative h-32 overflow-hidden bg-black/20">
+                <Image src={c.image} alt="" fill className="object-cover transition duration-700 group-hover:scale-105" sizes="(max-width: 640px) 100vw, 240px" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               </div>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">
-                {c.desc}
-              </p>
+              <div className="p-5">
+                <div className="text-base font-extrabold text-[var(--brand-gold)]">
+                  {c.label}
+                </div>
+                <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">
+                  {c.desc}
+                </p>
+              </div>
             </Link>
           ))}
         </div>
       </section>
+
+      <TrendingRecipes recipes={trendingRecipes} />
 
       {/* FEATURED RECIPES */}
       <section className="mt-12">
@@ -402,6 +435,8 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      <RecipeVideoShowcase />
 
       {/* FEATURED GUIDES */}
       <section className="mt-12">

@@ -73,3 +73,35 @@ h1, h2, h3, h4, h5 {
   background: rgba(214, 178, 94, 0.35);
   color: var(--text);
 }
+
+@keyframes vm-rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vm-soft-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+
+.vm-rise {
+  animation: vm-rise-in 700ms ease-out both;
+}
+
+.vm-float {
+  animation: vm-soft-float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vm-rise,
+  .vm-float {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
