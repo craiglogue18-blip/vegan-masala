@@ -8,6 +8,7 @@ import { getAllGuides } from "@/lib/guides";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import CurrySlider from "@/components/CurrySlider";
 import DinnerPlanPromo from "@/components/DinnerPlanPromo";
+import DinnerFinder from "@/components/DinnerFinder";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
@@ -57,6 +58,23 @@ export default function Home() {
   const latestRecipes = recipes.slice(0, 6);
   const featuredRecipes = recipes.slice(0, 3);
   const featuredGuides = guides.slice(0, 3);
+  const finderRecipes = recipes.slice(0, 40).map((recipe) => ({
+    slug: recipe.slug,
+    title: recipe.title,
+    description: recipe.description || "",
+    image: getRecipeImage(recipe.slug),
+    totalMinutes: (recipe.prepMinutes || 0) + (recipe.cookMinutes || 0),
+    spice: recipe.spiceLevel || recipe.spice || "",
+    searchText: [
+      recipe.title,
+      recipe.description,
+      ...(recipe.tags || []),
+      ...(recipe.ingredients || []),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase(),
+  }));
 
   const organizationJsonLd = {
     "@context": "https://schema.org",
@@ -68,7 +86,7 @@ export default function Home() {
       "https://www.instagram.com/veganmasalaonline/",
       "https://www.youtube.com/@vegan-masala",
       "https://uk.pinterest.com/VeganMasala/",
-      "https://www.facebook.com/profile.php?id=61588342679463",
+      "https://www.facebook.com/profile.php?id=61576464682288",
       "https://www.tiktok.com/@user2554050179629?lang=en-GB",
     ],
   };
@@ -192,35 +210,28 @@ export default function Home() {
             </p>
 
             <h1 className="mt-3 text-4xl font-extrabold leading-tight text-[var(--brand-gold)] sm:text-5xl">
-              Vegan Indian Cooking with Depth, Warmth and Real Flavour
+              Find your next unforgettable vegan Indian dinner
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">
-              Vegan Masala is a growing collection of vegan Indian recipes and cooking
-              guides built around proper masalas, dependable methods and the generous
-              spirit of family-style food.
-            </p>
-
-            <p className="mt-4 max-w-2xl text-base leading-7 text-[var(--text-soft)]">
-              Explore vegan Indian curries, dals, flatbreads, rice dishes, snacks and
-              practical cooking guides designed to help home cooks build real flavour
-              with confidence.
+              Proper masalas, dependable methods and generous family-style food.
+              Choose what you are craving and we’ll help make dinner the easy decision.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
-                href="/recipes"
+                href="#dinner-finder"
                 className="rounded-xl bg-[var(--brand-red)] px-6 py-3 font-bold text-white shadow transition hover:opacity-90"
               >
-                Browse Recipes
+                Find tonight’s recipe
               </Link>
 
-              <Link
-                href="/guides"
+              <a
+                href="https://vegan-masala.kit.com/7271084c33?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=homepage-hero"
                 className="rounded-xl border border-[var(--border)] bg-black/10 px-6 py-3 font-bold text-[var(--brand-gold)] transition hover:bg-black/20"
               >
-                Explore Guides
-              </Link>
+                Get the free dinner plan
+              </a>
             </div>
 
             <div className="mt-10 grid gap-3 text-sm text-[var(--text-soft)] sm:grid-cols-2 xl:grid-cols-4">
@@ -265,6 +276,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <div className="mt-10">
+        <DinnerFinder recipes={finderRecipes} />
+      </div>
 
       <div className="mt-10">
         <DinnerPlanPromo placement="homepage" />
