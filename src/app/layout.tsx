@@ -23,6 +23,12 @@ export const metadata: Metadata = {
     template: "%s | Vegan Masala",
   },
   description: "Vegan Indian recipes made simple. Weeknight-friendly and tested.",
+  applicationName: "Vegan Masala",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Vegan Masala",
+  },
 
   verification: {
     google: "YpPgzdzyFcDfPTJ-m6ANwOVq0L1uH3pjr8LyE5RgSQ8",

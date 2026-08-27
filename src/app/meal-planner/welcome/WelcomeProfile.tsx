@@ -13,6 +13,7 @@ import {
   type PlannerPreference,
   type PlannerProfile,
 } from "../profile";
+import InstallAppButton from "../InstallAppButton";
 
 const MEALS: PlannerMeal[] = ["Breakfast", "Lunch", "Dinner"];
 const GOALS: { value: PlannerPreference; label: string; detail: string }[] = [
@@ -123,6 +124,11 @@ export default function WelcomeProfile() {
               <p className="mt-1 text-xs text-[var(--text-soft)]">Saved only in this browser on this device.</p>
             </div>
             <button type="button" onClick={saveProfile} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand-red)] px-6 py-3.5 font-extrabold text-white hover:brightness-110">Set up my planner <ArrowRight aria-hidden="true" size={19} /></button>
+          </div>
+          <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-4">
+            <p className="text-sm font-extrabold text-white">Keep Vegan Masala close</p>
+            <p className="mt-1 text-xs text-[var(--text-soft)]">Install it on this device for a home-screen icon and a standalone app window.</p>
+            <div className="mt-3"><InstallAppButton /></div>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import MobileAppNav from "@/components/MobileAppNav";
+import PwaManager from "@/components/PwaManager";
 import SiteHeader from "@/components/SiteHeader";
 
 export default function SiteShell({ children, footer }: { children: React.ReactNode; footer: React.ReactNode }) {
@@ -33,6 +34,7 @@ export default function SiteShell({ children, footer }: { children: React.ReactN
         </div>
       </header>}
       {children}
+      <PwaManager />
       <MobileAppNav />
     </div>
   );
