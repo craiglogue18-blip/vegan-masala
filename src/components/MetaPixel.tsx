@@ -65,6 +65,7 @@ export default function MetaPixel() {
   const listenerId = useRef<number | undefined>(undefined);
 
   useEffect(() => {
+    if (pathname.startsWith("/meal-planner")) return;
     let cancelled = false;
     let pollCount = 0;
     let pollTimer: ReturnType<typeof setInterval> | undefined;
@@ -139,7 +140,7 @@ export default function MetaPixel() {
         window.__tcfapi("removeEventListener", 2, () => undefined, listenerId.current);
       }
     };
-  }, []);
+  }, [pathname]);
 
   const saveFallbackConsent = (granted: boolean) => {
     window.localStorage.setItem(CONSENT_STORAGE_KEY, granted ? "granted" : "denied");
@@ -167,7 +168,7 @@ export default function MetaPixel() {
     trackRegistrationOnce();
   }, [pathname, ready]);
 
-  if (!showFallbackConsent) return null;
+  if (pathname.startsWith("/meal-planner") || !showFallbackConsent) return null;
 
   return (
     <aside

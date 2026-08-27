@@ -1,9 +1,13 @@
+"use client";
+
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 
 const ADSENSE_CLIENT = "ca-pub-8611934119496722";
 
 export default function AdSenseScript() {
-  if (process.env.NEXT_PUBLIC_ADSENSE_ENABLED !== "true") return null;
+  const pathname = usePathname();
+  if (pathname.startsWith("/meal-planner") || process.env.NEXT_PUBLIC_ADSENSE_ENABLED !== "true") return null;
 
   return (
     <Script
