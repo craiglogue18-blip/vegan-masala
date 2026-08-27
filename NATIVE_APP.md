@@ -7,7 +7,7 @@ The iOS beta is packaged with Capacitor using bundle identifier `com.veganmasala
 The native shell loads the deployed meal planner. Until the `meal-planner-v1` branch is deployed, provide a reachable development address:
 
 ```bash
-CAPACITOR_SERVER_URL=http://YOUR-MAC-IP:3001 npm run native:sync
+CAPACITOR_SERVER_URL=http://YOUR-MAC-IP:3001/meal-planner npm run native:sync
 ```
 
 Do not submit a build that still points at a local address. The default production address is `https://www.vegan-masala.com/meal-planner`.
