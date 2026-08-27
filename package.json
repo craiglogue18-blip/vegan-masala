@@ -17,9 +17,12 @@
     "native:run:ios": "cap run ios"
   },
   "dependencies": {
+    "@capacitor/browser": "^8.0.4",
     "@capacitor/cli": "^8.5.0",
     "@capacitor/core": "^8.5.0",
+    "@capacitor/haptics": "^8.0.2",
     "@capacitor/ios": "^8.5.0",
+    "@capacitor/share": "^8.0.1",
     "@mdx-js/mdx": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@resvg/resvg-js": "^2.6.2",

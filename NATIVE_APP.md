@@ -32,4 +32,6 @@ In Xcode, select the App target and configure the Apple development team. Instal
 - Complete App Privacy details based on the production build.
 - Archive in Xcode and upload to TestFlight before requesting App Store review.
 
+Draft listing copy, privacy working notes, screenshot requirements and the split between free preparation and Developer Program steps are in [`APP_STORE_PREP.md`](./APP_STORE_PREP.md).
+
 Android has intentionally not been generated yet because the local Java/Android SDK toolchain is absent. Validate the iOS beta first, then add `@capacitor/android` and run `npx cap add android`.

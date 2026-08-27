@@ -1,5 +1,7 @@
 "use client";
 
+import { Capacitor } from "@capacitor/core";
+import { Share } from "@capacitor/share";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle2, Circle, Search, X } from "lucide-react";
@@ -437,6 +439,16 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
         "",
       ]),
     ].join("\n");
+
+    if (Capacitor.isNativePlatform()) {
+      await Share.share({
+        title: "Vegan Masala shopping list",
+        text,
+        dialogTitle: "Share shopping list",
+      });
+      setExportMessage("Shopping list shared.");
+      return;
+    }
 
     if (navigator.share) {
       try {

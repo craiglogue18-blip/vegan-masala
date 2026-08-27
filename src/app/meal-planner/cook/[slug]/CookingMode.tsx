@@ -1,11 +1,15 @@
 "use client";
 
+import { Capacitor } from "@capacitor/core";
+import { Haptics, NotificationType } from "@capacitor/haptics";
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, Clock3, ListChecks, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 type CookingRecipe = { slug: string; title: string; image?: string; ingredients: string[]; steps: string[]; totalMinutes: number };
+type WakeLockSentinel = { release: () => Promise<void>; released: boolean };
+type WakeLockNavigator = Navigator & { wakeLock?: { request: (type: "screen") => Promise<WakeLockSentinel> } };
 
 function timerMinutes(step: string) {
   const match = step.match(/\b(\d+)\s*(?:-|–|to)?\s*\d*\s*(?:minutes?|mins?)\b/i);
@@ -34,10 +38,39 @@ export default function CookingMode({ recipe }: { recipe: CookingRecipe }) {
 
   useEffect(() => {
     if (secondsLeft === 0) {
-      window.navigator.vibrate?.([200, 100, 200]);
+      if (Capacitor.isNativePlatform()) {
+        void Haptics.notification({ type: NotificationType.Success });
+      } else {
+        window.navigator.vibrate?.([200, 100, 200]);
+      }
       document.title = `Timer finished · ${recipe.title}`;
     }
   }, [recipe.title, secondsLeft]);
+
+  useEffect(() => {
+    let lock: WakeLockSentinel | null = null;
+    let active = true;
+
+    const keepScreenAwake = async () => {
+      try {
+        const wakeLock = (navigator as WakeLockNavigator).wakeLock;
+        if (active && wakeLock && document.visibilityState === "visible") lock = await wakeLock.request("screen");
+      } catch {
+        // Wake Lock is optional; cooking mode remains fully usable without it.
+      }
+    };
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible" && (!lock || lock.released)) void keepScreenAwake();
+    };
+
+    void keepScreenAwake();
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      active = false;
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      if (lock && !lock.released) void lock.release();
+    };
+  }, []);
 
   function toggleIngredient(index: number) {
     setCheckedIngredients((current) => current.includes(index) ? current.filter((item) => item !== index) : [...current, index]);

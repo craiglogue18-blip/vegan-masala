@@ -1,5 +1,6 @@
 "use client";
 
+import { Capacitor } from "@capacitor/core";
 import { Check, Download, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -12,6 +13,7 @@ export default function InstallAppButton() {
   const [promptEvent, setPromptEvent] = useState<InstallPromptEvent | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [installed, setInstalled] = useState(false);
+  const [native, setNative] = useState(false);
 
   useEffect(() => {
     const onPrompt = (event: Event) => {
@@ -20,14 +22,17 @@ export default function InstallAppButton() {
     };
     window.addEventListener("beforeinstallprompt", onPrompt);
     const standalone = window.matchMedia("(display-mode: standalone)").matches || Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
-    const installedStatus = window.setTimeout(() => setInstalled(standalone), 0);
+    const installedStatus = window.setTimeout(() => {
+      setInstalled(standalone);
+      setNative(Capacitor.isNativePlatform());
+    }, 0);
     return () => {
       window.clearTimeout(installedStatus);
       window.removeEventListener("beforeinstallprompt", onPrompt);
     };
   }, []);
 
-  if (installed) return <span className="inline-flex items-center gap-2 rounded-xl border border-green-800/70 bg-green-950/40 px-4 py-2.5 text-sm font-extrabold text-green-300"><Check aria-hidden="true" size={18} /> Installed on this device</span>;
+  if (installed || native) return <span className="inline-flex items-center gap-2 rounded-xl border border-green-800/70 bg-green-950/40 px-4 py-2.5 text-sm font-extrabold text-green-300"><Check aria-hidden="true" size={18} /> Running as the installed app</span>;
 
   async function install() {
     if (!promptEvent) return;
