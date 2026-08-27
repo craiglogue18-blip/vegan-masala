@@ -18,6 +18,8 @@ export type Recipe = {
   cookMinutes?: number;
   diet?: string[];
   tags?: string[];
+  mealTypes?: string[];
+  plannerTags?: string[];
   publishedAt?: string;
 
   // optional extra frontmatter
@@ -146,6 +148,9 @@ function buildRecipeFromFile(file: string): Recipe | null {
       ? (data.tags.filter(Boolean).map(String) as string[])
       : undefined,
 
+    mealTypes: safeStringArray(data.mealTypes),
+    plannerTags: safeStringArray(data.plannerTags),
+
     publishedAt:
       typeof data.publishedAt === "string" ? data.publishedAt : undefined,
 
@@ -168,9 +173,9 @@ function buildRecipeFromFile(file: string): Recipe | null {
     socialHook:
       typeof data.socialHook === "string" ? data.socialHook : undefined,
 
-    ingredients: safeStringArray((data as any).ingredients),
-    instructions: safeStringArray((data as any).instructions),
-    notes: safeStringArray((data as any).notes),
+    ingredients: safeStringArray(data.ingredients),
+    instructions: safeStringArray(data.instructions),
+    notes: safeStringArray(data.notes),
 
     raw,
     content,

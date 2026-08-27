@@ -1,14 +1,19 @@
 // src/app/layout.tsx
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import localFont from "next/font/local";
 
 import SiteHeader from "@/components/SiteHeader";
+import MobileAppNav from "@/components/MobileAppNav";
 import AdSenseScript from "@/components/AdSenseScript";
 import MetaPixel from "@/components/MetaPixel";
 import PrivacyChoicesButton from "@/components/PrivacyChoicesButton";
+
+export const viewport: Viewport = {
+  themeColor: "#07131d",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -229,10 +234,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }}
           />
 
-          <div className="relative z-10">
+          <div className="relative z-10 pb-20 md:pb-0">
             <SiteHeader />
             {children}
             <SiteFooter />
+            <MobileAppNav />
           </div>
         </div>
       </body>
