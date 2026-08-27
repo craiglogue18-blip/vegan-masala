@@ -14,7 +14,7 @@ const items = [
 export default function MobileAppNav() {
   const pathname = usePathname();
 
-  if (pathname === "/meal-planner/welcome" || pathname.startsWith("/meal-planner/cook/")) return null;
+  if (!pathname.startsWith("/meal-planner") || pathname === "/meal-planner/welcome" || pathname.startsWith("/meal-planner/cook/")) return null;
 
   return (
     <nav aria-label="App navigation" className="fixed inset-x-0 bottom-0 z-[60] border-t border-[var(--border)] bg-[#0b1216]/95 px-4 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_30px_rgba(0,0,0,0.35)] backdrop-blur md:hidden">

@@ -5,8 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import localFont from "next/font/local";
 
-import SiteHeader from "@/components/SiteHeader";
-import MobileAppNav from "@/components/MobileAppNav";
+import SiteShell from "@/components/SiteShell";
 import AdSenseScript from "@/components/AdSenseScript";
 import MetaPixel from "@/components/MetaPixel";
 import PrivacyChoicesButton from "@/components/PrivacyChoicesButton";
@@ -234,12 +233,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }}
           />
 
-          <div className="relative z-10 pb-20 md:pb-0">
-            <SiteHeader />
-            {children}
-            <SiteFooter />
-            <MobileAppNav />
-          </div>
+          <SiteShell footer={<SiteFooter />}>{children}</SiteShell>
         </div>
       </body>
     </html>
