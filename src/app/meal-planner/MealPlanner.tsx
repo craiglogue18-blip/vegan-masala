@@ -94,6 +94,7 @@ function nextMondayKey() {
 function shoppingCategory(ingredient: string): ShoppingCategory {
   const text = ingredient.toLowerCase();
   if (/\bfrozen\b/.test(text)) return "Freezer";
+  if (/powder|ground |seeds?|masala|turmeric|paprika|asafoetida|hing|fenugreek|methi|salt|sugar|flour|oil|purée|puree|tinned|tin |canned|coconut milk/.test(text)) return "Cupboard";
   if (/tofu|tempeh|yogurt|yoghurt|milk|cream|butter|margarine|refrigerated/.test(text)) return "Fridge";
   if (/onion|garlic|ginger|tomato|potato|spinach|coriander|cilantro|mint|lime|lemon|pepper|chilli|chili|courgette|zucchini|cauliflower|aubergine|eggplant|carrot|cabbage|mushroom|okra|peas|fenugreek leaves|curry leaves|cucumber|avocado|banana|apple|berries/.test(text)) {
     return "Vegetables & fruit";
@@ -123,6 +124,7 @@ function numericQuantity(value: string) {
 function canonicalIngredientName(value: string) {
   let name = value
     .replace(/^of\s+/i, "")
+    .replace(/^[-–]\s*/, "")
     .replace(/\s*\([^)]*\)\s*/g, " ")
     .split(/,|\s+-\s+/)[0]
     .replace(/\b(?:finely|roughly|thinly|freshly)\s+(?:chopped|sliced|grated|ground)\b/gi, "")
@@ -132,13 +134,25 @@ function canonicalIngredientName(value: string) {
     .trim()
     .toLowerCase();
   const aliases: Array<[RegExp, string]> = [
-    [/^(?:red |white |brown )?onions?$/, "onion"],
-    [/^tomatoes?$/, "tomato"],
-    [/^(?:fresh )?root ginger$/, "fresh ginger"],
-    [/^(?:fresh )?coriander leaves?$/, "fresh coriander"],
+    [/^(?:red |white |brown )?onions?$/, "onions"],
+    [/^(?:fresh )?tomatoes?$/, "tomatoes"],
+    [/^(?:fresh )?(?:root )?ginger$/, "fresh ginger"],
+    [/^(?:fresh |chopped )?coriander leaves?$|^fresh coriander$|^coriander$/, "fresh coriander"],
+    [/^(?:coriander powder|ground coriander)$/, "ground coriander"],
+    [/^cumin$|^cumin powder$|^ground cumin$/, "ground cumin"],
+    [/^(?:red )?chilli powder$|^chili powder$/, "chilli powder"],
+    [/^(?:ground )?turmeric(?: powder)?$/, "ground turmeric"],
+    [/^(?:kasuri methi|dried fenugreek leaves?)$/, "dried fenugreek leaves"],
     [/^chickpeas?$/, "chickpeas"],
-    [/^garlic cloves?$/, "garlic"],
+    [/^(?:garlic cloves?|cloves?(?: of)? garlic)$/, "garlic"],
     [/^chill(?:i|ies)$/, "chillies"],
+    [/^potatoes?$|^.*\bpotatoes$/, "potatoes"],
+    [/^cauliflowers?$/, "cauliflower"],
+    [/^carrots?$/, "carrots"],
+    [/^lemons?$|^lemon juice$/, "lemons"],
+    [/^(?:finely )?chopped tomatoes?(?: or passata)?$|^tomatoes? or passata$/, "tinned tomatoes or passata"],
+    [/^(?:neutral|sunflower|vegetable|rapeseed|cooking) oil$|^oil$/, "cooking oil"],
+    [/^tomato (?:purée|puree|paste)$/, "tomato purée"],
   ];
   for (const [pattern, replacement] of aliases) if (pattern.test(name)) name = replacement;
   return name || value.trim().toLowerCase();
@@ -146,15 +160,30 @@ function canonicalIngredientName(value: string) {
 
 function parseIngredient(value: string): ParsedIngredient {
   const cleaned = value.replace(/^[•\-]\s*/, "").trim();
-  if (/\b(?:to taste|as needed|for serving|for frying|for garnish)\b/i.test(cleaned) || /^(?:a\s+)?(?:pinch|handful)\b/i.test(cleaned)) {
+  const packaged = cleaned.match(/^(\d+(?:\.\d+)?|[¼½¾])\s*x\s*400\s*g\s*(?:tin|can)\s+(?:of\s+)?(.+)$/i);
+  if (packaged) return { name: canonicalIngredientName(packaged[2]), quantity: numericQuantity(packaged[1]), unit: "tin", approximate: false };
+  const juice = cleaned.match(/^juice\s+of\s+(\d+\s*\/\s*\d+|\d+(?:\.\d+)?|[¼½¾])\s+lemons?$/i);
+  if (juice) return { name: "lemons", quantity: numericQuantity(juice[1]), unit: "each", approximate: false };
+  const thumbGinger = cleaned.match(/^(?:a|one)\s+(?:small\s+)?thumb-sized piece of ginger/i);
+  if (thumbGinger) return { name: "fresh ginger", quantity: 30, unit: "g", approximate: true };
+  const inchGinger = cleaned.match(/^(\d+\s*\/\s*\d+|\d+(?:\.\d+)?|[¼½¾])\s*-?\s*inch(?:es)?(?:\s+piece)?\s+(?:of\s+)?(?:fresh\s+)?ginger/i);
+  if (inchGinger) return { name: "fresh ginger", quantity: numericQuantity(inchGinger[1]) * 15, unit: "g", approximate: true };
+  if (/\b(?:to taste|as needed|for serving|for frying|for garnish)\b/i.test(cleaned) || /^(?:a\s+)?(?:(?:small|large)\s+)?(?:pinch|handful)\b/i.test(cleaned)) {
     const name = canonicalIngredientName(cleaned
-      .replace(/^(?:a|one|\d+)?\s*(?:pinches?|handfuls?)\s+(?:of\s+)?/i, "")
+      .replace(/^(?:a|one|\d+)?\s*(?:(?:small|large)\s+)?(?:pinches?|handfuls?)\s+(?:of\s+)?/i, "")
       .replace(/\s*(?:,|\()?(?:to taste|as needed|for serving|for frying|for garnish).*$/i, ""));
     return { name, quantity: null, unit: "", approximate: true };
   }
 
-  const range = cleaned.match(/^\d+(?:\.\d+)?\s*(?:-|–|to)\s*\d+(?:\.\d+)?\s*(?:\w+\s+)?(.*)$/i);
-  if (range) return { name: canonicalIngredientName(range[1]), quantity: null, unit: "", approximate: true };
+  const range = cleaned.match(/^\d+(?:\.\d+)?\s*(?:-|–|to)\s*(\d+(?:\.\d+)?)\s*(g|grams?|kg|ml|l|tsp|teaspoons?|tbsp|tablespoons?|cups?)?\s*(.*)$/i);
+  if (range) {
+    let quantity = Number(range[1]);
+    let unit = UNIT_ALIASES[(range[2] ?? "").toLowerCase()] ?? "each";
+    if (unit === "kg") { quantity *= 1000; unit = "g"; }
+    if (unit === "l") { quantity *= 1000; unit = "ml"; }
+    if (unit === "tbsp") { quantity *= 3; unit = "tsp"; }
+    return { name: canonicalIngredientName(range[3]), quantity, unit, approximate: true };
+  }
 
   const match = cleaned.match(/^(\d+\s*[¼½¾⅓⅔⅛]|[¼½¾⅓⅔⅛]|\d+\s*\/\s*\d+|\d+(?:\.\d+)?)\s*(g|grams?|kg|kilograms?|ml|millilitres?|l|litres?|tsp|teaspoons?|tbsp|tablespoons?|cups?|tins?|cans?|packs?|packets?)?\b\s*(.*)$/i);
   if (!match) return { name: canonicalIngredientName(cleaned), quantity: null, unit: "", approximate: true };
@@ -167,6 +196,39 @@ function parseIngredient(value: string): ParsedIngredient {
   const name = canonicalIngredientName(match[3]);
   if (/^(?:sea salt|salt|salt and pepper)$/.test(name)) return { name: "salt", quantity: null, unit: "", approximate: true };
   return { name, quantity, unit, approximate: false };
+}
+
+function supermarketQuantity(parsed: ParsedIngredient): ParsedIngredient {
+  const item = { ...parsed };
+  if (item.name === "potatoes" && item.quantity !== null && item.unit === "each") {
+    item.quantity *= 200;
+    item.unit = "g";
+  }
+  if (item.name === "garlic" && item.quantity !== null && item.unit === "each") {
+    item.quantity /= 10;
+    item.unit = "bulb";
+  }
+  if (/^(?:inch|inches) (?:piece of )?(?:fresh )?ginger$/.test(item.name) && item.quantity !== null) {
+    item.name = "fresh ginger";
+    item.quantity *= 15;
+    item.unit = "g";
+  }
+  if (item.name === "fresh ginger" && item.quantity !== null && item.unit === "tsp") {
+    item.quantity *= 5;
+    item.unit = "g";
+  }
+  if (item.name === "fresh coriander") {
+    item.quantity = item.quantity === null ? 1 : item.unit === "cup" ? item.quantity * 2 : item.quantity / 12;
+    item.unit = "bunch";
+  }
+  if (item.unit === "cup" && item.quantity !== null) {
+    const gramsPerCup = /(?:rice|lentils?|dal|dahl|flour|besan)/.test(item.name) ? 190 : /sugar|jaggery/.test(item.name) ? 200 : /cashews?/.test(item.name) ? 140 : null;
+    if (gramsPerCup) {
+      item.quantity *= gramsPerCup;
+      item.unit = "g";
+    }
+  }
+  return item;
 }
 
 function prettyName(name: string) {
@@ -182,6 +244,30 @@ function formatQuantity(quantity: number, unit: string) {
   if (unit === "each") return value;
   const plural = rounded === 1 ? unit : unit === "cup" ? "cups" : unit === "tin" ? "tins" : unit === "packet" ? "packets" : unit;
   return `${value} ${plural}`;
+}
+
+const JAR_INGREDIENT = /(?:powder|ground |seeds?$|masala|turmeric|paprika|asafoetida|hing|dried fenugreek|garam masala)/;
+
+function formatSupermarketItem(name: string, quantity: number | null, unit: string) {
+  if (JAR_INGREDIENT.test(name)) {
+    const needed = quantity === null ? "" : ` (${formatQuantity(quantity, unit)} needed)`;
+    return `1 jar ${name}${needed}`;
+  }
+  if (name === "salt") return "1 pack salt";
+  if (name === "cooking oil") return `1 bottle cooking oil${quantity === null ? "" : ` (${unit === "tsp" ? `${Math.ceil(quantity * 5)}ml` : formatQuantity(quantity, unit)} needed)`}`;
+  if (name === "tomato purée") return `1 tube tomato purée${quantity === null ? "" : ` (${unit === "tsp" ? `${Math.ceil(quantity * 5)}ml` : formatQuantity(quantity, unit)} needed)`}`;
+  if (name === "garlic" && unit === "bulb") return `${Math.max(1, Math.ceil(quantity ?? 1))} ${Math.max(1, Math.ceil(quantity ?? 1)) === 1 ? "bulb" : "bulbs"} garlic`;
+  if (name === "fresh coriander" && unit === "bunch") return `${Math.max(1, Math.ceil(quantity ?? 1))} ${Math.max(1, Math.ceil(quantity ?? 1)) === 1 ? "bunch" : "bunches"} fresh coriander`;
+  if (unit === "tin") return `${Math.max(1, Math.ceil(quantity ?? 1))} × 400g ${Math.max(1, Math.ceil(quantity ?? 1)) === 1 ? "tin" : "tins"} ${name}`;
+  if (unit === "each") return `${Math.max(1, Math.ceil(quantity ?? 1))} ${name}`;
+  if (unit === "g") {
+    const increment = name === "fresh ginger" ? 50 : name === "potatoes" ? 500 : 100;
+    const rounded = Math.max(increment, Math.ceil((quantity ?? 0) / increment) * increment);
+    return `${formatQuantity(rounded, "g")} ${name}`;
+  }
+  if (unit === "ml") return `${formatQuantity(Math.max(100, Math.ceil((quantity ?? 0) / 100) * 100), "ml")} ${name}`;
+  if (quantity === null) return `${prettyName(name)} · as needed`;
+  return `${formatQuantity(quantity, unit)} ${name}`;
 }
 
 function recipeText(recipe: PlannerRecipe) {
@@ -494,7 +580,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   );
   const aggregated = new Map<string, { parsed: ParsedIngredient; quantity: number | null; recipeTitles: Set<string> }>();
   for (const source of neededSources) {
-    const parsed = parseIngredient(source.ingredient);
+    const parsed = supermarketQuantity(parseIngredient(source.ingredient));
+    if (/^(?:water|hot water|boiling water)$/.test(parsed.name)) continue;
     const scale = source.occurrences * (people / (source.recipe.servings && source.recipe.servings > 0 ? source.recipe.servings : people));
     const quantity = parsed.quantity === null ? null : parsed.quantity * scale;
     const aggregateKey = `${parsed.name}:${parsed.unit || "pantry"}`;
@@ -509,9 +596,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   }
   const neededShoppingItems: ShoppingItem[] = Array.from(aggregated.entries()).map(([key, item]) => ({
     key,
-    ingredient: item.quantity === null
-      ? `${prettyName(item.parsed.name)} · as needed`
-      : `${formatQuantity(item.quantity, item.parsed.unit)} ${item.parsed.name}`,
+    ingredient: formatSupermarketItem(item.parsed.name, item.quantity, item.parsed.unit),
     recipeTitles: Array.from(item.recipeTitles),
     category: shoppingCategory(item.parsed.name),
   })).sort((a, b) => a.ingredient.localeCompare(b.ingredient));
