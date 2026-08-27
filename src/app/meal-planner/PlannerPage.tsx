@@ -14,6 +14,7 @@ export default function PlannerPage({ view }: { view: PlannerView }) {
     mealTypes: recipe.mealTypes ?? [],
     plannerTags: recipe.plannerTags ?? [],
     ingredients: recipe.ingredients ?? [],
+    servings: recipe.servings,
     spiceLevel: recipe.spiceLevel ?? recipe.spice,
   }));
 

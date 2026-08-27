@@ -28,6 +28,7 @@ type PlannerRecipe = {
   mealTypes: string[];
   plannerTags: string[];
   ingredients: string[];
+  servings?: number;
   spiceLevel?: string;
 };
 
@@ -42,8 +43,15 @@ type PlannedMeal = {
 type ShoppingItem = {
   key: string;
   ingredient: string;
-  recipeTitle: string;
+  recipeTitles: string[];
   category: ShoppingCategory;
+};
+
+type ParsedIngredient = {
+  name: string;
+  quantity: number | null;
+  unit: string;
+  approximate: boolean;
 };
 
 const MEALS: Meal[] = ["Breakfast", "Lunch", "Dinner"];
@@ -91,6 +99,89 @@ function shoppingCategory(ingredient: string): ShoppingCategory {
     return "Vegetables & fruit";
   }
   return "Cupboard";
+}
+
+const FRACTIONS: Record<string, number> = { "¼": 0.25, "½": 0.5, "¾": 0.75, "⅓": 1 / 3, "⅔": 2 / 3, "⅛": 0.125 };
+const UNIT_ALIASES: Record<string, string> = {
+  g: "g", gram: "g", grams: "g", kg: "kg", kilogram: "kg", kilograms: "kg",
+  ml: "ml", millilitre: "ml", millilitres: "ml", l: "l", litre: "l", litres: "l",
+  tsp: "tsp", teaspoon: "tsp", teaspoons: "tsp", tbsp: "tbsp", tablespoon: "tbsp", tablespoons: "tbsp",
+  cup: "cup", cups: "cup", tin: "tin", tins: "tin", can: "tin", cans: "tin",
+  packet: "packet", packets: "packet", pack: "packet", packs: "packet",
+};
+
+function numericQuantity(value: string) {
+  const text = value.trim();
+  if (FRACTIONS[text]) return FRACTIONS[text];
+  const mixed = text.match(/^(\d+)\s*([¼½¾⅓⅔⅛])$/);
+  if (mixed) return Number(mixed[1]) + FRACTIONS[mixed[2]];
+  const slash = text.match(/^(\d+)\s*\/\s*(\d+)$/);
+  if (slash) return Number(slash[1]) / Number(slash[2]);
+  return Number(text);
+}
+
+function canonicalIngredientName(value: string) {
+  let name = value
+    .replace(/^of\s+/i, "")
+    .replace(/\s*\([^)]*\)\s*/g, " ")
+    .split(/,|\s+-\s+/)[0]
+    .replace(/\b(?:finely|roughly|thinly|freshly)\s+(?:chopped|sliced|grated|ground)\b/gi, "")
+    .replace(/\b(?:chopped|sliced|diced|grated|crushed|peeled|drained|rinsed|divided)\b/gi, "")
+    .replace(/^(?:small|medium|large)\s+/i, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+  const aliases: Array<[RegExp, string]> = [
+    [/^(?:red |white |brown )?onions?$/, "onion"],
+    [/^tomatoes?$/, "tomato"],
+    [/^(?:fresh )?root ginger$/, "fresh ginger"],
+    [/^(?:fresh )?coriander leaves?$/, "fresh coriander"],
+    [/^chickpeas?$/, "chickpeas"],
+    [/^garlic cloves?$/, "garlic"],
+    [/^chill(?:i|ies)$/, "chillies"],
+  ];
+  for (const [pattern, replacement] of aliases) if (pattern.test(name)) name = replacement;
+  return name || value.trim().toLowerCase();
+}
+
+function parseIngredient(value: string): ParsedIngredient {
+  const cleaned = value.replace(/^[•\-]\s*/, "").trim();
+  if (/\b(?:to taste|as needed|for serving|for frying|for garnish)\b/i.test(cleaned) || /^(?:a\s+)?(?:pinch|handful)\b/i.test(cleaned)) {
+    const name = canonicalIngredientName(cleaned
+      .replace(/^(?:a|one|\d+)?\s*(?:pinches?|handfuls?)\s+(?:of\s+)?/i, "")
+      .replace(/\s*(?:,|\()?(?:to taste|as needed|for serving|for frying|for garnish).*$/i, ""));
+    return { name, quantity: null, unit: "", approximate: true };
+  }
+
+  const range = cleaned.match(/^\d+(?:\.\d+)?\s*(?:-|–|to)\s*\d+(?:\.\d+)?\s*(?:\w+\s+)?(.*)$/i);
+  if (range) return { name: canonicalIngredientName(range[1]), quantity: null, unit: "", approximate: true };
+
+  const match = cleaned.match(/^(\d+\s*[¼½¾⅓⅔⅛]|[¼½¾⅓⅔⅛]|\d+\s*\/\s*\d+|\d+(?:\.\d+)?)\s*(g|grams?|kg|kilograms?|ml|millilitres?|l|litres?|tsp|teaspoons?|tbsp|tablespoons?|cups?|tins?|cans?|packs?|packets?)?\b\s*(.*)$/i);
+  if (!match) return { name: canonicalIngredientName(cleaned), quantity: null, unit: "", approximate: true };
+
+  let quantity = numericQuantity(match[1]);
+  let unit = UNIT_ALIASES[(match[2] ?? "").toLowerCase()] ?? "each";
+  if (unit === "kg") { quantity *= 1000; unit = "g"; }
+  if (unit === "l") { quantity *= 1000; unit = "ml"; }
+  if (unit === "tbsp") { quantity *= 3; unit = "tsp"; }
+  const name = canonicalIngredientName(match[3]);
+  if (/^(?:sea salt|salt|salt and pepper)$/.test(name)) return { name: "salt", quantity: null, unit: "", approximate: true };
+  return { name, quantity, unit, approximate: false };
+}
+
+function prettyName(name: string) {
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+function formatQuantity(quantity: number, unit: string) {
+  const rounded = Math.round(quantity * 4) / 4;
+  const value = Number.isInteger(rounded) ? String(rounded) : String(Number(rounded.toFixed(2)));
+  if (unit === "g" && rounded >= 1000) return `${Number((rounded / 1000).toFixed(2))}kg`;
+  if (unit === "ml" && rounded >= 1000) return `${Number((rounded / 1000).toFixed(2))}l`;
+  if (unit === "tsp" && rounded >= 3) return `${Number((rounded / 3).toFixed(2))} tbsp`;
+  if (unit === "each") return value;
+  const plural = rounded === 1 ? unit : unit === "cup" ? "cups" : unit === "tin" ? "tins" : unit === "packet" ? "packets" : unit;
+  return `${value} ${plural}`;
 }
 
 function recipeText(recipe: PlannerRecipe) {
@@ -386,18 +477,45 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   const shoppingRecipes = Array.from(
     new Map(plan.map((item) => [item.recipe.slug, item.recipe])).values()
   ).filter((recipe) => recipe.ingredients.length > 0);
-  const shoppingItems: ShoppingItem[] = shoppingRecipes.flatMap((recipe) =>
+  const recipeOccurrences = plan.reduce<Record<string, number>>((counts, item) => {
+    counts[item.recipe.slug] = (counts[item.recipe.slug] ?? 0) + 1;
+    return counts;
+  }, {});
+  const sourceShoppingItems = shoppingRecipes.flatMap((recipe) =>
     recipe.ingredients.map((ingredient, index) => ({
       key: `${recipe.slug}:${index}`,
       ingredient,
-      recipeTitle: recipe.title,
-      category: shoppingCategory(ingredient),
+      recipe,
+      occurrences: recipeOccurrences[recipe.slug] ?? 1,
     }))
   );
-  const neededShoppingItems = shoppingItems.filter(
+  const neededSources = sourceShoppingItems.filter(
     (item) => (shoppingStatuses[item.key] ?? "need") === "need"
   );
-  const haveShoppingItemCount = shoppingItems.filter(
+  const aggregated = new Map<string, { parsed: ParsedIngredient; quantity: number | null; recipeTitles: Set<string> }>();
+  for (const source of neededSources) {
+    const parsed = parseIngredient(source.ingredient);
+    const scale = source.occurrences * (people / (source.recipe.servings && source.recipe.servings > 0 ? source.recipe.servings : people));
+    const quantity = parsed.quantity === null ? null : parsed.quantity * scale;
+    const aggregateKey = `${parsed.name}:${parsed.unit || "pantry"}`;
+    const existing = aggregated.get(aggregateKey);
+    if (existing) {
+      if (existing.quantity !== null && quantity !== null) existing.quantity += quantity;
+      else existing.quantity = null;
+      existing.recipeTitles.add(source.recipe.title);
+    } else {
+      aggregated.set(aggregateKey, { parsed, quantity, recipeTitles: new Set([source.recipe.title]) });
+    }
+  }
+  const neededShoppingItems: ShoppingItem[] = Array.from(aggregated.entries()).map(([key, item]) => ({
+    key,
+    ingredient: item.quantity === null
+      ? `${prettyName(item.parsed.name)} · as needed`
+      : `${formatQuantity(item.quantity, item.parsed.unit)} ${item.parsed.name}`,
+    recipeTitles: Array.from(item.recipeTitles),
+    category: shoppingCategory(item.parsed.name),
+  })).sort((a, b) => a.ingredient.localeCompare(b.ingredient));
+  const haveShoppingItemCount = sourceShoppingItems.filter(
     (item) => shoppingStatuses[item.key] === "have"
   ).length;
   const boughtShoppingItemCount = neededShoppingItems.filter((item) =>
@@ -424,9 +542,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
 
   function setShoppingStatus(key: string, status: ShoppingStatus) {
     setShoppingStatuses((current) => ({ ...current, [key]: status }));
-    if (status !== "need") {
-      setCheckedShoppingItems((current) => current.filter((item) => item !== key));
-    }
+    setCheckedShoppingItems([]);
   }
 
   async function exportShoppingList() {
@@ -637,7 +753,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
           </div>
 
           <div className="mt-6 rounded-2xl border border-[var(--border)] bg-black/20 p-5 text-[var(--text-soft)]">
-            Quantities are shown exactly as written in each recipe. Automatic combining and portion scaling will be added once ingredients are fully structured.
+            Your shopping list combines matching ingredients across the week and adjusts reliable quantities for your household. Flexible amounts such as salt to taste are shown once as “as needed”.
           </div>
           </>}
 
@@ -646,7 +762,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-soft)]">For this plan</p>
                 <h2 className="mt-1 text-3xl">Weekly shopping list</h2>
-                <p className="mt-2 text-sm text-[var(--text-soft)]">{boughtShoppingItemCount} of {neededShoppingItems.length} bought · {haveShoppingItemCount} already at home</p>
+                <p className="mt-2 text-sm text-[var(--text-soft)]">{boughtShoppingItemCount} of {neededShoppingItems.length} weekly items bought · {haveShoppingItemCount} recipe ingredients already at home</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button type="button" onClick={() => void exportShoppingList()} disabled={neededShoppingItems.length === 0} className="rounded-xl bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white disabled:opacity-50">Export list</button>
@@ -671,7 +787,9 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
                               {bought ? <CheckCircle2 aria-hidden="true" className="mt-0.5 shrink-0 text-green-300" size={19} /> : <Circle aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--text-soft)]" size={19} />}
                               <span>
                                 <span className="block text-sm">{item.ingredient}</span>
-                                <span className="mt-0.5 block text-xs text-[var(--text-soft)]">{item.recipeTitle}</span>
+                                <span className="mt-0.5 block text-xs text-[var(--text-soft)]">
+                                  For {item.recipeTitles.length === 1 ? item.recipeTitles[0] : `${item.recipeTitles.length} recipes`}
+                                </span>
                               </span>
                             </button>
                           </li>
