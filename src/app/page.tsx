@@ -247,7 +247,7 @@ export default function Home() {
               </Link>
 
               <a
-                href="https://vegan-masala.kit.com/7271084c33?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=homepage-hero"
+                href="/dinner-plan?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=homepage-hero"
                 className="rounded-xl border border-[var(--border)] bg-black/10 px-6 py-3 font-bold text-[var(--brand-gold)] transition hover:bg-black/20"
               >
                 Get the free dinner plan

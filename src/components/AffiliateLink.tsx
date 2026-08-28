@@ -1,6 +1,7 @@
 "use client";
 
 import type { MouseEventHandler, ReactNode } from "react";
+import { recordEngagement } from "@/lib/dinner-plan-tracking";
 
 declare global {
   interface Window {
@@ -34,6 +35,10 @@ export default function AffiliateLink({
 
     window.dataLayer?.push({ event: "affiliate_click", ...event });
     window.fbq?.("trackCustom", "AffiliateClick", event);
+    recordEngagement("affiliate_click", {
+      category,
+      product: title,
+    });
   };
 
   return (

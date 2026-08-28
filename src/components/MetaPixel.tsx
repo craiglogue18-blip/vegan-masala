@@ -2,6 +2,10 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import {
+  DINNER_PLAN_COMPLETED_KEY,
+  DINNER_PLAN_PENDING_KEY,
+} from "@/lib/dinner-plan-tracking";
 
 const PIXEL_ID = "1942268053118106";
 const CONSENT_POLL_INTERVAL_MS = 250;
@@ -9,8 +13,6 @@ const CONSENT_POLL_LIMIT = 40;
 const FALLBACK_CONSENT_POLL_COUNT = 12;
 const REGISTRATION_EVENT = "vegan-masala:complete-registration";
 const OPEN_PRIVACY_CHOICES_EVENT = "vegan-masala:open-privacy-choices";
-const REGISTRATION_STORAGE_KEY =
-  "vegan-masala:complete-registration:7-day-dinner-plan:v1";
 const CONSENT_STORAGE_KEY = "vegan-masala:advertising-consent:v1";
 const CONFIRMATION_PATH = "/dinner-plan/confirmed";
 
@@ -49,13 +51,22 @@ function initialisePixel() {
 
 function trackRegistrationOnce() {
   if (!window.fbq || !window.__vmDinnerPlanRegistrationRequested) return;
-  if (window.sessionStorage.getItem(REGISTRATION_STORAGE_KEY)) return;
+  const eventId =
+    window.__vmDinnerPlanRegistrationEventId ||
+    window.localStorage.getItem(DINNER_PLAN_PENDING_KEY);
+  if (!eventId) return;
+  if (window.localStorage.getItem(DINNER_PLAN_COMPLETED_KEY) === eventId) return;
 
-  window.sessionStorage.setItem(REGISTRATION_STORAGE_KEY, "true");
-  window.fbq("track", "CompleteRegistration", {
-    content_name: "7-Day Vegan Indian Dinner Plan",
-    status: true,
-  });
+  window.localStorage.setItem(DINNER_PLAN_COMPLETED_KEY, eventId);
+  window.fbq(
+    "track",
+    "CompleteRegistration",
+    {
+      content_name: "7-Day Vegan Indian Dinner Plan",
+      status: true,
+    },
+    { eventID: eventId },
+  );
 }
 
 export default function MetaPixel() {
@@ -158,7 +169,10 @@ export default function MetaPixel() {
   };
 
   useEffect(() => {
-    window.__vmDinnerPlanRegistrationRequested = pathname === CONFIRMATION_PATH;
+    const pendingSignupId = window.localStorage.getItem(DINNER_PLAN_PENDING_KEY);
+    window.__vmDinnerPlanRegistrationRequested =
+      pathname === CONFIRMATION_PATH && Boolean(pendingSignupId);
+    window.__vmDinnerPlanRegistrationEventId = pendingSignupId || undefined;
     if (window.__vmDinnerPlanRegistrationRequested) {
       window.dispatchEvent(new Event(REGISTRATION_EVENT));
     }

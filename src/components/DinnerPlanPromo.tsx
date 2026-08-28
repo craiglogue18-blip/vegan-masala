@@ -5,7 +5,7 @@ type DinnerPlanPromoProps = {
   compact?: boolean;
 };
 
-const landingPage = "https://vegan-masala.kit.com/7271084c33";
+const landingPage = "/dinner-plan";
 
 export default function DinnerPlanPromo({ placement, compact = false }: DinnerPlanPromoProps) {
   const href = `${landingPage}?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=${placement}`;

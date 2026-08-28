@@ -66,7 +66,7 @@ export default function SiteHeader() {
               Contact
             </Link>
             <a
-              href="https://vegan-masala.kit.com/7271084c33?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=header"
+              href="/dinner-plan?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=header"
               className="rounded-xl bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white shadow transition hover:-translate-y-0.5 hover:opacity-95 sm:text-base"
             >
               Free Dinner Plan

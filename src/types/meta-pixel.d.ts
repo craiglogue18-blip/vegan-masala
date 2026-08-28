@@ -31,6 +31,7 @@ declare global {
     _fbq?: MetaPixelFunction;
     __tcfapi?: TcfApi;
     __vmDinnerPlanRegistrationRequested?: boolean;
+    __vmDinnerPlanRegistrationEventId?: string;
   }
 }
 
