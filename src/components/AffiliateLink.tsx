@@ -13,6 +13,8 @@ type AffiliateLinkProps = {
   href: string;
   title: string;
   category: string;
+  network?: string;
+  destinationLabel?: string;
   className?: string;
   children: ReactNode;
 };
@@ -21,12 +23,14 @@ export default function AffiliateLink({
   href,
   title,
   category,
+  network = "Amazon UK",
+  destinationLabel = network,
   className,
   children,
 }: AffiliateLinkProps) {
   const trackClick: MouseEventHandler<HTMLAnchorElement> = () => {
     const event = {
-      affiliate_network: "Amazon UK",
+      affiliate_network: network,
       affiliate_product: title,
       affiliate_category: category,
       destination_url: href,
@@ -47,7 +51,7 @@ export default function AffiliateLink({
       target="_blank"
       rel="sponsored nofollow noopener noreferrer"
       className={className}
-      aria-label={`View ${title} on Amazon UK — paid affiliate link`}
+      aria-label={`View ${title} at ${destinationLabel} — paid affiliate link`}
       onClick={trackClick}
     >
       {children}

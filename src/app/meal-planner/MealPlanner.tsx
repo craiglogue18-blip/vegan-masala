@@ -4,6 +4,7 @@ import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
 import Image from "next/image";
 import Link from "next/link";
+import ShoppingAffiliatePartners from "@/components/ShoppingAffiliatePartners";
 import { ArrowLeftRight, CheckCircle2, Circle, Pencil, Plus, Search, Trash2, UtensilsCrossed, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -1204,6 +1205,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
             ) : (
               <p className="mt-6 rounded-2xl border border-[var(--border)] bg-black/20 p-5 text-[var(--text-soft)]">Everything is marked as already at home or not needed.</p>
             )}
+
+            <ShoppingAffiliatePartners />
 
             <div className="mt-10 border-t border-[var(--border)] pt-7">
               <h3 className="text-2xl">Choose what goes on the list</h3>

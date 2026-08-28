@@ -24,6 +24,12 @@ export default function AffiliateDisclosurePage() {
         <p className="font-bold text-[var(--brand-gold)]">
           As an Amazon Associate I earn from qualifying purchases.
         </p>
+        <p>
+          Vegan Masala may also participate in affiliate programmes operated by
+          selected food, grocery and kitchenware retailers. Where these links are
+          present, the retailer is named and the link is identified as a paid
+          affiliate link.
+        </p>
       </div>
     </main>
   );
