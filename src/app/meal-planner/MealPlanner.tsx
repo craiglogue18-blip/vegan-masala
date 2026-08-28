@@ -4,7 +4,7 @@ import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle2, Circle, Pencil, Plus, Search, Trash2, X } from "lucide-react";
+import { ArrowLeftRight, CheckCircle2, Circle, Pencil, Plus, Search, Trash2, UtensilsCrossed, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -14,6 +14,7 @@ import { PROFILE_SKIPPED_KEY, readPlannerProfile } from "./profile";
 type Meal = "Breakfast" | "Lunch" | "Dinner";
 type Preference = "Any" | "Quick" | "Low cost" | "High protein" | "Family friendly";
 type ShoppingStatus = "need" | "have" | "skip";
+type MealStatus = "skipped" | "eating-out";
 type ShoppingCategory = "Vegetables & fruit" | "Fridge" | "Freezer" | "Cupboard";
 export type PlannerView = "dashboard" | "build" | "shopping" | "recipes";
 
@@ -437,15 +438,27 @@ function MealCard({
   cooked,
   onSwap,
   onToggleCooked,
+  status,
+  onStatus,
+  onMove,
+  canMoveBack,
+  canMoveForward,
 }: {
   item: PlannedMeal;
   cooked: boolean;
   onSwap: () => void;
   onToggleCooked: () => void;
+  status?: MealStatus;
+  onStatus: (status?: MealStatus) => void;
+  onMove: (direction: -1 | 1) => void;
+  canMoveBack: boolean;
+  canMoveForward: boolean;
 }) {
   const { meal, recipe } = item;
   const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
   const cookHref = `/meal-planner/cook/${recipe.slug}${item.batchCook ? "?batch=2" : ""}`;
+
+  if (status) return <div className="rounded-2xl border border-dashed border-[var(--border)] bg-black/20 p-4"><p className="text-xs font-bold uppercase tracking-widest text-[var(--text-soft)]">{meal}</p><div className="mt-2 flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-[var(--brand-gold)]"><UtensilsCrossed aria-hidden="true" size={19} /></span><div><p className="font-extrabold text-white">{status === "eating-out" ? "Eating out" : "No meal planned"}</p><button type="button" onClick={() => onStatus(undefined)} className="mt-1 text-xs font-bold text-[var(--brand-gold)] underline">Restore recipe</button></div></div></div>;
 
   return (
     <div className={`flex gap-3 rounded-2xl border border-[var(--border)] p-3 transition ${cooked ? "bg-green-950/25 opacity-75" : "bg-black/20"}`}>
@@ -463,7 +476,8 @@ function MealCard({
         {item.leftoverFrom && <p className="mt-1 text-xs font-extrabold text-green-300">Leftovers from {item.leftoverFrom}</p>}
         {item.batchCook && <p className="mt-1 text-xs font-extrabold text-[var(--brand-gold)]">Cook double · tomorrow&apos;s lunch sorted</p>}
         {totalMinutes > 0 && <p className="mt-1 text-xs text-[var(--text-soft)]">{totalMinutes} minutes</p>}
-        <button type="button" onClick={onSwap} className="mt-1.5 text-xs font-bold text-[var(--text-soft)] underline decoration-[var(--border)] underline-offset-4 hover:text-white">{item.leftoverFrom ? "Choose a fresh lunch" : "Swap meal"}</button>
+        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-bold text-[var(--text-soft)]"><button type="button" onClick={onSwap} className="underline decoration-[var(--border)] underline-offset-4 hover:text-white">{item.leftoverFrom ? "Choose fresh" : "Swap recipe"}</button><button type="button" onClick={() => onStatus("eating-out")} className="hover:text-white">Eating out</button><button type="button" onClick={() => onStatus("skipped")} className="hover:text-white">Skip</button></div>
+        {(canMoveBack || canMoveForward) && <div className="mt-2 flex items-center gap-2 text-xs font-bold text-[var(--text-soft)]"><ArrowLeftRight aria-hidden="true" size={14} /><span>Move:</span><button type="button" disabled={!canMoveBack} onClick={() => onMove(-1)} className="disabled:opacity-25 hover:text-white">Previous day</button><button type="button" disabled={!canMoveForward} onClick={() => onMove(1)} className="disabled:opacity-25 hover:text-white">Next day</button></div>}
       </div>
     </div>
   );
@@ -479,6 +493,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   const [useLeftovers, setUseLeftovers] = useState(false);
   const [generation, setGeneration] = useState<number | null>(null);
   const [swaps, setSwaps] = useState<Record<string, number>>({});
+  const [mealStatuses, setMealStatuses] = useState<Record<string, MealStatus>>({});
+  const [mealOverrides, setMealOverrides] = useState<Record<string, string>>({});
   const [storageReady, setStorageReady] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [cookedSlots, setCookedSlots] = useState<string[]>([]);
@@ -519,6 +535,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
           setGeneration(saved.generation);
         }
         if (saved.swaps && typeof saved.swaps === "object") setSwaps(saved.swaps as Record<string, number>);
+        if (saved.mealStatuses && typeof saved.mealStatuses === "object") setMealStatuses(saved.mealStatuses as Record<string, MealStatus>);
+        if (saved.mealOverrides && typeof saved.mealOverrides === "object") setMealOverrides(saved.mealOverrides as Record<string, string>);
         if (Array.isArray(saved.cookedSlots)) {
           setCookedSlots(saved.cookedSlots.filter((slot): slot is string => typeof slot === "string"));
         }
@@ -560,9 +578,9 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     if (!storageReady || generation === null) return;
     localStorage.setItem(
       SAVED_PLAN_KEY,
-      JSON.stringify({ people, days, startDate, meals, preference, useLeftovers, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
+      JSON.stringify({ people, days, startDate, meals, preference, useLeftovers, generation, swaps, mealStatuses, mealOverrides, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
     );
-  }, [checkedShoppingItems, cookedSlots, customShoppingItems, days, generation, meals, people, preference, shoppingOverrides, shoppingStatuses, startDate, storageReady, swaps, useLeftovers]);
+  }, [checkedShoppingItems, cookedSlots, customShoppingItems, days, generation, mealOverrides, mealStatuses, meals, people, preference, shoppingOverrides, shoppingStatuses, startDate, storageReady, swaps, useLeftovers]);
 
   const planDays = useMemo(
     () => Array.from({ length: days }, (_, index) => planDate(startDate, index)),
@@ -588,7 +606,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
           mealIndex +
           (swaps[slot] ?? 0) * 997;
         const ordered = seededOrder(pool, slotSeed);
-        const recipe = ordered.find((candidate) => !usedSlugs.has(candidate.slug)) ?? ordered[0];
+        const generatedRecipe = ordered.find((candidate) => !usedSlugs.has(candidate.slug)) ?? ordered[0];
+        const recipe = recipes.find((candidate) => candidate.slug === mealOverrides[slot] && matchesMeal(candidate, meal)) ?? generatedRecipe;
 
         usedSlugs.add(recipe.slug);
         return { day, dayName: plannedDay.name, dateKey: plannedDay.key, meal, recipe };
@@ -607,7 +626,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
       planned[dinnerIndex] = { ...planned[dinnerIndex], batchCook: true };
     }
     return planned;
-  }, [generation, meals, planDays, preference, recipes, swaps, useLeftovers]);
+  }, [generation, mealOverrides, meals, planDays, preference, recipes, swaps, useLeftovers]);
 
   function toggleMeal(meal: Meal) {
     setMeals((current) => {
@@ -634,6 +653,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
         useLeftovers,
         generation: nextGeneration,
         swaps: {},
+        mealStatuses: {},
+        mealOverrides: {},
         cookedSlots: [],
         checkedShoppingItems: [],
         shoppingStatuses: {},
@@ -642,6 +663,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
       })
     );
     setSwaps({});
+    setMealStatuses({});
+    setMealOverrides({});
     setCookedSlots([]);
     setCheckedShoppingItems([]);
     setShoppingStatuses({});
@@ -677,11 +700,28 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     );
   }
 
+  function setMealStatus(day: string, meal: Meal, status?: MealStatus) {
+    const slot = `${day}-${meal}`;
+    setMealStatuses((current) => { const next = { ...current }; if (status) next[slot] = status; else delete next[slot]; return next; });
+  }
+
+  function moveMeal(item: PlannedMeal, direction: -1 | 1) {
+    const dayIndex = planDays.findIndex((day) => day.key === item.dateKey);
+    const targetDay = planDays[dayIndex + direction];
+    if (!targetDay) return;
+    const target = plan.find((candidate) => candidate.dateKey === targetDay.key && candidate.meal === item.meal);
+    if (!target) return;
+    const sourceSlot = `${item.day}-${item.meal}`;
+    const targetSlot = `${target.day}-${target.meal}`;
+    setMealOverrides((current) => ({ ...current, [sourceSlot]: target.recipe.slug, [targetSlot]: item.recipe.slug }));
+    setSaveMessage("Meals moved. Your shopping list has been updated.");
+  }
+
   function savePlan() {
     if (generation === null) return;
     localStorage.setItem(
       SAVED_PLAN_KEY,
-      JSON.stringify({ people, days, startDate, meals, preference, useLeftovers, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
+      JSON.stringify({ people, days, startDate, meals, preference, useLeftovers, generation, swaps, mealStatuses, mealOverrides, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
     );
     setSaveMessage("Plan saved on this device.");
   }
@@ -697,6 +737,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     }
     setGeneration(null);
     setSwaps({});
+    setMealStatuses({});
+    setMealOverrides({});
     setCookedSlots([]);
     setCheckedShoppingItems([]);
     setShoppingStatuses({});
@@ -707,16 +749,18 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   }
 
   const todayKey = localDateKey(new Date());
-  const todayMeals = plan.filter((item) => item.dateKey === todayKey);
+  const activePlan = plan.filter((item) => !mealStatuses[`${item.day}-${item.meal}`]);
+  const todayMeals = activePlan.filter((item) => item.dateKey === todayKey);
   const todayName = new Intl.DateTimeFormat("en-GB", { weekday: "long" }).format(new Date());
   const todaysDinner = todayMeals.find((item) => item.meal === "Dinner");
-  const nextDinner = todaysDinner ?? plan.find((item) => item.meal === "Dinner");
-  const cookedCount = plan.filter((item) => cookedSlots.includes(`${item.day}-${item.meal}`)).length;
+  const nextDinner = todaysDinner ?? activePlan.find((item) => item.meal === "Dinner");
+  const cookedCount = activePlan.filter((item) => cookedSlots.includes(`${item.day}-${item.meal}`)).length;
   const shoppingRecipes = Array.from(
-    new Map(plan.map((item) => [item.recipe.slug, item.recipe])).values()
+    new Map(activePlan.map((item) => [item.recipe.slug, item.recipe])).values()
   ).filter((recipe) => recipe.ingredients.length > 0);
-  const recipeOccurrences = plan.reduce<Record<string, number>>((counts, item) => {
-    const cookingAmount = item.leftoverFrom ? 0 : item.batchCook ? 2 : 1;
+  const recipeOccurrences = activePlan.reduce<Record<string, number>>((counts, item) => {
+    const leftoverSourceUnavailable = item.leftoverFrom && mealStatuses[`${item.leftoverFrom}-Dinner`];
+    const cookingAmount = item.leftoverFrom ? leftoverSourceUnavailable ? 1 : 0 : item.batchCook ? 2 : 1;
     counts[item.recipe.slug] = (counts[item.recipe.slug] ?? 0) + cookingAmount;
     return counts;
   }, {});
@@ -1037,7 +1081,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
               <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                 {todayMeals.map((item) => {
                   const slot = `${item.day}-${item.meal}`;
-                  return <MealCard key={slot} item={item} cooked={cookedSlots.includes(slot)} onSwap={() => swapMeal(item.day, item.meal)} onToggleCooked={() => toggleCooked(item.day, item.meal)} />;
+                  const dayIndex = planDays.findIndex((day) => day.key === item.dateKey);
+                  return <MealCard key={slot} item={item} cooked={cookedSlots.includes(slot)} status={mealStatuses[slot]} onStatus={(status) => setMealStatus(item.day, item.meal, status)} onMove={(direction) => moveMeal(item, direction)} canMoveBack={dayIndex > 0} canMoveForward={dayIndex < planDays.length - 1} onSwap={() => swapMeal(item.day, item.meal)} onToggleCooked={() => toggleCooked(item.day, item.meal)} />;
                 })}
               </div>
             ) : (
@@ -1055,7 +1100,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
                 <div className="space-y-3 p-4">
                   {plan.filter((item) => item.dateKey === plannedDay.key).map((item) => {
                     const slot = `${item.day}-${item.meal}`;
-                    return <MealCard key={slot} item={item} cooked={cookedSlots.includes(slot)} onSwap={() => swapMeal(item.day, item.meal)} onToggleCooked={() => toggleCooked(item.day, item.meal)} />;
+                    const dayIndex = planDays.findIndex((day) => day.key === item.dateKey);
+                    return <MealCard key={slot} item={item} cooked={cookedSlots.includes(slot)} status={mealStatuses[slot]} onStatus={(status) => setMealStatus(item.day, item.meal, status)} onMove={(direction) => moveMeal(item, direction)} canMoveBack={dayIndex > 0} canMoveForward={dayIndex < planDays.length - 1} onSwap={() => swapMeal(item.day, item.meal)} onToggleCooked={() => toggleCooked(item.day, item.meal)} />;
                   })}
                 </div>
               </article>

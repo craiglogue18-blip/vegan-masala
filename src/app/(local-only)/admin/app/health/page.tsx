@@ -5,6 +5,8 @@ import { getAllRecipes } from "@/lib/recipes";
 
 import MealTypeEditor from "./MealTypeEditor";
 import ServingEditor from "./ServingEditor";
+import HealthSearch from "./HealthSearch";
+import RecipeDataEditor from "./RecipeDataEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -58,11 +60,12 @@ export default function AppRecipeHealthPage() {
 
       <section className="mt-8">
         <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-widest text-[var(--text-soft)]">Full catalogue</p><h2 className="mt-1 text-2xl font-extrabold text-[var(--brand-gold)]">Recipes needing the most attention first</h2></div><p className="text-sm text-[var(--text-soft)]">Open a row to see its checks</p></div>
+        <HealthSearch />
         <div className="mt-5 space-y-3">
           {report.map((item) => {
             const blockers = item.issues.filter((problem) => problem.severity === "blocker").length;
             const warnings = item.issues.filter((problem) => problem.severity === "warning").length;
-            return <details key={item.recipe.slug} className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] open:bg-black/20">
+            return <details key={item.recipe.slug} data-health-recipe={`${item.recipe.title} ${item.recipe.slug} ${item.issues.map((problem) => `${problem.area} ${problem.message}`).join(" ")}`.toLowerCase()} className="group rounded-2xl border border-[var(--border)] bg-[var(--surface)] open:bg-black/20">
               <summary className="flex cursor-pointer list-none flex-wrap items-center gap-3 p-4 sm:p-5">
                 <span className={`h-3 w-3 shrink-0 rounded-full ${blockers ? "bg-red-500" : warnings ? "bg-amber-400" : "bg-green-400"}`} />
                 <span className="min-w-56 flex-1 font-extrabold text-white">{item.recipe.title}</span>
@@ -75,6 +78,7 @@ export default function AppRecipeHealthPage() {
                 </div>
                 <MealTypeEditor slug={item.recipe.slug} current={item.recipe.mealTypes ?? []} suggested={suggestRecipeMealTypes(item.recipe)} />
                 <ServingEditor slug={item.recipe.slug} current={item.recipe.servings ?? item.recipe.serves} />
+                <RecipeDataEditor slug={item.recipe.slug} initialTags={item.recipe.plannerTags ?? []} initialIngredients={item.ingredients} steps={item.steps} initialVideos={item.recipe.stepVideos ?? []} />
                 <div className="mt-4 flex flex-wrap gap-3 text-sm"><Link href={`/recipes/${item.recipe.slug}`} className="font-bold text-[var(--brand-gold)] underline underline-offset-4">View recipe</Link><Link href={`/meal-planner/cook/${item.recipe.slug}`} className="font-bold text-[var(--brand-gold)] underline underline-offset-4">Test cooking mode</Link><span className="text-[var(--text-soft)]">{plural(item.ingredients.length, "ingredient")} · {plural(item.steps.length, "step")} · {plural(item.videoCount, "video")}</span></div>
               </div>
             </details>;

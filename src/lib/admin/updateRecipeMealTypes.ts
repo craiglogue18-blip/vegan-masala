@@ -39,6 +39,13 @@ function updateFrontmatterLine(filePath: string, key: string, replacement: strin
   fs.writeFileSync(filePath, `---\n${lines.join("\n")}${body}`, "utf8");
 }
 
+function updateRecipeArray(slug: string, key: string, values: Array<string | null>, insertAfter: string) {
+  const filePath = recipeFileForSlug(slug);
+  if (!filePath) throw new Error("Recipe not found.");
+  updateFrontmatterLine(filePath, key, `${key}: [${values.map((value) => value === null ? "null" : JSON.stringify(value)).join(", ")}]`, insertAfter);
+  return path.basename(filePath);
+}
+
 export function updateRecipeMealTypes(slug: string, mealTypes: string[]) {
   const filePath = recipeFileForSlug(slug);
   if (!filePath) throw new Error("Recipe not found.");
@@ -54,4 +61,16 @@ export function updateRecipeServings(slug: string, servings: number) {
   const key = Object.prototype.hasOwnProperty.call(data, "serves") && !Object.prototype.hasOwnProperty.call(data, "servings") ? "serves" : "servings";
   updateFrontmatterLine(filePath, key, `${key}: ${servings}`, "cookMinutes");
   return path.basename(filePath);
+}
+
+export function updateRecipePlannerTags(slug: string, tags: string[]) {
+  return updateRecipeArray(slug, "plannerTags", tags, "mealTypes");
+}
+
+export function updateRecipeIngredients(slug: string, ingredients: string[]) {
+  return updateRecipeArray(slug, "ingredients", ingredients, "socialHook");
+}
+
+export function updateRecipeStepVideos(slug: string, videos: Array<string | null>) {
+  return updateRecipeArray(slug, "stepVideos", videos, "instructions");
 }
