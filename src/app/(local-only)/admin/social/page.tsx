@@ -64,6 +64,17 @@ description:
 "Monitor recipe, guide, hub and sitemap SEO structure health using local repository data.",
 
 cta:"Open SEO health"
+},
+
+{
+title:"App Recipe Health",
+
+href:"/admin/app/health",
+
+description:
+"Find recipe data that could weaken meal planning, shopping quantities, cooking mode or future step videos.",
+
+cta:"Open app health"
 }
 
 ];
@@ -142,6 +153,18 @@ className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold 
 >
 
 SEO health
+
+</Link>
+
+<Link
+
+href="/admin/app/health"
+
+className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
+
+>
+
+App recipe health
 
 </Link>
 
