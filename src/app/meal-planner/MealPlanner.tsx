@@ -4,7 +4,7 @@ import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle2, Circle, Search, X } from "lucide-react";
+import { CheckCircle2, Circle, Pencil, Plus, Search, Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -47,6 +47,9 @@ type ShoppingItem = {
   category: ShoppingCategory;
 };
 
+type CustomShoppingItem = { id: string; ingredient: string; category: ShoppingCategory };
+type ShoppingOverride = { ingredient?: string; category?: ShoppingCategory; hidden?: boolean };
+
 type ParsedIngredient = {
   name: string;
   quantity: number | null;
@@ -56,6 +59,7 @@ type ParsedIngredient = {
 
 const MEALS: Meal[] = ["Breakfast", "Lunch", "Dinner"];
 const PREFERENCES: Preference[] = ["Any", "Quick", "Low cost", "High protein", "Family friendly"];
+const SHOPPING_CATEGORIES: ShoppingCategory[] = ["Vegetables & fruit", "Fridge", "Freezer", "Cupboard"];
 const SAVED_PLAN_KEY = "vegan-masala-meal-plan-v1";
 const BREAKFAST_FALLBACK_SLUGS = new Set([
   "aloo-tikki",
@@ -474,6 +478,13 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   const [cookedSlots, setCookedSlots] = useState<string[]>([]);
   const [checkedShoppingItems, setCheckedShoppingItems] = useState<string[]>([]);
   const [shoppingStatuses, setShoppingStatuses] = useState<Record<string, ShoppingStatus>>({});
+  const [shoppingOverrides, setShoppingOverrides] = useState<Record<string, ShoppingOverride>>({});
+  const [customShoppingItems, setCustomShoppingItems] = useState<CustomShoppingItem[]>([]);
+  const [newShoppingItem, setNewShoppingItem] = useState("");
+  const [newShoppingCategory, setNewShoppingCategory] = useState<ShoppingCategory>("Cupboard");
+  const [editingShoppingKey, setEditingShoppingKey] = useState<string | null>(null);
+  const [editingShoppingText, setEditingShoppingText] = useState("");
+  const [editingShoppingCategory, setEditingShoppingCategory] = useState<ShoppingCategory>("Cupboard");
   const [exportMessage, setExportMessage] = useState("");
   const [profileName, setProfileName] = useState("");
   const [profileSummary, setProfileSummary] = useState("");
@@ -512,6 +523,12 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
         if (saved.shoppingStatuses && typeof saved.shoppingStatuses === "object") {
           setShoppingStatuses(saved.shoppingStatuses as Record<string, ShoppingStatus>);
         }
+        if (saved.shoppingOverrides && typeof saved.shoppingOverrides === "object") {
+          setShoppingOverrides(saved.shoppingOverrides as Record<string, ShoppingOverride>);
+        }
+        if (Array.isArray(saved.customShoppingItems)) {
+          setCustomShoppingItems(saved.customShoppingItems.filter((item): item is CustomShoppingItem => Boolean(item && typeof item === "object" && typeof (item as CustomShoppingItem).id === "string" && typeof (item as CustomShoppingItem).ingredient === "string" && SHOPPING_CATEGORIES.includes((item as CustomShoppingItem).category))));
+        }
       } else if (profile) {
         setPeople(profile.people);
         setMeals(MEALS.filter((meal) => profile.meals.includes(meal)));
@@ -536,9 +553,9 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     if (!storageReady || generation === null) return;
     localStorage.setItem(
       SAVED_PLAN_KEY,
-      JSON.stringify({ people, days, startDate, meals, preference, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses })
+      JSON.stringify({ people, days, startDate, meals, preference, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
     );
-  }, [checkedShoppingItems, cookedSlots, days, generation, meals, people, preference, shoppingStatuses, startDate, storageReady, swaps]);
+  }, [checkedShoppingItems, cookedSlots, customShoppingItems, days, generation, meals, people, preference, shoppingOverrides, shoppingStatuses, startDate, storageReady, swaps]);
 
   const planDays = useMemo(
     () => Array.from({ length: days }, (_, index) => planDate(startDate, index)),
@@ -599,12 +616,16 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
         cookedSlots: [],
         checkedShoppingItems: [],
         shoppingStatuses: {},
+        shoppingOverrides: {},
+        customShoppingItems: [],
       })
     );
     setSwaps({});
     setCookedSlots([]);
     setCheckedShoppingItems([]);
     setShoppingStatuses({});
+    setShoppingOverrides({});
+    setCustomShoppingItems([]);
     setSaveMessage("");
     setGeneration(nextGeneration);
     router.push("/meal-planner");
@@ -639,7 +660,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     if (generation === null) return;
     localStorage.setItem(
       SAVED_PLAN_KEY,
-      JSON.stringify({ people, days, startDate, meals, preference, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses })
+      JSON.stringify({ people, days, startDate, meals, preference, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
     );
     setSaveMessage("Plan saved on this device.");
   }
@@ -658,6 +679,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     setCookedSlots([]);
     setCheckedShoppingItems([]);
     setShoppingStatuses({});
+    setShoppingOverrides({});
+    setCustomShoppingItems([]);
     setSaveMessage("");
     router.push("/meal-planner/build");
   }
@@ -702,19 +725,27 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
       aggregated.set(aggregateKey, { parsed, quantity, recipeTitles: new Set([source.recipe.title]) });
     }
   }
-  const neededShoppingItems: ShoppingItem[] = Array.from(aggregated.entries()).map(([key, item]) => ({
+  const generatedShoppingItems: ShoppingItem[] = Array.from(aggregated.entries()).map(([key, item]) => ({
     key,
     ingredient: formatSupermarketItem(item.parsed.name, item.quantity, item.parsed.unit),
     recipeTitles: Array.from(item.recipeTitles),
     category: shoppingCategory(`${item.parsed.unit} ${item.parsed.name}`),
   })).sort((a, b) => a.ingredient.localeCompare(b.ingredient));
+  const neededShoppingItems: ShoppingItem[] = [
+    ...generatedShoppingItems.flatMap((item) => {
+      const override = shoppingOverrides[item.key];
+      if (override?.hidden) return [];
+      return [{ ...item, ingredient: override?.ingredient || item.ingredient, category: override?.category || item.category }];
+    }),
+    ...customShoppingItems.map((item) => ({ key: `custom:${item.id}`, ingredient: item.ingredient, category: item.category, recipeTitles: [] })),
+  ].sort((a, b) => a.ingredient.localeCompare(b.ingredient));
   const haveShoppingItemCount = sourceShoppingItems.filter(
     (item) => shoppingStatuses[item.key] === "have"
   ).length;
   const boughtShoppingItemCount = neededShoppingItems.filter((item) =>
     checkedShoppingItems.includes(item.key)
   ).length;
-  const shoppingGroups = (["Vegetables & fruit", "Fridge", "Freezer", "Cupboard"] as ShoppingCategory[])
+  const shoppingGroups = SHOPPING_CATEGORIES
     .map((category) => ({
       category,
       items: neededShoppingItems.filter((item) => item.category === category),
@@ -736,6 +767,40 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   function setShoppingStatus(key: string, status: ShoppingStatus) {
     setShoppingStatuses((current) => ({ ...current, [key]: status }));
     setCheckedShoppingItems([]);
+  }
+
+  function addShoppingItem() {
+    const ingredient = newShoppingItem.trim();
+    if (!ingredient) return;
+    setCustomShoppingItems((current) => [...current, { id: `${Date.now()}-${current.length}`, ingredient, category: newShoppingCategory }]);
+    setNewShoppingItem("");
+  }
+
+  function beginEditingShoppingItem(item: ShoppingItem) {
+    setEditingShoppingKey(item.key);
+    setEditingShoppingText(item.ingredient);
+    setEditingShoppingCategory(item.category);
+  }
+
+  function saveShoppingItemEdit() {
+    if (!editingShoppingKey || !editingShoppingText.trim()) return;
+    if (editingShoppingKey.startsWith("custom:")) {
+      const id = editingShoppingKey.slice(7);
+      setCustomShoppingItems((current) => current.map((item) => item.id === id ? { ...item, ingredient: editingShoppingText.trim(), category: editingShoppingCategory } : item));
+    } else {
+      setShoppingOverrides((current) => ({ ...current, [editingShoppingKey]: { ...current[editingShoppingKey], ingredient: editingShoppingText.trim(), category: editingShoppingCategory } }));
+    }
+    setEditingShoppingKey(null);
+  }
+
+  function removeShoppingItem(key: string) {
+    setCheckedShoppingItems((current) => current.filter((item) => item !== key));
+    if (key.startsWith("custom:")) {
+      const id = key.slice(7);
+      setCustomShoppingItems((current) => current.filter((item) => item.id !== id));
+    } else {
+      setShoppingOverrides((current) => ({ ...current, [key]: { ...current[key], hidden: true } }));
+    }
   }
 
   async function exportShoppingList() {
@@ -987,6 +1052,18 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
             </div>
             {exportMessage && <p className="mt-3 text-sm font-bold text-green-300" role="status">{exportMessage}</p>}
 
+            <form onSubmit={(event) => { event.preventDefault(); addShoppingItem(); }} className="mt-6 rounded-2xl border border-[var(--border)] bg-black/20 p-4">
+              <h3 className="text-lg">Add your own item</h3>
+              <p className="mt-1 text-xs text-[var(--text-soft)]">Include household items or anything that is not part of a recipe.</p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
+                <input value={newShoppingItem} onChange={(event) => setNewShoppingItem(event.target.value)} placeholder="e.g. oat milk or washing-up liquid" className="min-w-0 rounded-xl border border-[var(--border)] bg-[#10191e] px-4 py-2.5 text-sm text-white outline-none placeholder:text-[var(--text-soft)] focus:border-[var(--brand-gold)]" />
+                <select value={newShoppingCategory} onChange={(event) => setNewShoppingCategory(event.target.value as ShoppingCategory)} className="rounded-xl border border-[var(--border)] bg-[#10191e] px-3 py-2.5 text-sm text-white">
+                  {SHOPPING_CATEGORIES.map((category) => <option key={category}>{category}</option>)}
+                </select>
+                <button type="submit" disabled={!newShoppingItem.trim()} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand-gold)] px-4 py-2.5 text-sm font-extrabold text-black disabled:opacity-40"><Plus aria-hidden="true" size={17} /> Add</button>
+              </div>
+            </form>
+
             {neededShoppingItems.length > 0 ? (
               <div className="mt-6 grid gap-5 md:grid-cols-2">
                 {shoppingGroups.map((group) => (
@@ -996,16 +1073,18 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
                       {group.items.map((item) => {
                         const bought = checkedShoppingItems.includes(item.key);
                         return (
-                          <li key={item.key}>
-                            <button type="button" onClick={() => toggleShoppingItem(item.key)} className={`flex w-full items-start gap-3 py-3 text-left transition ${bought ? "text-[var(--text-soft)] line-through" : "text-white"}`}>
+                          <li key={item.key} className="flex items-start gap-2 py-3">
+                            <button type="button" onClick={() => toggleShoppingItem(item.key)} aria-label={`Mark ${item.ingredient} as ${bought ? "not bought" : "bought"}`} className={`flex min-w-0 flex-1 items-start gap-3 text-left transition ${bought ? "text-[var(--text-soft)] line-through" : "text-white"}`}>
                               {bought ? <CheckCircle2 aria-hidden="true" className="mt-0.5 shrink-0 text-green-300" size={19} /> : <Circle aria-hidden="true" className="mt-0.5 shrink-0 text-[var(--text-soft)]" size={19} />}
                               <span>
                                 <span className="block text-sm">{item.ingredient}</span>
                                 <span className="mt-0.5 block text-xs text-[var(--text-soft)]">
-                                  For {item.recipeTitles.length === 1 ? item.recipeTitles[0] : `${item.recipeTitles.length} recipes`}
+                                  {item.recipeTitles.length === 0 ? "Personal item" : `For ${item.recipeTitles.length === 1 ? item.recipeTitles[0] : `${item.recipeTitles.length} recipes`}`}
                                 </span>
                               </span>
                             </button>
+                            <button type="button" onClick={() => beginEditingShoppingItem(item)} aria-label={`Edit ${item.ingredient}`} className="shrink-0 rounded-lg p-2 text-[var(--text-soft)] hover:bg-white/10 hover:text-white"><Pencil aria-hidden="true" size={16} /></button>
+                            <button type="button" onClick={() => removeShoppingItem(item.key)} aria-label={`Remove ${item.ingredient}`} className="shrink-0 rounded-lg p-2 text-[var(--text-soft)] hover:bg-red-950/50 hover:text-red-300"><Trash2 aria-hidden="true" size={16} /></button>
                           </li>
                         );
                       })}
@@ -1055,6 +1134,15 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
           </section>}
         </section>
       )}
+
+      {editingShoppingKey && <div className="fixed inset-0 z-[85] grid place-items-center bg-black/75 p-4 backdrop-blur-sm" role="presentation" onClick={() => setEditingShoppingKey(null)}>
+        <section role="dialog" aria-modal="true" aria-labelledby="edit-shopping-title" onClick={(event) => event.stopPropagation()} className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[#10191e] p-6 shadow-2xl">
+          <div className="flex items-center justify-between gap-3"><h2 id="edit-shopping-title" className="text-2xl">Edit shopping item</h2><button type="button" onClick={() => setEditingShoppingKey(null)} aria-label="Close editor" className="rounded-xl border border-[var(--border)] p-2 text-[var(--text-soft)]"><X aria-hidden="true" size={18} /></button></div>
+          <label className="mt-5 block text-sm font-bold text-[var(--text-soft)]">Item and quantity<input value={editingShoppingText} onChange={(event) => setEditingShoppingText(event.target.value)} className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/25 px-4 py-3 text-white outline-none focus:border-[var(--brand-gold)]" /></label>
+          <label className="mt-4 block text-sm font-bold text-[var(--text-soft)]">Supermarket section<select value={editingShoppingCategory} onChange={(event) => setEditingShoppingCategory(event.target.value as ShoppingCategory)} className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/25 px-4 py-3 text-white">{SHOPPING_CATEGORIES.map((category) => <option key={category}>{category}</option>)}</select></label>
+          <div className="mt-6 grid grid-cols-2 gap-3"><button type="button" onClick={() => setEditingShoppingKey(null)} className="rounded-xl border border-[var(--border)] px-4 py-3 font-bold text-[var(--text-soft)]">Cancel</button><button type="button" onClick={saveShoppingItemEdit} disabled={!editingShoppingText.trim()} className="rounded-xl bg-[var(--brand-red)] px-4 py-3 font-extrabold text-white disabled:opacity-40">Save changes</button></div>
+        </section>
+      </div>}
 
       {storageReady && recipePickerOpen && <div className="fixed inset-0 z-[80] bg-black/75 p-3 backdrop-blur-sm sm:p-6" role="presentation" onClick={() => setRecipePickerOpen(false)}>
         <section role="dialog" aria-modal="true" aria-labelledby="recipe-picker-title" onClick={(event) => event.stopPropagation()} className="mx-auto flex h-full max-h-[800px] max-w-4xl flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[#10191e] shadow-2xl">
