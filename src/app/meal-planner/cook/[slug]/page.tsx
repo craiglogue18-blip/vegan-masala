@@ -26,5 +26,5 @@ export default async function CookingPage({ params, searchParams }: { params: Pr
   const ingredients = recipe.ingredients?.length ? recipe.ingredients : extractList(recipe.ingredientsMarkdown, false);
   const steps = recipe.instructions?.length ? recipe.instructions : extractList(recipe.methodMarkdown, true);
 
-  return <CookingMode batchMultiplier={batch === "2" ? 2 : 1} recipe={{ slug: recipe.slug, title: recipe.title, image: recipe.image, ingredients, steps, totalMinutes: (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0) }} />;
+  return <CookingMode batchMultiplier={batch === "2" ? 2 : 1} recipe={{ slug: recipe.slug, title: recipe.title, image: recipe.image, ingredients, steps, stepVideos: recipe.stepVideos, totalMinutes: (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0) }} />;
 }

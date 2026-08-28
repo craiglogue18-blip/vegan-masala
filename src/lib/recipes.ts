@@ -36,6 +36,7 @@ export type Recipe = {
   // arrays
   ingredients?: string[];
   instructions?: string[];
+  stepVideos?: (string | null)[];
   notes?: string[];
 
   raw: string;
@@ -67,6 +68,18 @@ function safeStringArray(v: unknown): string[] | undefined {
     .filter(Boolean);
 
   return arr.length ? arr : undefined;
+}
+
+function safeOptionalStringArray(v: unknown): (string | null)[] | undefined {
+  if (!Array.isArray(v)) return undefined;
+
+  const arr = v.map((item) => {
+    if (typeof item !== "string") return null;
+    const value = item.trim();
+    return value || null;
+  });
+
+  return arr.some(Boolean) ? arr : undefined;
 }
 
 function readRecipeFile(filePath: string) {
@@ -175,6 +188,7 @@ function buildRecipeFromFile(file: string): Recipe | null {
 
     ingredients: safeStringArray(data.ingredients),
     instructions: safeStringArray(data.instructions),
+    stepVideos: safeOptionalStringArray(data.stepVideos),
     notes: safeStringArray(data.notes),
 
     raw,

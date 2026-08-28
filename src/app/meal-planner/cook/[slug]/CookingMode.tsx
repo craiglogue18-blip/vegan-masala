@@ -2,12 +2,12 @@
 
 import { Capacitor } from "@capacitor/core";
 import { Haptics, NotificationType } from "@capacitor/haptics";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, Clock3, ListChecks, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Clock3, ListChecks, Play, Video, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-type CookingRecipe = { slug: string; title: string; image?: string; ingredients: string[]; steps: string[]; totalMinutes: number };
+type CookingRecipe = { slug: string; title: string; image?: string; ingredients: string[]; steps: string[]; stepVideos?: (string | null)[]; totalMinutes: number };
 type WakeLockSentinel = { release: () => Promise<void>; released: boolean };
 type WakeLockNavigator = Navigator & { wakeLock?: { request: (type: "screen") => Promise<WakeLockSentinel> } };
 
@@ -28,6 +28,7 @@ export default function CookingMode({ recipe, batchMultiplier = 1 }: { recipe: C
   const [checkedIngredients, setCheckedIngredients] = useState<number[]>([]);
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
   const currentStep = recipe.steps[step] ?? "";
+  const currentVideo = recipe.stepVideos?.[step] ?? null;
   const suggestedTimer = useMemo(() => timerMinutes(currentStep), [currentStep]);
 
   useEffect(() => {
@@ -102,7 +103,31 @@ export default function CookingMode({ recipe, batchMultiplier = 1 }: { recipe: C
             </div>
             <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/30"><div className="h-full rounded-full bg-[var(--brand-gold)] transition-all" style={{ width: `${((step + 1) / recipe.steps.length) * 100}%` }} /></div>
 
-            <div className="flex min-h-64 items-center py-8 sm:min-h-72">
+            {currentVideo ? (
+              <div className="mt-6 overflow-hidden rounded-2xl border border-[var(--border)] bg-black">
+                <video key={currentVideo} controls playsInline preload="metadata" poster={recipe.image} className="aspect-video w-full object-cover">
+                  <source src={currentVideo} />
+                  Your device cannot play this step video.
+                </video>
+                <div className="flex items-center gap-2 border-t border-[var(--border)] bg-black/30 px-4 py-3 text-sm font-bold text-[var(--text-soft)]">
+                  <Play aria-hidden="true" size={17} className="text-[var(--brand-gold)]" />
+                  Watch this step, then follow the instruction below
+                </div>
+              </div>
+            ) : (
+              <div className="relative mt-6 overflow-hidden rounded-2xl border border-[var(--border)] bg-black/30">
+                <div className="relative h-36 sm:h-44">
+                  <Image src={recipe.image || "/brand/logo-mark.png"} alt="" fill sizes="(max-width: 768px) 100vw, 896px" className="object-cover opacity-25 blur-[1px]" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#10191e] via-[#10191ed9] to-[#10191e80]" />
+                  <div className="absolute inset-0 flex items-center gap-4 p-5 sm:p-6">
+                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[var(--brand-gold)] text-black"><Video aria-hidden="true" size={22} /></span>
+                    <div><p className="font-extrabold text-white">Step video coming soon</p><p className="mt-1 max-w-lg text-sm leading-5 text-[var(--text-soft)]">We&apos;re preparing short, checked visual guides. You can continue with the full instruction below.</p></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex min-h-56 items-center py-7 sm:min-h-64">
               <p className="text-2xl font-semibold leading-relaxed text-white sm:text-3xl">{currentStep}</p>
             </div>
 
