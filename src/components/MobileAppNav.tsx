@@ -8,7 +8,7 @@ const items = [
   { href: "/meal-planner", label: "This week", icon: CalendarDays },
   { href: "/meal-planner/build", label: "Build", icon: ListPlus },
   { href: "/meal-planner/shopping", label: "Shopping", icon: ShoppingBasket },
-  { href: "/recipes", label: "Recipes", icon: BookOpen },
+  { href: "/meal-planner/recipes", label: "Recipes", icon: BookOpen },
 ];
 
 export default function MobileAppNav() {

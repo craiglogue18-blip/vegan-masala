@@ -15,7 +15,7 @@ type Meal = "Breakfast" | "Lunch" | "Dinner";
 type Preference = "Any" | "Quick" | "Low cost" | "High protein" | "Family friendly";
 type ShoppingStatus = "need" | "have" | "skip";
 type ShoppingCategory = "Vegetables & fruit" | "Fridge" | "Freezer" | "Cupboard";
-export type PlannerView = "dashboard" | "build" | "shopping";
+export type PlannerView = "dashboard" | "build" | "shopping" | "recipes";
 
 type PlannerRecipe = {
   slug: string;
@@ -442,7 +442,7 @@ function MealCard({
 
   return (
     <div className={`flex gap-3 rounded-2xl border border-[var(--border)] p-3 transition ${cooked ? "bg-green-950/25 opacity-75" : "bg-black/20"}`}>
-      <Link href={`/recipes/${recipe.slug}`} className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-black/30">
+      <Link href={`/meal-planner/cook/${recipe.slug}`} className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-black/30">
         <Image src={recipe.image || "/brand/logo-mark.png"} alt="" fill sizes="96px" className="object-cover" />
       </Link>
       <div className="min-w-0 flex-1">
@@ -452,7 +452,7 @@ function MealCard({
             {cooked ? <CheckCircle2 aria-hidden="true" size={20} /> : <Circle aria-hidden="true" size={20} />}
           </button>
         </div>
-        <Link href={`/recipes/${recipe.slug}`} className={`mt-1 line-clamp-2 block text-base font-extrabold leading-tight text-[var(--brand-gold)] hover:underline ${cooked ? "line-through decoration-green-500/60" : ""}`}>{recipe.title}</Link>
+        <Link href={`/meal-planner/cook/${recipe.slug}`} className={`mt-1 line-clamp-2 block text-base font-extrabold leading-tight text-[var(--brand-gold)] hover:underline ${cooked ? "line-through decoration-green-500/60" : ""}`}>{recipe.title}</Link>
         {totalMinutes > 0 && <p className="mt-1 text-xs text-[var(--text-soft)]">{totalMinutes} minutes</p>}
         <button type="button" onClick={onSwap} className="mt-1.5 text-xs font-bold text-[var(--text-soft)] underline decoration-[var(--border)] underline-offset-4 hover:text-white">Swap meal</button>
       </div>
@@ -788,11 +788,32 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
             ["dashboard", "/meal-planner", "This Week"],
             ["build", "/meal-planner/build", "Build Plan"],
             ["shopping", "/meal-planner/shopping", "Shopping"],
+            ["recipes", "/meal-planner/recipes", "Recipes"],
           ] as const).map(([itemView, href, label]) => (
             <Link key={itemView} href={href} aria-current={view === itemView ? "page" : undefined} className={`flex-1 rounded-xl px-4 py-3 text-center text-sm font-extrabold ${view === itemView ? "bg-[var(--brand-gold)] text-black" : "text-[var(--text-soft)] hover:bg-white/5 hover:text-white"}`}>{label}</Link>
           ))}
         </nav>
       )}
+
+      {storageReady && view === "recipes" && <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm sm:p-8">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]">Recipe collection</p>
+        <h1 className="mt-2 text-4xl">What would you like to cook?</h1>
+        <p className="mt-2 text-[var(--text-soft)]">Choose a recipe to open the app&apos;s guided cooking view. Exiting always brings you back to your saved week.</p>
+        <label className="relative mt-6 block">
+          <Search aria-hidden="true" size={19} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-soft)]" />
+          <span className="sr-only">Search recipes</span>
+          <input value={recipeSearch} onChange={(event) => setRecipeSearch(event.target.value)} placeholder="Search recipes or ingredients…" className="w-full rounded-xl border border-[var(--border)] bg-black/25 py-3 pl-11 pr-4 text-white outline-none placeholder:text-[var(--text-soft)] focus:border-[var(--brand-gold)]" />
+        </label>
+        {selectableRecipes.length > 0 ? <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {selectableRecipes.map((recipe) => {
+            const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
+            return <Link key={recipe.slug} href={`/meal-planner/cook/${recipe.slug}`} className="group flex gap-3 rounded-2xl border border-[var(--border)] bg-black/20 p-3 transition hover:border-[var(--brand-gold)] hover:bg-white/5">
+              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-black/30"><Image src={recipe.image || "/brand/logo-mark.png"} alt="" fill sizes="96px" className="object-cover transition group-hover:scale-105" /></div>
+              <div className="min-w-0 py-1"><h2 className="line-clamp-2 text-base font-extrabold leading-tight text-[var(--brand-gold)]">{recipe.title}</h2>{totalMinutes > 0 && <p className="mt-2 text-xs text-[var(--text-soft)]">{totalMinutes} minutes</p>}<p className="mt-2 text-xs font-bold text-white">Open recipe →</p></div>
+            </Link>;
+          })}
+        </div> : <div className="py-14 text-center"><h2 className="text-2xl">No recipes found</h2><p className="mt-2 text-[var(--text-soft)]">Try a different dish or ingredient.</p></div>}
+      </section>}
 
       {storageReady && view === "build" && <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm sm:p-9">
         <p className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]">Vegan Masala Planner</p>
@@ -1011,7 +1032,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
                       <span className="hidden shrink-0 text-xs font-bold text-[var(--text-soft)] group-open:inline">Hide −</span>
                     </span>
                   </summary>
-                  <Link href={`/recipes/${recipe.slug}`} className="mt-2 inline-block text-xs font-bold text-[var(--text-soft)] underline hover:text-white">View recipe</Link>
+                  <Link href={`/meal-planner/cook/${recipe.slug}`} className="mt-2 inline-block text-xs font-bold text-[var(--text-soft)] underline hover:text-white">Open recipe</Link>
                   <ul className="mt-3 space-y-2">
                     {recipe.ingredients.map((ingredient, index) => {
                       const key = `${recipe.slug}:${index}`;
