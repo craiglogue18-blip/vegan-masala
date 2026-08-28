@@ -15,10 +15,7 @@ function recipeFileForSlug(slug: string) {
   return null;
 }
 
-export function updateRecipeMealTypes(slug: string, mealTypes: string[]) {
-  const filePath = recipeFileForSlug(slug);
-  if (!filePath) throw new Error("Recipe not found.");
-
+function updateFrontmatterLine(filePath: string, key: string, replacement: string, insertAfter: string) {
   const raw = fs.readFileSync(filePath, "utf8");
   const boundary = raw.indexOf("\n---", 3);
   if (!raw.startsWith("---") || boundary === -1) throw new Error("Recipe frontmatter is invalid.");
@@ -26,20 +23,35 @@ export function updateRecipeMealTypes(slug: string, mealTypes: string[]) {
   const header = raw.slice(4, boundary);
   const body = raw.slice(boundary);
   const lines = header.split("\n");
-  const existing = lines.findIndex((line) => /^mealTypes\s*:/.test(line));
-  const replacement = `mealTypes: [${mealTypes.join(", ")}]`;
+  const existing = lines.findIndex((line) => new RegExp(`^${key}\\s*:`).test(line));
 
   if (existing >= 0) {
     let end = existing + 1;
     while (end < lines.length && /^\s+-\s+/.test(lines[end])) end += 1;
     lines.splice(existing, end - existing, replacement);
   } else {
-    const tags = lines.findIndex((line) => /^tags\s*:/.test(line));
-    let insertAt = tags >= 0 ? tags + 1 : lines.length;
+    const anchor = lines.findIndex((line) => new RegExp(`^${insertAfter}\\s*:`).test(line));
+    let insertAt = anchor >= 0 ? anchor + 1 : lines.length;
     while (insertAt < lines.length && /^\s+-\s+/.test(lines[insertAt])) insertAt += 1;
     lines.splice(insertAt, 0, replacement);
   }
 
   fs.writeFileSync(filePath, `---\n${lines.join("\n")}${body}`, "utf8");
+}
+
+export function updateRecipeMealTypes(slug: string, mealTypes: string[]) {
+  const filePath = recipeFileForSlug(slug);
+  if (!filePath) throw new Error("Recipe not found.");
+
+  updateFrontmatterLine(filePath, "mealTypes", `mealTypes: [${mealTypes.join(", ")}]`, "tags");
+  return path.basename(filePath);
+}
+
+export function updateRecipeServings(slug: string, servings: number) {
+  const filePath = recipeFileForSlug(slug);
+  if (!filePath) throw new Error("Recipe not found.");
+  const data = matter(fs.readFileSync(filePath, "utf8")).data;
+  const key = Object.prototype.hasOwnProperty.call(data, "serves") && !Object.prototype.hasOwnProperty.call(data, "servings") ? "serves" : "servings";
+  updateFrontmatterLine(filePath, key, `${key}: ${servings}`, "cookMinutes");
   return path.basename(filePath);
 }

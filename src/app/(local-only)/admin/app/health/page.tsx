@@ -4,6 +4,7 @@ import { buildRecipeAppHealth, suggestRecipeMealTypes, type AppHealthSeverity } 
 import { getAllRecipes } from "@/lib/recipes";
 
 import MealTypeEditor from "./MealTypeEditor";
+import ServingEditor from "./ServingEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -73,6 +74,7 @@ export default function AppRecipeHealthPage() {
                   {item.issues.length ? item.issues.map((problem, index) => <div key={`${problem.area}-${index}`} className={`rounded-xl border px-4 py-3 text-sm ${severityStyle[problem.severity]}`}><span className="mr-2 font-extrabold">{problem.area}</span>{problem.message}</div>) : <p className="rounded-xl border border-green-800/70 bg-green-950/30 px-4 py-3 text-sm text-green-200">No app-readiness issues detected.</p>}
                 </div>
                 <MealTypeEditor slug={item.recipe.slug} current={item.recipe.mealTypes ?? []} suggested={suggestRecipeMealTypes(item.recipe)} />
+                <ServingEditor slug={item.recipe.slug} current={item.recipe.servings ?? item.recipe.serves} />
                 <div className="mt-4 flex flex-wrap gap-3 text-sm"><Link href={`/recipes/${item.recipe.slug}`} className="font-bold text-[var(--brand-gold)] underline underline-offset-4">View recipe</Link><Link href={`/meal-planner/cook/${item.recipe.slug}`} className="font-bold text-[var(--brand-gold)] underline underline-offset-4">Test cooking mode</Link><span className="text-[var(--text-soft)]">{plural(item.ingredients.length, "ingredient")} · {plural(item.steps.length, "step")} · {plural(item.videoCount, "video")}</span></div>
               </div>
             </details>;

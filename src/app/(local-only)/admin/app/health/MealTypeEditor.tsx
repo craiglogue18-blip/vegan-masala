@@ -25,7 +25,7 @@ export default function MealTypeEditor({ slug, current, suggested }: { slug: str
     setState("saving");
     setMessage("");
     try {
-      const response = await fetch("/api/admin/app/recipe-health", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slug, mealTypes: values }) });
+      const response = await fetch("/api/admin/app/recipe-health", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "mealTypes", slug, mealTypes: values }) });
       const result = await response.json();
       if (!response.ok || !result.ok) throw new Error(result.error || "Unable to save.");
       setSelected(values);
