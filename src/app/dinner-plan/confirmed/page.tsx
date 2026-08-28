@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import {
+  DinnerPlanConfirmationTracker,
+  DinnerPlanDownloadLink,
+} from "@/components/DinnerPlanSignupForm";
 
 export const metadata: Metadata = {
   title: "Your 7-Day Dinner Plan is ready",
@@ -14,6 +18,7 @@ const downloadUrl =
 export default function DinnerPlanConfirmedPage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-12 sm:py-16">
+      <DinnerPlanConfirmationTracker />
       <div className="grid overflow-hidden rounded-3xl border border-[var(--border)] bg-black/70 shadow-2xl md:grid-cols-[1.05fr_0.95fr]">
         <div className="p-8 sm:p-12">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]">
@@ -27,13 +32,7 @@ export default function DinnerPlanConfirmedPage() {
             one organised shopping list and practical preparation notes.
           </p>
 
-          <a
-            href={downloadUrl}
-            className="mt-8 inline-flex rounded-full bg-[var(--brand-gold)] px-7 py-4 text-base font-extrabold text-black transition hover:brightness-110"
-            download="vegan-masala-7-day-dinner-plan.pdf"
-          >
-            Download the dinner plan
-          </a>
+          <DinnerPlanDownloadLink href={downloadUrl} />
 
           <p className="mt-6 text-sm leading-6 text-[var(--text-soft)]/80">
             You can bookmark this page. We only measure this confirmation when your

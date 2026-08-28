@@ -102,7 +102,7 @@ function SiteFooter() {
                 </li>
                 <li>
                   <a
-                    href="https://vegan-masala.kit.com/7271084c33?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=footer"
+                    href="/dinner-plan?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=footer"
                     className="font-bold text-[var(--brand-gold)] hover:underline"
                   >
                     Free 7-Day Dinner Plan
