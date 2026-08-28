@@ -443,6 +443,8 @@ function MealCard({
   onMove,
   canMoveBack,
   canMoveForward,
+  editMode,
+  onChoose,
 }: {
   item: PlannedMeal;
   cooked: boolean;
@@ -453,6 +455,8 @@ function MealCard({
   onMove: (direction: -1 | 1) => void;
   canMoveBack: boolean;
   canMoveForward: boolean;
+  editMode: boolean;
+  onChoose: () => void;
 }) {
   const { meal, recipe } = item;
   const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
@@ -476,8 +480,8 @@ function MealCard({
         {item.leftoverFrom && <p className="mt-1 text-xs font-extrabold text-green-300">Leftovers from {item.leftoverFrom}</p>}
         {item.batchCook && <p className="mt-1 text-xs font-extrabold text-[var(--brand-gold)]">Cook double · tomorrow&apos;s lunch sorted</p>}
         {totalMinutes > 0 && <p className="mt-1 text-xs text-[var(--text-soft)]">{totalMinutes} minutes</p>}
-        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-bold text-[var(--text-soft)]"><button type="button" onClick={onSwap} className="underline decoration-[var(--border)] underline-offset-4 hover:text-white">{item.leftoverFrom ? "Choose fresh" : "Swap recipe"}</button><button type="button" onClick={() => onStatus("eating-out")} className="hover:text-white">Eating out</button><button type="button" onClick={() => onStatus("skipped")} className="hover:text-white">Skip</button></div>
-        {(canMoveBack || canMoveForward) && <div className="mt-2 flex items-center gap-2 text-xs font-bold text-[var(--text-soft)]"><ArrowLeftRight aria-hidden="true" size={14} /><span>Move:</span><button type="button" disabled={!canMoveBack} onClick={() => onMove(-1)} className="disabled:opacity-25 hover:text-white">Previous day</button><button type="button" disabled={!canMoveForward} onClick={() => onMove(1)} className="disabled:opacity-25 hover:text-white">Next day</button></div>}
+        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-bold text-[var(--text-soft)]"><button type="button" onClick={onSwap} className="underline decoration-[var(--border)] underline-offset-4 hover:text-white">{item.leftoverFrom ? "Choose fresh" : "Swap recipe"}</button>{editMode && <><button type="button" onClick={onChoose} className="text-[var(--brand-gold)] hover:text-white">Choose recipe</button><button type="button" onClick={() => onStatus("eating-out")} className="hover:text-white">Eating out</button><button type="button" onClick={() => onStatus("skipped")} className="hover:text-white">Skip</button></>}</div>
+        {editMode && (canMoveBack || canMoveForward) && <div className="mt-2 flex items-center gap-2 text-xs font-bold text-[var(--text-soft)]"><ArrowLeftRight aria-hidden="true" size={14} /><span>Move:</span><button type="button" disabled={!canMoveBack} onClick={() => onMove(-1)} className="disabled:opacity-25 hover:text-white">Previous day</button><button type="button" disabled={!canMoveForward} onClick={() => onMove(1)} className="disabled:opacity-25 hover:text-white">Next day</button></div>}
       </div>
     </div>
   );
@@ -511,7 +515,10 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   const [profileName, setProfileName] = useState("");
   const [profileSummary, setProfileSummary] = useState("");
   const [recipePickerOpen, setRecipePickerOpen] = useState(false);
+  const [recipePickerSlot, setRecipePickerSlot] = useState<string | null>(null);
   const [recipeSearch, setRecipeSearch] = useState("");
+  const [editWeek, setEditWeek] = useState(false);
+  const [undoState, setUndoState] = useState<{ mealStatuses: Record<string, MealStatus>; mealOverrides: Record<string, string> } | null>(null);
 
   useEffect(() => {
     try {
@@ -702,6 +709,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
 
   function setMealStatus(day: string, meal: Meal, status?: MealStatus) {
     const slot = `${day}-${meal}`;
+    setUndoState({ mealStatuses: { ...mealStatuses }, mealOverrides: { ...mealOverrides } });
     setMealStatuses((current) => { const next = { ...current }; if (status) next[slot] = status; else delete next[slot]; return next; });
   }
 
@@ -711,10 +719,30 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     if (!targetDay) return;
     const target = plan.find((candidate) => candidate.dateKey === targetDay.key && candidate.meal === item.meal);
     if (!target) return;
+    setUndoState({ mealStatuses: { ...mealStatuses }, mealOverrides: { ...mealOverrides } });
     const sourceSlot = `${item.day}-${item.meal}`;
     const targetSlot = `${target.day}-${target.meal}`;
     setMealOverrides((current) => ({ ...current, [sourceSlot]: target.recipe.slug, [targetSlot]: item.recipe.slug }));
     setSaveMessage("Meals moved. Your shopping list has been updated.");
+  }
+
+  function chooseRecipeForSlot(recipe: PlannerRecipe) {
+    if (!recipePickerSlot) return;
+    setUndoState({ mealStatuses: { ...mealStatuses }, mealOverrides: { ...mealOverrides } });
+    setMealOverrides((current) => ({ ...current, [recipePickerSlot]: recipe.slug }));
+    setMealStatuses((current) => { const next = { ...current }; delete next[recipePickerSlot]; return next; });
+    setRecipePickerOpen(false);
+    setRecipePickerSlot(null);
+    setRecipeSearch("");
+    setSaveMessage("Recipe changed. Your shopping list has been updated.");
+  }
+
+  function undoLastPlanEdit() {
+    if (!undoState) return;
+    setMealStatuses(undoState.mealStatuses);
+    setMealOverrides(undoState.mealOverrides);
+    setUndoState(null);
+    setSaveMessage("Last change undone.");
   }
 
   function savePlan() {
@@ -823,6 +851,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
       return !query || recipeText(recipe).includes(query);
     })
     .sort((a, b) => a.title.localeCompare(b.title));
+  const pickerMeal = recipePickerSlot ? plan.find((item) => `${item.day}-${item.meal}` === recipePickerSlot)?.meal : undefined;
+  const pickerRecipes = pickerMeal ? selectableRecipes.filter((recipe) => matchesMeal(recipe, pickerMeal)) : selectableRecipes;
 
   function toggleShoppingItem(key: string) {
     setCheckedShoppingItems((current) =>
@@ -1039,6 +1069,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
             <div className="flex flex-wrap items-center gap-3">
               <span className="rounded-full border border-green-800/70 bg-green-950/40 px-3 py-1.5 text-xs font-bold text-green-300">Saved on this device</span>
               <button type="button" onClick={savePlan} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)] hover:bg-white/10">Save plan</button>
+              <button type="button" aria-pressed={editWeek} onClick={() => setEditWeek((value) => !value)} className={`rounded-xl px-4 py-2 text-sm font-extrabold ${editWeek ? "bg-[var(--brand-gold)] text-black" : "border border-[var(--border)] text-[var(--brand-gold)] hover:bg-white/10"}`}>{editWeek ? "Done editing" : "Edit week"}</button>
+              {undoState && <button type="button" onClick={undoLastPlanEdit} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-white hover:bg-white/10">Undo change</button>}
               <Link href="/meal-planner/build" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--text-soft)] hover:bg-white/10 hover:text-white">Edit plan</Link>
               <Link href="/meal-planner/welcome" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--text-soft)] hover:bg-white/10 hover:text-white">My preferences</Link>
               <button type="button" onClick={startNewPlan} className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--text-soft)] hover:bg-white/10 hover:text-white">New plan</button>
@@ -1062,7 +1094,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
                 </div>
                 <div className="mt-6 flex flex-wrap gap-2">
                   <Link href={`/meal-planner/cook/${nextDinner.recipe.slug}`} className="rounded-xl bg-[var(--brand-red)] px-5 py-3 font-extrabold text-white hover:brightness-110">Start cooking</Link>
-                  <button type="button" onClick={() => setRecipePickerOpen(true)} className="rounded-xl border border-[var(--brand-gold)] bg-[var(--brand-gold)]/10 px-4 py-3 font-bold text-[var(--brand-gold)] hover:bg-[var(--brand-gold)] hover:text-black">Choose another recipe</button>
+                  <button type="button" onClick={() => { setRecipePickerSlot(null); setRecipePickerOpen(true); }} className="rounded-xl border border-[var(--brand-gold)] bg-[var(--brand-gold)]/10 px-4 py-3 font-bold text-[var(--brand-gold)] hover:bg-[var(--brand-gold)] hover:text-black">Choose another recipe</button>
                   <button type="button" onClick={() => swapMeal(nextDinner.day, nextDinner.meal)} className="rounded-xl border border-[var(--border)] bg-black/20 px-4 py-3 font-bold text-white hover:bg-white/10">Swap dinner</button>
                 </div>
               </div>
@@ -1082,7 +1114,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
                 {todayMeals.map((item) => {
                   const slot = `${item.day}-${item.meal}`;
                   const dayIndex = planDays.findIndex((day) => day.key === item.dateKey);
-                  return <MealCard key={slot} item={item} cooked={cookedSlots.includes(slot)} status={mealStatuses[slot]} onStatus={(status) => setMealStatus(item.day, item.meal, status)} onMove={(direction) => moveMeal(item, direction)} canMoveBack={dayIndex > 0} canMoveForward={dayIndex < planDays.length - 1} onSwap={() => swapMeal(item.day, item.meal)} onToggleCooked={() => toggleCooked(item.day, item.meal)} />;
+                  return <MealCard key={slot} item={item} cooked={cookedSlots.includes(slot)} status={mealStatuses[slot]} editMode={editWeek} onChoose={() => { setRecipePickerSlot(slot); setRecipeSearch(""); setRecipePickerOpen(true); }} onStatus={(status) => setMealStatus(item.day, item.meal, status)} onMove={(direction) => moveMeal(item, direction)} canMoveBack={dayIndex > 0} canMoveForward={dayIndex < planDays.length - 1} onSwap={() => swapMeal(item.day, item.meal)} onToggleCooked={() => toggleCooked(item.day, item.meal)} />;
                 })}
               </div>
             ) : (
@@ -1101,7 +1133,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
                   {plan.filter((item) => item.dateKey === plannedDay.key).map((item) => {
                     const slot = `${item.day}-${item.meal}`;
                     const dayIndex = planDays.findIndex((day) => day.key === item.dateKey);
-                    return <MealCard key={slot} item={item} cooked={cookedSlots.includes(slot)} status={mealStatuses[slot]} onStatus={(status) => setMealStatus(item.day, item.meal, status)} onMove={(direction) => moveMeal(item, direction)} canMoveBack={dayIndex > 0} canMoveForward={dayIndex < planDays.length - 1} onSwap={() => swapMeal(item.day, item.meal)} onToggleCooked={() => toggleCooked(item.day, item.meal)} />;
+                    return <MealCard key={slot} item={item} cooked={cookedSlots.includes(slot)} status={mealStatuses[slot]} editMode={editWeek} onChoose={() => { setRecipePickerSlot(slot); setRecipeSearch(""); setRecipePickerOpen(true); }} onStatus={(status) => setMealStatus(item.day, item.meal, status)} onMove={(direction) => moveMeal(item, direction)} canMoveBack={dayIndex > 0} canMoveForward={dayIndex < planDays.length - 1} onSwap={() => swapMeal(item.day, item.meal)} onToggleCooked={() => toggleCooked(item.day, item.meal)} />;
                   })}
                 </div>
               </article>
@@ -1225,7 +1257,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
         <section role="dialog" aria-modal="true" aria-labelledby="recipe-picker-title" onClick={(event) => event.stopPropagation()} className="mx-auto flex h-full max-h-[800px] max-w-4xl flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[#10191e] shadow-2xl">
           <div className="border-b border-[var(--border)] p-5 sm:p-6">
             <div className="flex items-start justify-between gap-4">
-              <div><p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]">Cook anything</p><h2 id="recipe-picker-title" className="mt-1 text-3xl">Choose a recipe</h2><p className="mt-1 text-sm text-[var(--text-soft)]">This opens cooking mode without changing your weekly plan.</p></div>
+              <div><p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]">{recipePickerSlot ? "Edit your week" : "Cook anything"}</p><h2 id="recipe-picker-title" className="mt-1 text-3xl">Choose a recipe</h2><p className="mt-1 text-sm text-[var(--text-soft)]">{recipePickerSlot ? `Choose a ${pickerMeal?.toLowerCase()} recipe. Your shopping list will update automatically.` : "This opens cooking mode without changing your weekly plan."}</p></div>
               <button type="button" onClick={() => setRecipePickerOpen(false)} aria-label="Close recipe selection" className="rounded-xl border border-[var(--border)] p-2 text-[var(--text-soft)] hover:text-white"><X aria-hidden="true" /></button>
             </div>
             <label className="relative mt-5 block">
@@ -1235,13 +1267,13 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
             </label>
           </div>
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-            {selectableRecipes.length > 0 ? <div className="grid gap-3 sm:grid-cols-2">
-              {selectableRecipes.map((recipe) => {
+            {pickerRecipes.length > 0 ? <div className="grid gap-3 sm:grid-cols-2">
+              {pickerRecipes.map((recipe) => {
                 const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
-                return <Link key={recipe.slug} href={`/meal-planner/cook/${recipe.slug}`} className="group flex gap-3 rounded-2xl border border-[var(--border)] bg-black/20 p-3 transition hover:border-[var(--brand-gold)] hover:bg-white/5">
-                  <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-black/30"><Image src={recipe.image || "/brand/logo-mark.png"} alt="" fill sizes="96px" className="object-cover transition group-hover:scale-105" /></div>
-                  <div className="min-w-0 py-1"><h3 className="line-clamp-2 text-base font-extrabold leading-tight text-[var(--brand-gold)]">{recipe.title}</h3>{totalMinutes > 0 && <p className="mt-2 text-xs text-[var(--text-soft)]">{totalMinutes} minutes</p>}<p className="mt-2 text-xs font-bold text-white">Start cooking →</p></div>
-                </Link>;
+                const cardClass = "group flex gap-3 rounded-2xl border border-[var(--border)] bg-black/20 p-3 text-left transition hover:border-[var(--brand-gold)] hover:bg-white/5";
+                const card = <><div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-black/30"><Image src={recipe.image || "/brand/logo-mark.png"} alt="" fill sizes="96px" className="object-cover transition group-hover:scale-105" /></div>
+                  <div className="min-w-0 py-1"><h3 className="line-clamp-2 text-base font-extrabold leading-tight text-[var(--brand-gold)]">{recipe.title}</h3>{totalMinutes > 0 && <p className="mt-2 text-xs text-[var(--text-soft)]">{totalMinutes} minutes</p>}<p className="mt-2 text-xs font-bold text-white">{recipePickerSlot ? "Use in plan →" : "Start cooking →"}</p></div></>;
+                return recipePickerSlot ? <button type="button" key={recipe.slug} onClick={() => chooseRecipeForSlot(recipe)} className={cardClass}>{card}</button> : <Link key={recipe.slug} href={`/meal-planner/cook/${recipe.slug}`} className={cardClass}>{card}</Link>;
               })}
             </div> : <div className="py-14 text-center"><h3 className="text-2xl">No recipes found</h3><p className="mt-2 text-[var(--text-soft)]">Try a different dish or ingredient.</p></div>}
           </div>
