@@ -38,6 +38,8 @@ type PlannedMeal = {
   dateKey: string;
   meal: Meal;
   recipe: PlannerRecipe;
+  leftoverFrom?: string;
+  batchCook?: boolean;
 };
 
 type ShoppingItem = {
@@ -443,10 +445,11 @@ function MealCard({
 }) {
   const { meal, recipe } = item;
   const totalMinutes = (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0);
+  const cookHref = `/meal-planner/cook/${recipe.slug}${item.batchCook ? "?batch=2" : ""}`;
 
   return (
     <div className={`flex gap-3 rounded-2xl border border-[var(--border)] p-3 transition ${cooked ? "bg-green-950/25 opacity-75" : "bg-black/20"}`}>
-      <Link href={`/meal-planner/cook/${recipe.slug}`} className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-black/30">
+      <Link href={cookHref} className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-black/30">
         <Image src={recipe.image || "/brand/logo-mark.png"} alt="" fill sizes="96px" className="object-cover" />
       </Link>
       <div className="min-w-0 flex-1">
@@ -456,9 +459,11 @@ function MealCard({
             {cooked ? <CheckCircle2 aria-hidden="true" size={20} /> : <Circle aria-hidden="true" size={20} />}
           </button>
         </div>
-        <Link href={`/meal-planner/cook/${recipe.slug}`} className={`mt-1 line-clamp-2 block text-base font-extrabold leading-tight text-[var(--brand-gold)] hover:underline ${cooked ? "line-through decoration-green-500/60" : ""}`}>{recipe.title}</Link>
+        <Link href={cookHref} className={`mt-1 line-clamp-2 block text-base font-extrabold leading-tight text-[var(--brand-gold)] hover:underline ${cooked ? "line-through decoration-green-500/60" : ""}`}>{recipe.title}</Link>
+        {item.leftoverFrom && <p className="mt-1 text-xs font-extrabold text-green-300">Leftovers from {item.leftoverFrom}</p>}
+        {item.batchCook && <p className="mt-1 text-xs font-extrabold text-[var(--brand-gold)]">Cook double · tomorrow&apos;s lunch sorted</p>}
         {totalMinutes > 0 && <p className="mt-1 text-xs text-[var(--text-soft)]">{totalMinutes} minutes</p>}
-        <button type="button" onClick={onSwap} className="mt-1.5 text-xs font-bold text-[var(--text-soft)] underline decoration-[var(--border)] underline-offset-4 hover:text-white">Swap meal</button>
+        <button type="button" onClick={onSwap} className="mt-1.5 text-xs font-bold text-[var(--text-soft)] underline decoration-[var(--border)] underline-offset-4 hover:text-white">{item.leftoverFrom ? "Choose a fresh lunch" : "Swap meal"}</button>
       </div>
     </div>
   );
@@ -471,6 +476,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   const [startDate, setStartDate] = useState(() => localDateKey(new Date()));
   const [meals, setMeals] = useState<Meal[]>(MEALS);
   const [preference, setPreference] = useState<Preference>("Any");
+  const [useLeftovers, setUseLeftovers] = useState(false);
   const [generation, setGeneration] = useState<number | null>(null);
   const [swaps, setSwaps] = useState<Record<string, number>>({});
   const [storageReady, setStorageReady] = useState(false);
@@ -508,6 +514,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
           if (restoredMeals.length > 0) setMeals(restoredMeals);
         }
         if (PREFERENCES.includes(saved.preference as Preference)) setPreference(saved.preference as Preference);
+        if (typeof saved.useLeftovers === "boolean") setUseLeftovers(saved.useLeftovers);
         if (typeof saved.generation === "number") {
           setGeneration(saved.generation);
         }
@@ -553,9 +560,9 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     if (!storageReady || generation === null) return;
     localStorage.setItem(
       SAVED_PLAN_KEY,
-      JSON.stringify({ people, days, startDate, meals, preference, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
+      JSON.stringify({ people, days, startDate, meals, preference, useLeftovers, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
     );
-  }, [checkedShoppingItems, cookedSlots, customShoppingItems, days, generation, meals, people, preference, shoppingOverrides, shoppingStatuses, startDate, storageReady, swaps]);
+  }, [checkedShoppingItems, cookedSlots, customShoppingItems, days, generation, meals, people, preference, shoppingOverrides, shoppingStatuses, startDate, storageReady, swaps, useLeftovers]);
 
   const planDays = useMemo(
     () => Array.from({ length: days }, (_, index) => planDate(startDate, index)),
@@ -568,7 +575,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     const selectedMeals = MEALS.filter((meal) => meals.includes(meal));
     const usedSlugs = new Set<string>();
 
-    return planDays.flatMap((plannedDay, dayIndex) =>
+    const generated: PlannedMeal[] = planDays.flatMap((plannedDay, dayIndex) =>
       selectedMeals.map((meal, mealIndex) => {
         const day = plannedDay.label;
         const slot = `${day}-${meal}`;
@@ -587,7 +594,20 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
         return { day, dayName: plannedDay.name, dateKey: plannedDay.key, meal, recipe };
       })
     );
-  }, [generation, meals, planDays, preference, recipes, swaps]);
+    if (!useLeftovers || !selectedMeals.includes("Lunch") || !selectedMeals.includes("Dinner")) return generated;
+
+    const planned = generated.map((item) => ({ ...item }));
+    for (let dayIndex = 1; dayIndex < planDays.length; dayIndex += 1) {
+      const lunchIndex = planned.findIndex((item) => item.dateKey === planDays[dayIndex].key && item.meal === "Lunch");
+      const dinnerIndex = planned.findIndex((item) => item.dateKey === planDays[dayIndex - 1].key && item.meal === "Dinner");
+      if (lunchIndex < 0 || dinnerIndex < 0) continue;
+      const lunchSlot = `${planned[lunchIndex].day}-Lunch`;
+      if ((swaps[lunchSlot] ?? 0) > 0) continue;
+      planned[lunchIndex] = { ...planned[lunchIndex], recipe: planned[dinnerIndex].recipe, leftoverFrom: planned[dinnerIndex].day };
+      planned[dinnerIndex] = { ...planned[dinnerIndex], batchCook: true };
+    }
+    return planned;
+  }, [generation, meals, planDays, preference, recipes, swaps, useLeftovers]);
 
   function toggleMeal(meal: Meal) {
     setMeals((current) => {
@@ -611,6 +631,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
         startDate,
         meals,
         preference,
+        useLeftovers,
         generation: nextGeneration,
         swaps: {},
         cookedSlots: [],
@@ -660,7 +681,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     if (generation === null) return;
     localStorage.setItem(
       SAVED_PLAN_KEY,
-      JSON.stringify({ people, days, startDate, meals, preference, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
+      JSON.stringify({ people, days, startDate, meals, preference, useLeftovers, generation, swaps, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
     );
     setSaveMessage("Plan saved on this device.");
   }
@@ -695,7 +716,8 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     new Map(plan.map((item) => [item.recipe.slug, item.recipe])).values()
   ).filter((recipe) => recipe.ingredients.length > 0);
   const recipeOccurrences = plan.reduce<Record<string, number>>((counts, item) => {
-    counts[item.recipe.slug] = (counts[item.recipe.slug] ?? 0) + 1;
+    const cookingAmount = item.leftoverFrom ? 0 : item.batchCook ? 2 : 1;
+    counts[item.recipe.slug] = (counts[item.recipe.slug] ?? 0) + cookingAmount;
     return counts;
   }, {});
   const sourceShoppingItems = shoppingRecipes.flatMap((recipe) =>
@@ -896,7 +918,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
               <span className="w-20 text-center font-bold">{people}</span>
               <button type="button" onClick={() => setPeople((value) => Math.min(8, value + 1))} className="h-11 w-11 rounded-xl text-xl hover:bg-white/10" aria-label="Add one person">+</button>
             </div>
-            <p className="mt-2 text-xs text-[var(--text-soft)]">Portion scaling is coming next.</p>
+            <p className="mt-2 text-xs text-[var(--text-soft)]">Recipe and shopping quantities are adjusted for your household.</p>
           </fieldset>
 
           <fieldset>
@@ -934,6 +956,15 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
                 <button key={option} type="button" aria-pressed={preference === option} onClick={() => { setPreference(option); setGeneration(null); setSwaps({}); }} className={`rounded-xl border px-4 py-3 font-bold ${preference === option ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] bg-black/20 hover:bg-white/10"}`}>{option}</button>
               ))}
             </div>
+          </fieldset>
+
+          <fieldset className="rounded-2xl border border-[var(--border)] bg-black/20 p-5 lg:col-span-2">
+            <legend className="px-2 text-xl font-extrabold text-[var(--brand-gold)]">Cook once, eat twice</legend>
+            <button type="button" aria-pressed={useLeftovers} onClick={() => { setUseLeftovers((value) => !value); setGeneration(null); setSwaps({}); }} className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition ${useLeftovers ? "border-green-700 bg-green-950/30" : "border-[var(--border)] bg-black/20 hover:bg-white/5"}`}>
+              <span className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border ${useLeftovers ? "border-green-500 bg-green-600 text-white" : "border-[var(--border)]"}`}>{useLeftovers && <CheckCircle2 aria-hidden="true" size={17} />}</span>
+              <span><span className="block font-extrabold text-white">Use dinner leftovers for the next day&apos;s lunch</span><span className="mt-1 block text-sm leading-6 text-[var(--text-soft)]">When lunch and dinner are selected, eligible dinners make double portions. The next lunch is already prepared and the shopping list buys the correct batch quantity.</span></span>
+            </button>
+            {(!meals.includes("Lunch") || !meals.includes("Dinner")) && useLeftovers && <p className="mt-3 text-sm font-bold text-amber-300">Select both Lunch and Dinner to create leftover meals.</p>}
           </fieldset>
         </div>
 

@@ -22,7 +22,7 @@ function timerLabel(seconds: number) {
   return `${minutes}:${String(remainder).padStart(2, "0")}`;
 }
 
-export default function CookingMode({ recipe }: { recipe: CookingRecipe }) {
+export default function CookingMode({ recipe, batchMultiplier = 1 }: { recipe: CookingRecipe; batchMultiplier?: number }) {
   const [step, setStep] = useState(0);
   const [ingredientsOpen, setIngredientsOpen] = useState(false);
   const [checkedIngredients, setCheckedIngredients] = useState<number[]>([]);
@@ -95,6 +95,7 @@ export default function CookingMode({ recipe }: { recipe: CookingRecipe }) {
 
         {recipe.steps.length ? (
           <div className="p-5 sm:p-8">
+            {batchMultiplier > 1 && <div className="mb-5 rounded-2xl border border-green-800/70 bg-green-950/35 p-4"><p className="font-extrabold text-green-300">Batch-cooking tonight</p><p className="mt-1 text-sm leading-6 text-[var(--text-soft)]">Make double the listed ingredient quantities. Serve half now and refrigerate half for tomorrow&apos;s lunch.</p></div>}
             <div className="flex items-center justify-between gap-4 text-sm font-bold text-[var(--text-soft)]">
               <span>Step {step + 1} of {recipe.steps.length}</span>
               {recipe.totalMinutes > 0 && <span className="inline-flex items-center gap-1.5"><Clock3 aria-hidden="true" size={16} /> About {recipe.totalMinutes} min</span>}
