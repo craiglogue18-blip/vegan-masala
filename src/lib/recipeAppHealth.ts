@@ -18,7 +18,12 @@ export type RecipeAppHealth = {
   status: "Needs attention" | "Usable" | "App ready";
 };
 
-const VALID_MEAL_TYPES = new Set(["breakfast", "lunch", "dinner"]);
+export const APP_MEAL_TYPES = ["breakfast", "lunch", "dinner", "snack", "side", "dessert"] as const;
+const VALID_MEAL_TYPES = new Set<string>(APP_MEAL_TYPES);
+const BREAKFAST_FRIENDLY = /\b(dosa|poori|breakfast|overnight oats|porridge|upma|poha)\b/i;
+const DESSERT = /\b(kheer|pudding|sweet|dessert|jalebi|gulab jamun|rasgulla|barfi|katli|balls)\b/i;
+const SIDE = /\b(chutney|naan|chapati|roti|rice|salad|raita)\b/i;
+const SNACK = /\b(pakora|bhaji|samosa|tikki|vada pav|gobi 65|cauliflower 65)\b/i;
 const SIDE_OR_SWEET = /\b(chutney|naan|chapati|roti|pakora|bhaji|poori|salad|raita|kheer|pudding|sweet|dessert|jalebi|gulab jamun|rasgulla|barfi|katli)\b/i;
 const UNLIKELY_BREAKFAST = /\b(madras|vindaloo|tikka masala|korma|curry|stew|balti|dhansak|makhani|makhanwala|pasanda)\b/i;
 const FLEXIBLE_QUANTITY = /\b(to taste|as needed|for serving|for garnish|for frying|a pinch|pinch of|a handful|handful of)\b/i;
@@ -94,6 +99,15 @@ export function analyseRecipeAppHealth(recipe: Recipe): RecipeAppHealth {
   const status = blockers ? "Needs attention" : warnings ? "Usable" : "App ready";
 
   return { recipe, issues, ingredients, steps, videoCount, score, status };
+}
+
+export function suggestRecipeMealTypes(recipe: Recipe): string[] {
+  const text = [recipe.title, recipe.slug, ...(recipe.tags ?? [])].join(" ");
+  if (DESSERT.test(text)) return ["dessert"];
+  if (SIDE.test(text)) return ["side"];
+  if (SNACK.test(text)) return ["snack"];
+  if (BREAKFAST_FRIENDLY.test(text)) return ["breakfast", "lunch"];
+  return ["lunch", "dinner"];
 }
 
 export function buildRecipeAppHealth(recipes: Recipe[]) {
