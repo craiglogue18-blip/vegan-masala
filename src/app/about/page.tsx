@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About Vegan Masala",
+  description:
+    "Meet Craig Logue and learn how Vegan Masala creates approachable vegan Indian recipes and practical cooking guides.",
+};
 
 export default function AboutPage() {
   const btnPrimary =
@@ -13,9 +20,10 @@ export default function AboutPage() {
       </h1>
 
       <p className="mt-3 max-w-3xl text-[var(--text-soft)]">
-        Vegan Masala is a growing collection of vegan Indian recipes that aim to taste
-        authentic — the kind of food you’d expect from family kitchens and local cafés —
-        but made simple and approachable for everyday cooking.
+        Vegan Masala is an independent recipe site created and edited by Craig
+        Logue. It is a growing collection of vegan Indian recipes inspired by the
+        food of family kitchens, restaurants and local cafés, made approachable for
+        everyday home cooking.
       </p>
 
       {/* Main content card */}
@@ -26,8 +34,8 @@ export default function AboutPage() {
 
         <ul className="mt-4 list-disc space-y-2 pl-5 text-[var(--text-soft)]">
           <li>
-            <span className="font-semibold text-[var(--brand-gold)]">Tested recipes</span> with clear steps,
-            timings, and sensible substitutions.
+            <span className="font-semibold text-[var(--brand-gold)]">Practical recipes</span> with clear steps,
+            timings, ingredient guidance and sensible substitutions.
           </li>
           <li>
             <span className="font-semibold text-[var(--brand-gold)]">Guides</span> to spices, herbs,
@@ -71,12 +79,27 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Small footer note card */}
       <section className="mt-10 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
-        <p className="text-sm text-[var(--text-soft)]">
-          Want to suggest a recipe or a guide you’d like next? Add a note to your project TODO list
-          and we’ll build a simple “Contact” page when you’re ready.
-        </p>
+        <h2 className="text-xl font-bold tracking-wide text-[var(--brand-gold)]">
+          How the site is made
+        </h2>
+        <div className="mt-3 space-y-3 text-sm leading-7 text-[var(--text-soft)]">
+          <p>
+            Craig selects, adapts and edits every recipe published on Vegan Masala.
+            The aim is to give readers useful detail: what a dish should look and
+            taste like, where a substitution works, and what commonly goes wrong.
+          </p>
+          <p>
+            Digital tools may assist with drafting, research, administration and
+            food imagery. They do not replace editorial review. Generated images
+            are illustrative, while recipe instructions and recommendations are
+            checked for clarity and usefulness before publication.
+          </p>
+          <p>
+            Read the full <Link href="/editorial-standards" className="font-semibold text-[var(--brand-gold)] underline">editorial standards</Link>,
+            or <Link href="/contact" className="font-semibold text-[var(--brand-gold)] underline">contact Craig</Link> to suggest a recipe, report a correction or ask a question.
+          </p>
+        </div>
       </section>
     </main>
   );

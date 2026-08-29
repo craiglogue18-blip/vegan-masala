@@ -111,6 +111,11 @@ function SiteFooter() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/meal-planner" className="hover:text-[var(--brand-gold)]">
+                    Meal Planner
+                  </Link>
+                </li>
+                <li>
                   <a
                     href="/dinner-plan?utm_source=vegan-masala&utm_medium=website&utm_campaign=7-day-dinner-plan&utm_content=footer"
                     className="font-bold text-[var(--brand-gold)] hover:underline"
@@ -144,6 +149,11 @@ function SiteFooter() {
                 <li>
                   <Link href="/affiliate-disclosure" className="hover:text-[var(--brand-gold)]">
                     Affiliate Disclosure
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/editorial-standards" className="hover:text-[var(--brand-gold)]">
+                    Editorial Standards
                   </Link>
                 </li>
                 <li>

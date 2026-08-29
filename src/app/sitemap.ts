@@ -5,12 +5,13 @@ import path from "node:path";
 import { getAllRecipes } from "@/lib/recipes";
 import { getAllGuideSlugs } from "@/lib/guides";
 import { RECIPE_COLLECTIONS } from "@/lib/seo/collections";
+import { isRecipeReadyForIndex } from "@/lib/recipeQuality";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
 
-  const recipes = getAllRecipes();
+  const recipes = getAllRecipes().filter(isRecipeReadyForIndex);
   const guideSlugs = getAllGuideSlugs();
 
   return [
@@ -33,6 +34,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}/about`,
       changeFrequency: "monthly",
       priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/editorial-standards`,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/meal-planner`,
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
     {
       url: `${siteUrl}/contact`,

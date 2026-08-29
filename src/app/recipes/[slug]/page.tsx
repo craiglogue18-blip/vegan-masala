@@ -9,6 +9,8 @@ import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import { isCurryHubRecipe } from "@/lib/seo/curryHub";
 import { isDalHubRecipe } from "@/lib/seo/dalHub";
 import { getCollectionsForRecipe } from "@/lib/seo/collections";
+import { getRecipeDepth } from "@/lib/recipeDepth";
+import { isRecipeReadyForIndex } from "@/lib/recipeQuality";
 import PrintButton from "@/components/PrintButton";
 import RelatedGuides from "@/components/RelatedGuides";
 import RelatedRecipes from "@/components/RelatedRecipes";
@@ -369,6 +371,9 @@ export async function generateMetadata({
     title: seoTitle,
     description: seoDescription,
     alternates: { canonical },
+    robots: isRecipeReadyForIndex(recipe)
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
     openGraph: {
       title: seoTitle,
       description: seoDescription,
@@ -478,6 +483,9 @@ export default async function RecipePage({
       ? recipe.instructions
       : methodFromBody) || [];
 
+  const depth = getRecipeDepth(recipe.slug);
+  const displayInstructions = depth?.instructions ?? instructions;
+
   const notes =
     (Array.isArray(recipe.notes) && recipe.notes.length
       ? recipe.notes
@@ -562,9 +570,9 @@ export default async function RecipePage({
     image: heroAbs || undefined,
     datePublished: recipe.publishedAt || undefined,
     author: {
-      "@type": "Organization",
-      name: "Vegan Masala",
-      url: siteUrl,
+      "@type": "Person",
+      name: "Craig Logue",
+      url: `${siteUrl}/about`,
     },
     publisher: {
       "@type": "Organization",
@@ -584,8 +592,8 @@ export default async function RecipePage({
     cookTime: isoDurationFromMinutes(recipe.cookMinutes),
     totalTime: isoDurationFromMinutes(totalMins ?? undefined),
     recipeIngredient: ingredients.length ? ingredients : undefined,
-    recipeInstructions: instructions.length
-      ? instructions.map((step: string, i: number) => ({
+    recipeInstructions: displayInstructions.length
+      ? displayInstructions.map((step: string, i: number) => ({
           "@type": "HowToStep",
           name: `Step ${i + 1}`,
           text: step,
@@ -662,6 +670,12 @@ export default async function RecipePage({
               </p>
             )}
 
+            <p className="mt-4 text-sm leading-6 text-[var(--text-soft)]">
+              Recipe by <Link href="/about" rel="author" className="font-bold text-[var(--brand-gold)] underline decoration-[var(--brand-gold)]/40 underline-offset-4">Craig Logue</Link>
+              <span aria-hidden="true"> · </span>
+              <Link href="/editorial-standards" className="underline decoration-current/40 underline-offset-4">How our recipes are created</Link>
+            </p>
+
             <div className="mt-6 flex flex-wrap gap-2">
               {totalLabel && (
                 <span className="rounded-xl bg-[var(--brand-red)] px-3 py-1 text-xs font-bold text-white shadow">
@@ -728,7 +742,7 @@ export default async function RecipePage({
           <span className="hidden px-3 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65 sm:inline">On this page</span>
           <a href="#overview" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Overview</a>
           <a href="#ingredients" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Ingredients ({ingredients.length})</a>
-          <a href="#method" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Method ({instructions.length})</a>
+          <a href="#method" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Method ({displayInstructions.length})</a>
           <a href="#notes" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Notes</a>
           {equipmentRecommendations.length > 0 && (
             <a href="#equipment" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Equipment</a>
@@ -762,6 +776,32 @@ export default async function RecipePage({
 
       <RecipeEquipment items={equipmentRecommendations} />
 
+      {depth && (
+        <section className="mt-8 rounded-[2rem] border border-[var(--border)] bg-[var(--surface)]/95 p-6 shadow-sm lg:p-8">
+          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">Recipe-specific guidance</p>
+          <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">Why this method works</h2>
+          <p className="mt-4 max-w-4xl leading-8 text-[var(--text-soft)]">{depth.whyItWorks}</p>
+          <div className="mt-8 grid gap-6 lg:grid-cols-2">
+            <div className="rounded-2xl border border-white/5 bg-black/15 p-5">
+              <h3 className="text-lg font-bold text-[var(--brand-gold)]">Cues to watch for</h3>
+              <ul className="mt-4 space-y-3 text-[var(--text-soft)]">
+                {depth.cues.map((cue) => <li key={cue} className="flex gap-3 leading-7"><span className="font-bold text-[var(--brand-gold)]">•</span><span>{cue}</span></li>)}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-white/5 bg-black/15 p-5">
+              <h3 className="text-lg font-bold text-[var(--brand-gold)]">Useful substitutions</h3>
+              <ul className="mt-4 space-y-3 text-[var(--text-soft)]">
+                {depth.substitutions.map((substitution) => <li key={substitution} className="flex gap-3 leading-7"><span className="font-bold text-[var(--brand-gold)]">•</span><span>{substitution}</span></li>)}
+              </ul>
+            </div>
+          </div>
+          <div className="mt-6 rounded-2xl border border-[var(--brand-gold)]/20 bg-[var(--brand-gold)]/5 p-5">
+            <h3 className="font-bold text-[var(--brand-gold)]">Storage and reheating</h3>
+            <p className="mt-2 leading-7 text-[var(--text-soft)]">{depth.leftovers}</p>
+          </div>
+        </section>
+      )}
+
       <section className="mt-10 grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
         <div
           id="method"
@@ -777,9 +817,9 @@ export default async function RecipePage({
               Method
             </h2>
 
-            {instructions.length ? (
+            {displayInstructions.length ? (
               <ol className="mt-8 space-y-6">
-                {instructions.map((step: string, i: number) => (
+                {displayInstructions.map((step: string, i: number) => (
                   <li key={i} className="flex gap-4">
                     <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--brand-red)] text-sm font-extrabold text-white shadow">
                       {i + 1}
