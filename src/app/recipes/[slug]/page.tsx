@@ -595,8 +595,8 @@ export default async function RecipePage({
     recipeInstructions: displayInstructions.length
       ? displayInstructions.map((step: string, i: number) => ({
           "@type": "HowToStep",
-          name: `Step ${i + 1}`,
           text: step,
+          url: `${canonicalUrl}#step-${i + 1}`,
         }))
       : undefined,
     suitableForDiet: "https://schema.org/VeganDiet",
@@ -820,7 +820,7 @@ export default async function RecipePage({
             {displayInstructions.length ? (
               <ol className="mt-8 space-y-6">
                 {displayInstructions.map((step: string, i: number) => (
-                  <li key={i} className="flex gap-4">
+                  <li id={`step-${i + 1}`} key={i} className="flex scroll-mt-32 gap-4">
                     <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--brand-red)] text-sm font-extrabold text-white shadow">
                       {i + 1}
                     </div>
