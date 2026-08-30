@@ -1,58 +1,62 @@
 import Image from "next/image";
-import Script from "next/script";
+
+const PAYHIP_PRODUCT_URL = "https://payhip.com/b/Qna1A";
 
 export const metadata = {
-  title: "Vegan Indian Sweets Mini Ebook",
+  title: "Vegan Indian Sweets Ebook | Vegan Masala Shop",
   description:
-    "A beginner-friendly vegan Indian sweets ebook with 6 comforting recipes, pantry notes, troubleshooting tips, and festive serving ideas.",
+    "The revised 34-page Vegan Indian Sweets ebook with six comforting recipes, a master shopping list, troubleshooting help and celebration planning.",
 };
 
 export default function EbookPage() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen text-white">
       <div className="mx-auto max-w-6xl px-6 py-12 md:px-8 lg:px-10">
-        <section className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <div className="order-2 lg:order-1">
-            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-red-400">
-              New Digital Ebook
+        <section className="relative grid gap-10 overflow-hidden rounded-[2.25rem] border border-[var(--brand-gold)]/45 bg-black/70 p-6 shadow-2xl sm:p-9 lg:grid-cols-2 lg:items-center lg:p-12">
+          <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-[var(--brand-red)]/15 blur-3xl" />
+          <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 right-0 h-80 w-80 rounded-full bg-[var(--brand-gold)]/10 blur-3xl" />
+          <div className="order-1">
+            <p className="mb-4 text-sm font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">
+              Revised second edition
             </p>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight text-yellow-400 md:text-5xl">
-              Vegan Indian Sweets Mini Ebook
+              Vegan Indian Sweets
             </h1>
 
             <p className="mb-6 text-lg leading-8 text-zinc-200">
-              Make vegan Indian sweets at home with more confidence.
+              Six celebration-worthy recipes, made clearer for the home kitchen.
             </p>
 
             <p className="mb-6 text-base leading-8 text-zinc-300">
-              This beautifully designed mini ebook brings together 6 comforting
-              sweet recipes, plus pantry notes, troubleshooting tips, and
-              festive serving ideas to help you make Indian sweets that feel
-              warm, generous, and worth sharing.
+              A richly illustrated 34-page guide to jalebi, vegan gulab jamun,
+              coconut ladoo, kheer, carrot halwa and mango lassi—with the practical
+              details that make each recipe easier to get right.
             </p>
 
             <div className="mb-8 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-yellow-500/30 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-200">
-                6 sweet recipes
+                6 complete sweet recipes
               </div>
               <div className="rounded-2xl border border-yellow-500/30 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-200">
-                Beginner-friendly format
+                34 beautifully designed pages
               </div>
               <div className="rounded-2xl border border-yellow-500/30 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-200">
                 Instant PDF download
               </div>
               <div className="rounded-2xl border border-yellow-500/30 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-200">
-                Pantry + troubleshooting notes
+                Shopping list + troubleshooting
               </div>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <a
-                href="#buy"
+                href={PAYHIP_PRODUCT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex rounded-full bg-red-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
               >
-                Get the Ebook
+                Buy the second edition
               </a>
 
               <a
@@ -64,17 +68,17 @@ export default function EbookPage() {
             </div>
 
             <p className="mt-6 text-sm text-zinc-400">
-              Instant digital download in PDF format.
+              One payment. Instant PDF delivery. Keep it and cook from it whenever you like.
             </p>
           </div>
 
-          <div className="order-1 lg:order-2">
-            <div className="mx-auto max-w-md overflow-hidden rounded-[2rem] border border-yellow-500/80 bg-zinc-950 p-4 shadow-2xl">
+          <div className="order-2">
+            <div className="vm-float mx-auto max-w-md overflow-hidden rounded-[2rem] border border-[var(--brand-gold)]/80 bg-zinc-950 p-3 shadow-2xl shadow-black/60">
               <Image
-                src="/images/ebook/cover.jpg"
-                alt="Vegan Indian Sweets Mini Ebook cover"
-                width={1600}
-                height={2560}
+                src="/images/ebook/cover-second-edition.png"
+                alt="Revised Vegan Indian Sweets ebook cover"
+                width={632}
+                height={898}
                 className="h-auto w-full rounded-[1.5rem]"
                 priority
               />
@@ -82,15 +86,45 @@ export default function EbookPage() {
           </div>
         </section>
 
-        <section className="mt-20 grid gap-8 rounded-[2rem] border border-yellow-500/40 bg-zinc-950/60 p-8 md:grid-cols-2">
+        <section className="relative mt-10 min-h-[360px] overflow-hidden rounded-[2rem] border border-[var(--brand-gold)]/45 shadow-2xl sm:min-h-[430px]">
+          <Image
+            src="/images/ebook/shop-hero.png"
+            alt="Jalebi, vegan gulab jamun and coconut ladoo arranged for a Vegan Masala celebration"
+            fill
+            sizes="(min-width: 1200px) 1152px, 100vw"
+            className="object-cover object-[68%_center] sm:object-center"
+          />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-[#071719] via-[#071719]/80 to-transparent" />
+          <div className="relative z-10 flex min-h-[360px] max-w-xl flex-col justify-center p-7 sm:min-h-[430px] sm:p-12">
+            <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[var(--brand-gold)]">
+              A little celebration at home
+            </p>
+            <h2 className="mt-4 text-3xl leading-tight text-white sm:text-5xl">
+              Make something worth sharing.
+            </h2>
+            <p className="mt-5 max-w-md text-base leading-7 text-[var(--text-soft)] sm:text-lg sm:leading-8">
+              From crisp jalebi to syrupy gulab jamun and soft coconut ladoo,
+              the revised guide helps you approach every sweet with more confidence.
+            </p>
+            <a
+              href={PAYHIP_PRODUCT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-7 inline-flex w-fit rounded-full bg-[var(--brand-gold)] px-6 py-3 font-extrabold text-black transition hover:-translate-y-0.5 hover:brightness-110"
+            >
+              Get the ebook for £5
+            </a>
+          </div>
+        </section>
+
+        <section className="mt-16 grid gap-8 rounded-[2rem] border border-[var(--brand-gold)]/40 bg-[var(--surface)] p-8 md:grid-cols-2">
           <div>
             <h2 className="mb-4 text-3xl font-bold text-yellow-400">
               What&apos;s Inside
             </h2>
             <p className="mb-6 leading-8 text-zinc-300">
-              A small but carefully chosen collection of vegan Indian sweets and
-              sweet treats, designed to feel approachable, practical, and
-              genuinely useful in a real kitchen.
+              More than a bundle of recipes: this edition is organised as a small
+              kitchen companion that helps you shop, prepare, cook and serve with confidence.
             </p>
             <ul className="space-y-3 text-zinc-200">
               <li>• Jalebi</li>
@@ -102,6 +136,8 @@ export default function EbookPage() {
               <li>• Pantry essentials for vegan Indian sweets</li>
               <li>• Troubleshooting common problems</li>
               <li>• Festive serving ideas</li>
+              <li>• Master shopping list</li>
+              <li>• A simple celebration menu</li>
             </ul>
           </div>
 
@@ -110,12 +146,9 @@ export default function EbookPage() {
               Who It&apos;s For
             </h2>
             <p className="leading-8 text-zinc-300">
-              This ebook is for home cooks who want a warm, approachable
-              introduction to vegan Indian sweets. It&apos;s especially helpful
-              if you want something more curated than loose online recipes, more
-              beautiful than scattered notes, and easier to come back to when
-              you want to make something sweet for a celebration, family meal,
-              or quiet weekend at home.
+              It is for curious beginners and confident home cooks who want dependable
+              guidance without losing the warmth and character of Indian sweet-making.
+              Keep it on your phone or tablet while you cook, or print the pages you use most.
             </p>
           </div>
         </section>
@@ -134,30 +167,30 @@ export default function EbookPage() {
           <div className="grid gap-6 md:grid-cols-3">
             <div className="overflow-hidden rounded-[1.5rem] border border-yellow-500/50 bg-zinc-950 p-3">
               <Image
-                src="/images/ebook/contents.jpg"
-                alt="Ebook contents page preview"
-                width={1200}
-                height={1600}
+                src="/images/ebook/contents-second-edition.png"
+                alt="Revised ebook contents page preview"
+                width={632}
+                height={898}
                 className="h-auto w-full rounded-[1rem]"
               />
             </div>
 
             <div className="overflow-hidden rounded-[1.5rem] border border-yellow-500/50 bg-zinc-950 p-3">
               <Image
-                src="/images/ebook/jalebi-intro.jpg"
-                alt="Jalebi intro page preview"
-                width={1200}
-                height={1600}
+                src="/images/ebook/jalebi-second-edition.png"
+                alt="Revised jalebi recipe introduction preview"
+                width={632}
+                height={898}
                 className="h-auto w-full rounded-[1rem]"
               />
             </div>
 
             <div className="overflow-hidden rounded-[1.5rem] border border-yellow-500/50 bg-zinc-950 p-3">
               <Image
-                src="/images/ebook/jalebi-recipe-1.jpg"
-                alt="Jalebi recipe page preview"
-                width={1200}
-                height={1600}
+                src="/images/ebook/troubleshooting-second-edition.png"
+                alt="Ebook troubleshooting page preview"
+                width={632}
+                height={898}
                 className="h-auto w-full rounded-[1rem]"
               />
             </div>
@@ -207,21 +240,22 @@ export default function EbookPage() {
                 <li>• 6 vegan Indian sweet recipes</li>
                 <li>• Pantry notes and ingredient help</li>
                 <li>• Troubleshooting tips</li>
-                <li>• Festive serving inspiration</li>
+                <li>• Master shopping list and festive serving inspiration</li>
+                <li>• Celebration menu and safer storage guidance</li>
                 <li>• Instant PDF delivery by email</li>
               </ul>
             </div>
 
-            <div className="mb-4 text-2xl font-bold text-white">£7.00</div>
+            <div className="mb-4 text-2xl font-bold text-white">£5.00</div>
 
-            <div className="flex justify-center">
-              <div className="inline-block">
-                <div
-                  id="product-component-1774981931178"
-                  className="flex justify-center"
-                />
-              </div>
-            </div>
+            <a
+              href={PAYHIP_PRODUCT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-14 w-full items-center justify-center rounded-2xl bg-[var(--brand-gold)] px-8 py-4 text-lg font-extrabold text-black transition hover:-translate-y-0.5 hover:brightness-110"
+            >
+              Buy securely with Payhip
+            </a>
 
             <p className="mt-4 text-sm text-zinc-500">
               Delivered instantly after purchase.
@@ -234,17 +268,19 @@ export default function EbookPage() {
             Ready to make vegan Indian sweets at home?
           </h2>
           <p className="mx-auto max-w-3xl leading-8 text-zinc-300">
-            Download the Vegan Indian Sweets Mini Ebook and keep a beautiful,
+            Download the revised Vegan Indian Sweets Ebook and keep a beautiful,
             practical collection of sweet recipes ready for whenever you want to
             cook something warm, nostalgic, and worth sharing.
           </p>
 
           <div className="mt-8">
             <a
-              href="#buy"
+              href={PAYHIP_PRODUCT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex rounded-full bg-red-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
             >
-              Buy the Ebook for £7
+              Buy the Ebook for £5
             </a>
           </div>
         </section>
@@ -305,287 +341,6 @@ export default function EbookPage() {
         </section>
       </div>
 
-      <Script
-        id="shopify-buy-button-script"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function () {
-              var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-              if (window.ShopifyBuy) {
-                if (window.ShopifyBuy.UI) {
-                  ShopifyBuyInit();
-                } else {
-                  loadScript();
-                }
-              } else {
-                loadScript();
-              }
-
-              function loadScript() {
-                var script = document.createElement('script');
-                script.async = true;
-                script.src = scriptURL;
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-                script.onload = ShopifyBuyInit;
-              }
-
-              function ShopifyBuyInit() {
-                var client = window.ShopifyBuy.buildClient({
-                  domain: 'wz2ryc-0k.myshopify.com',
-                  storefrontAccessToken: '8bd36cdc7a5878be0b0eb30c17626a64',
-                });
-
-                window.ShopifyBuy.UI.onReady(client).then(function (ui) {
-                  ui.createComponent('product', {
-                    id: '15512163320132',
-                    node: document.getElementById('product-component-1774981931178'),
-                    moneyFormat: '%C2%A3%7B%7Bamount%7D%7D',
-                    options: {
-                      product: {
-                        styles: {
-                          product: {
-                            "width": "auto",
-                            "margin-left": "0px",
-                            "margin-right": "0px",
-                            "margin-bottom": "0px",
-                            "@media (min-width: 601px)": {
-                              "width": "auto",
-                              "max-width": "none",
-                              "margin-left": "0px",
-                              "margin-right": "0px",
-                              "margin-bottom": "0px"
-                            }
-                          },
-                          button: {
-                            "font-family": "'Rajdhani', Arial, sans-serif",
-                            "font-size": "17px",
-                            "padding-top": "16.5px",
-                            "padding-bottom": "16.5px",
-                            "color": "#000000",
-                            ":hover": {
-                              "color": "#000000",
-                              "background-color": "#e4c74d"
-                            },
-                            "background-color": "#fddd56",
-                            ":focus": {
-                              "background-color": "#e4c74d"
-                            },
-                            "border-radius": "14px",
-                            "padding-left": "80px",
-                            "padding-right": "80px"
-                          },
-                          quantityInput: {
-                            "font-size": "17px",
-                            "padding-top": "16.5px",
-                            "padding-bottom": "16.5px"
-                          }
-                        },
-                        contents: {
-                          img: false,
-                          title: false,
-                          price: false
-                        },
-                        text: {
-                          button: "Add to cart"
-                        }
-                      },
-                      productSet: {
-                        styles: {
-                          products: {
-                            "justify-content": "center",
-                            "@media (min-width: 601px)": {
-                              "margin-left": "0px",
-                              "justify-content": "center"
-                            }
-                          }
-                        }
-                      },
-                      modalProduct: {
-                        contents: {
-                          img: false,
-                          imgWithCarousel: true,
-                          button: false,
-                          buttonWithQuantity: true
-                        },
-                        styles: {
-                          product: {
-                            "@media (min-width: 601px)": {
-                              "max-width": "100%",
-                              "margin-left": "0px",
-                              "margin-bottom": "0px"
-                            }
-                          },
-                          button: {
-                            "font-family": "'Rajdhani', Arial, sans-serif",
-                            "font-size": "17px",
-                            "padding-top": "16.5px",
-                            "padding-bottom": "16.5px",
-                            "color": "#000000",
-                            ":hover": {
-                              "color": "#000000",
-                              "background-color": "#e4c74d"
-                            },
-                            "background-color": "#fddd56",
-                            ":focus": {
-                              "background-color": "#e4c74d"
-                            },
-                            "border-radius": "14px",
-                            "padding-left": "80px",
-                            "padding-right": "80px"
-                          },
-                          quantityInput: {
-                            "font-size": "17px",
-                            "padding-top": "16.5px",
-                            "padding-bottom": "16.5px"
-                          }
-                        },
-                        text: {
-                          button: "Add to cart"
-                        }
-                      },
-                      option: {},
-                      cart: {
-                        styles: {
-                          button: {
-                            "font-family": "'Rajdhani', Arial, sans-serif",
-                            "font-size": "17px",
-                            "padding-top": "16.5px",
-                            "padding-bottom": "16.5px",
-                            "color": "#000000",
-                            ":hover": {
-                              "color": "#000000",
-                              "background-color": "#e4c74d"
-                            },
-                            "background-color": "#fddd56",
-                            ":focus": {
-                              "background-color": "#e4c74d"
-                            },
-                            "border-radius": "14px"
-                          },
-                          title: {
-                            "color": "#faff68"
-                          },
-                          header: {
-                            "color": "#faff68"
-                          },
-                          lineItems: {
-                            "color": "#faff68"
-                          },
-                          subtotalText: {
-                            "color": "#faff68"
-                          },
-                          subtotal: {
-                            "color": "#faff68"
-                          },
-                          notice: {
-                            "color": "#faff68"
-                          },
-                          currency: {
-                            "color": "#faff68"
-                          },
-                          close: {
-                            "color": "#faff68",
-                            ":hover": {
-                              "color": "#faff68"
-                            }
-                          },
-                          empty: {
-                            "color": "#faff68"
-                          },
-                          noteDescription: {
-                            "color": "#faff68"
-                          },
-                          discountText: {
-                            "color": "#faff68"
-                          },
-                          discountIcon: {
-                            "fill": "#faff68"
-                          },
-                          discountAmount: {
-                            "color": "#faff68"
-                          },
-                          cart: {
-                            "background-color": "#080707"
-                          },
-                          footer: {
-                            "background-color": "#080707"
-                          }
-                        },
-                        text: {
-                          total: "Subtotal",
-                          button: "Checkout"
-                        }
-                      },
-                      toggle: {
-                        styles: {
-                          toggle: {
-                            "font-family": "'Rajdhani', Arial, sans-serif",
-                            "background-color": "#fddd56",
-                            ":hover": {
-                              "background-color": "#e4c74d"
-                            },
-                            ":focus": {
-                              "background-color": "#e4c74d"
-                            }
-                          },
-                          count: {
-                            "font-size": "17px",
-                            "color": "#000000",
-                            ":hover": {
-                              "color": "#000000"
-                            }
-                          },
-                          iconPath: {
-                            "fill": "#000000"
-                          }
-                        }
-                      },
-                      lineItem: {
-                        styles: {
-                          variantTitle: {
-                            "color": "#faff68"
-                          },
-                          title: {
-                            "color": "#faff68"
-                          },
-                          price: {
-                            "color": "#faff68"
-                          },
-                          fullPrice: {
-                            "color": "#faff68"
-                          },
-                          discount: {
-                            "color": "#faff68"
-                          },
-                          discountIcon: {
-                            "fill": "#faff68"
-                          },
-                          quantity: {
-                            "color": "#faff68"
-                          },
-                          quantityIncrement: {
-                            "color": "#faff68",
-                            "border-color": "#faff68"
-                          },
-                          quantityDecrement: {
-                            "color": "#faff68",
-                            "border-color": "#faff68"
-                          },
-                          quantityInput: {
-                            "color": "#faff68",
-                            "border-color": "#faff68"
-                          }
-                        }
-                      }
-                    }
-                  });
-                });
-              }
-            })();
-          `,
-        }}
-      />
     </main>
   );
 }

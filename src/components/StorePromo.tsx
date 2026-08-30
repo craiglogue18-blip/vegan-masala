@@ -38,7 +38,7 @@ export default function StorePromo({
             </Link>
 
             <span className="text-sm font-semibold text-[var(--brand-gold)]">
-              £7 digital download
+              £5 digital download
             </span>
           </div>
         </div>

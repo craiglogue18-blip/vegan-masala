@@ -4,7 +4,7 @@ export const EBOOK = {
   shortTitle: "Vegan Indian Sweets Ebook",
   description:
     "A beginner-friendly vegan Indian sweets ebook with 6 comforting recipes, pantry notes, troubleshooting tips, and festive serving ideas.",
-  price: "£7",
+  price: "£5",
   url: "https://www.vegan-masala.com/store",
   coverImage: "/images/ebook/cover.jpg",
   previewImages: [
