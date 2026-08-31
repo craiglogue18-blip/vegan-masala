@@ -56,9 +56,6 @@ export default function SiteHeader() {
             <Link className="hover:opacity-90" href="/guides">
               Guides
             </Link>
-            <Link className="hover:opacity-90" href="/meal-planner">
-              Meal Planner
-            </Link>
             <Link className="hover:opacity-90" href="/store">
               Store
             </Link>
