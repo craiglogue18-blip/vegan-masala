@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "About Vegan Masala",
   description:
     "Meet Craig Logue and learn how Vegan Masala creates approachable vegan Indian recipes and practical cooking guides.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

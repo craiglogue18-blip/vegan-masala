@@ -5,7 +5,7 @@ type:"recipe"|"guide"
 
 const base=
 process.env.NEXT_PUBLIC_SITE_URL ||
-"https://vegan-masala.com";
+"https://www.vegan-masala.com";
 
 if(type==="recipe"){
 

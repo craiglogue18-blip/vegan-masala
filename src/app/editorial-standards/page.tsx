@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Editorial Standards",
   description:
     "How Vegan Masala develops, reviews, corrects and illustrates its vegan Indian recipes and cooking guides.",
+  alternates: { canonical: "/editorial-standards" },
 };
 
 export default function EditorialStandardsPage() {

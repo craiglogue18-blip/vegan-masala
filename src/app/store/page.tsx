@@ -6,6 +6,7 @@ export const metadata = {
   title: "Vegan Indian Sweets Ebook | Vegan Masala Shop",
   description:
     "The revised 34-page Vegan Indian Sweets ebook with six comforting recipes, a master shopping list, troubleshooting help and celebration planning.",
+  alternates: { canonical: "/store" },
 };
 
 export default function EbookPage() {

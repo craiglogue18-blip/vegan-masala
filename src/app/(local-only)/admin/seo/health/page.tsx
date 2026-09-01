@@ -10,7 +10,7 @@ import { DAL_HUB_RECIPE_SLUGS } from "@/lib/seo/dalHub";
 export const dynamic = "force-dynamic";
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
 const expectedHubPaths = [
   "/recipes/vegan-indian-curry-recipes",

@@ -2,6 +2,7 @@
 export const metadata = {
   title: "Privacy Policy",
   description: "Privacy policy for Vegan Masala.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

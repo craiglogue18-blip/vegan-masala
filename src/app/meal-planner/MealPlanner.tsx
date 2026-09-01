@@ -942,7 +942,11 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      {!storageReady && <div className="min-h-[40vh]" aria-label="Loading saved meal plan" />}
+      {!storageReady && (
+        <div className="min-h-[40vh]" aria-label="Loading saved meal plan">
+          <h1 className="sr-only">Free Vegan Meal Planner</h1>
+        </div>
+      )}
 
       {storageReady && (
         <nav aria-label="Meal planner" className="mb-7 hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-2 md:flex">

@@ -88,10 +88,13 @@ function normaliseText(value: unknown) {
   return String(value ?? "").trim().toLowerCase();
 }
 
+function recipeIdentityText(recipe: any) {
+  return [recipe?.title ?? "", recipe?.slug ?? ""].join(" ").toLowerCase();
+}
+
 function recipeSearchText(recipe: any) {
   return [
-    recipe?.title ?? "",
-    recipe?.slug ?? "",
+    recipeIdentityText(recipe),
     recipe?.description ?? "",
     recipe?.cuisine ?? "",
     ...(Array.isArray(recipe?.tags) ? recipe.tags : []),
@@ -102,21 +105,41 @@ function recipeSearchText(recipe: any) {
 }
 
 function buildSeoTypeLabel(recipe: any) {
-  const text = recipeSearchText(recipe);
+  const text = recipeIdentityText(recipe);
 
-  if (/\bchana|chickpea|chickpeas|chole\b/.test(text)) {
+  if (/\b(chutney|pickle|achar)\b/.test(text)) {
+    return "Vegan Indian Chutney";
+  }
+
+  if (/\b(naan|roti|chapati|poori|puri|paratha|flatbread)\b/.test(text)) {
+    return "Vegan Indian Bread";
+  }
+
+  if (/\b(pakora|bhaji|samosa)\b/.test(text)) {
+    return "Vegan Indian Snack";
+  }
+
+  if (/\b(biryani)\b/.test(text)) {
+    return "Vegan Indian Biryani";
+  }
+
+  if (/\b(rice|pulao|pilau)\b/.test(text)) {
+    return "Vegan Indian Rice Dish";
+  }
+
+  if (/\b(chana|chickpea|chickpeas|chole)\b/.test(text)) {
     return "Vegan Indian Chickpea Curry";
   }
 
-  if (/\bdal|dahl|lentil|lentils|masoor|moong|urad|toor\b/.test(text)) {
+  if (/\b(dal|dahl|lentil|lentils|masoor|moong|urad|toor)\b/.test(text)) {
     return "Vegan Indian Dal";
   }
 
-  if (/\bsaag|palak|spinach\b/.test(text) && /\baloo|potato|potatoes\b/.test(text)) {
+  if (/\b(saag|palak|spinach)\b/.test(text) && /\b(aloo|potato|potatoes)\b/.test(text)) {
     return "Vegan Indian Spinach Potato Curry";
   }
 
-  if (/\baloo|potato|potatoes\b/.test(text) && /\bcurry|masala\b/.test(text)) {
+  if (/\b(aloo|potato|potatoes)\b/.test(text) && /\b(curry|masala)\b/.test(text)) {
     return "Vegan Indian Potato Curry";
   }
 
@@ -124,39 +147,37 @@ function buildSeoTypeLabel(recipe: any) {
     return "Vegan Indian Butter Tofu Curry";
   }
 
-  if (/\btofu\b/.test(text) && /\bcurry|masala|makhani|korma|vindaloo\b/.test(text)) {
+  if (/\btofu\b/.test(text) && /\b(curry|masala|makhani|korma|vindaloo)\b/.test(text)) {
     return "Vegan Indian Tofu Curry";
   }
 
-  if (/\brajma|kidney beans?\b/.test(text)) {
+  if (/\b(rajma|kidney beans?)\b/.test(text)) {
     return "Vegan Indian Kidney Bean Curry";
   }
 
-  if (/\bbiryani\b/.test(text)) {
-    return "Vegan Indian Biryani";
-  }
-
-  if (/\brice|pulao\b/.test(text)) {
-    return "Vegan Indian Rice Dish";
-  }
-
-  if (/\bnaan|roti|chapati|poori|paratha|flatbread\b/.test(text)) {
-    return "Vegan Indian Bread";
-  }
-
-  if (/\bpakora|bhaji|samosa\b/.test(text)) {
-    return "Vegan Indian Snack";
-  }
-
-  if (/\bcurry|masala|korma|vindaloo|makhani|makhanwala\b/.test(text)) {
+  if (/\b(curry|masala|korma|vindaloo|makhani|makhanwala)\b/.test(text)) {
     return "Vegan Indian Curry";
   }
 
   return "Vegan Indian Recipe";
 }
 
+function formatSeoRecipeTitle(value: unknown) {
+  const minorWords = new Set(["and", "for", "in", "of", "the", "to", "with"]);
+  return String(value ?? "Recipe")
+    .trim()
+    .split(/\s+/)
+    .map((word, index) => {
+      if (/^[A-Z0-9-]+$/.test(word)) return word;
+      const lower = word.toLowerCase();
+      if (index > 0 && minorWords.has(lower)) return lower;
+      return lower.replace(/(^|[-(])([a-z])/g, (_match, prefix, letter) => `${prefix}${letter.toUpperCase()}`);
+    })
+    .join(" ");
+}
+
 function buildSeoTitle(recipe: any) {
-  const title = String(recipe?.title ?? "Recipe").trim();
+  const title = formatSeoRecipeTitle(recipe?.title);
   const lowerTitle = title.toLowerCase();
   const typeLabel = buildSeoTypeLabel(recipe);
 
@@ -349,7 +370,7 @@ export async function generateMetadata({
   if (!recipe) return {};
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
   const heroBase =
     typeof recipe.image === "string" && recipe.image.trim().length > 0
@@ -413,7 +434,7 @@ export default async function RecipePage({
   const nextRecipe = nextSlug ? getRecipeBySlug(nextSlug) : null;
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
   const heroBase =
     typeof recipe.image === "string" && recipe.image.trim().length > 0

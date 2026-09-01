@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { savePinterestToken } from "@/lib/social/core/pinterestToken";
+import { SOCIAL_OAUTH_COOKIE, validOauthState } from "@/lib/social/core/oauthState";
 
 function base64Credentials(clientId: string, clientSecret: string) {
   return Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
@@ -8,6 +9,18 @@ function base64Credentials(clientId: string, clientSecret: string) {
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
+
+    const stateCookie = req.headers.get("cookie")
+      ?.split(";")
+      .map((part) => part.trim().split("="))
+      .find(([name]) => name === SOCIAL_OAUTH_COOKIE)?.[1];
+
+    if (!validOauthState("pinterest", searchParams.get("state"), stateCookie)) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid or expired Pinterest connection request" },
+        { status: 400 }
+      );
+    }
 
     const code = searchParams.get("code");
     const error = searchParams.get("error");
@@ -64,7 +77,7 @@ export async function GET(req: Request) {
 
     const saved = await savePinterestToken(tokenData);
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       ok: saved,
       saved,
       hasAccessToken: Boolean(tokenData?.access_token),
@@ -73,6 +86,8 @@ export async function GET(req: Request) {
         ? "Pinterest connected successfully. You can close this page."
         : "Pinterest authorized, but token storage is unavailable.",
     }, { status: saved ? 200 : 500 });
+    response.cookies.delete(SOCIAL_OAUTH_COOKIE);
+    return response;
 
   } catch (err: any) {
     return NextResponse.json(
