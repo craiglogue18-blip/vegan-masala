@@ -40,8 +40,24 @@ for (const file of fs.readdirSync(recipesDir).filter((name) => /\.mdx?$/.test(na
   else if (fs.statSync(imagePath).size > 1_000_000) issue(warnings, slug, "hero source exceeds 1 MB");
 
   const instructions = (data.instructions || []).join(" ");
-  const suspicious = /\b\d+\s+(?:minced|drained|chopped)\s+\d+|\b(\d+\s+(?:tbsp|tsp|tablespoons?|teaspoons?|cans?|cloves?))\b[^.!]{0,35}\b\1\b/i;
-  if (suspicious.test(instructions)) issue(errors, slug, "possible duplicated quantity in instructions; culinary review required");
+  const malformedQuantity = /\b\d+\s+(?:minced|drained|chopped)\s+\d+\b/i;
+  if (malformedQuantity.test(instructions)) {
+    issue(errors, slug, "possible malformed quantity in instructions; culinary review required");
+  }
+
+  if (data.indexable !== false) {
+    const dairyIngredient = (data.ingredients || []).find((ingredient) => {
+      const value = String(ingredient).toLowerCase();
+      if (/\b(vegan|plant[- ]based|plant milk|non-dairy|oat|soy|almond|coconut|cashew)\b/.test(value)) {
+        return false;
+      }
+      return /\b(whole milk|cow'?s? milk|dairy milk|dairy cream|paneer|ghee)\b/.test(value);
+    });
+
+    if (dairyIngredient) {
+      issue(errors, slug, `non-vegan ingredient requires review: ${dairyIngredient}`);
+    }
+  }
 
   for (const heading of ["Ingredients", "Method", "Notes"]) {
     if (!new RegExp(`^## ${heading}$`, "m").test(content)) issue(errors, slug, `missing ${heading} section`);

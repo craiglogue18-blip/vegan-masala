@@ -1,9 +1,9 @@
-import { getAllRecipes } from "@/lib/recipes";
+import { getPublicRecipes } from "@/lib/recipes";
 
 import MealPlanner, { type PlannerView } from "./MealPlanner";
 
 export default function PlannerPage({ view }: { view: PlannerView }) {
-  const recipes = getAllRecipes().map((recipe) => ({
+  const recipes = getPublicRecipes().map((recipe) => ({
     slug: recipe.slug,
     title: recipe.title,
     description: recipe.description,
