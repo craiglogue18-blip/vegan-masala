@@ -28,6 +28,10 @@ function extractSections(raw: string) {
   return sections;
 }
 
+function extractIntroduction(raw: string) {
+  return raw.split(/\n##\s+/)[0]?.trim() || "";
+}
+
 function extractFAQs(content: string) {
   const faqs: { question: string; answer: string }[] = [];
 
@@ -181,6 +185,9 @@ function getRelatedRecipeTags(slug: string) {
     "vegan-dairy-alternatives": ["tofu", "korma", "makhanwala", "butter"],
     herbs: ["palak", "spinach", "curry", "chutney"],
     equipment: ["instant-pot", "pressure-cooker", "one-pot", "rice"],
+    "seasonal-vegetables-for-indian-cooking": ["vegetable", "potato", "cauliflower", "spinach", "curry"],
+    "low-waste-vegan-indian-kitchen": ["one-pot", "dal", "rice", "potato", "chickpea"],
+    "weekly-vegan-indian-grocery-list": ["easy", "dal", "chana", "rice", "tofu", "vegetable"],
   };
 
   return guideRecipeMap[slug] || [];
@@ -418,6 +425,7 @@ export default async function GuidePage({
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
   const sections = extractSections(guide.content);
+  const introduction = extractIntroduction(guide.content);
   const faqs = extractFAQs(guide.content);
   const heroImage = getGuideImage(guide);
   const heroImageAbs = absUrl(siteUrl, heroImage);
@@ -530,6 +538,12 @@ export default async function GuidePage({
           )}
         </div>
       </section>
+
+      {introduction && (
+        <section className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+          <div>{renderBlock(introduction)}</div>
+        </section>
+      )}
 
       <section className="mt-10 space-y-8">
         {sections.map((section) => (

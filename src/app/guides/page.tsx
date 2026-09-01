@@ -49,7 +49,7 @@ function getGuideImage(guide: Guide) {
 
   if (legacyMap[guide.slug]) return legacyMap[guide.slug];
 
-  return slugImage || guide.image || "/images/guides/spices.jpg";
+  return guide.image || slugImage || "/images/guides/spices.jpg";
 }
 
 function GuideCard({
@@ -152,6 +152,7 @@ export default function GuidesIndexPage() {
     "Core Cooking Guides",
     "Ingredient & Swap Guides",
     "Kitchen Setup",
+    "Shopping & Sustainability",
     "More Guides",
   ].filter((name) => grouped[name]);
 

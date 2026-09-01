@@ -9,6 +9,7 @@ export type Guide = {
   slug: string;
   description?: string;
   image?: string;
+  category?: string;
   content: string;
 };
 
@@ -43,6 +44,7 @@ export function getGuideBySlug(slug: string): Guide | null {
     slug: String(data.slug ?? slug),
     description: data.description ? String(data.description) : "",
     image: data.image ? String(data.image) : "",
+    category: data.category ? String(data.category) : "",
     content: content.trim(),
   };
 }
