@@ -2,12 +2,14 @@ import crypto from "node:crypto";
 
 export const SOCIAL_OAUTH_COOKIE = "vegan_masala_social_oauth";
 
-export function createOauthState(platform: "youtube" | "tiktok") {
+type SocialOauthPlatform = "pinterest" | "youtube" | "tiktok";
+
+export function createOauthState(platform: SocialOauthPlatform) {
   return `${platform}.${crypto.randomBytes(24).toString("base64url")}`;
 }
 
 export function validOauthState(
-  platform: "youtube" | "tiktok",
+  platform: SocialOauthPlatform,
   queryState: string | null,
   cookieState: string | undefined
 ) {

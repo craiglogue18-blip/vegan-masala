@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import RelatedRecipes from "@/components/RelatedRecipes";
 import { getRecipeCollection, RECIPE_COLLECTIONS } from "@/lib/seo/collections";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
 export function generateStaticParams() {
   return RECIPE_COLLECTIONS.map(({ slug }) => ({ slug }));

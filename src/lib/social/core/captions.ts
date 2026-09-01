@@ -851,7 +851,7 @@ Useful for:
 • practical help you can use straight away
 
 Read the full guide:
-https://vegan-masala.com
+https://www.vegan-masala.com
 
 ${guideHashtags(slug)}`;
 
@@ -862,7 +862,7 @@ ${hook}
 A practical guide designed to make everyday cooking feel easier and more natural.
 
 Read the full guide:
-https://vegan-masala.com
+https://www.vegan-masala.com
 
 ${guideHashtags(slug)}`;
 
@@ -905,7 +905,7 @@ Good for:
 • ${benefit}
 
 Get the full recipe:
-https://vegan-masala.com
+https://www.vegan-masala.com
 
 ${recipeHashtags(slug)}`;
 
@@ -916,7 +916,7 @@ ${hook}
 ${inviting}
 
 Get the full recipe:
-https://vegan-masala.com
+https://www.vegan-masala.com
 
 ${recipeHashtags(slug)}`;
 
@@ -983,7 +983,7 @@ ${hook}
 ${bullets}
 
 Get the full recipe:
-https://vegan-masala.com
+https://www.vegan-masala.com
 
 ${recipeHashtags(slug)}`;
   }
@@ -1013,7 +1013,7 @@ ${hook}
 ${bullets}
 
 Read the full guide:
-https://vegan-masala.com
+https://www.vegan-masala.com
 
 ${guideHashtags(slug)}`;
 }

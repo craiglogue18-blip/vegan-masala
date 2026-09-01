@@ -9,7 +9,7 @@ import { isRecipeReadyForIndex } from "@/lib/recipeQuality";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
   const recipes = getAllRecipes().filter(isRecipeReadyForIndex);
   const guideSlugs = getAllGuideSlugs();

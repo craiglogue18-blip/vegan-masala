@@ -2,6 +2,7 @@
 export const metadata = {
   title: "Cookie Policy",
   description: "Cookie policy for Vegan Masala.",
+  alternates: { canonical: "/cookies" },
 };
 
 export default function CookiesPage() {

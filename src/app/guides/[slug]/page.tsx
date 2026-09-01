@@ -374,7 +374,7 @@ export async function generateMetadata({
 
   const image = getGuideImage(guide);
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
   const canonical = `${siteUrl}/guides/${slug}`;
   const imageAbs = absUrl(siteUrl, image);
   const seoTitle = buildGuideSeoTitle(guide);
@@ -415,7 +415,7 @@ export default async function GuidePage({
   if (!guide) return notFound();
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
   const sections = extractSections(guide.content);
   const faqs = extractFAQs(guide.content);

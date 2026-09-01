@@ -26,7 +26,7 @@ export default function RecipeSchema({
 
     name: recipe.title,
     description: recipe.description,
-    image: [`https://vegan-masala.com${image}`],
+    image: [`https://www.vegan-masala.com${image}`],
 
     author: {
       "@type": "Person",

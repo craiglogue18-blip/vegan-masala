@@ -4,7 +4,7 @@ import Link from "next/link";
 import GuideAffiliateRecommendations from "@/components/GuideAffiliateRecommendations";
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vegan-masala.com";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
 export const metadata: Metadata = {
   title: "Indian Spices Guide",
