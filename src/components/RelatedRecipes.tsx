@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { getAllRecipes } from "@/lib/recipes";
+import { getPublicRecipes } from "@/lib/recipes";
 import type { Recipe } from "@/lib/recipes";
 import { getRecipeImage } from "@/lib/recipeimages";
 
@@ -18,7 +18,7 @@ export default function RelatedRecipes({
   max = 6,
   excludeSlugs = [],
 }: Props) {
-  const recipes = getAllRecipes();
+  const recipes = getPublicRecipes();
 
   const related = recipes
     .map((r: Recipe) => {

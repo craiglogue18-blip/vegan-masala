@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { getAllRecipes } from "@/lib/recipes";
+import { getPublicRecipes } from "@/lib/recipes";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import { RECIPE_COLLECTIONS } from "@/lib/seo/collections";
 import RecipesClient from "./RecipesClient";
@@ -252,7 +252,7 @@ export default async function RecipesPage({
 }: {
   searchParams?: Promise<{ tag?: string | string[]; collection?: string | string[] }>;
 }) {
-  const recipes = getAllRecipes();
+  const recipes = getPublicRecipes();
 
   const sp = (await searchParams) ?? {};
   const tagRaw = Array.isArray(sp.tag) ? sp.tag[0] : sp.tag;

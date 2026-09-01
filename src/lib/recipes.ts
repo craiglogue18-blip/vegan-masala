@@ -21,6 +21,7 @@ export type Recipe = {
   mealTypes?: string[];
   plannerTags?: string[];
   publishedAt?: string;
+  indexable?: boolean;
 
   // optional extra frontmatter
   serves?: number;
@@ -47,6 +48,10 @@ export type Recipe = {
   methodMarkdown?: string;
   notesMarkdown?: string;
 };
+
+export function getPublicRecipes() {
+  return getAllRecipes().filter((recipe) => recipe.indexable !== false);
+}
 
 function safeNumber(v: unknown): number | undefined {
   if (typeof v === "number" && Number.isFinite(v)) return v;
@@ -166,6 +171,8 @@ function buildRecipeFromFile(file: string): Recipe | null {
 
     publishedAt:
       typeof data.publishedAt === "string" ? data.publishedAt : undefined,
+
+    indexable: data.indexable !== false,
 
     serves: safeNumber(data.serves),
     servings: safeNumber(data.servings),

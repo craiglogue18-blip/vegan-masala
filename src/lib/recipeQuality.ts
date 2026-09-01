@@ -11,6 +11,7 @@ function countWords(value: string) {
 }
 
 export function isRecipeReadyForIndex(recipe: Recipe) {
+  if (recipe.indexable === false) return false;
   if (getRecipeDepth(recipe.slug)) return true;
 
   const ingredients = recipe.ingredients?.length ?? 0;

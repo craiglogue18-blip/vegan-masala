@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
-import { getAllRecipes } from "@/lib/recipes";
+import { getPublicRecipes } from "@/lib/recipes";
 import { getAllGuides } from "@/lib/guides";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import CurrySlider from "@/components/CurrySlider";
@@ -55,7 +55,7 @@ function getGuideImage(slug: string, image?: string) {
 }
 
 export default function Home() {
-  const recipes = getAllRecipes();
+  const recipes = getPublicRecipes();
   const guides = getAllGuides();
 
   const latestRecipes = recipes.slice(0, 6);
