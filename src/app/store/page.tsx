@@ -5,7 +5,7 @@ const PAYHIP_PRODUCT_URL = "https://payhip.com/b/Qna1A";
 export const metadata = {
   title: "Vegan Indian Sweets Ebook | Vegan Masala Shop",
   description:
-    "The revised 34-page Vegan Indian Sweets ebook with six comforting recipes, a master shopping list, troubleshooting help and celebration planning.",
+    "The original 23-page Vegan Indian Sweets ebook with six comforting recipes, pantry guidance, troubleshooting help and festive serving ideas.",
   alternates: { canonical: "/store" },
 };
 
@@ -18,7 +18,7 @@ export default function EbookPage() {
           <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 right-0 h-80 w-80 rounded-full bg-[var(--brand-gold)]/10 blur-3xl" />
           <div className="order-1">
             <p className="mb-4 text-sm font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">
-              Revised second edition
+              Original illustrated edition
             </p>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight text-yellow-400 md:text-5xl">
@@ -26,13 +26,13 @@ export default function EbookPage() {
             </h1>
 
             <p className="mb-6 text-lg leading-8 text-zinc-200">
-              Six celebration-worthy recipes, made clearer for the home kitchen.
+              Six celebration-worthy recipes in the original Vegan Masala design.
             </p>
 
             <p className="mb-6 text-base leading-8 text-zinc-300">
-              A richly illustrated 34-page guide to jalebi, vegan gulab jamun,
-              coconut ladoo, kheer, carrot halwa and mango lassi—with the practical
-              details that make each recipe easier to get right.
+              A richly illustrated 23-page guide to jalebi, vegan gulab jamun,
+              coconut ladoo, kheer, carrot halwa and mango lassi, presented with
+              the original framed photography and distinctive Vegan Masala styling.
             </p>
 
             <div className="mb-8 grid gap-3 sm:grid-cols-2">
@@ -40,13 +40,13 @@ export default function EbookPage() {
                 6 complete sweet recipes
               </div>
               <div className="rounded-2xl border border-yellow-500/30 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-200">
-                34 beautifully designed pages
+                23 originally designed pages
               </div>
               <div className="rounded-2xl border border-yellow-500/30 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-200">
                 Instant PDF download
               </div>
               <div className="rounded-2xl border border-yellow-500/30 bg-zinc-950/60 px-4 py-3 text-sm text-zinc-200">
-                Shopping list + troubleshooting
+                Pantry notes + troubleshooting
               </div>
             </div>
 
@@ -57,7 +57,7 @@ export default function EbookPage() {
                 rel="noopener noreferrer"
                 className="inline-flex rounded-full bg-red-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
               >
-                Buy the second edition
+                Buy the ebook for £5
               </a>
 
               <a
@@ -76,10 +76,10 @@ export default function EbookPage() {
           <div className="order-2">
             <div className="vm-float mx-auto max-w-md overflow-hidden rounded-[2rem] border border-[var(--brand-gold)]/80 bg-zinc-950 p-3 shadow-2xl shadow-black/60">
               <Image
-                src="/images/ebook/cover-second-edition.png"
-                alt="Revised Vegan Indian Sweets ebook cover"
-                width={632}
-                height={898}
+                src="/images/ebook/cover.jpg"
+                alt="Original Vegan Indian Sweets ebook cover"
+                width={1600}
+                height={2560}
                 className="h-auto w-full rounded-[1.5rem]"
                 priority
               />
@@ -105,7 +105,8 @@ export default function EbookPage() {
             </h2>
             <p className="mt-5 max-w-md text-base leading-7 text-[var(--text-soft)] sm:text-lg sm:leading-8">
               From crisp jalebi to syrupy gulab jamun and soft coconut ladoo,
-              the revised guide helps you approach every sweet with more confidence.
+              the original illustrated guide brings six comforting recipes together
+              in one unmistakably Vegan Masala collection.
             </p>
             <a
               href={PAYHIP_PRODUCT_URL}
@@ -124,8 +125,9 @@ export default function EbookPage() {
               What&apos;s Inside
             </h2>
             <p className="mb-6 leading-8 text-zinc-300">
-              More than a bundle of recipes: this edition is organised as a small
-              kitchen companion that helps you shop, prepare, cook and serve with confidence.
+              More than a bundle of recipes: the original edition combines practical
+              guidance with the layered photography, frames and branded page design
+              that make it feel like a complete little cookbook.
             </p>
             <ul className="space-y-3 text-zinc-200">
               <li>• Jalebi</li>
@@ -137,8 +139,6 @@ export default function EbookPage() {
               <li>• Pantry essentials for vegan Indian sweets</li>
               <li>• Troubleshooting common problems</li>
               <li>• Festive serving ideas</li>
-              <li>• Master shopping list</li>
-              <li>• A simple celebration menu</li>
             </ul>
           </div>
 
@@ -168,30 +168,30 @@ export default function EbookPage() {
           <div className="grid gap-6 md:grid-cols-3">
             <div className="overflow-hidden rounded-[1.5rem] border border-yellow-500/50 bg-zinc-950 p-3">
               <Image
-                src="/images/ebook/contents-second-edition.png"
-                alt="Revised ebook contents page preview"
-                width={632}
-                height={898}
+                src="/images/ebook/contents.jpg"
+                alt="Original ebook contents page preview"
+                width={1600}
+                height={2560}
                 className="h-auto w-full rounded-[1rem]"
               />
             </div>
 
             <div className="overflow-hidden rounded-[1.5rem] border border-yellow-500/50 bg-zinc-950 p-3">
               <Image
-                src="/images/ebook/jalebi-second-edition.png"
-                alt="Revised jalebi recipe introduction preview"
-                width={632}
-                height={898}
+                src="/images/ebook/jalebi-intro.jpg"
+                alt="Original jalebi recipe introduction preview"
+                width={1600}
+                height={2560}
                 className="h-auto w-full rounded-[1rem]"
               />
             </div>
 
             <div className="overflow-hidden rounded-[1.5rem] border border-yellow-500/50 bg-zinc-950 p-3">
               <Image
-                src="/images/ebook/troubleshooting-second-edition.png"
-                alt="Ebook troubleshooting page preview"
-                width={632}
-                height={898}
+                src="/images/ebook/jalebi-recipe-1.jpg"
+                alt="Original framed jalebi ingredients and method page preview"
+                width={1600}
+                height={2560}
                 className="h-auto w-full rounded-[1rem]"
               />
             </div>
@@ -241,8 +241,8 @@ export default function EbookPage() {
                 <li>• 6 vegan Indian sweet recipes</li>
                 <li>• Pantry notes and ingredient help</li>
                 <li>• Troubleshooting tips</li>
-                <li>• Master shopping list and festive serving inspiration</li>
-                <li>• Celebration menu and safer storage guidance</li>
+                <li>• Festive serving inspiration</li>
+                <li>• The original 23-page framed design</li>
                 <li>• Instant PDF delivery by email</li>
               </ul>
             </div>
@@ -269,7 +269,7 @@ export default function EbookPage() {
             Ready to make vegan Indian sweets at home?
           </h2>
           <p className="mx-auto max-w-3xl leading-8 text-zinc-300">
-            Download the revised Vegan Indian Sweets Ebook and keep a beautiful,
+            Download the original Vegan Indian Sweets Ebook and keep a beautiful,
             practical collection of sweet recipes ready for whenever you want to
             cook something warm, nostalgic, and worth sharing.
           </p>

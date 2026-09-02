@@ -1,21 +1,21 @@
 export const EBOOK = {
   slug: "vegan-indian-sweets-mini-ebook",
-  title: "Vegan Indian Sweets – Revised Second Edition",
+  title: "Vegan Indian Sweets – Original Illustrated Edition",
   shortTitle: "Vegan Indian Sweets Ebook",
   description:
-    "A beautifully designed 34-page guide with 6 vegan Indian sweet recipes, a master shopping list, troubleshooting help and celebration ideas.",
+    "The original 23-page illustrated guide with 6 vegan Indian sweet recipes, pantry notes, troubleshooting help and festive serving ideas.",
   price: "£5",
   url: "https://www.vegan-masala.com/store",
-  coverImage: "/images/ebook/cover-second-edition.png",
+  coverImage: "/images/ebook/cover.jpg",
   previewImages: [
-    "/images/ebook/contents-second-edition.png",
-    "/images/ebook/jalebi-second-edition.png",
-    "/images/ebook/troubleshooting-second-edition.png",
+    "/images/ebook/contents.jpg",
+    "/images/ebook/jalebi-intro.jpg",
+    "/images/ebook/jalebi-recipe-1.jpg",
   ],
   bullets: [
     "6 complete sweet recipes",
-    "34 beautifully designed pages",
+    "23 originally designed pages",
     "Instant PDF download",
-    "Master shopping list + troubleshooting",
+    "Pantry notes + troubleshooting",
   ],
 };
