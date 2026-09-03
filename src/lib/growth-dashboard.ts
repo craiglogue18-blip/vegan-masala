@@ -4,6 +4,8 @@ import { Redis } from "@upstash/redis";
 import { getGscPerformanceSnapshot } from "@/lib/seo/gsc";
 import { allQueueItems } from "@/lib/social/core/queue";
 import { getTrendingRecipesWithCounts } from "@/lib/trending";
+import { getPinterestAccessToken } from "@/lib/social/core/pinterestToken";
+import { getTikTokAccessToken } from "@/lib/social/core/tiktokAuth";
 
 const DAY_MS = 86_400_000;
 
@@ -233,12 +235,97 @@ function summariseAwin(transactions: AwinTransaction[]) {
   };
 }
 
+type SocialSnapshot = {
+  configured: boolean;
+  followers: number | null;
+  content: number | null;
+  impressions: number | null;
+  outboundClicks: number | null;
+  error: string | null;
+};
+
+const emptySocial = (configured: boolean, error: string | null = null): SocialSnapshot => ({
+  configured,
+  followers: null,
+  content: null,
+  impressions: null,
+  outboundClicks: null,
+  error,
+});
+
+async function getMetaAudience() {
+  const token = (process.env.META_PAGE_ACCESS_TOKEN || process.env.META_ACCESS_TOKEN || "").trim();
+  const pageId = process.env.META_PAGE_ID?.trim();
+  const igId = process.env.META_IG_USER_ID?.trim();
+  const request = async (id: string | undefined, fields: string) => {
+    if (!token || !id) return null;
+    const url = new URL(`https://graph.facebook.com/v23.0/${encodeURIComponent(id)}`);
+    url.searchParams.set("fields", fields);
+    url.searchParams.set("access_token", token);
+    const response = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(8_000) });
+    if (!response.ok) throw new Error("permission");
+    return response.json() as Promise<Record<string, unknown>>;
+  };
+  try {
+    const [facebook, instagram] = await Promise.all([
+      request(pageId, "followers_count,fan_count"),
+      request(igId, "followers_count,media_count"),
+    ]);
+    return {
+      facebook: facebook ? { ...emptySocial(true), followers: Number(facebook.followers_count ?? facebook.fan_count) || 0 } : emptySocial(false),
+      instagram: instagram ? { ...emptySocial(true), followers: Number(instagram.followers_count) || 0, content: Number(instagram.media_count) || 0 } : emptySocial(false),
+    };
+  } catch {
+    const error = "Connected for publishing; audience reporting permission is still needed";
+    return { facebook: emptySocial(Boolean(token && pageId), error), instagram: emptySocial(Boolean(token && igId), error) };
+  }
+}
+
+async function getPinterestPerformance(): Promise<SocialSnapshot> {
+  const configured = Boolean(process.env.PINTEREST_ACCESS_TOKEN || process.env.PINTEREST_CLIENT_ID);
+  try {
+    const token = await getPinterestAccessToken();
+    if (!token) return emptySocial(configured, "Pinterest reporting token unavailable");
+    const end = new Date();
+    const start = new Date(end.getTime() - 28 * DAY_MS);
+    const url = new URL("https://api.pinterest.com/v5/user_account/analytics");
+    url.searchParams.set("start_date", start.toISOString().slice(0, 10));
+    url.searchParams.set("end_date", end.toISOString().slice(0, 10));
+    url.searchParams.set("metric_types", "IMPRESSION,OUTBOUND_CLICK");
+    const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store", signal: AbortSignal.timeout(8_000) });
+    if (!response.ok) return emptySocial(true, "Connected for publishing; analytics permission is still needed");
+    const payload = (await response.json()) as { all?: { daily_metrics?: Array<{ metrics?: Record<string, unknown> }> } };
+    const daily = payload.all?.daily_metrics ?? [];
+    const sum = (metric: string) => daily.reduce((total, row) => total + (Number(row.metrics?.[metric]) || 0), 0);
+    return { ...emptySocial(true), impressions: sum("IMPRESSION"), outboundClicks: sum("OUTBOUND_CLICK") };
+  } catch {
+    return emptySocial(configured, "Pinterest reporting is temporarily unavailable");
+  }
+}
+
+async function getTikTokAudience(): Promise<SocialSnapshot> {
+  const configured = dataSourceConfigured("TIKTOK");
+  try {
+    const token = await getTikTokAccessToken();
+    if (!token) return emptySocial(configured, "TikTok reporting token unavailable");
+    const url = new URL("https://open.tiktokapis.com/v2/user/info/");
+    url.searchParams.set("fields", "follower_count,video_count,likes_count");
+    const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store", signal: AbortSignal.timeout(8_000) });
+    if (!response.ok) return emptySocial(true, "Connected for publishing; user statistics permission is still needed");
+    const payload = (await response.json()) as { data?: { user?: Record<string, unknown> } };
+    const user = payload.data?.user ?? {};
+    return { ...emptySocial(true), followers: Number(user.follower_count) || 0, content: Number(user.video_count) || 0 };
+  } catch {
+    return emptySocial(configured, "TikTok reporting is temporarily unavailable");
+  }
+}
+
 export async function getGrowthDashboard() {
   const now = new Date();
   const currentStart = new Date(now.getTime() - 28 * DAY_MS).toISOString().slice(0, 10);
   const previousStart = new Date(now.getTime() - 56 * DAY_MS).toISOString().slice(0, 10);
   const today = now.toISOString().slice(0, 10);
-  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious] = await Promise.all([
+  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience] = await Promise.all([
     getGscPerformanceSnapshot({ rowLimit: 8 }),
     engagementWindow(28),
     engagementWindow(28, 28),
@@ -250,6 +337,9 @@ export async function getGrowthDashboard() {
     getKitSubscriberCount(previousStart, currentStart),
     getAwinTransactions(),
     getAwinTransactions(28),
+    getMetaAudience(),
+    getPinterestPerformance(),
+    getTikTokAudience(),
   ]);
 
   const currentEvents = {
@@ -308,6 +398,12 @@ export async function getGrowthDashboard() {
         current: summariseAwin(awinCurrent.transactions),
         previous: summariseAwin(awinPrevious.transactions),
         error: awinCurrent.error || awinPrevious.error,
+      },
+      socialPerformance: {
+        facebook: metaAudience.facebook,
+        instagram: metaAudience.instagram,
+        pinterest: pinterestPerformance,
+        tiktok: tiktokAudience,
       },
       openAi: {
         configured: Boolean(process.env.OPENAI_API_KEY?.trim()),

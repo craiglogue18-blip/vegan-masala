@@ -174,6 +174,23 @@ export default async function GrowthDashboardPage() {
         )}
       </section>
 
+      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
+        <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Social account reporting</h2>
+        <p className="mt-2 text-sm text-[var(--text-soft)]">Live audience and analytics checks from the connected platform accounts.</p>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {Object.entries(data.services.socialPerformance).map(([platform, item]) => (
+            <div key={platform} className="rounded-xl bg-black/15 p-4">
+              <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">{titleCase(platform)}</p>
+              <p className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">{item.followers === null ? "—" : number(item.followers)}</p>
+              <p className="text-xs text-[var(--text-soft)]">{item.followers === null ? "Followers unavailable" : "Followers"}</p>
+              {item.impressions !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.impressions)} impressions · {number(item.outboundClicks ?? 0)} outbound clicks</p>}
+              {item.content !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.content)} published items</p>}
+              {item.error && <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">{item.error}</p>}
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="mt-8 grid gap-6 xl:grid-cols-3">
         <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Affiliate interest</h2>
