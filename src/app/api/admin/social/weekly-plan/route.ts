@@ -52,6 +52,14 @@ export async function POST(req: Request) {
       dryRun: body?.dryRun === true,
       pinterestBoardId:
         typeof body?.pinterestBoardId === "string" ? body.pinterestBoardId.trim() : undefined,
+      pinterestRecipeBoardId:
+        typeof body?.pinterestRecipeBoardId === "string"
+          ? body.pinterestRecipeBoardId.trim()
+          : undefined,
+      pinterestGuideBoardId:
+        typeof body?.pinterestGuideBoardId === "string"
+          ? body.pinterestGuideBoardId.trim()
+          : undefined,
     });
     return NextResponse.json({ ok: true, ...result });
   } catch (error: any) {
