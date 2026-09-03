@@ -28,3 +28,11 @@ export async function getTrendingSlugs(limit = 6) {
   if (!redis) return [];
   return redis.zrange<string[]>(weekKey(), 0, Math.max(0, limit - 1), { rev: true });
 }
+
+export async function getTrendingRecipesWithCounts(limit = 8) {
+  const redis = redisClient();
+  if (!redis) return [];
+  const slugs = await redis.zrange<string[]>(weekKey(), 0, Math.max(0, limit - 1), { rev: true });
+  const scores = await Promise.all(slugs.map((slug) => redis.zscore(weekKey(), slug)));
+  return slugs.map((slug, index) => ({ slug, views: Number(scores[index]) || 0 }));
+}
