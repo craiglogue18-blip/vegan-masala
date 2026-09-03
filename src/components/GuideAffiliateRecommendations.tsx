@@ -84,19 +84,45 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
   ],
 };
 
-const ethicalSuperstoreGuides: Record<string, string> = {
-  "vegan-indian-pantry-staples":
-    "Browse vegan cupboard staples and thoughtfully sourced ingredients for building your Indian pantry.",
-  "seasonal-vegetables-for-indian-cooking":
-    "Explore organic groceries and ethical kitchen essentials to complement your seasonal cooking.",
-  "low-waste-vegan-indian-kitchen":
-    "Browse ethical household, refill and cupboard options that can support a lower-waste kitchen.",
+const ethicalSuperstoreGuides: Record<string, { description: string; destinationUrl: string }> = {
+  "vegan-indian-pantry-staples": {
+    description: "Browse vegan cupboard staples and thoughtfully sourced ingredients for building your Indian pantry.",
+    destinationUrl: "https://www.ethicalsuperstore.com/category/groceries-and-everyday/world-food/indian/",
+  },
+  "seasonal-vegetables-for-indian-cooking": {
+    description: "Explore organic groceries and ethical kitchen essentials to complement your seasonal cooking.",
+    destinationUrl: "https://www.ethicalsuperstore.com/category/groceries-and-everyday/",
+  },
+  "low-waste-vegan-indian-kitchen": {
+    description: "Browse ethical household, refill and cupboard options that can support a lower-waste kitchen.",
+    destinationUrl: "https://www.ethicalsuperstore.com/category/groceries-and-everyday/",
+  },
+  "regional-indian-cooking": {
+    description: "Explore ethically sourced rice, pulses and cupboard ingredients while learning how regional Indian cooking differs.",
+    destinationUrl: "https://www.ethicalsuperstore.com/category/groceries-and-everyday/world-food/indian/",
+  },
+  "weekly-vegan-indian-grocery-list": {
+    description: "Browse vegan pantry essentials that can help turn the weekly list into a practical shop.",
+    destinationUrl: "https://www.ethicalsuperstore.com/category/groceries-and-everyday/world-food/indian/",
+  },
+  "lentils-and-dal": {
+    description: "Browse dried lentils, chickpeas and beans for everyday dals and pulse-based curries.",
+    destinationUrl: "https://www.ethicalsuperstore.com/category/groceries-and-everyday/pasta-rice-and-pulses/beans-and-pulses-dried/",
+  },
+  "indian-spices-explained-for-beginners": {
+    description: "Explore vegan herbs and spices while building a useful beginner Indian spice collection.",
+    destinationUrl: "https://www.ethicalsuperstore.com/category/groceries-and-everyday/store-cupboard/herbs-and-spices/vegan.htm",
+  },
+  "how-to-cook-basmati-rice": {
+    description: "Browse basmati rice, grains and pulses to accompany everyday Indian meals.",
+    destinationUrl: "https://www.ethicalsuperstore.com/category/groceries-and-everyday/world-food/indian/",
+  },
 };
 
 export default function GuideAffiliateRecommendations({ slug }: { slug: string }) {
   const recommendations = recommendationsByGuide[slug] ?? [];
-  const ethicalDescription = ethicalSuperstoreGuides[slug];
-  if (!recommendations.length && !ethicalDescription) return null;
+  const ethicalRecommendation = ethicalSuperstoreGuides[slug];
+  if (!recommendations.length && !ethicalRecommendation) return null;
 
   return (
     <section className="mt-10 rounded-3xl border border-[var(--brand-gold)]/35 bg-[var(--surface)]/95 p-6 shadow-sm sm:p-8">
@@ -122,12 +148,13 @@ export default function GuideAffiliateRecommendations({ slug }: { slug: string }
               description={item.description}
               href={amazonUkSearchUrl(item.query)}
               category="Vegan Masala recommends"
+              placement={`guide-${slug}`}
             />
           </article>
         ))}
       </div>}
 
-      {ethicalDescription && (
+      {ethicalRecommendation && (
         <article className="mt-6 grid gap-5 overflow-hidden rounded-2xl border border-[#2bafe3]/45 bg-gradient-to-br from-white to-[#eaf8fd] p-5 text-slate-900 sm:grid-cols-[180px_1fr] sm:items-center">
           <div className="flex min-h-24 items-center justify-center rounded-xl bg-white p-4 shadow-sm">
             <Image
@@ -143,12 +170,17 @@ export default function GuideAffiliateRecommendations({ slug }: { slug: string }
               Affiliate partner
             </p>
             <h3 className="mt-1 text-xl font-extrabold">Shop with Ethical Superstore</h3>
-            <p className="mt-2 text-sm leading-6 text-slate-700">{ethicalDescription}</p>
+            <p className="mt-2 text-sm leading-6 text-slate-700">{ethicalRecommendation.description}</p>
             <AffiliateLink
-              href={ethicalSuperstoreAffiliateUrl(`guide-${slug}`)}
+              href={ethicalSuperstoreAffiliateUrl(
+                `guide-${slug}`,
+                ethicalRecommendation.destinationUrl,
+              )}
               title="Ethical Superstore"
               category={`Guide: ${slug}`}
               network="Awin"
+              destinationLabel="Ethical Superstore"
+              placement={`guide-${slug}`}
               className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#087cac] px-5 py-2 text-sm font-extrabold text-white transition hover:bg-[#06678f]"
             >
               Visit Ethical Superstore →

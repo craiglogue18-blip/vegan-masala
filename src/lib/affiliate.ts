@@ -24,10 +24,13 @@ export function awinDeepLinkUrl({
   return url.toString();
 }
 
-export function ethicalSuperstoreAffiliateUrl(clickReference: string) {
+export function ethicalSuperstoreAffiliateUrl(
+  clickReference: string,
+  destinationUrl = ETHICAL_SUPERSTORE_URL,
+) {
   return awinDeepLinkUrl({
     advertiserId: ETHICAL_SUPERSTORE_ADVERTISER_ID,
-    destinationUrl: ETHICAL_SUPERSTORE_URL,
+    destinationUrl,
     clickReference,
   });
 }

@@ -18,6 +18,7 @@ import StorePromo from "@/components/StorePromo";
 import RecipeEngagement from "@/components/RecipeEngagement";
 import RecipeEquipment, { getRecipeEquipment } from "@/components/RecipeEquipment";
 import DinnerPlanPromo from "@/components/DinnerPlanPromo";
+import RecipePantryShopping, { getRecipePantryPicks } from "@/components/RecipePantryShopping";
 
 function extractSections(raw: string) {
   const sections: Record<string, string> = {};
@@ -524,6 +525,12 @@ export default async function RecipePage({
   const showDalHubCallout = isDalHubRecipe(recipe.slug);
   const recipeCollections = getCollectionsForRecipe(recipe);
   const equipmentRecommendations = getRecipeEquipment(recipe);
+  const pantryPicks = getRecipePantryPicks({
+    slug: recipe.slug,
+    title: recipe.title,
+    ingredients,
+    tags: recipe.tags,
+  });
 
   const servingIdeas = (() => {
     if (typeof recipe.servingSuggestion === "string" && recipe.servingSuggestion.trim()) {
@@ -768,6 +775,7 @@ export default async function RecipePage({
           {equipmentRecommendations.length > 0 && (
             <a href="#equipment" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Equipment</a>
           )}
+          <a href="#shop-ingredients" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Shop ingredients</a>
         </div>
       </nav>
 
@@ -795,7 +803,7 @@ export default async function RecipePage({
         </div>
       </section>
 
-      <RecipeEquipment items={equipmentRecommendations} />
+      <RecipeEquipment items={equipmentRecommendations} recipeSlug={recipe.slug} />
 
       {depth && (
         <section className="mt-8 rounded-[2rem] border border-[var(--border)] bg-[var(--surface)]/95 p-6 shadow-sm lg:p-8">
@@ -919,6 +927,11 @@ export default async function RecipePage({
               </p>
             )}
           </div>
+
+          <RecipePantryShopping
+            recipe={{ slug: recipe.slug, title: recipe.title, ingredients, tags: recipe.tags }}
+            picks={pantryPicks}
+          />
         </div>
       </section>
 

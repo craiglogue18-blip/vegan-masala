@@ -11,6 +11,7 @@ import DinnerPlanPromo from "@/components/DinnerPlanPromo";
 import DinnerFinder from "@/components/DinnerFinder";
 import TrendingRecipes from "@/components/TrendingRecipes";
 import RecipeVideoShowcase from "@/components/RecipeVideoShowcase";
+import EthicalShoppingSpotlight from "@/components/EthicalShoppingSpotlight";
 import homeSeasonal from "@/data/homeSeasonal.json";
 
 const siteUrl =
@@ -610,6 +611,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <EthicalShoppingSpotlight />
 
       {/* EXPLORE BY INGREDIENT */}
       <section className="mt-12 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">

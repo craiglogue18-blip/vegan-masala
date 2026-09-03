@@ -172,7 +172,8 @@ export default function EquipmentGuidePage() {
                 title={e.name}
                 description={e.why}
                 tip={e.tip}
-                  href={amazonUkSearchUrl(e.shopQuery)}
+                href={amazonUkSearchUrl(e.shopQuery)}
+                placement="guide-equipment"
               />
             </article>
           ))}

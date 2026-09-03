@@ -79,6 +79,8 @@ export default function ShoppingAffiliatePartners() {
               title={partner.name}
               category="Weekly shopping partner"
               network={partner.network}
+              destinationLabel={partner.name}
+              placement="meal-planner-shopping"
               className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-extrabold text-black hover:brightness-110"
             >
               Visit {partner.name} →

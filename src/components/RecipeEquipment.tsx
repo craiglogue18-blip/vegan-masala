@@ -75,7 +75,13 @@ export function getRecipeEquipment(recipe: RecipeLike): EquipmentRecommendation[
   return [];
 }
 
-export default function RecipeEquipment({ items }: { items: EquipmentRecommendation[] }) {
+export default function RecipeEquipment({
+  items,
+  recipeSlug,
+}: {
+  items: EquipmentRecommendation[];
+  recipeSlug: string;
+}) {
   if (!items.length) return null;
 
   return (
@@ -102,6 +108,7 @@ export default function RecipeEquipment({ items }: { items: EquipmentRecommendat
               description={item.reason}
               href={amazonUkSearchUrl(item.query)}
               category="Vegan Masala recommends"
+              placement={`recipe-${recipeSlug}-equipment`}
             />
           </article>
         ))}

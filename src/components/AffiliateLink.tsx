@@ -15,6 +15,7 @@ type AffiliateLinkProps = {
   category: string;
   network?: string;
   destinationLabel?: string;
+  placement?: string;
   className?: string;
   children: ReactNode;
 };
@@ -25,6 +26,7 @@ export default function AffiliateLink({
   category,
   network = "Amazon UK",
   destinationLabel = network,
+  placement,
   className,
   children,
 }: AffiliateLinkProps) {
@@ -33,6 +35,7 @@ export default function AffiliateLink({
       affiliate_network: network,
       affiliate_product: title,
       affiliate_category: category,
+      affiliate_placement: placement,
       destination_url: href,
       page_path: window.location.pathname,
     };
@@ -42,6 +45,8 @@ export default function AffiliateLink({
     recordEngagement("affiliate_click", {
       category,
       product: title,
+      placement,
+      source: network,
     });
   };
 

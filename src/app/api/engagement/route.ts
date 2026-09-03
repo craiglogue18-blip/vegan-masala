@@ -8,6 +8,7 @@ const ALLOWED_EVENTS = new Set([
   "dinner_plan_confirmed",
   "dinner_plan_download",
   "affiliate_click",
+  "commerce_click",
 ]);
 
 function redisClient() {

@@ -8,6 +8,7 @@ type AffiliateCardProps = {
   category?: string;
   network?: string;
   buttonLabel?: string;
+  placement?: string;
 };
 
 export default function AffiliateCard({
@@ -18,6 +19,7 @@ export default function AffiliateCard({
   category = "Recommended kitchen tool",
   network = "Amazon UK",
   buttonLabel = "View on Amazon UK",
+  placement,
 }: AffiliateCardProps) {
   return (
     <div className="relative flex flex-1 flex-col overflow-hidden p-6">
@@ -54,6 +56,7 @@ export default function AffiliateCard({
             title={title}
             category={category}
             network={network}
+            placement={placement}
             className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--brand-gold)] px-5 py-3 text-center text-sm font-extrabold text-[var(--bg)] shadow-[0_8px_24px_rgba(214,178,94,0.18)] transition hover:-translate-y-0.5 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-gold)]"
           >
             {buttonLabel}

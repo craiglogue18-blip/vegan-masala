@@ -1,4 +1,5 @@
 import Image from "next/image";
+import CommerceLink from "@/components/CommerceLink";
 
 const PAYHIP_PRODUCT_URL = "https://payhip.com/b/Qna1A";
 
@@ -51,14 +52,14 @@ export default function EbookPage() {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <a
+              <CommerceLink
                 href={PAYHIP_PRODUCT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                product="Vegan Indian Sweets Ebook"
+                placement="store-hero"
                 className="inline-flex rounded-full bg-red-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
               >
                 Buy the ebook for £5
-              </a>
+              </CommerceLink>
 
               <a
                 href="#inside"
@@ -108,14 +109,14 @@ export default function EbookPage() {
               the original illustrated guide brings six comforting recipes together
               in one unmistakably Vegan Masala collection.
             </p>
-            <a
+            <CommerceLink
               href={PAYHIP_PRODUCT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              product="Vegan Indian Sweets Ebook"
+              placement="store-celebration"
               className="mt-7 inline-flex w-fit rounded-full bg-[var(--brand-gold)] px-6 py-3 font-extrabold text-black transition hover:-translate-y-0.5 hover:brightness-110"
             >
               Get the ebook for £5
-            </a>
+            </CommerceLink>
           </div>
         </section>
 
@@ -249,14 +250,14 @@ export default function EbookPage() {
 
             <div className="mb-4 text-2xl font-bold text-white">£5.00</div>
 
-            <a
+            <CommerceLink
               href={PAYHIP_PRODUCT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              product="Vegan Indian Sweets Ebook"
+              placement="store-checkout"
               className="inline-flex min-h-14 w-full items-center justify-center rounded-2xl bg-[var(--brand-gold)] px-8 py-4 text-lg font-extrabold text-black transition hover:-translate-y-0.5 hover:brightness-110"
             >
               Buy securely with Payhip
-            </a>
+            </CommerceLink>
 
             <p className="mt-4 text-sm text-zinc-500">
               Delivered instantly after purchase.
@@ -275,14 +276,14 @@ export default function EbookPage() {
           </p>
 
           <div className="mt-8">
-            <a
+            <CommerceLink
               href={PAYHIP_PRODUCT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              product="Vegan Indian Sweets Ebook"
+              placement="store-footer"
               className="inline-flex rounded-full bg-red-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
             >
               Buy the Ebook for £5
-            </a>
+            </CommerceLink>
           </div>
         </section>
 
