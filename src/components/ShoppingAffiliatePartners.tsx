@@ -1,25 +1,32 @@
 import AffiliateLink from "@/components/AffiliateLink";
+import { ethicalSuperstoreAffiliateUrl } from "@/lib/affiliate";
 
 const partners = [
   {
     name: "Ethical Superstore",
     description: "Vegan cupboard ingredients and ethical household essentials.",
-    url: process.env.NEXT_PUBLIC_ETHICAL_SUPERSTORE_AFFILIATE_URL,
+    url:
+      process.env.NEXT_PUBLIC_ETHICAL_SUPERSTORE_AFFILIATE_URL ||
+      ethicalSuperstoreAffiliateUrl("meal-planner-shopping"),
+    network: "Awin",
   },
   {
     name: "Abel & Cole",
     description: "Organic fruit, vegetables and flexible grocery deliveries.",
     url: process.env.NEXT_PUBLIC_ABEL_AND_COLE_AFFILIATE_URL,
+    network: "Abel & Cole",
   },
   {
     name: "Lakeland",
     description: "Practical cookware, storage and kitchen equipment.",
     url: process.env.NEXT_PUBLIC_LAKELAND_AFFILIATE_URL,
+    network: "Lakeland",
   },
   {
     name: "Ninja Kitchen",
     description: "Blenders, food processors, air fryers and multi-cookers.",
     url: process.env.NEXT_PUBLIC_NINJA_AFFILIATE_URL,
+    network: "Ninja Kitchen",
   },
 ].filter((partner): partner is typeof partner & { url: string } => Boolean(partner.url));
 
@@ -45,7 +52,7 @@ export default function ShoppingAffiliatePartners() {
               href={partner.url}
               title={partner.name}
               category="Weekly shopping partner"
-              network={partner.name}
+              network={partner.network}
               className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--brand-gold)] px-4 py-2 text-sm font-extrabold text-black hover:brightness-110"
             >
               Visit {partner.name} →
