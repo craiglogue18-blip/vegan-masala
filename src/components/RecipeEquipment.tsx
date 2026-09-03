@@ -1,5 +1,5 @@
 import AffiliateCard from "@/components/AffiliateCard";
-import { amazonUkSearchUrl } from "@/lib/affiliate";
+import { AMAZON_PRODUCTS, amazonUkProductUrl } from "@/lib/affiliate";
 
 type RecipeLike = {
   title?: string;
@@ -10,45 +10,55 @@ type RecipeLike = {
 
 type EquipmentRecommendation = {
   name: string;
-  query: string;
+  asin: string;
   reason: string;
 };
 
 const tools = {
   pressureCooker: {
-    name: "Pressure cooker or Instant Pot",
-    query: "electric pressure cooker Instant Pot",
+    name: AMAZON_PRODUCTS.pressureCooker.name,
+    asin: AMAZON_PRODUCTS.pressureCooker.asin,
     reason: "Useful for getting chickpeas, beans and lentils tender without a long stovetop simmer.",
   },
   tawa: {
-    name: "Cast-iron tawa",
-    query: "cast iron tawa chapati pan",
+    name: AMAZON_PRODUCTS.tawa.name,
+    asin: AMAZON_PRODUCTS.tawa.asin,
     reason: "A broad, flat surface helps breads and dosas cook evenly and develop their characteristic spots.",
   },
   blender: {
-    name: "Blender or food processor",
-    query: "compact blender food processor",
+    name: AMAZON_PRODUCTS.handBlender.name,
+    asin: AMAZON_PRODUCTS.handBlender.asin,
     reason: "Helpful for smooth chutneys, batters and curry sauces without transferring large quantities by hand.",
   },
   grinder: {
-    name: "Electric spice grinder",
-    query: "electric spice grinder",
+    name: AMAZON_PRODUCTS.spiceGrinder.name,
+    asin: AMAZON_PRODUCTS.spiceGrinder.asin,
     reason: "Freshly ground whole spices give masalas a brighter aroma than long-opened ground spices.",
   },
   kadai: {
-    name: "Kadai or deep frying pan",
-    query: "Indian kadai karahi pan",
+    name: AMAZON_PRODUCTS.kadai.name,
+    asin: AMAZON_PRODUCTS.kadai.asin,
     reason: "The deep shape gives hot oil and bubbling masala room while keeping stirring and turning manageable.",
   },
   heavyPot: {
-    name: "Heavy-bottomed cooking pot",
-    query: "heavy bottom casserole pot",
+    name: AMAZON_PRODUCTS.heavyPot.name,
+    asin: AMAZON_PRODUCTS.heavyPot.asin,
     reason: "Steady heat helps rice, dal and slow-simmered sauces cook evenly without catching on the base.",
   },
   sieve: {
-    name: "Fine-mesh sieve",
-    query: "fine mesh kitchen sieve",
+    name: AMAZON_PRODUCTS.sieve.name,
+    asin: AMAZON_PRODUCTS.sieve.asin,
     reason: "Handy for rinsing rice and lentils thoroughly and draining them without losing smaller grains.",
+  },
+  idliSteamer: {
+    name: AMAZON_PRODUCTS.idliSteamer.name,
+    asin: AMAZON_PRODUCTS.idliSteamer.asin,
+    reason: "The stacked plates steam several evenly shaped idlis together without taking over the hob.",
+  },
+  miniChopper: {
+    name: AMAZON_PRODUCTS.miniChopper.name,
+    asin: AMAZON_PRODUCTS.miniChopper.asin,
+    reason: "Useful for small batches of nuts, aromatics, chutneys and pastes where a full-size processor is unnecessary.",
   },
 } satisfies Record<string, EquipmentRecommendation>;
 
@@ -59,17 +69,25 @@ export function getRecipeEquipment(recipe: RecipeLike): EquipmentRecommendation[
     .toLowerCase();
 
   if (/\b(instant pot|pressure cooker)\b/.test(text)) return [tools.pressureCooker, tools.grinder];
+  if (/\b(idli|idly)\b/.test(text)) return [tools.idliSteamer];
   if (/\b(naan|roti|chapati|poori|dosa|paratha|flatbread)\b/.test(text)) return [tools.tawa];
+  if (/\b(pancakes?|cheela|chilla)\b/.test(text)) return [tools.tawa];
   if (/\b(chutney|lassi)\b/.test(text)) return [tools.blender, tools.grinder];
   if (/\b(pakora|bhaji|samosa|jalebi|gobi 65|cauliflower 65|vada pav|aloo tikki)\b/.test(text)) {
     return [tools.kadai];
   }
   if (/\b(biryani|pulao|pulav|pilau|rice)\b/.test(text)) return [tools.heavyPot, tools.sieve];
-  if (/\b(dal|dahl|lentils?|rajma|kidney beans?|blackeye|black-eyed|kala chana)\b/.test(text)) {
+  if (/\b(dal|dahl|dhal|lentils?|rajma|kidney beans?|blackeye|black-eyed|kala chana|chole)\b/.test(text)) {
     return [tools.heavyPot, tools.pressureCooker];
   }
-  if (/\b(curry|masala|korma|kurma|vindaloo|makhani|makhanwala|saag|palak|bhuna|dum aloo)\b/.test(text)) {
+  if (/\b(curry|curried|masala|korma|kurma|vindaloo|madras|makhani|makhanwala|saag|palak|bhuna|dum aloo|dalna)\b/.test(text)) {
     return [tools.heavyPot, tools.grinder];
+  }
+  if (/\b(upma|aloo|potato|cauliflower|gobi|tandoori|tikka|tofu|bhurji|pasanda|kondattam)\b/.test(text)) {
+    return [tools.kadai, tools.grinder];
+  }
+  if (/\b(barfi|burfi|katli|rasgulla|gulab jamun|laddu|ladoo|sweet|dessert|balls)\b/.test(text)) {
+    return [tools.miniChopper, tools.kadai];
   }
 
   return [];
@@ -106,7 +124,7 @@ export default function RecipeEquipment({
             <AffiliateCard
               title={item.name}
               description={item.reason}
-              href={amazonUkSearchUrl(item.query)}
+              href={amazonUkProductUrl(item.asin)}
               category="Vegan Masala recommends"
               placement={`recipe-${recipeSlug}-equipment`}
             />

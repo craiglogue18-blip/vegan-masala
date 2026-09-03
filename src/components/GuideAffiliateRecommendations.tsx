@@ -1,13 +1,23 @@
 import Image from "next/image";
 import AffiliateCard from "@/components/AffiliateCard";
 import AffiliateLink from "@/components/AffiliateLink";
-import { amazonUkSearchUrl, ethicalSuperstoreAffiliateUrl } from "@/lib/affiliate";
+import {
+  AMAZON_PRODUCTS,
+  amazonUkProductUrl,
+  amazonUkSearchUrl,
+  ethicalSuperstoreAffiliateUrl,
+} from "@/lib/affiliate";
 
 type Recommendation = {
   title: string;
   description: string;
-  query: string;
+  query?: string;
+  asin?: string;
 };
+
+function recommendationUrl(item: Recommendation) {
+  return item.asin ? amazonUkProductUrl(item.asin) : amazonUkSearchUrl(item.query ?? item.title);
+}
 
 const recommendationsByGuide: Record<string, Recommendation[]> = {
   "how-to-cook-basmati-rice": [
@@ -17,21 +27,21 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
       query: "rice cooker basmati rice",
     },
     {
-      title: "Fine-mesh sieve",
+      title: AMAZON_PRODUCTS.sieve.name,
       description: "Makes it easy to rinse basmati thoroughly without losing grains through larger holes.",
-      query: "fine mesh kitchen sieve rice",
+      asin: AMAZON_PRODUCTS.sieve.asin,
     },
   ],
   "how-to-build-a-curry-base": [
     {
-      title: "Heavy-bottomed cooking pot",
+      title: AMAZON_PRODUCTS.heavyPot.name,
       description: "Steady heat helps onion, tomato and spice bases cook down without catching on the bottom.",
-      query: "heavy bottom casserole cooking pot",
+      asin: AMAZON_PRODUCTS.heavyPot.asin,
     },
     {
-      title: "Stick blender",
+      title: AMAZON_PRODUCTS.handBlender.name,
       description: "A convenient way to smooth curry bases directly in the pot with less transferring and washing up.",
-      query: "stick blender hand blender",
+      asin: AMAZON_PRODUCTS.handBlender.asin,
     },
   ],
   "how-to-temper-spices": [
@@ -48,14 +58,14 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
   ],
   "lentils-and-dal": [
     {
-      title: "Pressure cooker or Instant Pot",
+      title: AMAZON_PRODUCTS.pressureCooker.name,
       description: "Cuts down the cooking time for lentils, chickpeas and beans, especially when cooking from dry.",
-      query: "electric pressure cooker Instant Pot",
+      asin: AMAZON_PRODUCTS.pressureCooker.asin,
     },
     {
-      title: "Heavy-bottomed cooking pot",
+      title: AMAZON_PRODUCTS.heavyPot.name,
       description: "Helps dal simmer steadily with less risk of sticking as it thickens.",
-      query: "heavy bottom casserole cooking pot",
+      asin: AMAZON_PRODUCTS.heavyPot.asin,
     },
   ],
   "vegan-indian-pantry-staples": [
@@ -65,16 +75,16 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
       query: "airtight glass spice jars labels",
     },
     {
-      title: "Electric spice grinder",
+      title: AMAZON_PRODUCTS.spiceGrinder.name,
       description: "Lets you buy whole spices and grind small, aromatic batches when you need them.",
-      query: "electric spice grinder",
+      asin: AMAZON_PRODUCTS.spiceGrinder.asin,
     },
   ],
   "indian-spices-explained-for-beginners": [
     {
-      title: "Electric spice grinder",
+      title: AMAZON_PRODUCTS.spiceGrinder.name,
       description: "Freshly grinding toasted cumin, coriander and pepper gives beginner masalas a brighter aroma.",
-      query: "electric spice grinder",
+      asin: AMAZON_PRODUCTS.spiceGrinder.asin,
     },
     {
       title: "Stainless-steel spice box",
@@ -146,7 +156,7 @@ export default function GuideAffiliateRecommendations({ slug }: { slug: string }
             <AffiliateCard
               title={item.title}
               description={item.description}
-              href={amazonUkSearchUrl(item.query)}
+              href={recommendationUrl(item)}
               category="Vegan Masala recommends"
               placement={`guide-${slug}`}
             />

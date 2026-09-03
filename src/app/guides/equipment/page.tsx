@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import AffiliateCard from "@/components/AffiliateCard";
-import { amazonUkSearchUrl } from "@/lib/affiliate";
+import { AMAZON_PRODUCTS, amazonUkProductUrl, amazonUkSearchUrl } from "@/lib/affiliate";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
@@ -39,7 +39,17 @@ function GuideImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-const equipment = [
+type EquipmentItem = {
+  name: string;
+  image: string;
+  alt: string;
+  why: string;
+  tip: string;
+  shopQuery?: string;
+  product?: { asin: string; name: string };
+};
+
+const equipment: EquipmentItem[] = [
   {
     name: "Tadka pan (tempering pan)",
     image: "/images/equipment/tadka.jpg",
@@ -54,7 +64,7 @@ const equipment = [
     alt: "Kadai (karahi) pan",
     why: "Great for stir-frying, bhaji-style dishes, and quick curries.",
     tip: "Hot pan + quick movement = better flavour and texture.",
-    shopQuery: "Indian kadai karahi pan",
+    product: AMAZON_PRODUCTS.kadai,
   },
   {
     name: "Tawa (flat griddle)",
@@ -62,7 +72,7 @@ const equipment = [
     alt: "Tawa for cooking rotis and flatbreads",
     why: "Essential for rotis, chapatis, parathas, and toasting spices.",
     tip: "Heat until a sprinkle of water dances; don’t oil for chapati.",
-    shopQuery: "cast iron tawa chapati pan",
+    product: AMAZON_PRODUCTS.tawa,
   },
   {
     name: "Heavy-bottom pot / Dutch oven",
@@ -70,7 +80,7 @@ const equipment = [
     alt: "Heavy-bottom pot or Dutch oven on a stovetop",
     why: "Best for curries and dals: even heat prevents sticking and scorching.",
     tip: "Use medium heat and stir after adding tomatoes or purées.",
-    shopQuery: "heavy bottom casserole pot",
+    product: AMAZON_PRODUCTS.heavyPot,
   },
   {
     name: "Pressure cooker / Instant Pot",
@@ -78,7 +88,7 @@ const equipment = [
     alt: "Pressure cooker used for lentils and beans",
     why: "Speeds up lentils, chickpeas, and beans — weeknight game-changer.",
     tip: "Finish with tadka for best flavour.",
-    shopQuery: "electric pressure cooker Instant Pot",
+    product: AMAZON_PRODUCTS.pressureCooker,
   },
   {
     name: "Spice grinder / coffee grinder",
@@ -86,7 +96,7 @@ const equipment = [
     alt: "Spice grinder with whole spices",
     why: "Fresh-ground spices taste dramatically better (cumin, coriander, pepper).",
     tip: "Grind small batches and keep in a sealed jar.",
-    shopQuery: "electric spice grinder",
+    product: AMAZON_PRODUCTS.spiceGrinder,
   },
   {
     name: "Mortar & pestle",
@@ -102,7 +112,7 @@ const equipment = [
     alt: "Fine mesh sieve",
     why: "Great for rinsing lentils and straining chai or stocks.",
     tip: "Rinse lentils until water runs clearer for cleaner flavour.",
-    shopQuery: "fine mesh kitchen sieve",
+    product: AMAZON_PRODUCTS.sieve,
   },
   {
     name: "Wooden spoon",
@@ -154,8 +164,9 @@ export default function EquipmentGuidePage() {
         <div className="mt-5 max-w-3xl rounded-2xl border border-[var(--brand-gold)]/35 bg-[var(--surface)] px-5 py-4 text-sm leading-6 text-[var(--brand-ink)]/75">
           <span className="font-bold text-[var(--brand-ink)]">Affiliate disclosure:</span>{" "}
           The Amazon links below are paid links. If you make a qualifying purchase,
-          Vegan Masala may earn a commission at no extra cost to you. The links open
-          useful search results rather than claiming one untested product is best.
+          Vegan Masala may earn a commission at no extra cost to you. Where a specific
+          product is shown, it is a relevant example rather than a claim that it has
+          been personally tested; please check the current listing and specifications.
         </div>
 
         <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -169,10 +180,14 @@ export default function EquipmentGuidePage() {
               </div>
 
               <AffiliateCard
-                title={e.name}
+                title={e.product?.name ?? e.name}
                 description={e.why}
                 tip={e.tip}
-                href={amazonUkSearchUrl(e.shopQuery)}
+                href={
+                  e.product
+                    ? amazonUkProductUrl(e.product.asin)
+                    : amazonUkSearchUrl(e.shopQuery ?? e.name)
+                }
                 placement="guide-equipment"
               />
             </article>
