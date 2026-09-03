@@ -13,6 +13,8 @@ type Recommendation = {
   description: string;
   query?: string;
   asin?: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 function recommendationUrl(item: Recommendation) {
@@ -25,11 +27,15 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
       title: "Rice cooker",
       description: "Useful for consistent, hands-off basmati rice when rice is a regular part of your meals.",
       query: "rice cooker basmati rice",
+      image: "/images/affiliate/equipment/rice-cooker.webp",
+      imageAlt: "Compact rice cooker filled with basmati rice",
     },
     {
       title: AMAZON_PRODUCTS.sieve.name,
       description: "Makes it easy to rinse basmati thoroughly without losing grains through larger holes.",
       asin: AMAZON_PRODUCTS.sieve.asin,
+      image: "/images/affiliate/equipment/sieve.webp",
+      imageAlt: "Fine-mesh kitchen sieve",
     },
   ],
   "how-to-build-a-curry-base": [
@@ -37,11 +43,15 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
       title: AMAZON_PRODUCTS.heavyPot.name,
       description: "Steady heat helps onion, tomato and spice bases cook down without catching on the bottom.",
       asin: AMAZON_PRODUCTS.heavyPot.asin,
+      image: "/images/affiliate/equipment/heavy-pot.webp",
+      imageAlt: "Heavy-bottomed cooking pot on a hob",
     },
     {
       title: AMAZON_PRODUCTS.handBlender.name,
       description: "A convenient way to smooth curry bases directly in the pot with less transferring and washing up.",
       asin: AMAZON_PRODUCTS.handBlender.asin,
+      image: "/images/affiliate/equipment/hand-blender.webp",
+      imageAlt: "Immersion hand blender beside a blending jug",
     },
   ],
   "how-to-temper-spices": [
@@ -49,11 +59,15 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
       title: "Tadka pan",
       description: "Its small size keeps oil and whole spices together so you can bloom them quickly and pour safely.",
       query: "Indian tadka tempering pan",
+      image: "/images/affiliate/equipment/tadka-pan.webp",
+      imageAlt: "Small tadka pan for tempering spices",
     },
     {
       title: "Stainless-steel spice box",
       description: "Keeps frequently used tempering spices organised and close at hand while the oil is heating.",
       query: "Indian stainless steel masala dabba spice box",
+      image: "/images/affiliate/equipment/spice-box.webp",
+      imageAlt: "Open stainless-steel masala dabba filled with spices",
     },
   ],
   "lentils-and-dal": [
@@ -61,11 +75,15 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
       title: AMAZON_PRODUCTS.pressureCooker.name,
       description: "Cuts down the cooking time for lentils, chickpeas and beans, especially when cooking from dry.",
       asin: AMAZON_PRODUCTS.pressureCooker.asin,
+      image: "/images/affiliate/equipment/pressure-cooker.webp",
+      imageAlt: "Pressure cooker used for lentils and beans",
     },
     {
       title: AMAZON_PRODUCTS.heavyPot.name,
       description: "Helps dal simmer steadily with less risk of sticking as it thickens.",
       asin: AMAZON_PRODUCTS.heavyPot.asin,
+      image: "/images/affiliate/equipment/heavy-pot.webp",
+      imageAlt: "Heavy-bottomed cooking pot on a hob",
     },
   ],
   "vegan-indian-pantry-staples": [
@@ -73,11 +91,15 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
       title: "Airtight spice jars",
       description: "Protect spices from moisture and make a growing Indian pantry easier to organise.",
       query: "airtight glass spice jars labels",
+      image: "/images/affiliate/equipment/spice-jars.webp",
+      imageAlt: "Airtight glass jars filled with Indian spices",
     },
     {
       title: AMAZON_PRODUCTS.spiceGrinder.name,
       description: "Lets you buy whole spices and grind small, aromatic batches when you need them.",
       asin: AMAZON_PRODUCTS.spiceGrinder.asin,
+      image: "/images/affiliate/equipment/spice-grinder.webp",
+      imageAlt: "Kitchen spice grinder with whole spices",
     },
   ],
   "indian-spices-explained-for-beginners": [
@@ -85,11 +107,15 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
       title: AMAZON_PRODUCTS.spiceGrinder.name,
       description: "Freshly grinding toasted cumin, coriander and pepper gives beginner masalas a brighter aroma.",
       asin: AMAZON_PRODUCTS.spiceGrinder.asin,
+      image: "/images/affiliate/equipment/spice-grinder.webp",
+      imageAlt: "Kitchen spice grinder with whole spices",
     },
     {
       title: "Stainless-steel spice box",
       description: "Keeps core everyday spices visible and accessible while you learn how to combine them.",
       query: "Indian stainless steel masala dabba spice box",
+      image: "/images/affiliate/equipment/spice-box.webp",
+      imageAlt: "Open stainless-steel masala dabba filled with spices",
     },
   ],
 };
@@ -159,6 +185,8 @@ export default function GuideAffiliateRecommendations({ slug }: { slug: string }
               href={recommendationUrl(item)}
               category="Vegan Masala recommends"
               placement={`guide-${slug}`}
+              imageSrc={item.image}
+              imageAlt={item.imageAlt}
             />
           </article>
         ))}
