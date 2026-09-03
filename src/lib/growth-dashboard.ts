@@ -118,6 +118,72 @@ async function getRecraftBalance() {
   }
 }
 
+type OpenAICostResult = {
+  amount?: { value?: unknown; currency?: unknown };
+};
+
+type OpenAICostBucket = {
+  results?: OpenAICostResult[];
+};
+
+async function getOpenAICosts() {
+  const adminKey = process.env.OPENAI_ADMIN_KEY?.trim();
+  if (!adminKey) return { configured: false, cost: null, currency: "USD", error: null };
+
+  const startTime = Math.floor((Date.now() - 28 * DAY_MS) / 1_000);
+  let nextPage: string | null = null;
+  let cost = 0;
+  let currency = "USD";
+
+  try {
+    do {
+      const url = new URL("https://api.openai.com/v1/organization/costs");
+      url.searchParams.set("start_time", String(startTime));
+      url.searchParams.set("bucket_width", "1d");
+      url.searchParams.set("limit", "31");
+      if (nextPage) url.searchParams.set("page", nextPage);
+
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${adminKey}` },
+        cache: "no-store",
+        signal: AbortSignal.timeout(8_000),
+      });
+      if (!response.ok) {
+        return {
+          configured: true,
+          cost: null,
+          currency,
+          error: `OpenAI cost request failed (${response.status})`,
+        };
+      }
+
+      const payload = (await response.json()) as {
+        data?: OpenAICostBucket[];
+        next_page?: unknown;
+      };
+      for (const bucket of payload.data ?? []) {
+        for (const result of bucket.results ?? []) {
+          const value = Number(result.amount?.value);
+          if (Number.isFinite(value)) cost += value;
+          if (typeof result.amount?.currency === "string") {
+            currency = result.amount.currency.toUpperCase();
+          }
+        }
+      }
+      nextPage = typeof payload.next_page === "string" ? payload.next_page : null;
+    } while (nextPage);
+
+    return { configured: true, cost, currency, error: null };
+  } catch {
+    return {
+      configured: true,
+      cost: null,
+      currency,
+      error: "OpenAI cost reporting is temporarily unavailable",
+    };
+  }
+}
+
 async function getKitSubscriberCount(createdAfter?: string, createdBefore?: string) {
   const apiKey = process.env.KIT_API_KEY?.trim();
   if (!apiKey) return { configured: false, count: null, error: null };
@@ -375,7 +441,7 @@ export async function getGrowthDashboard() {
   const currentStart = new Date(now.getTime() - 28 * DAY_MS).toISOString().slice(0, 10);
   const previousStart = new Date(now.getTime() - 56 * DAY_MS).toISOString().slice(0, 10);
   const today = now.toISOString().slice(0, 10);
-  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience, youtubePerformance] = await Promise.all([
+  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience, youtubePerformance, openAiCosts] = await Promise.all([
     getGscPerformanceSnapshot({ rowLimit: 8 }),
     engagementWindow(28),
     engagementWindow(28, 28),
@@ -391,6 +457,7 @@ export async function getGrowthDashboard() {
     getPinterestPerformance(),
     getTikTokAudience(),
     getYouTubePerformance(),
+    getOpenAICosts(),
   ]);
 
   const currentEvents = {
@@ -459,7 +526,10 @@ export async function getGrowthDashboard() {
       },
       openAi: {
         configured: Boolean(process.env.OPENAI_API_KEY?.trim()),
-        usageConnected: Boolean(process.env.OPENAI_ADMIN_KEY?.trim()),
+        usageConnected: openAiCosts.configured,
+        cost: openAiCosts.cost,
+        currency: openAiCosts.currency,
+        error: openAiCosts.error,
       },
       searchConsole: { configured: dataSourceConfigured("GSC") },
       meta: {

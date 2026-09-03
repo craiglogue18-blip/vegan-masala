@@ -262,8 +262,14 @@ export default async function GrowthDashboardPage() {
           </div>
           <div className="rounded-xl bg-black/15 p-4">
             <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">OpenAI API</p>
-            <p className="mt-2 text-lg font-extrabold text-[var(--text)]">{data.services.openAi.configured ? "Connected" : "Not connected"}</p>
-            <p className="mt-1 text-sm text-[var(--text-soft)]">{data.services.openAi.usageConnected ? "Admin usage reporting available" : "Usage requires a separate Admin API key"}</p>
+            <p className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">
+              {data.services.openAi.cost === null ? (data.services.openAi.configured ? "Connected" : "—") : money(data.services.openAi.cost, data.services.openAi.currency)}
+            </p>
+            <p className="mt-1 text-sm text-[var(--text-soft)]">
+              {data.services.openAi.cost === null
+                ? data.services.openAi.error || (data.services.openAi.usageConnected ? "Cost data unavailable" : "Usage requires a separate Admin API key")
+                : "Spent in the latest 28 days · remaining credit is shown in OpenAI Billing"}
+            </p>
           </div>
           <div className="rounded-xl bg-black/15 p-4">
             <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">Traffic data</p>
