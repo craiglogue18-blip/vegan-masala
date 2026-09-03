@@ -40,6 +40,12 @@ type Guide = {
 function getGuideImage(guide: Guide) {
   const slugImage = `/images/guides/${guide.slug}.png`;
 
+  const editorialMap: Record<string, string> = {
+    "vegan-indian-pantry-staples": "/images/editorial/market-produce.jpg",
+    "indian-spices-explained-for-beginners": "/images/editorial/street-food-dosa.jpg",
+    "how-to-build-a-curry-base": "/images/editorial/home-kitchen-chapati.jpg",
+  };
+
   const legacyMap: Record<string, string> = {
     spices: "/images/guides/indian-spices-guide.png",
     "vegan-dairy-alternatives": "/images/guides/dairy.jpg",
@@ -47,6 +53,7 @@ function getGuideImage(guide: Guide) {
     herbs: "/images/guides/herbs.jpg",
   };
 
+  if (editorialMap[guide.slug]) return editorialMap[guide.slug];
   if (legacyMap[guide.slug]) return legacyMap[guide.slug];
 
   return guide.image || slugImage || "/images/guides/spices.jpg";

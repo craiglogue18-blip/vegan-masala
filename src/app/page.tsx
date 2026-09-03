@@ -184,6 +184,33 @@ export default function Home() {
     { label: "Instant Pot", key: "instant-pot" },
   ];
 
+  const editorialStories = [
+    {
+      eyebrow: "At the market",
+      title: "Cook with the seasons",
+      description: "Start with what looks fresh, then build flavour with the right spices and technique.",
+      href: "/guides/seasonal-vegetables-for-indian-cooking",
+      image: "/images/editorial/market-produce.jpg",
+      alt: "A shopper choosing aubergines and greens at an Indian produce market",
+    },
+    {
+      eyebrow: "Street-side craft",
+      title: "Watch everyday skill at work",
+      description: "Explore the techniques and flavours behind crisp, savoury Indian favourites.",
+      href: "/recipes?tag=snacks",
+      image: "/images/editorial/street-food-dosa.jpg",
+      alt: "A street-food cook preparing masala dosa on a wide griddle",
+    },
+    {
+      eyebrow: "Passed down",
+      title: "Learn by cooking together",
+      description: "Straightforward guides that bring traditional kitchen knowledge into everyday cooking.",
+      href: "/guides/beginner-friendly-vegan-indian-recipes",
+      image: "/images/editorial/home-kitchen-chapati.jpg",
+      alt: "Two generations learning to roll chapati together in a home kitchen",
+    },
+  ];
+
   const browseSections = [
     {
       title: "Curries",
@@ -338,6 +365,67 @@ export default function Home() {
             <Image src="/images/home/collections/curries.webp" alt="A warming vegan Indian curry for the changing season" fill className="object-cover transition duration-700 hover:scale-[1.02]" sizes="(max-width: 1024px) 100vw, 48vw" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
           </div>
+        </div>
+      </section>
+
+      <section className="mt-12 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-lg">
+        <div className="relative min-h-[360px] overflow-hidden sm:min-h-[440px]">
+          <Image
+            src="/images/editorial/shared-table.jpg"
+            alt="Family and friends sharing a plant-based Indian meal around a courtyard table"
+            fill
+            sizes="(min-width: 1200px) 1152px, 100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/10" />
+          <div className="relative flex min-h-[360px] max-w-xl flex-col justify-end p-7 sm:min-h-[440px] sm:p-10">
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">
+              Food, people &amp; places
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+              Indian food is more than what lands on the plate
+            </h2>
+            <p className="mt-4 max-w-lg leading-7 text-zinc-200">
+              Discover the markets, shared tables and everyday kitchen knowledge that give plant-based Indian cooking its character.
+            </p>
+            <Link
+              href="/guides"
+              className="mt-6 inline-flex w-fit rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:opacity-95"
+            >
+              Explore the stories and guides →
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid gap-px bg-[var(--border)] md:grid-cols-3">
+          {editorialStories.map((story) => (
+            <Link
+              key={story.title}
+              href={story.href}
+              className="group grid bg-[var(--surface)] sm:grid-cols-[180px_1fr] md:block"
+            >
+              <div className="relative min-h-44 overflow-hidden">
+                <Image
+                  src={story.image}
+                  alt={story.alt}
+                  fill
+                  sizes="(max-width: 768px) 180px, 384px"
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-5">
+                <p className="text-xs font-extrabold uppercase tracking-[0.15em] text-[var(--brand-gold)]/75">
+                  {story.eyebrow}
+                </p>
+                <h3 className="mt-2 text-lg font-extrabold text-[var(--brand-gold)] group-hover:underline">
+                  {story.title}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">
+                  {story.description}
+                </p>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
