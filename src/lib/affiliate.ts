@@ -1,4 +1,4 @@
-export const AMAZON_ASSOCIATES_TAG = "veganmasala21-21";
+export const AMAZON_ASSOCIATES_TAG = "veganmasala03-21";
 export const AWIN_PUBLISHER_ID = "3062927";
 export const ETHICAL_SUPERSTORE_ADVERTISER_ID = "3651";
 export const ETHICAL_SUPERSTORE_URL = "https://www.ethicalsuperstore.com/";
