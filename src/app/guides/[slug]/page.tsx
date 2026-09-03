@@ -187,6 +187,7 @@ function getRelatedRecipeTags(slug: string) {
     equipment: ["instant-pot", "pressure-cooker", "one-pot", "rice"],
     "seasonal-vegetables-for-indian-cooking": ["vegetable", "potato", "cauliflower", "spinach", "curry"],
     "low-waste-vegan-indian-kitchen": ["one-pot", "dal", "rice", "potato", "chickpea"],
+    "regional-indian-cooking": ["dal", "chickpea", "rice", "potato", "street food", "curry"],
     "weekly-vegan-indian-grocery-list": ["easy", "dal", "chana", "rice", "tofu", "vegetable"],
   };
 
@@ -305,7 +306,42 @@ function renderBlock(body: string) {
   }
 
   for (const line of lines) {
+    const mapMatch = line.match(/^\[MAP:\s*(.+?)\s*\|\s*(.+?)\s*\|\s*(.+?)\]$/i);
     const cardMatch = line.match(/^\[CARD:\s*(.+?)\s*\|\s*(.+?)\s*\|\s*(.+?)\]$/i);
+
+    if (mapMatch) {
+      flushAll();
+
+      out.push(
+        <figure
+          key={`map-${out.length}`}
+          className="mt-5 grid overflow-hidden rounded-2xl border border-[var(--brand-gold)]/35 bg-gradient-to-br from-[#101a1f] to-black/30 sm:grid-cols-[minmax(220px,0.85fr)_1.15fr] sm:items-center"
+        >
+          <div className="relative min-h-64 border-b border-[var(--brand-gold)]/25 p-5 sm:border-b-0 sm:border-r">
+            <Image
+              src={mapMatch[2].trim()}
+              alt={`${mapMatch[1].trim()} highlighted on a map of India`}
+              fill
+              sizes="(max-width: 640px) 100vw, 40vw"
+              className="object-contain p-4"
+            />
+          </div>
+          <figcaption className="p-6">
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
+              Regional orientation
+            </p>
+            <h3 className="mt-2 text-xl font-extrabold text-[var(--brand-gold)]">
+              {mapMatch[1].trim()}
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-[var(--text-soft)]">
+              {mapMatch[3].trim()}
+            </p>
+          </figcaption>
+        </figure>
+      );
+
+      continue;
+    }
 
     if (cardMatch) {
       flushPara();
