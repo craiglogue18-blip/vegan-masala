@@ -176,14 +176,40 @@ export default async function GrowthDashboardPage() {
         </article>
       </section>
 
+      <section className="mt-8 grid gap-6 xl:grid-cols-2">
+        <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Affiliate traffic sources</h2>
+          <p className="mt-2 text-sm text-[var(--text-soft)]">Where visitors were immediately before clicking an affiliate recommendation.</p>
+          <div className="mt-5 space-y-3">
+            {data.topAffiliateSources.length ? data.topAffiliateSources.map((item) => (
+              <div key={item.label} className="flex justify-between gap-4 text-sm"><span className="text-[var(--text-soft)]">{titleCase(item.label)}</span><strong className="text-[var(--brand-gold)]">{item.count}</strong></div>
+            )) : <Empty>No affiliate source data is available yet.</Empty>}
+          </div>
+        </article>
+        <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Pages generating affiliate clicks</h2>
+          <p className="mt-2 text-sm text-[var(--text-soft)]">The site pages that led visitors to affiliate partners.</p>
+          <div className="mt-5 space-y-3">
+            {data.topAffiliatePages.length ? data.topAffiliatePages.map((item) => (
+              <div key={item.label} className="flex justify-between gap-4 text-sm"><span className="truncate text-[var(--text-soft)]">{item.label}</span><strong className="text-[var(--brand-gold)]">{item.count}</strong></div>
+            )) : <Empty>No affiliate page data is available yet.</Empty>}
+          </div>
+        </article>
+      </section>
+
       <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Services and usage</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Connection checks never display secret keys. Recraft&apos;s balance is read directly without consuming generation credits.</p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
           <div className="rounded-xl bg-black/15 p-4">
             <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">Recraft API</p>
             <p className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">{data.services.recraft.credits === null ? "—" : number(data.services.recraft.credits)}</p>
             <p className="mt-1 text-sm text-[var(--text-soft)]">{data.services.recraft.credits === null ? data.services.recraft.error || "Token not configured" : "API units remaining"}</p>
+          </div>
+          <div className="rounded-xl bg-black/15 p-4">
+            <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">Kit subscribers</p>
+            <p className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">{data.services.kit.activeSubscribers === null ? "—" : number(data.services.kit.activeSubscribers)}</p>
+            <p className="mt-1 text-sm text-[var(--text-soft)]">{data.services.kit.newSubscribers === null ? data.services.kit.error || "API key not configured" : `${number(data.services.kit.newSubscribers)} new in 28 days · ${delta(data.services.kit.newSubscribers, data.services.kit.previousNewSubscribers ?? 0)}`}</p>
           </div>
           <div className="rounded-xl bg-black/15 p-4">
             <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">OpenAI API</p>
@@ -204,7 +230,7 @@ export default async function GrowthDashboardPage() {
 
         <h3 className="mt-7 text-lg font-extrabold text-[var(--brand-gold)]">Reporting connections still needed</h3>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Kit subscribers</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Not connected yet. Add Kit reporting credentials later to show subscriber totals, growth and form conversion.</p></div>
+          {!data.services.kit.configured && <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Kit subscribers</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Add a private Kit V4 API key to show active subscribers and 28-day growth.</p></div>}
           <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Amazon and Awin sales</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Click tracking is active. Confirmed orders and commission require reporting access or periodic imports from the partner dashboards.</p></div>
         </div>
       </section>

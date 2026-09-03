@@ -107,14 +107,56 @@ async function getRecraftBalance() {
   }
 }
 
+async function getKitSubscriberCount(createdAfter?: string, createdBefore?: string) {
+  const apiKey = process.env.KIT_API_KEY?.trim();
+  if (!apiKey) return { configured: false, count: null, error: null };
+
+  try {
+    const url = new URL("https://api.kit.com/v4/subscribers");
+    url.searchParams.set("include_total_count", "true");
+    url.searchParams.set("per_page", "1");
+    url.searchParams.set("slim", "true");
+    url.searchParams.set("status", "active");
+    if (createdAfter) url.searchParams.set("created_after", createdAfter);
+    if (createdBefore) url.searchParams.set("created_before", createdBefore);
+
+    const response = await fetch(url, {
+      headers: { "X-Kit-Api-Key": apiKey },
+      cache: "no-store",
+      signal: AbortSignal.timeout(8_000),
+    });
+    if (!response.ok) return { configured: true, count: null, error: "Kit reporting request failed" };
+
+    const payload = (await response.json()) as {
+      total_count?: unknown;
+      pagination?: { total_count?: unknown };
+    };
+    const count = Number(payload.total_count ?? payload.pagination?.total_count);
+    return {
+      configured: true,
+      count: Number.isFinite(count) ? count : null,
+      error: Number.isFinite(count) ? null : "Kit did not return a subscriber total",
+    };
+  } catch {
+    return { configured: true, count: null, error: "Kit reporting is temporarily unavailable" };
+  }
+}
+
 export async function getGrowthDashboard() {
-  const [search, current, previous, queue, trending, recraft] = await Promise.all([
+  const now = new Date();
+  const currentStart = new Date(now.getTime() - 28 * DAY_MS).toISOString().slice(0, 10);
+  const previousStart = new Date(now.getTime() - 56 * DAY_MS).toISOString().slice(0, 10);
+  const today = now.toISOString().slice(0, 10);
+  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious] = await Promise.all([
     getGscPerformanceSnapshot({ rowLimit: 8 }),
     engagementWindow(28),
     engagementWindow(28, 28),
     allQueueItems().catch(() => []),
     getTrendingRecipesWithCounts(8).catch(() => []),
     getRecraftBalance(),
+    getKitSubscriberCount(),
+    getKitSubscriberCount(currentStart, today),
+    getKitSubscriberCount(previousStart, currentStart),
   ]);
 
   const currentEvents = {
@@ -161,6 +203,13 @@ export async function getGrowthDashboard() {
     social,
     services: {
       recraft,
+      kit: {
+        configured: kitTotal.configured,
+        activeSubscribers: kitTotal.count,
+        newSubscribers: kitCurrent.count,
+        previousNewSubscribers: kitPrevious.count,
+        error: kitTotal.error || kitCurrent.error || kitPrevious.error,
+      },
       openAi: {
         configured: Boolean(process.env.OPENAI_API_KEY?.trim()),
         usageConnected: Boolean(process.env.OPENAI_ADMIN_KEY?.trim()),
