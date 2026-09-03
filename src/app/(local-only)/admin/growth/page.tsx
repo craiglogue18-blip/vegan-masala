@@ -11,6 +11,14 @@ function percent(value: number) {
   return `${(value * 100).toFixed(1)}%`;
 }
 
+function money(value: number, currency: string) {
+  try {
+    return new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(value);
+  } catch {
+    return `${currency} ${value.toFixed(2)}`;
+  }
+}
+
 function delta(current: number, previous: number) {
   if (!previous) return current ? "New activity" : "No change";
   const change = ((current - previous) / previous) * 100;
@@ -143,6 +151,29 @@ export default async function GrowthDashboardPage() {
         </article>
       </section>
 
+      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
+        <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Awin performance</h2>
+        <p className="mt-2 text-sm text-[var(--text-soft)]">Verified partner transactions from Awin during the latest 28 days.</p>
+        {data.services.awin.error ? <div className="mt-5"><Empty>{data.services.awin.error}</Empty></div> : (
+          <>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <Metric label="Transactions" value={number(data.services.awin.current.transactions)} note={delta(data.services.awin.current.transactions, data.services.awin.previous.transactions)} />
+              <Metric label="Sales value" value={money(data.services.awin.current.saleValue, data.services.awin.current.currency)} note="Before returns or validation" />
+              <Metric label="Commission" value={money(data.services.awin.current.commission, data.services.awin.current.currency)} note="Pending and approved combined" />
+              <Metric label="Status" value={`${data.services.awin.current.approved} / ${data.services.awin.current.pending}`} note={`Approved / pending · ${data.services.awin.current.declined} declined`} />
+            </div>
+            <div className="mt-5 space-y-3">
+              {data.services.awin.current.advertisers.length ? data.services.awin.current.advertisers.map((item) => (
+                <div key={item.name} className="flex flex-wrap justify-between gap-3 border-b border-[var(--border)] pb-3 text-sm">
+                  <span className="font-bold text-[var(--text)]">{item.name}</span>
+                  <span className="text-[var(--text-soft)]">{item.transactions} transaction{item.transactions === 1 ? "" : "s"} · {money(item.commission, data.services.awin.current.currency)} commission</span>
+                </div>
+              )) : <Empty>No Awin transactions were reported in this window.</Empty>}
+            </div>
+          </>
+        )}
+      </section>
+
       <section className="mt-8 grid gap-6 xl:grid-cols-3">
         <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Affiliate interest</h2>
@@ -231,7 +262,7 @@ export default async function GrowthDashboardPage() {
         <h3 className="mt-7 text-lg font-extrabold text-[var(--brand-gold)]">Reporting connections still needed</h3>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {!data.services.kit.configured && <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Kit subscribers</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Add a private Kit V4 API key to show active subscribers and 28-day growth.</p></div>}
-          <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Amazon and Awin sales</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Click tracking is active. Confirmed orders and commission require reporting access or periodic imports from the partner dashboards.</p></div>
+          <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Amazon sales</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Click tracking is active. Confirmed orders and commission require reporting access or periodic imports from Amazon Associates.</p></div>
         </div>
       </section>
     </main>

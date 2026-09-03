@@ -18,6 +18,14 @@ type EngagementRow = {
   count: number;
 };
 
+type AwinAmount = { amount?: unknown; currency?: unknown };
+type AwinTransaction = {
+  advertiserName?: unknown;
+  commissionStatus?: unknown;
+  commissionAmount?: AwinAmount;
+  saleAmount?: AwinAmount;
+};
+
 function redisClient() {
   const url = process.env.KV_REST_API_URL?.trim();
   const token = process.env.KV_REST_API_TOKEN?.trim();
@@ -142,12 +150,95 @@ async function getKitSubscriberCount(createdAfter?: string, createdBefore?: stri
   }
 }
 
+function awinAmount(value: AwinAmount | undefined) {
+  const amount = Number(value?.amount);
+  return Number.isFinite(amount) ? amount : 0;
+}
+
+async function getAwinTransactions(offsetDays = 0) {
+  const token = process.env.AWIN_API_TOKEN?.trim();
+  const publisherId = process.env.AWIN_PUBLISHER_ID?.trim();
+  if (!token || !publisherId) {
+    return { configured: false, transactions: [] as AwinTransaction[], error: null };
+  }
+
+  const end = new Date(Date.now() - offsetDays * DAY_MS);
+  const start = new Date(end.getTime() - 28 * DAY_MS);
+  const timestamp = (date: Date, endOfDay = false) =>
+    `${date.toISOString().slice(0, 10)}T${endOfDay ? "23:59:59" : "00:00:00"}`;
+  const url = new URL(`https://api.awin.com/publishers/${encodeURIComponent(publisherId)}/transactions/`);
+  url.searchParams.set("startDate", timestamp(start));
+  url.searchParams.set("endDate", timestamp(end, true));
+  url.searchParams.set("timezone", "Europe/London");
+
+  try {
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!response.ok) {
+      return {
+        configured: true,
+        transactions: [] as AwinTransaction[],
+        error: `Awin reporting request failed (${response.status})`,
+      };
+    }
+    const payload = (await response.json()) as unknown;
+    const transactions = Array.isArray(payload)
+      ? payload
+      : Array.isArray((payload as { transactions?: unknown })?.transactions)
+        ? (payload as { transactions: AwinTransaction[] }).transactions
+        : [];
+    return { configured: true, transactions: transactions as AwinTransaction[], error: null };
+  } catch {
+    return {
+      configured: true,
+      transactions: [] as AwinTransaction[],
+      error: "Awin reporting is temporarily unavailable",
+    };
+  }
+}
+
+function summariseAwin(transactions: AwinTransaction[]) {
+  const status = (value: unknown) => String(value || "unknown").toLowerCase();
+  const advertisers = new Map<string, { transactions: number; commission: number }>();
+  let saleValue = 0;
+  let commission = 0;
+  let currency = "GBP";
+
+  for (const transaction of transactions) {
+    saleValue += awinAmount(transaction.saleAmount);
+    commission += awinAmount(transaction.commissionAmount);
+    currency = String(transaction.commissionAmount?.currency || transaction.saleAmount?.currency || currency);
+    const name = String(transaction.advertiserName || "Unknown advertiser");
+    const current = advertisers.get(name) ?? { transactions: 0, commission: 0 };
+    current.transactions += 1;
+    current.commission += awinAmount(transaction.commissionAmount);
+    advertisers.set(name, current);
+  }
+
+  return {
+    transactions: transactions.length,
+    approved: transactions.filter((item) => status(item.commissionStatus) === "approved").length,
+    pending: transactions.filter((item) => status(item.commissionStatus) === "pending").length,
+    declined: transactions.filter((item) => status(item.commissionStatus) === "declined").length,
+    saleValue,
+    commission,
+    currency,
+    advertisers: [...advertisers.entries()]
+      .map(([name, values]) => ({ name, ...values }))
+      .sort((a, b) => b.commission - a.commission || b.transactions - a.transactions)
+      .slice(0, 8),
+  };
+}
+
 export async function getGrowthDashboard() {
   const now = new Date();
   const currentStart = new Date(now.getTime() - 28 * DAY_MS).toISOString().slice(0, 10);
   const previousStart = new Date(now.getTime() - 56 * DAY_MS).toISOString().slice(0, 10);
   const today = now.toISOString().slice(0, 10);
-  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious] = await Promise.all([
+  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious] = await Promise.all([
     getGscPerformanceSnapshot({ rowLimit: 8 }),
     engagementWindow(28),
     engagementWindow(28, 28),
@@ -157,6 +248,8 @@ export async function getGrowthDashboard() {
     getKitSubscriberCount(),
     getKitSubscriberCount(currentStart, today),
     getKitSubscriberCount(previousStart, currentStart),
+    getAwinTransactions(),
+    getAwinTransactions(28),
   ]);
 
   const currentEvents = {
@@ -209,6 +302,12 @@ export async function getGrowthDashboard() {
         newSubscribers: kitCurrent.count,
         previousNewSubscribers: kitPrevious.count,
         error: kitTotal.error || kitCurrent.error || kitPrevious.error,
+      },
+      awin: {
+        configured: awinCurrent.configured,
+        current: summariseAwin(awinCurrent.transactions),
+        previous: summariseAwin(awinPrevious.transactions),
+        error: awinCurrent.error || awinPrevious.error,
       },
       openAi: {
         configured: Boolean(process.env.OPENAI_API_KEY?.trim()),
