@@ -1,7 +1,16 @@
+import Image from "next/image";
 import AffiliateLink from "@/components/AffiliateLink";
 import { ethicalSuperstoreAffiliateUrl } from "@/lib/affiliate";
 
-const partners = [
+type ShoppingPartner = {
+  name: string;
+  description: string;
+  url?: string;
+  network: string;
+  logo?: string;
+};
+
+const configuredPartners: ShoppingPartner[] = [
   {
     name: "Ethical Superstore",
     description: "Vegan cupboard ingredients and ethical household essentials.",
@@ -9,6 +18,7 @@ const partners = [
       process.env.NEXT_PUBLIC_ETHICAL_SUPERSTORE_AFFILIATE_URL ||
       ethicalSuperstoreAffiliateUrl("meal-planner-shopping"),
     network: "Awin",
+    logo: "/images/affiliates/ethical-superstore-logo.png",
   },
   {
     name: "Abel & Cole",
@@ -28,7 +38,11 @@ const partners = [
     url: process.env.NEXT_PUBLIC_NINJA_AFFILIATE_URL,
     network: "Ninja Kitchen",
   },
-].filter((partner): partner is typeof partner & { url: string } => Boolean(partner.url));
+];
+
+const partners = configuredPartners.filter(
+  (partner): partner is ShoppingPartner & { url: string } => Boolean(partner.url),
+);
 
 export default function ShoppingAffiliatePartners() {
   if (partners.length === 0) return null;
@@ -46,7 +60,19 @@ export default function ShoppingAffiliatePartners() {
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {partners.map((partner) => (
           <div key={partner.name} className="flex flex-col rounded-xl border border-[var(--border)] bg-black/20 p-4">
-            <p className="font-extrabold text-white">{partner.name}</p>
+            {partner.logo ? (
+              <div className="mb-3 flex min-h-16 items-center justify-center rounded-xl bg-white px-4 py-3">
+                <Image
+                  src={partner.logo}
+                  alt={`${partner.name} logo`}
+                  width={274}
+                  height={114}
+                  className="h-10 w-auto object-contain"
+                />
+              </div>
+            ) : (
+              <p className="font-extrabold text-white">{partner.name}</p>
+            )}
             <p className="mt-1 flex-1 text-sm leading-6 text-[var(--text-soft)]">{partner.description}</p>
             <AffiliateLink
               href={partner.url}

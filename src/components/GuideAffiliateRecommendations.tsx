@@ -1,5 +1,7 @@
+import Image from "next/image";
 import AffiliateCard from "@/components/AffiliateCard";
-import { amazonUkSearchUrl } from "@/lib/affiliate";
+import AffiliateLink from "@/components/AffiliateLink";
+import { amazonUkSearchUrl, ethicalSuperstoreAffiliateUrl } from "@/lib/affiliate";
 
 type Recommendation = {
   title: string;
@@ -82,9 +84,19 @@ const recommendationsByGuide: Record<string, Recommendation[]> = {
   ],
 };
 
+const ethicalSuperstoreGuides: Record<string, string> = {
+  "vegan-indian-pantry-staples":
+    "Browse vegan cupboard staples and thoughtfully sourced ingredients for building your Indian pantry.",
+  "seasonal-vegetables-for-indian-cooking":
+    "Explore organic groceries and ethical kitchen essentials to complement your seasonal cooking.",
+  "low-waste-vegan-indian-kitchen":
+    "Browse ethical household, refill and cupboard options that can support a lower-waste kitchen.",
+};
+
 export default function GuideAffiliateRecommendations({ slug }: { slug: string }) {
   const recommendations = recommendationsByGuide[slug] ?? [];
-  if (!recommendations.length) return null;
+  const ethicalDescription = ethicalSuperstoreGuides[slug];
+  if (!recommendations.length && !ethicalDescription) return null;
 
   return (
     <section className="mt-10 rounded-3xl border border-[var(--brand-gold)]/35 bg-[var(--surface)]/95 p-6 shadow-sm sm:p-8">
@@ -95,11 +107,11 @@ export default function GuideAffiliateRecommendations({ slug }: { slug: string }
         Useful tools for this guide
       </h2>
       <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">
-        These optional Amazon UK links are selected for the task explained above. We may
-        earn a commission from qualifying purchases at no extra cost to you.
+        These optional shopping links are selected for the guide above. We may earn a
+        commission from qualifying purchases at no extra cost to you.
       </p>
 
-      <div className="mt-6 grid gap-5 md:grid-cols-2">
+      {recommendations.length > 0 && <div className="mt-6 grid gap-5 md:grid-cols-2">
         {recommendations.map((item) => (
           <article
             key={item.title}
@@ -113,7 +125,37 @@ export default function GuideAffiliateRecommendations({ slug }: { slug: string }
             />
           </article>
         ))}
-      </div>
+      </div>}
+
+      {ethicalDescription && (
+        <article className="mt-6 grid gap-5 overflow-hidden rounded-2xl border border-[#2bafe3]/45 bg-gradient-to-br from-white to-[#eaf8fd] p-5 text-slate-900 sm:grid-cols-[180px_1fr] sm:items-center">
+          <div className="flex min-h-24 items-center justify-center rounded-xl bg-white p-4 shadow-sm">
+            <Image
+              src="/images/affiliates/ethical-superstore-logo.png"
+              alt="Ethical Superstore logo"
+              width={274}
+              height={114}
+              className="h-auto w-full max-w-[170px] object-contain"
+            />
+          </div>
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#087cac]">
+              Affiliate partner
+            </p>
+            <h3 className="mt-1 text-xl font-extrabold">Shop with Ethical Superstore</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-700">{ethicalDescription}</p>
+            <AffiliateLink
+              href={ethicalSuperstoreAffiliateUrl(`guide-${slug}`)}
+              title="Ethical Superstore"
+              category={`Guide: ${slug}`}
+              network="Awin"
+              className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#087cac] px-5 py-2 text-sm font-extrabold text-white transition hover:bg-[#06678f]"
+            >
+              Visit Ethical Superstore →
+            </AffiliateLink>
+          </div>
+        </article>
+      )}
     </section>
   );
 }
