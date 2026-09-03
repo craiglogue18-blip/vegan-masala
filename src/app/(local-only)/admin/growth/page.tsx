@@ -184,6 +184,7 @@ export default async function GrowthDashboardPage() {
               <p className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">{item.followers === null ? "—" : number(item.followers)}</p>
               <p className="text-xs text-[var(--text-soft)]">{item.followers === null ? "Followers unavailable" : "Followers"}</p>
               {item.impressions !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.impressions)} impressions · {number(item.outboundClicks ?? 0)} outbound clicks</p>}
+              {item.views !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.views)} views in the latest 28 days</p>}
               {item.content !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.content)} published items</p>}
               {item.error && <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">{item.error}</p>}
             </div>

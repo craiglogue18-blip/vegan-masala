@@ -9,7 +9,11 @@ export async function GET() {
       access_type: "offline",
       prompt: "consent",
       include_granted_scopes: true,
-      scope: ["https://www.googleapis.com/auth/youtube.upload"],
+      scope: [
+        "https://www.googleapis.com/auth/youtube.upload",
+        "https://www.googleapis.com/auth/youtube.readonly",
+        "https://www.googleapis.com/auth/yt-analytics.readonly",
+      ],
       state,
     });
     const response = NextResponse.redirect(url);

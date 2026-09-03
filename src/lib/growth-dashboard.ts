@@ -6,6 +6,7 @@ import { allQueueItems } from "@/lib/social/core/queue";
 import { getTrendingRecipesWithCounts } from "@/lib/trending";
 import { getPinterestAccessToken } from "@/lib/social/core/pinterestToken";
 import { getTikTokAccessToken } from "@/lib/social/core/tiktokAuth";
+import { youtubeOauthClient, youtubeRefreshToken } from "@/lib/social/core/youtubeAuth";
 
 const DAY_MS = 86_400_000;
 
@@ -241,6 +242,7 @@ type SocialSnapshot = {
   content: number | null;
   impressions: number | null;
   outboundClicks: number | null;
+  views: number | null;
   error: string | null;
 };
 
@@ -250,6 +252,7 @@ const emptySocial = (configured: boolean, error: string | null = null): SocialSn
   content: null,
   impressions: null,
   outboundClicks: null,
+  views: null,
   error,
 });
 
@@ -320,12 +323,59 @@ async function getTikTokAudience(): Promise<SocialSnapshot> {
   }
 }
 
+async function getYouTubePerformance(): Promise<SocialSnapshot> {
+  const configured = Boolean(process.env.YOUTUBE_CLIENT_ID && process.env.YOUTUBE_CLIENT_SECRET);
+  if (!configured) return emptySocial(false);
+  try {
+    const refreshToken = await youtubeRefreshToken();
+    if (!refreshToken) return emptySocial(true, "OAuth approval still needed");
+    const client = youtubeOauthClient();
+    client.setCredentials({ refresh_token: refreshToken });
+    const access = await client.getAccessToken();
+    const token = access.token;
+    if (!token) return emptySocial(true, "YouTube access token unavailable");
+
+    const end = new Date();
+    const start = new Date(end.getTime() - 28 * DAY_MS);
+    const headers = { Authorization: `Bearer ${token}` };
+    const channelUrl = new URL("https://www.googleapis.com/youtube/v3/channels");
+    channelUrl.searchParams.set("part", "statistics");
+    channelUrl.searchParams.set("mine", "true");
+    const analyticsUrl = new URL("https://youtubeanalytics.googleapis.com/v2/reports");
+    analyticsUrl.searchParams.set("ids", "channel==MINE");
+    analyticsUrl.searchParams.set("startDate", start.toISOString().slice(0, 10));
+    analyticsUrl.searchParams.set("endDate", end.toISOString().slice(0, 10));
+    analyticsUrl.searchParams.set("metrics", "views,estimatedMinutesWatched,subscribersGained");
+
+    const [channelResponse, analyticsResponse] = await Promise.all([
+      fetch(channelUrl, { headers, cache: "no-store", signal: AbortSignal.timeout(8_000) }),
+      fetch(analyticsUrl, { headers, cache: "no-store", signal: AbortSignal.timeout(8_000) }),
+    ]);
+    if (!channelResponse.ok) return emptySocial(true, "YouTube channel reporting permission is still needed");
+    const channel = (await channelResponse.json()) as { items?: Array<{ statistics?: Record<string, unknown> }> };
+    const statistics = channel.items?.[0]?.statistics ?? {};
+    let views = Number(statistics.viewCount) || 0;
+    if (analyticsResponse.ok) {
+      const analytics = (await analyticsResponse.json()) as { rows?: unknown[][] };
+      views = Number(analytics.rows?.[0]?.[0]) || 0;
+    }
+    return {
+      ...emptySocial(true),
+      followers: Number(statistics.subscriberCount) || 0,
+      content: Number(statistics.videoCount) || 0,
+      views,
+    };
+  } catch {
+    return emptySocial(true, "YouTube reporting is temporarily unavailable; reconnect OAuth if this persists");
+  }
+}
+
 export async function getGrowthDashboard() {
   const now = new Date();
   const currentStart = new Date(now.getTime() - 28 * DAY_MS).toISOString().slice(0, 10);
   const previousStart = new Date(now.getTime() - 56 * DAY_MS).toISOString().slice(0, 10);
   const today = now.toISOString().slice(0, 10);
-  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience] = await Promise.all([
+  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience, youtubePerformance] = await Promise.all([
     getGscPerformanceSnapshot({ rowLimit: 8 }),
     engagementWindow(28),
     engagementWindow(28, 28),
@@ -340,6 +390,7 @@ export async function getGrowthDashboard() {
     getMetaAudience(),
     getPinterestPerformance(),
     getTikTokAudience(),
+    getYouTubePerformance(),
   ]);
 
   const currentEvents = {
@@ -404,6 +455,7 @@ export async function getGrowthDashboard() {
         instagram: metaAudience.instagram,
         pinterest: pinterestPerformance,
         tiktok: tiktokAudience,
+        youtube: youtubePerformance,
       },
       openAi: {
         configured: Boolean(process.env.OPENAI_API_KEY?.trim()),
