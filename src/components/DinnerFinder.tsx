@@ -68,18 +68,19 @@ export default function DinnerFinder({ recipes }: Props) {
   return (
     <section
       id="dinner-finder"
-      className="scroll-mt-28 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-lg"
+      className="scroll-mt-28 overflow-hidden rounded-3xl border border-[var(--brand-gold)]/25 bg-[var(--surface)] shadow-lg"
     >
       <div className="grid lg:grid-cols-[0.72fr_1.28fr]">
-        <div className="relative overflow-hidden bg-[var(--brand-red)] p-7 text-white sm:p-9">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full border-[38px] border-white/10" />
-          <p className="relative text-xs font-extrabold uppercase tracking-[0.2em] text-white/75">
+        <div className="relative overflow-hidden border-b border-[var(--brand-gold)]/20 bg-gradient-to-br from-[#172129] via-[#111a20] to-[#0b1217] p-7 text-[var(--text)] lg:border-b-0 lg:border-r sm:p-9">
+          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full border-[38px] border-[var(--brand-gold)]/5" />
+          <div className="pointer-events-none absolute -bottom-24 -left-20 h-52 w-52 rounded-full bg-[var(--brand-gold)]/5 blur-3xl" />
+          <p className="relative text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]/70">
             Tonight, sorted
           </p>
-          <h2 className="relative mt-3 text-3xl font-extrabold leading-tight">
+          <h2 className="relative mt-3 text-3xl font-extrabold leading-tight text-[var(--brand-gold)]">
             What should I cook?
           </h2>
-          <p className="relative mt-3 max-w-md leading-7 text-white/85">
+          <p className="relative mt-3 max-w-md leading-7 text-[var(--text-soft)]">
             Tell us what kind of evening you are having. We’ll find three recipes
             from the Vegan Masala kitchen—instantly.
           </p>
@@ -93,7 +94,7 @@ export default function DinnerFinder({ recipes }: Props) {
               <select
                 value={ingredient}
                 onChange={(event) => setIngredient(event.target.value)}
-                className="w-full rounded-xl border border-white/25 bg-black/20 px-4 py-3 font-bold text-white outline-none focus:border-white"
+                className="w-full rounded-xl border border-[var(--brand-gold)]/30 bg-black/20 px-4 py-3 font-bold text-[var(--text)] outline-none transition focus:border-[var(--brand-gold)]/70"
               >
                 <option className="text-black" value="any">Anything</option>
                 <option className="text-black" value="chickpea">Chickpeas</option>
@@ -131,7 +132,7 @@ export default function DinnerFinder({ recipes }: Props) {
                 <div className="relative h-36 bg-black/20">
                   <Image src={recipe.image} alt={recipe.title} fill className="object-cover transition duration-500 group-hover:scale-105" sizes="(max-width: 640px) 100vw, 220px" />
                   {index === 0 ? (
-                    <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-wide text-white">
+                    <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-gold)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-wide text-[#111820] shadow-sm">
                       Best match
                     </span>
                   ) : null}
@@ -177,8 +178,8 @@ function ChoiceGroup({ label, value, options, onChange }: { label: string; value
             onClick={() => onChange(option.value)}
             className={`rounded-full border px-3 py-2 text-xs font-extrabold transition ${
               value === option.value
-                ? "border-white bg-white text-[var(--brand-red)]"
-                : "border-white/25 bg-black/15 text-white hover:border-white/60"
+                ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-[#111820] shadow-sm"
+                : "border-[var(--brand-gold)]/25 bg-black/15 text-[var(--text-soft)] hover:border-[var(--brand-gold)]/60 hover:text-[var(--text)]"
             }`}
           >
             {option.label}
