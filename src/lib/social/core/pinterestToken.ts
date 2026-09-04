@@ -58,7 +58,7 @@ function isAccessTokenStillFresh(token: PinterestTokenData | null) {
   return expiresAt - now > 60_000;
 }
 
-export async function savePinterestToken(data: any) {
+export async function savePinterestToken(data: PinterestTokenData) {
   const redis = getRedis();
 
   const tokenToSave: PinterestTokenData = {
@@ -112,7 +112,7 @@ export async function refreshPinterestAccessToken() {
     body: new URLSearchParams({
       grant_type: "refresh_token",
       refresh_token: refreshToken,
-      scope: "boards:read,boards:write,pins:read,pins:write",
+      scope: "boards:read,boards:write,pins:read,pins:write,user_accounts:read",
     }).toString(),
     cache: "no-store",
   });

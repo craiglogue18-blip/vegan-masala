@@ -52,6 +52,8 @@ export function DinnerPlanSignupForm() {
           autoComplete="email"
           required
           onFocus={markStarted}
+          onInput={markStarted}
+          onPointerDown={markStarted}
           placeholder="you@example.com"
           className="min-h-12 flex-1 rounded-xl border border-[var(--border)] bg-black/35 px-4 text-white outline-none placeholder:text-white/45 focus:border-[var(--brand-gold)]"
         />

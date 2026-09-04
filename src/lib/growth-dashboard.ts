@@ -184,6 +184,27 @@ async function getOpenAICosts() {
   }
 }
 
+type AmazonReport = {
+  importedAt: string;
+  filename: string;
+  rows: number;
+  orderedItems: number;
+  shippedItems: number;
+  revenue: number;
+  earnings: number;
+  currency: string;
+};
+
+async function getAmazonReport() {
+  const redis = redisClient();
+  if (!redis) return null;
+  try {
+    return await redis.get<AmazonReport>("growth:amazon-associates:latest");
+  } catch {
+    return null;
+  }
+}
+
 async function getKitSubscriberCount(createdAfter?: string, createdBefore?: string) {
   const apiKey = process.env.KIT_API_KEY?.trim();
   if (!apiKey) return { configured: false, count: null, error: null };
@@ -361,12 +382,37 @@ async function getPinterestPerformance(): Promise<SocialSnapshot> {
     url.searchParams.set("start_date", start.toISOString().slice(0, 10));
     url.searchParams.set("end_date", end.toISOString().slice(0, 10));
     url.searchParams.set("metric_types", "IMPRESSION,OUTBOUND_CLICK");
-    const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store", signal: AbortSignal.timeout(8_000) });
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await fetch(url, { headers, cache: "no-store", signal: AbortSignal.timeout(8_000) });
     if (!response.ok) return emptySocial(true, "Connected for publishing; analytics permission is still needed");
     const payload = (await response.json()) as { all?: { daily_metrics?: Array<{ metrics?: Record<string, unknown> }> } };
     const daily = payload.all?.daily_metrics ?? [];
     const sum = (metric: string) => daily.reduce((total, row) => total + (Number(row.metrics?.[metric]) || 0), 0);
-    return { ...emptySocial(true), impressions: sum("IMPRESSION"), outboundClicks: sum("OUTBOUND_CLICK") };
+    let followers = 0;
+    let bookmark: string | null = null;
+    let followerReportingAvailable = true;
+    do {
+      const followersUrl = new URL("https://api.pinterest.com/v5/user_account/followers");
+      followersUrl.searchParams.set("page_size", "100");
+      if (bookmark) followersUrl.searchParams.set("bookmark", bookmark);
+      const followerResponse = await fetch(followersUrl, { headers, cache: "no-store", signal: AbortSignal.timeout(8_000) });
+      if (!followerResponse.ok) {
+        followerReportingAvailable = false;
+        break;
+      }
+      const followerPayload = (await followerResponse.json()) as { items?: unknown[]; bookmark?: unknown };
+      followers += followerPayload.items?.length ?? 0;
+      bookmark = typeof followerPayload.bookmark === "string" && followerPayload.bookmark
+        ? followerPayload.bookmark
+        : null;
+    } while (bookmark);
+
+    return {
+      ...emptySocial(true, followerReportingAvailable ? null : "Analytics connected; reconnect Pinterest to add follower reporting"),
+      followers: followerReportingAvailable ? followers : null,
+      impressions: sum("IMPRESSION"),
+      outboundClicks: sum("OUTBOUND_CLICK"),
+    };
   } catch {
     return emptySocial(configured, "Pinterest reporting is temporarily unavailable");
   }
@@ -441,7 +487,7 @@ export async function getGrowthDashboard() {
   const currentStart = new Date(now.getTime() - 28 * DAY_MS).toISOString().slice(0, 10);
   const previousStart = new Date(now.getTime() - 56 * DAY_MS).toISOString().slice(0, 10);
   const today = now.toISOString().slice(0, 10);
-  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience, youtubePerformance, openAiCosts] = await Promise.all([
+  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience, youtubePerformance, openAiCosts, amazonReport] = await Promise.all([
     getGscPerformanceSnapshot({ rowLimit: 8 }),
     engagementWindow(28),
     engagementWindow(28, 28),
@@ -458,6 +504,7 @@ export async function getGrowthDashboard() {
     getTikTokAudience(),
     getYouTubePerformance(),
     getOpenAICosts(),
+    getAmazonReport(),
   ]);
 
   const currentEvents = {
@@ -517,6 +564,7 @@ export async function getGrowthDashboard() {
         previous: summariseAwin(awinPrevious.transactions),
         error: awinCurrent.error || awinPrevious.error,
       },
+      amazon: amazonReport,
       socialPerformance: {
         facebook: metaAudience.facebook,
         instagram: metaAudience.instagram,

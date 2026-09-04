@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getGrowthDashboard } from "@/lib/growth-dashboard";
+import { AmazonReportImport } from "@/components/admin/AmazonReportImport";
 
 export const dynamic = "force-dynamic";
 
@@ -286,7 +287,19 @@ export default async function GrowthDashboardPage() {
         <h3 className="mt-7 text-lg font-extrabold text-[var(--brand-gold)]">Reporting connections still needed</h3>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {!data.services.kit.configured && <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Kit subscribers</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Add a private Kit V4 API key to show active subscribers and 28-day growth.</p></div>}
-          <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Amazon sales</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Click tracking is active. Confirmed orders and commission require reporting access or periodic imports from Amazon Associates.</p></div>
+          <div className="rounded-xl bg-black/15 p-4">
+            <p className="font-bold text-[var(--text)]">Amazon Associates report</p>
+            {data.services.amazon ? (
+              <div className="mt-2 text-sm leading-6 text-[var(--text-soft)]">
+                <p><strong className="text-[var(--brand-gold)]">{number(data.services.amazon.orderedItems)}</strong> ordered · <strong className="text-[var(--brand-gold)]">{number(data.services.amazon.shippedItems)}</strong> shipped</p>
+                <p>{money(data.services.amazon.revenue, data.services.amazon.currency)} revenue · {money(data.services.amazon.earnings, data.services.amazon.currency)} earnings</p>
+                <p className="mt-1 text-xs">Imported {new Date(data.services.amazon.importedAt).toLocaleString("en-GB")}</p>
+              </div>
+            ) : (
+              <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Download an earnings or orders CSV from Amazon Associates and import it here.</p>
+            )}
+            <AmazonReportImport />
+          </div>
         </div>
       </section>
     </main>

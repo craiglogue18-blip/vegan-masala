@@ -4,10 +4,10 @@ import { createOauthState, SOCIAL_OAUTH_COOKIE } from "@/lib/social/core/oauthSt
 export async function GET() {
   const clientId = process.env.PINTEREST_APP_ID;
   const redirectUri = process.env.PINTEREST_REDIRECT_URI;
-  const scopes = process.env.PINTEREST_SCOPES;
+  const scopes = process.env.PINTEREST_SCOPES || "boards:read,boards:write,pins:read,pins:write,user_accounts:read";
   const state = createOauthState("pinterest");
 
-  if (!clientId || !redirectUri || !scopes) {
+  if (!clientId || !redirectUri) {
     return NextResponse.json(
       {
         ok: false,

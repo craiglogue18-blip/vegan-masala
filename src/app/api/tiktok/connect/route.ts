@@ -8,7 +8,7 @@ export async function GET() {
     const url = `https://www.tiktok.com/v2/auth/authorize/?${new URLSearchParams({
       client_key: tiktokClientKey(),
       response_type: "code",
-      scope: "video.publish",
+      scope: "user.info.basic,user.info.stats,video.publish",
       redirect_uri: tiktokRedirectUri(),
       state,
     })}`;

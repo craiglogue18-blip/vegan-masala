@@ -15,6 +15,14 @@ export function recordEngagement(
 ) {
   const body = JSON.stringify({ event, pagePath: window.location.pathname, ...details });
 
+  if (typeof navigator.sendBeacon === "function") {
+    const queued = navigator.sendBeacon(
+      "/api/engagement",
+      new Blob([body], { type: "application/json" }),
+    );
+    if (queued) return;
+  }
+
   void fetch("/api/engagement", {
     method: "POST",
     headers: { "content-type": "application/json" },
