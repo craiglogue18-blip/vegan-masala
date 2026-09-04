@@ -52,7 +52,9 @@ function currencyFrom(rows: string[][]) {
   const joined = rows.flat().join(" ");
   if (joined.includes("£")) return "GBP";
   if (joined.includes("€")) return "EUR";
-  return "USD";
+  // This dashboard imports reports from the Amazon Associates UK account.
+  // Empty reports contain no currency symbol, but are still GBP reports.
+  return "GBP";
 }
 
 export async function POST(request: Request) {

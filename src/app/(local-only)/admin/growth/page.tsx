@@ -294,7 +294,9 @@ export default async function GrowthDashboardPage() {
           </div>
         </div>
 
-        <h3 className="mt-7 text-lg font-extrabold text-[var(--brand-gold)]">Reporting connections still needed</h3>
+        <h3 className="mt-7 text-lg font-extrabold text-[var(--brand-gold)]">
+          {data.services.amazon ? "Manual reporting and imports" : "Reporting connections still needed"}
+        </h3>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {!data.services.kit.configured && <div className="rounded-xl bg-black/15 p-4"><p className="font-bold text-[var(--text)]">Kit subscribers</p><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Add a private Kit V4 API key to show active subscribers and 28-day growth.</p></div>}
           <div className="rounded-xl bg-black/15 p-4">
