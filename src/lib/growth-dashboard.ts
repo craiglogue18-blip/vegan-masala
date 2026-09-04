@@ -199,7 +199,11 @@ async function getAmazonReport() {
   const redis = redisClient();
   if (!redis) return null;
   try {
-    return await redis.get<AmazonReport>("growth:amazon-associates:latest");
+    const report = await redis.get<AmazonReport>("growth:amazon-associates:latest");
+    if (!report) return null;
+    // Reports on this dashboard come from the Amazon Associates UK account.
+    // Correct reports imported before the empty-report GBP fallback was added.
+    return report.currency === "USD" ? { ...report, currency: "GBP" } : report;
   } catch {
     return null;
   }
