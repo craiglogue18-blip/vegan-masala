@@ -356,19 +356,26 @@ async function getMetaAudience() {
     if (!response.ok) throw new Error("permission");
     return response.json() as Promise<Record<string, unknown>>;
   };
-  try {
-    const [facebook, instagram] = await Promise.all([
-      request(pageId, "followers_count,fan_count"),
-      request(igId, "followers_count,media_count"),
-    ]);
-    return {
-      facebook: facebook ? { ...emptySocial(true), followers: Number(facebook.followers_count ?? facebook.fan_count) || 0 } : emptySocial(false),
-      instagram: instagram ? { ...emptySocial(true), followers: Number(instagram.followers_count) || 0, content: Number(instagram.media_count) || 0 } : emptySocial(false),
-    };
-  } catch {
-    const error = "Connected for publishing; audience reporting permission is still needed";
-    return { facebook: emptySocial(Boolean(token && pageId), error), instagram: emptySocial(Boolean(token && igId), error) };
-  }
+  const unavailable = (configured: boolean) => emptySocial(
+    configured,
+    configured ? "Connected for publishing; audience reporting permission is still needed" : null,
+  );
+  const [facebookResult, instagramResult] = await Promise.allSettled([
+    // fan_count is the supported Page audience field. Requesting an unavailable
+    // companion field can make Meta reject the whole response.
+    request(pageId, "fan_count"),
+    request(igId, "followers_count,media_count"),
+  ]);
+  const facebook = facebookResult.status === "fulfilled" ? facebookResult.value : null;
+  const instagram = instagramResult.status === "fulfilled" ? instagramResult.value : null;
+  return {
+    facebook: facebook
+      ? { ...emptySocial(true), followers: Number(facebook.fan_count) || 0 }
+      : unavailable(Boolean(token && pageId)),
+    instagram: instagram
+      ? { ...emptySocial(true), followers: Number(instagram.followers_count) || 0, content: Number(instagram.media_count) || 0 }
+      : unavailable(Boolean(token && igId)),
+  };
 }
 
 async function getPinterestPerformance(): Promise<SocialSnapshot> {

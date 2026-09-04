@@ -188,6 +188,11 @@ export default async function GrowthDashboardPage() {
               {item.views !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.views)} views in the latest 28 days</p>}
               {item.content !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.content)} published items</p>}
               {item.error && <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">{item.error}</p>}
+              {platform === "tiktok" && item.followers === null && (
+                <a href="/api/tiktok/connect" className="mt-3 inline-flex rounded-lg border border-[var(--border)] px-3 py-2 text-xs font-bold text-[var(--brand-gold)] hover:bg-white/5">
+                  Reconnect TikTok
+                </a>
+              )}
             </div>
           ))}
         </div>
@@ -223,6 +228,11 @@ export default async function GrowthDashboardPage() {
           <div className="mt-5 space-y-2 text-xs text-[var(--text-soft)]">
             {data.social.platforms.map((item) => <p key={item.platform} className="flex justify-between"><span>{titleCase(item.platform)}</span><span>{item.posted} posted · {item.queued} queued · {item.failed} failed</span></p>)}
           </div>
+          {data.social.failed > 0 && (
+            <Link href="/admin/social/queue" className="mt-4 inline-flex rounded-lg border border-red-500/30 px-3 py-2 text-xs font-bold text-red-300 hover:bg-red-500/10">
+              Review failed posts
+            </Link>
+          )}
         </article>
       </section>
 
