@@ -12,6 +12,17 @@ type ToolCard = {
 const tools:ToolCard[]=[
 
 {
+title:"Growth Dashboard",
+
+href:"/admin/growth",
+
+description:
+"Track audience, search, email, affiliate and social growth from one combined dashboard.",
+
+cta:"Open growth dashboard"
+},
+
+{
 title:"Health Dashboard",
 
 href:"/admin/social/health",
@@ -104,6 +115,18 @@ Generate assets, build videos and schedule your publishing pipeline.
 
 
 <div className="mt-6 flex flex-wrap gap-3">
+
+<Link
+
+href="/admin/growth"
+
+className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
+
+>
+
+Growth dashboard
+
+</Link>
 
 <Link
 
