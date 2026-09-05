@@ -56,6 +56,17 @@ cta:"Open queue"
 },
 
 {
+title:"Social Automation",
+
+href:"/admin/social/automation",
+
+description:
+"Generate assets and prepare coordinated Pinterest, Instagram and Facebook posts in one workflow.",
+
+cta:"Open automation"
+},
+
+{
 title:"Video Generator",
 
 href:"/admin/social/video",
@@ -163,6 +174,18 @@ className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold 
 >
 
 Generate videos
+
+</Link>
+
+<Link
+
+href="/admin/social/automation"
+
+className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
+
+>
+
+Social automation
 
 </Link>
 

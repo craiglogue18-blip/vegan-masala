@@ -74,16 +74,21 @@ export function DinnerPlanSignupForm() {
 
 export function DinnerPlanConfirmationTracker() {
   useEffect(() => {
-    const signupId = window.localStorage.getItem(DINNER_PLAN_PENDING_KEY);
-    if (!signupId) return;
+    const pendingSignupId = window.localStorage.getItem(DINNER_PLAN_PENDING_KEY);
+    const completedSignupId = window.localStorage.getItem(DINNER_PLAN_COMPLETED_KEY);
+    const signupId = pendingSignupId || completedSignupId || createDinnerPlanSignupId();
 
-    window.__vmDinnerPlanRegistrationRequested = true;
-    window.__vmDinnerPlanRegistrationEventId = signupId;
-    window.dispatchEvent(new Event("vegan-masala:complete-registration"));
-
-    if (window.sessionStorage.getItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY) !== signupId) {
+    if (
+      completedSignupId !== signupId &&
+      window.sessionStorage.getItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY) !== signupId
+    ) {
+      window.__vmDinnerPlanRegistrationRequested = true;
+      window.__vmDinnerPlanRegistrationEventId = signupId;
+      window.dispatchEvent(new Event("vegan-masala:complete-registration"));
       recordEngagement("dinner_plan_confirmed");
       window.sessionStorage.setItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY, signupId);
+      window.localStorage.setItem(DINNER_PLAN_COMPLETED_KEY, signupId);
+      window.localStorage.removeItem(DINNER_PLAN_PENDING_KEY);
     }
   }, []);
 
