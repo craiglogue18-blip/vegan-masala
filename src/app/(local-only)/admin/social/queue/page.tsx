@@ -55,6 +55,16 @@ type PlatformHealth = {
   tiktok?: { configured: boolean; directPostEnabled: boolean; privacyLevel: string };
 };
 
+type WeekPlanItem = {
+  day: number;
+  slug: string;
+  title: string;
+  platform: "instagram" | "pinterest" | "facebook";
+  assetType: QueueAssetType;
+  scheduledFor: string;
+  board?: string;
+};
+
 const STORE_OPTIONS: StoreOption[] = [
   {
     slug: "vegan-indian-sweets-mini-ebook",
@@ -166,6 +176,8 @@ export default function SocialQueuePage() {
   const [slugsLoading, setSlugsLoading] = useState(false);
   const [boardsLoading, setBoardsLoading] = useState(false);
   const [autoQueueLoading, setAutoQueueLoading] = useState(false);
+  const [weekPlan, setWeekPlan] = useState<WeekPlanItem[]>([]);
+  const [weekPlanStartDate, setWeekPlanStartDate] = useState("");
   const [itemActionLoadingId, setItemActionLoadingId] = useState<string | null>(null);
 
   const [log, setLog] = useState("Waiting...");
@@ -545,7 +557,7 @@ export default function SocialQueuePage() {
     }
   }
 
-  async function queueNext7Days() {
+  async function previewNext7Days() {
     if (!board) {
       setLog("Select board first");
       return;
@@ -564,7 +576,7 @@ export default function SocialQueuePage() {
           pinterestBoardId: board,
           startDate: scheduledFor ? scheduledFor.slice(0, 10) : undefined,
           videoPlatform: "instagram",
-          dryRun: false,
+          dryRun: true,
         }),
       });
 
@@ -577,8 +589,9 @@ export default function SocialQueuePage() {
         return;
       }
 
-      setLog(`Queued ${data.count || 0} items for the next 7 days`);
-      await loadQueue();
+      setWeekPlan(Array.isArray(data.plan) ? data.plan : []);
+      setWeekPlanStartDate(data.startDate || "");
+      setLog(`Review ${data.count || 0} planned posts before confirming`);
     } catch (err: any) {
       setLog(err?.message || "Failed to queue 7-day plan");
       setDebugResponse(
@@ -591,6 +604,44 @@ export default function SocialQueuePage() {
           2
         )
       );
+      setShowDebug(true);
+    } finally {
+      setAutoQueueLoading(false);
+    }
+  }
+
+  async function confirmNext7Days() {
+    if (!board || weekPlan.length === 0) return;
+
+    setAutoQueueLoading(true);
+    setDebugResponse("");
+
+    try {
+      const res = await fetch("/api/admin/social/queue/auto-week", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pinterestBoardId: board,
+          startDate: weekPlanStartDate,
+          videoPlatform: "instagram",
+          dryRun: false,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      setDebugResponse(JSON.stringify(data, null, 2));
+
+      if (!res.ok || !data?.ok) {
+        setLog(data?.error || "Failed to queue 7-day plan");
+        setShowDebug(true);
+        return;
+      }
+
+      setWeekPlan([]);
+      setWeekPlanStartDate("");
+      setLog(`Queued ${data.count || 0} items for the next 7 days`);
+      await loadQueue();
+    } catch (err: any) {
+      setLog(err?.message || "Failed to queue 7-day plan");
       setShowDebug(true);
     } finally {
       setAutoQueueLoading(false);
@@ -1354,11 +1405,11 @@ export default function SocialQueuePage() {
 
             <div className="mt-5 flex flex-wrap gap-3">
               <button
-                onClick={() => queueNext7Days()}
+                onClick={() => previewNext7Days()}
                 disabled={queueLoading || autoQueueLoading || !board}
                 className="rounded-xl bg-[var(--brand-gold)] px-6 py-3 font-bold text-black disabled:opacity-50"
               >
-                {autoQueueLoading ? "Queueing 7 days..." : "Queue next 7 days"}
+                {autoQueueLoading ? "Building preview..." : "Preview next 7 days"}
               </button>
 
               <button
@@ -1469,6 +1520,41 @@ export default function SocialQueuePage() {
           </section>
         </div>
       </section>
+
+      {weekPlan.length > 0 ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" role="dialog" aria-modal="true" aria-labelledby="week-plan-title">
+          <div className="flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl">
+            <div className="border-b border-[var(--border)] p-6 sm:p-8">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-gold)]">Review before queueing</p>
+              <h2 id="week-plan-title" className="mt-2 text-2xl font-bold text-white">Next 7 days · {weekPlan.length} posts</h2>
+              <p className="mt-2 text-sm text-[var(--text-soft)]">Nothing has been queued yet. Check the recipes, platforms and publishing times below.</p>
+            </div>
+
+            <div className="overflow-y-auto p-4 sm:p-6">
+              <div className="space-y-2">
+                {weekPlan.map((item) => (
+                  <div key={`${item.day}-${item.platform}-${item.scheduledFor}-${item.slug}`} className="grid gap-2 rounded-xl border border-[var(--border)] bg-black/20 p-4 text-sm sm:grid-cols-[4rem_1fr_8rem_10rem] sm:items-center">
+                    <span className="font-bold text-[var(--brand-gold)]">Day {item.day}</span>
+                    <span className="min-w-0">
+                      <span className="block truncate font-semibold text-white">{item.title}</span>
+                      <span className="block truncate text-xs text-[var(--text-soft)]">{item.slug}</span>
+                    </span>
+                    <span className={`w-fit rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-wider ${platformClasses(item.platform)}`}>{item.platform}</span>
+                    <span className="text-white">{new Date(item.scheduledFor).toLocaleString("en-GB", { weekday: "short", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col-reverse gap-3 border-t border-[var(--border)] p-6 sm:flex-row sm:justify-end">
+              <button type="button" onClick={() => { setWeekPlan([]); setWeekPlanStartDate(""); setLog("7-day plan cancelled. Nothing was queued."); }} disabled={autoQueueLoading} className="rounded-xl border border-[var(--border)] px-6 py-3 font-bold text-white disabled:opacity-50">Cancel</button>
+              <button type="button" onClick={() => confirmNext7Days()} disabled={autoQueueLoading} className="rounded-xl bg-[var(--brand-gold)] px-6 py-3 font-bold text-black disabled:opacity-50">
+                {autoQueueLoading ? "Queueing posts..." : `Confirm and queue ${weekPlan.length} posts`}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
