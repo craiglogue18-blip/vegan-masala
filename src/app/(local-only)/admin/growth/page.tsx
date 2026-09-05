@@ -129,7 +129,12 @@ export default async function GrowthDashboardPage() {
           <div className="mt-5 space-y-3">
             {search?.topPages.length ? search.topPages.map((page) => (
               <div key={page.page} className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 rounded-xl bg-black/15 p-4">
-                <p className="truncate text-sm font-bold text-[var(--text)]">{page.page.replace(/^https?:\/\/[^/]+/, "") || "/"}</p>
+                <Link
+                  href={page.page.replace(/^https?:\/\/[^/]+/, "") || "/"}
+                  className="truncate text-sm font-bold text-[var(--text)] hover:text-[var(--brand-gold)] hover:underline"
+                >
+                  {page.page.replace(/^https?:\/\/[^/]+/, "") || "/"}
+                </Link>
                 <p className="text-sm text-[var(--brand-gold)]">{number(page.clicks)} clicks</p>
                 <p className="text-xs text-[var(--text-soft)]">{number(page.impressions)} impressions</p>
                 <p className="text-right text-xs text-[var(--text-soft)]">Position {page.position.toFixed(1)}</p>

@@ -7,16 +7,16 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
 export const metadata: Metadata = {
-  title: "Indian Herbs Guide",
+  title: "6 Essential Indian Herbs: Uses, Flavour & Storage",
   description:
-    "Explore the key herbs used in Indian cooking, how to use them, and how they add freshness, lift, and balance to vegan dishes.",
+    "Learn how to use six essential Indian herbs, including coriander, curry leaves and mint, with practical tips for flavour, buying and storage.",
   alternates: {
     canonical: `${siteUrl}/guides/herbs`,
   },
   openGraph: {
-    title: "Indian Herbs Guide | Vegan Masala",
+    title: "6 Essential Indian Herbs: Uses, Flavour & Storage | Vegan Masala",
     description:
-      "Explore the key herbs used in Indian cooking, how to use them, and how they add freshness, lift, and balance to vegan dishes.",
+      "Learn how to use six essential Indian herbs, including coriander, curry leaves and mint, with practical tips for flavour, buying and storage.",
     url: `${siteUrl}/guides/herbs`,
     siteName: "Vegan Masala",
     type: "article",
