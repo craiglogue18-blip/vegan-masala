@@ -79,7 +79,13 @@ async function waitForInstagramContainer(
   accessToken: string,
   kind: "image" | "video"
 ) {
-  for (let i = 0; i < 20; i++) {
+  // Reels regularly take longer than images for Meta to download and process.
+  // Keep this below the queue route's 300 second execution limit so a genuine
+  // timeout can still be recorded and retried by the queue.
+  const timeoutMs = kind === "video" ? 120_000 : 60_000;
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < timeoutMs) {
     const status = await graphGet(
       `${GRAPH_BASE}/${containerId}?fields=status_code,status&access_token=${accessToken}`
     );
@@ -87,7 +93,7 @@ async function waitForInstagramContainer(
     const code = String(status?.status_code || status?.status || "").toUpperCase();
 
     if (!code) {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       continue;
     }
 
@@ -96,7 +102,7 @@ async function waitForInstagramContainer(
     }
 
     if (code === "IN_PROGRESS") {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       continue;
     }
 
@@ -104,7 +110,7 @@ async function waitForInstagramContainer(
       throw new Error(`Instagram ${kind} container failed`);
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
   }
 
   throw new Error(`Instagram ${kind} container timed out`);
