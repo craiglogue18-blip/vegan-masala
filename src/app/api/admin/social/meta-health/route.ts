@@ -23,7 +23,7 @@ async function readLiveMetaPermissions(accessToken: string, pageId: string) {
     permissionUrl.searchParams.set("access_token", accessToken);
 
     const pageUrl = new URL(`${GRAPH_BASE}/${pageId}`);
-    pageUrl.searchParams.set("fields", "id,name,tasks");
+    pageUrl.searchParams.set("fields", "id,name,access_token");
     pageUrl.searchParams.set("access_token", accessToken);
 
     const [permissionResponse, pageResponse] = await Promise.all([
@@ -54,7 +54,7 @@ async function readLiveMetaPermissions(accessToken: string, pageId: string) {
         ? {
             id: String(pageBody?.id || ""),
             name: String(pageBody?.name || ""),
-            tasks: Array.isArray(pageBody?.tasks) ? pageBody.tasks.map(String).sort() : [],
+            pageAccessTokenAvailable: Boolean(pageBody?.access_token),
           }
         : null,
       pageError:
