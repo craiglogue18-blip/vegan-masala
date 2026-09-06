@@ -74,6 +74,19 @@ async function graphPost(endpoint: string, body: Record<string, string>) {
   return data;
 }
 
+async function resolvePublishedUrl(id: string | null | undefined, accessToken: string) {
+  if (!id) return null;
+  try {
+    const media = await graphGet(
+      `${GRAPH_BASE}/${id}?fields=permalink&access_token=${accessToken}`
+    );
+    return typeof media?.permalink === "string" ? media.permalink : null;
+  } catch (error) {
+    console.warn("Instagram post published, but its permalink was unavailable", error);
+    return null;
+  }
+}
+
 async function waitForInstagramContainer(
   containerId: string,
   accessToken: string,
@@ -160,6 +173,7 @@ export async function publishInstagram(input: PublishInstagramInput) {
       creation_id: container.id,
       access_token: accessToken,
     });
+    const publishedUrl = await resolvePublishedUrl(published?.id, accessToken);
 
     return {
       ok: true,
@@ -167,6 +181,7 @@ export async function publishInstagram(input: PublishInstagramInput) {
       videoUrl: safeVideoUrl,
       containerId: container.id,
       published,
+      publishedUrl,
     };
   }
 
@@ -197,6 +212,7 @@ export async function publishInstagram(input: PublishInstagramInput) {
     creation_id: container.id,
     access_token: accessToken,
   });
+  const publishedUrl = await resolvePublishedUrl(published?.id, accessToken);
 
   return {
     ok: true,
@@ -204,5 +220,6 @@ export async function publishInstagram(input: PublishInstagramInput) {
     imageUrl: safeImageUrl,
     containerId: container.id,
     published,
+    publishedUrl,
   };
 }

@@ -123,6 +123,17 @@ function platformResponseIdForResult(platform: string, result: any) {
   return null;
 }
 
+function publishedUrlForResult(platform: string, result: any) {
+  if (typeof result?.publishedUrl === "string" && result.publishedUrl) {
+    return result.publishedUrl;
+  }
+  const id = platformResponseIdForResult(platform, result);
+  if (!id) return null;
+  if (platform === "pinterest") return `https://www.pinterest.com/pin/${id}/`;
+  if (platform === "youtube") return `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`;
+  return null;
+}
+
 function isAllowedManualRequest(req: Request) {
   const secret = process.env.CRON_SECRET?.trim();
   if (secret && req.headers.get("authorization") === `Bearer ${secret}`) {
@@ -232,6 +243,7 @@ export async function POST(req: Request) {
               attemptedAt,
               completedAt: new Date().toISOString(),
               platformResponseId: platformResponseIdForResult(item.platform, result),
+              publishedUrl: publishedUrlForResult(item.platform, result),
             });
             count++;
             results.push({
@@ -283,6 +295,7 @@ export async function POST(req: Request) {
             attemptedAt,
             completedAt: new Date().toISOString(),
             platformResponseId: platformResponseIdForResult(item.platform, result),
+            publishedUrl: publishedUrlForResult(item.platform, result),
           });
           count++;
           results.push({
@@ -327,6 +340,7 @@ export async function POST(req: Request) {
             attemptedAt,
             completedAt: new Date().toISOString(),
             platformResponseId: platformResponseIdForResult(item.platform, result),
+            publishedUrl: publishedUrlForResult(item.platform, result),
           });
           count++;
           results.push({
@@ -368,6 +382,7 @@ export async function POST(req: Request) {
             attemptedAt,
             completedAt: new Date().toISOString(),
             platformResponseId: platformResponseIdForResult(item.platform, result),
+            publishedUrl: publishedUrlForResult(item.platform, result),
           });
           count++;
           results.push({

@@ -77,6 +77,16 @@ async function resolvePageAccessToken(pageId: string, accessToken: string) {
   return pageAccessToken;
 }
 
+async function resolvePublishedUrl(id: string | null | undefined, accessToken: string) {
+  if (!id) return null;
+  const url = new URL(`${GRAPH_BASE}/${id}`);
+  url.searchParams.set("fields", "permalink_url");
+  url.searchParams.set("access_token", accessToken);
+  const res = await fetch(url, { cache: "no-store" });
+  const data = await res.json().catch(() => ({}));
+  return res.ok && typeof data?.permalink_url === "string" ? data.permalink_url : null;
+}
+
 export async function publishFacebook(input: PublishFacebookInput) {
   const slug = input.slug.trim();
 
@@ -112,6 +122,7 @@ export async function publishFacebook(input: PublishFacebookInput) {
       description: input.caption || "",
       published: "true",
     }, pageAccessToken);
+    const publishedUrl = await resolvePublishedUrl(published?.id, pageAccessToken);
 
     return {
       ok: true,
@@ -120,6 +131,7 @@ export async function publishFacebook(input: PublishFacebookInput) {
       videoUrl: safeVideoUrl,
       videoId: published?.id || null,
       published,
+      publishedUrl,
     };
   }
 
@@ -138,6 +150,10 @@ export async function publishFacebook(input: PublishFacebookInput) {
     caption: input.caption || "",
     published: "true",
   }, pageAccessToken);
+  const publishedUrl = await resolvePublishedUrl(
+    published?.post_id || published?.id,
+    pageAccessToken
+  );
 
   return {
     ok: true,
@@ -147,5 +163,6 @@ export async function publishFacebook(input: PublishFacebookInput) {
     photoId: published?.id || null,
     postId: published?.post_id || null,
     published,
+    publishedUrl,
   };
 }

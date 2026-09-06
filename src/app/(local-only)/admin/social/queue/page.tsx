@@ -32,6 +32,8 @@ type QueueItem = {
   attemptCount?: number;
   retryable?: boolean;
   attemptedAt?: string;
+  platformResponseId?: string | null;
+  publishedUrl?: string | null;
 };
 
 type SlugOption = {
@@ -148,6 +150,23 @@ function contentTypeClasses(contentType?: QueueContentType) {
   }
 
   return "border-white/10 bg-white/5 text-white/80";
+}
+
+function publishedPostUrl(item: QueueItem) {
+  if (item.publishedUrl) return item.publishedUrl;
+  if (!item.platformResponseId) return "";
+  if (item.platform === "pinterest") {
+    return `https://www.pinterest.com/pin/${item.platformResponseId}/`;
+  }
+  if (item.platform === "youtube") {
+    return `https://www.youtube.com/watch?v=${encodeURIComponent(item.platformResponseId)}`;
+  }
+  if (item.platform === "facebook") {
+    return item.assetType === "video"
+      ? `https://www.facebook.com/watch/?v=${encodeURIComponent(item.platformResponseId)}`
+      : `https://www.facebook.com/${encodeURIComponent(item.platformResponseId)}`;
+  }
+  return "";
 }
 
 function normalizeSlugOption(item: SlugOption): SlugOption {
@@ -842,6 +861,7 @@ export default function SocialQueuePage() {
 
   function renderItemCard(item: QueueItem) {
     const busy = itemActionLoadingId === item.id;
+    const publishedPostHref = publishedPostUrl(item);
 
     return (
       <div
@@ -991,6 +1011,17 @@ export default function SocialQueuePage() {
             ) : null}
 
             <div className="mt-4 flex flex-wrap gap-2">
+              {item.status === "posted" && publishedPostHref ? (
+                <a
+                  href={publishedPostHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-lg bg-[var(--brand-gold)] px-3 py-2 text-xs font-bold text-black"
+                >
+                  Open published post
+                </a>
+              ) : null}
+
               {(item.status === "queued" || item.status === "failed") && (
                 <button
                   type="button"

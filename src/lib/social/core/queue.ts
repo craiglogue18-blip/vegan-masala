@@ -37,6 +37,7 @@ export type QueueItem = {
   errorCategory?: QueueErrorCategory;
   retryable?: boolean;
   platformResponseId?: string | null;
+  publishedUrl?: string | null;
   contentType?: QueueContentType;
   kind?: QueueContentKind;
   assetType?: QueueAssetType;
@@ -51,6 +52,7 @@ export type QueueAttemptMetadata = {
   attemptedAt?: string;
   completedAt?: string;
   platformResponseId?: string | null;
+  publishedUrl?: string | null;
   errorCategory?: QueueErrorCategory;
   retryable?: boolean;
 };
@@ -130,6 +132,7 @@ function resetAttemptMetadata(item: QueueItem): QueueItem {
     errorCategory: undefined,
     retryable: undefined,
     platformResponseId: undefined,
+    publishedUrl: undefined,
   };
 }
 
@@ -149,6 +152,7 @@ function applyAttemptMetadata(
     errorCategory: metadata.errorCategory,
     retryable: metadata.retryable,
     platformResponseId: metadata.platformResponseId ?? undefined,
+    publishedUrl: metadata.publishedUrl ?? item.publishedUrl,
   };
 }
 
@@ -321,6 +325,7 @@ export async function markQueueItemPostedWithMetadata(
       errorCategory: undefined,
       retryable: undefined,
       platformResponseId: metadata.platformResponseId ?? undefined,
+      publishedUrl: metadata.publishedUrl ?? item.publishedUrl,
     });
     await redis.del(lockKey(id));
     return;
@@ -338,6 +343,7 @@ export async function markQueueItemPostedWithMetadata(
           errorCategory: undefined,
           retryable: undefined,
           platformResponseId: metadata.platformResponseId ?? undefined,
+          publishedUrl: metadata.publishedUrl ?? item.publishedUrl,
         }
       : item
   );
@@ -375,6 +381,7 @@ export async function markQueueItemFailedWithMetadata(
       errorCategory: metadata.errorCategory,
       retryable: metadata.retryable,
       platformResponseId: metadata.platformResponseId ?? undefined,
+      publishedUrl: metadata.publishedUrl ?? item.publishedUrl,
     });
     await redis.del(lockKey(id));
     return;
@@ -400,6 +407,7 @@ export async function markQueueItemFailedWithMetadata(
           errorCategory: metadata.errorCategory,
           retryable: metadata.retryable,
           platformResponseId: metadata.platformResponseId ?? undefined,
+          publishedUrl: metadata.publishedUrl ?? item.publishedUrl,
         }
       : item
   );
