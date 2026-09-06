@@ -18,9 +18,10 @@ import { updateManifest } from "../core/manifest";
 import { buildInstagramCaption, saveCaption } from "../core/captions";
 import { getSocialCopyForSlug } from "../core/socialCopy";
 
-const ROOT = process.env.VERCEL ? "/tmp" : process.cwd();
+const IS_SERVERLESS = Boolean(process.env.VERCEL) || process.cwd().startsWith("/var/task");
+const ROOT = IS_SERVERLESS ? "/tmp" : process.cwd();
 const OUTPUT = path.join(ROOT, "generated", "instagram");
-const PUBLIC_OUTPUT = process.env.VERCEL
+const PUBLIC_OUTPUT = IS_SERVERLESS
   ? null
   : path.join(process.cwd(), "public", "generated", "instagram");
 
