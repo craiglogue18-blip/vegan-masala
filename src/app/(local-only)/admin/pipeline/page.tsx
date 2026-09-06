@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 export default function AdminPipelinePage() {
   const [adminToken, setAdminToken] = useState("");
+  const [isLocal, setIsLocal] = useState<boolean | null>(null);
   const [mode, setMode] = useState<"latest" | "slug" | "all" | "import-url">("latest");
   const [slug, setSlug] = useState("");
   const [importUrl, setImportUrl] = useState("");
@@ -19,6 +20,10 @@ export default function AdminPipelinePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    setIsLocal(
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname === "localhost"
+    );
     const saved = localStorage.getItem("vm_admin_token");
     if (saved) setAdminToken(saved);
   }, []);
@@ -28,11 +33,11 @@ export default function AdminPipelinePage() {
   }, [adminToken]);
 
   const canRun = useMemo(() => {
-    if (!adminToken.trim()) return false;
+    if (isLocal !== true) return false;
     if (mode === "slug" && !slug.trim()) return false;
     if (mode === "import-url" && !importUrl.trim()) return false;
     return !loading;
-  }, [adminToken, mode, slug, importUrl, loading]);
+  }, [isLocal, mode, slug, importUrl, loading]);
 
   async function runPipeline(e: React.FormEvent) {
     e.preventDefault();
@@ -90,17 +95,20 @@ export default function AdminPipelinePage() {
         onSubmit={runPipeline}
         className="mt-8 space-y-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm"
       >
-        <div>
+        {isLocal === false && (
+          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 text-sm text-amber-100">
+            The Recipe Pipeline edits files on your Mac, so it must be opened through the Vegan Masala Admin app on your Desktop.
+          </div>
+        )}
+
+        {isLocal && <div>
           <label className="block text-sm font-extrabold text-[var(--brand-gold)]">
-            Admin token
+            Local access
           </label>
-          <input
-            type="password"
-            value={adminToken}
-            onChange={(e) => setAdminToken(e.target.value)}
-            className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/30 px-4 py-3 text-sm text-white"
-          />
-        </div>
+          <div className="mt-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+            Connected to the recipe files on this Mac. No second admin token is required.
+          </div>
+        </div>}
 
         <div>
           <label className="block text-sm font-extrabold text-[var(--brand-gold)]">

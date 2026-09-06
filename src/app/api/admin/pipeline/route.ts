@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 export const runtime = "nodejs";
 
 function authed(req: Request) {
+  if (!process.env.VERCEL) return true;
   const token = req.headers.get("x-admin-token") ?? "";
   const expected = process.env.ADMIN_TOKEN ?? "";
   return Boolean(expected && token && token === expected);
@@ -37,6 +38,16 @@ function run(cmd: string, args: string[]) {
 }
 
 export async function POST(req: Request) {
+  if (process.env.VERCEL) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Recipe Pipeline must be run from the Vegan Masala Admin app on your Mac.",
+      },
+      { status: 409 }
+    );
+  }
+
   if (!authed(req)) {
     return NextResponse.json(
       { ok: false, error: "Unauthorized" },
