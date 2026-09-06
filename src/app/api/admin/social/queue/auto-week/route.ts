@@ -123,6 +123,8 @@ export async function POST(req: Request) {
     const videoPlatform: QueuePlatform =
       body?.videoPlatform === "facebook" ? "facebook" : "instagram";
     const dryRun = body?.dryRun === true || body?.dryRun === "1";
+    const authorization = req.headers.get("authorization");
+    const internalHeaders = authorization ? { authorization } : undefined;
 
     if (!pinterestBoardId) {
       return NextResponse.json(
@@ -137,9 +139,11 @@ export async function POST(req: Request) {
     const [queueRes, slugsRes] = await Promise.all([
       fetch(`${origin}/api/admin/social/queue`, {
         cache: "no-store",
+        headers: internalHeaders,
       }),
       fetch(`${origin}/api/admin/social/slugs`, {
         cache: "no-store",
+        headers: internalHeaders,
       }),
     ]);
 
