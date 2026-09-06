@@ -453,6 +453,11 @@ export async function PATCH(req: Request) {
       } else if ((existing.assetType || "image") === "video") {
         const generated = await buildRecipeVideo(existing.slug);
         videoUrl = String(generated.video || "");
+        const cover = await renderInstagramBySlug(existing.slug);
+        imageUrl = String(cover.image || "");
+        publishImageUrl = String(cover.publishImage || cover.image || "")
+          .split("?")[0]
+          .split("#")[0];
       } else {
         const generated = await renderInstagramBySlug(existing.slug);
         imageUrl = String(generated.image || "");

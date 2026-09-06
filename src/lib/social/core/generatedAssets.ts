@@ -88,14 +88,16 @@ export async function saveGeneratedPinterestImage(
   slug: string,
   buffer: Buffer
 ) {
+  const stamp = Date.now();
+
   if (hasBlobToken()) {
     const token = getBlobToken();
 
-    const blob = await put(`pinterest/${slug}.png`, buffer, {
+    const blob = await put(`pinterest/${slug}-${stamp}.png`, buffer, {
       access: "public",
       contentType: "image/png",
       addRandomSuffix: false,
-      allowOverwrite: true,
+      allowOverwrite: false,
       token,
     });
 
@@ -109,25 +111,27 @@ export async function saveGeneratedPinterestImage(
   const dir = path.join(LOCAL_PUBLIC_GENERATED_DIR, "pinterest");
   ensureDir(dir);
 
-  const localFile = path.join(dir, `${slug}.png`);
+  const localFile = path.join(dir, `${slug}-${stamp}.png`);
   fs.writeFileSync(localFile, buffer);
 
   return {
-    url: `/generated/pinterest/${slug}.png?v=${Date.now()}`,
+    url: `/generated/pinterest/${slug}-${stamp}.png?v=${Date.now()}`,
     storage: "local" as const,
     path: localFile,
   };
 }
 
 export async function saveGeneratedVideo(slug: string, buffer: Buffer) {
+  const stamp = Date.now();
+
   if (hasBlobToken()) {
     const token = getBlobToken();
 
-    const blob = await put(`videos/${slug}.mp4`, buffer, {
+    const blob = await put(`videos/${slug}-${stamp}.mp4`, buffer, {
       access: "public",
       contentType: "video/mp4",
       addRandomSuffix: false,
-      allowOverwrite: true,
+      allowOverwrite: false,
       token,
     });
 
@@ -141,11 +145,11 @@ export async function saveGeneratedVideo(slug: string, buffer: Buffer) {
   const dir = path.join(LOCAL_PUBLIC_GENERATED_DIR, "video");
   ensureDir(dir);
 
-  const localFile = path.join(dir, `${slug}.mp4`);
+  const localFile = path.join(dir, `${slug}-${stamp}.mp4`);
   fs.writeFileSync(localFile, buffer);
 
   return {
-    url: `/generated/video/${slug}.mp4?v=${Date.now()}`,
+    url: `/generated/video/${slug}-${stamp}.mp4?v=${Date.now()}`,
     storage: "local" as const,
     path: localFile,
   };

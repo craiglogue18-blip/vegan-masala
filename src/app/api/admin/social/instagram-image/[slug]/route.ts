@@ -41,22 +41,18 @@ export async function GET(
       );
     }
 
-    const prefixes = [
-      `instagram/${cleanSlug}.jpg`,
-      `instagram/${cleanSlug}.jpeg`,
-      `instagram/${cleanSlug}.png`,
-      `instagram/${cleanSlug}.webp`,
-    ];
+    const { blobs } = await list({
+      token,
+      prefix: `instagram/${cleanSlug}`,
+    });
+    const matches = blobs
+      .filter((blob) => /\.(?:jpe?g|png|webp)$/i.test(blob.pathname))
+      .sort(
+        (left, right) =>
+          new Date(right.uploadedAt).getTime() - new Date(left.uploadedAt).getTime()
+      );
 
-    for (const prefix of prefixes) {
-      const { blobs } = await list({
-        token,
-        prefix,
-      });
-
-      const match = blobs.find((b) => b.pathname === prefix);
-      if (!match?.url) continue;
-
+    for (const match of matches) {
       const downloaded = await fetchFromBlobUrl(match.url);
       if (!downloaded) continue;
 
@@ -64,7 +60,7 @@ export async function GET(
         status: 200,
         headers: {
           "Content-Type": downloaded.contentType,
-          "Cache-Control": "public, max-age=300",
+          "Cache-Control": "no-store, max-age=0",
         },
       });
     }
