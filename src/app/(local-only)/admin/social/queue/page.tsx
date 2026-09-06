@@ -580,6 +580,62 @@ export default function SocialQueuePage() {
     }
   }
 
+  async function regenerateQueuedItems() {
+    if (!queuedItems.length) {
+      setLog("There are no queued posts to regenerate.");
+      return;
+    }
+
+    if (!confirm(`Regenerate all ${queuedItems.length} queued posts? Their schedules will be preserved.`)) {
+      return;
+    }
+
+    setQueueLoading(true);
+    setDebugResponse("");
+    const results: Array<{ id: string; slug: string; ok: boolean; error?: string }> = [];
+
+    try {
+      for (let index = 0; index < queuedItems.length; index += 1) {
+        const item = queuedItems[index];
+        setLog(`Regenerating ${index + 1} of ${queuedItems.length}\n${item.title}`);
+
+        try {
+          const res = await fetch("/api/admin/social/queue", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: item.id, action: "regenerate" }),
+          });
+          const data = await res.json().catch(() => ({}));
+          results.push({
+            id: item.id,
+            slug: item.slug,
+            ok: res.ok,
+            error: res.ok ? undefined : data.error || "Regeneration failed",
+          });
+        } catch (error: any) {
+          results.push({
+            id: item.id,
+            slug: item.slug,
+            ok: false,
+            error: error?.message || "Regeneration failed",
+          });
+        }
+      }
+
+      const failed = results.filter((result) => !result.ok);
+      setLog(
+        failed.length
+          ? `Regenerated ${results.length - failed.length} of ${results.length}\nFailed: ${failed.length}`
+          : `Regenerated and checked all ${results.length} queued posts. Schedules preserved.`
+      );
+      setDebugResponse(JSON.stringify({ ok: failed.length === 0, results }, null, 2));
+      setShowDebug(failed.length > 0);
+      await loadQueue();
+    } finally {
+      setQueueLoading(false);
+    }
+  }
+
   async function build30() {
     if (!board) {
       setLog("Select board");
@@ -1502,6 +1558,14 @@ export default function SocialQueuePage() {
                 className="rounded-xl bg-[var(--brand-gold)] px-6 py-3 font-bold text-black disabled:opacity-50"
               >
                 Build 30 days Pinterest
+              </button>
+
+              <button
+                onClick={() => regenerateQueuedItems()}
+                disabled={queueLoading || queuedItems.length === 0}
+                className="rounded-xl border border-[var(--brand-gold)] px-6 py-3 font-bold text-[var(--brand-gold)] disabled:opacity-50"
+              >
+                {queueLoading ? "Working..." : `Regenerate all queued (${queuedItems.length})`}
               </button>
 
               <button
