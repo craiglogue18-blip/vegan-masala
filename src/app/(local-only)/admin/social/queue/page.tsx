@@ -60,6 +60,11 @@ type PlatformHealth = {
   tiktok?: { configured: boolean; directPostEnabled: boolean; privacyLevel: string };
 };
 
+type MetaHealth = {
+  instagramConfigured?: boolean;
+  facebookConfigured?: boolean;
+};
+
 type WeekPlanItem = {
   day: number;
   slug: string;
@@ -193,6 +198,7 @@ export default function SocialQueuePage() {
   const [availableSlugs, setAvailableSlugs] = useState<SlugOption[]>([]);
   const [boards, setBoards] = useState<PinterestBoard[]>([]);
   const [platformHealth, setPlatformHealth] = useState<PlatformHealth>({});
+  const [metaHealth, setMetaHealth] = useState<MetaHealth>({});
 
   const [queueLoading, setQueueLoading] = useState(false);
   const [slugsLoading, setSlugsLoading] = useState(false);
@@ -279,6 +285,35 @@ export default function SocialQueuePage() {
     [queueItems]
   );
 
+  const weekPlanReadiness = useMemo(() => {
+    const platforms = new Set<QueuePlatform>(weekPlan.map((item) => item.platform));
+    const blockers: string[] = [];
+    const advisories: string[] = [];
+
+    if (platforms.has("instagram") && metaHealth.instagramConfigured === false) {
+      blockers.push("Instagram is not ready to publish");
+    }
+    if (platforms.has("facebook") && metaHealth.facebookConfigured === false) {
+      blockers.push("Facebook is not ready to publish");
+    }
+    if (platforms.has("pinterest") && (!board || boards.length === 0)) {
+      blockers.push("Pinterest needs a connected board");
+    }
+    if (!platforms.has("facebook")) {
+      advisories.push("Facebook is not included in this seven-day template");
+    }
+    if (!platforms.has("youtube")) {
+      advisories.push("YouTube is not included in this seven-day template");
+    }
+    if (platformHealth.tiktok?.privacyLevel === "SELF_ONLY") {
+      advisories.push("TikTok is private-only while app approval is pending, so it is not included");
+    } else if (platformHealth.tiktok?.configured === false) {
+      advisories.push("TikTok is not fully configured, so it is not included");
+    }
+
+    return { blockers, advisories };
+  }, [weekPlan, metaHealth, board, boards.length, platformHealth]);
+
   async function loadQueue() {
     try {
       const res = await fetch("/api/admin/social/queue", {
@@ -337,11 +372,19 @@ export default function SocialQueuePage() {
 
   async function loadPlatformHealth() {
     try {
-      const res = await fetch("/api/admin/social/platform-health", { cache: "no-store" });
-      const data = await res.json();
-      setPlatformHealth(data?.ok ? data : {});
+      const [platformRes, metaRes] = await Promise.all([
+        fetch("/api/admin/social/platform-health", { cache: "no-store" }),
+        fetch("/api/admin/social/meta-health", { cache: "no-store" }),
+      ]);
+      const [platformData, metaData] = await Promise.all([
+        platformRes.json().catch(() => ({})),
+        metaRes.json().catch(() => ({})),
+      ]);
+      setPlatformHealth(platformData?.ok ? platformData : {});
+      setMetaHealth(metaData || {});
     } catch {
       setPlatformHealth({});
+      setMetaHealth({});
     }
   }
 
@@ -1572,6 +1615,19 @@ export default function SocialQueuePage() {
             </div>
 
             <div className="overflow-y-auto p-4 sm:p-6">
+              <div className={`mb-5 rounded-2xl border p-4 ${weekPlanReadiness.blockers.length ? "border-red-500/30 bg-red-500/10" : "border-emerald-500/30 bg-emerald-500/10"}`}>
+                <div className={`font-bold ${weekPlanReadiness.blockers.length ? "text-red-200" : "text-emerald-200"}`}>
+                  {weekPlanReadiness.blockers.length ? "Resolve before queueing" : "Planned platforms are ready"}
+                </div>
+                {weekPlanReadiness.blockers.length ? (
+                  <ul className="mt-2 space-y-1 text-sm text-red-100">{weekPlanReadiness.blockers.map((message) => <li key={message}>• {message}</li>)}</ul>
+                ) : null}
+                {weekPlanReadiness.advisories.length ? (
+                  <div className="mt-3 border-t border-white/10 pt-3 text-sm text-[var(--text-soft)]">
+                    {weekPlanReadiness.advisories.map((message) => <div key={message}>• {message}</div>)}
+                  </div>
+                ) : null}
+              </div>
               <div className="space-y-2">
                 {weekPlan.map((item) => (
                   <div key={`${item.day}-${item.platform}-${item.scheduledFor}-${item.slug}`} className="grid gap-2 rounded-xl border border-[var(--border)] bg-black/20 p-4 text-sm sm:grid-cols-[4rem_1fr_8rem_10rem] sm:items-center">
@@ -1589,7 +1645,7 @@ export default function SocialQueuePage() {
 
             <div className="flex flex-col-reverse gap-3 border-t border-[var(--border)] p-6 sm:flex-row sm:justify-end">
               <button type="button" onClick={() => { setWeekPlan([]); setWeekPlanStartDate(""); setLog("7-day plan cancelled. Nothing was queued."); }} disabled={autoQueueLoading} className="rounded-xl border border-[var(--border)] px-6 py-3 font-bold text-white disabled:opacity-50">Cancel</button>
-              <button type="button" onClick={() => confirmNext7Days()} disabled={autoQueueLoading} className="rounded-xl bg-[var(--brand-gold)] px-6 py-3 font-bold text-black disabled:opacity-50">
+              <button type="button" onClick={() => confirmNext7Days()} disabled={autoQueueLoading || weekPlanReadiness.blockers.length > 0} className="rounded-xl bg-[var(--brand-gold)] px-6 py-3 font-bold text-black disabled:opacity-50">
                 {autoQueueLoading ? "Queueing posts..." : `Confirm and queue ${weekPlan.length} posts`}
               </button>
             </div>
