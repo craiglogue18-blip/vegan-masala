@@ -690,6 +690,7 @@ async function textLayer(font: opentype.Font, title: string, hook: string, subti
     baseLineHeight: 26,
     maxHeight: 112,
     minFontSize: 17,
+    maxLines: 4,
   });
 
   const hookLines = hookBlock.lines;
@@ -755,6 +756,7 @@ async function textLayer(font: opentype.Font, title: string, hook: string, subti
     baseLineHeight: 26,
     maxHeight: 80,
     minFontSize: 16,
+    maxLines: 3,
   });
 
   const subtitleBaseY = hookBaseY + hookLines.length * hookBlock.lineHeight + 22;
@@ -818,8 +820,8 @@ async function logoLayer() {
 }
 
 async function heroImageLayer(slug: string, type: "recipe" | "guide") {
-  const img = findContentImage(slug, type);
-  if (!img) return { image: null, shadow: null };
+  const img = await resolveSourceImage(slug, type);
+  if (!img) throw new Error(`No usable source image found for ${slug}`);
 
   const roundedMask = Buffer.from(`
     <svg width="808" height="532" xmlns="http://www.w3.org/2000/svg">

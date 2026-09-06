@@ -93,6 +93,7 @@ function fitVideoTextBlock(options: {
   maxHeight: number;
   minFontSize?: number;
   step?: number;
+  maxLines?: number;
 }) {
   const {
     text,
@@ -102,6 +103,7 @@ function fitVideoTextBlock(options: {
     maxHeight,
     minFontSize = 18,
     step = 2,
+    maxLines = Number.POSITIVE_INFINITY,
   } = options;
 
   const cleaned = cleanPromoText(text);
@@ -119,7 +121,7 @@ function fitVideoTextBlock(options: {
     const lineHeight = Math.max(fontSize + 6, Math.round(baseLineHeight * scale));
     const lines = wrap(cleaned, chars);
 
-    if (lines.length * lineHeight <= maxHeight) {
+    if (lines.length <= maxLines && lines.length * lineHeight <= maxHeight) {
       return {
         lines,
         fontSize,
@@ -136,8 +138,17 @@ function fitVideoTextBlock(options: {
     Math.round(baseLineHeight * fallbackScale)
   );
 
+  const fallbackLines = wrap(cleaned, fallbackChars);
+  const safeLines = fallbackLines.length <= maxLines
+    ? fallbackLines
+    : fallbackLines.slice(0, Math.max(1, maxLines));
+  if (fallbackLines.length > maxLines) {
+    const last = safeLines.length - 1;
+    safeLines[last] = `${safeLines[last].replace(/[.,:;!?…-]+$/, "")}…`;
+  }
+
   return {
-    lines: wrap(cleaned, fallbackChars),
+    lines: safeLines,
     fontSize: fallbackFont,
     lineHeight: fallbackLineHeight,
   };
@@ -187,7 +198,7 @@ function sentenceForVideo(text: string, max: number) {
     if (next.length > max) break;
     result = next;
   }
-  return result.replace(/[,:;\-–—]+$/, "").trim();
+  return `${result.replace(/[,:;\-–—]+$/, "").trim()}…`;
 }
 
 function naturalVideoTitle(title: string) {
@@ -575,6 +586,7 @@ async function renderCard(
     baseLineHeight: 98,
     maxHeight: 205,
     minFontSize: 58,
+    maxLines: 2,
   });
 
   const subtitleBlock = fitVideoTextBlock({
@@ -584,6 +596,7 @@ async function renderCard(
     baseLineHeight: 62,
     maxHeight: 150,
     minFontSize: 34,
+    maxLines: 2,
   });
 
   const titleSvg = titleBlock.lines
@@ -662,6 +675,7 @@ async function renderMainOverlay(
     baseLineHeight: 70,
     maxHeight: 145,
     minFontSize: 48,
+    maxLines: 2,
   });
 
   const subtitleBlock = fitVideoTextBlock({
@@ -671,6 +685,7 @@ async function renderMainOverlay(
     baseLineHeight: 46,
     maxHeight: 100,
     minFontSize: 28,
+    maxLines: 2,
   });
 
   const titleSvg = titleBlock.lines

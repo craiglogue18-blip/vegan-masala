@@ -26,6 +26,29 @@ const PUBLIC_OUTPUT = process.env.VERCEL
 const WIDTH = 1000;
 const HEIGHT = 1500;
 
+function getBaseUrl() {
+  return (
+    process.env.SOCIAL_ASSET_BASE_URL ||
+    process.env.SITE_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "https://www.vegan-masala.com"
+  ).replace(/\/+$/, "");
+}
+
+async function resolveSourceImage(slug: string, type: "recipe" | "guide") {
+  const local = findContentImage(slug, type);
+  if (local) return local;
+
+  const folder = type === "recipe" ? "recipes" : "guides";
+  for (const ext of ["png", "jpg", "jpeg", "webp"]) {
+    const response = await fetch(`${getBaseUrl()}/images/${folder}/${slug}.${ext}`, {
+      cache: "no-store",
+    });
+    if (response.ok) return Buffer.from(await response.arrayBuffer());
+  }
+  return null;
+}
+
 const BRAND = {
   bg: "#081318",
   red: "#a33f3a",
@@ -309,6 +332,7 @@ async function textLayer(font: opentype.Font, title: string, hook: string, subti
     baseLineHeight: 36,
     maxHeight: 130,
     minFontSize: 20,
+    maxLines: 3,
   });
 
   const subtitleBlock = fitWrappedTextBlock({
@@ -318,6 +342,7 @@ async function textLayer(font: opentype.Font, title: string, hook: string, subti
     baseLineHeight: 28,
     maxHeight: 150,
     minFontSize: 16,
+    maxLines: 4,
   });
 
   const hookLines = hookBlock.lines;
@@ -433,8 +458,8 @@ async function logoLayer() {
 }
 
 async function heroImageLayer(slug: string, type: "recipe" | "guide") {
-  const img = findContentImage(slug, type);
-  if (!img) return { image: null, shadow: null };
+  const img = await resolveSourceImage(slug, type);
+  if (!img) throw new Error(`No usable source image found for ${slug}`);
 
   const roundedMask = Buffer.from(`
     <svg width="800" height="720" xmlns="http://www.w3.org/2000/svg">

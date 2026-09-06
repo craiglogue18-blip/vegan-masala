@@ -302,6 +302,33 @@ export async function findQueueItemById(id: string): Promise<QueueItem | null> {
   return readQueueFile().find((item) => item.id === id) || null;
 }
 
+export async function updateQueueItem(
+  id: string,
+  changes: Partial<Omit<QueueItem, "id" | "createdAt">>
+): Promise<QueueItem | null> {
+  const redis = getRedis();
+  if (redis) {
+    const item = await redis.get<QueueItem>(itemKey(id));
+    if (!item) return null;
+    const updated = { ...item, ...changes, id: item.id, createdAt: item.createdAt };
+    await redis.set(itemKey(id), updated);
+    return updated;
+  }
+
+  const items = readQueueFile();
+  const index = items.findIndex((item) => item.id === id);
+  if (index === -1) return null;
+  const updated = {
+    ...items[index],
+    ...changes,
+    id: items[index].id,
+    createdAt: items[index].createdAt,
+  };
+  items[index] = updated;
+  writeQueueFile(items);
+  return updated;
+}
+
 export async function markQueueItemPosted(id: string): Promise<void> {
   await markQueueItemPostedWithMetadata(id, {});
 }

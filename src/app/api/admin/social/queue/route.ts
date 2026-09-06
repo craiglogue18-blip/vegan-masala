@@ -7,6 +7,7 @@ import {
   findQueueItemById,
   rescheduleQueueItemNow,
   retryQueueItem,
+  updateQueueItem,
   type QueueAssetType,
   type QueueContentType,
   type QueuePlatform,
@@ -421,6 +422,81 @@ export async function PATCH(req: Request) {
       return NextResponse.json({
         ok: true,
         message: "Queue item rescheduled for immediate posting",
+      });
+    }
+
+    if (action === "regenerate") {
+      if (existing.status !== "queued") {
+        return NextResponse.json(
+          { ok: false, error: "Only queued posts can be regenerated" },
+          { status: 400 }
+        );
+      }
+
+      const contentType = existing.contentType || detectContentTypeBySlug(existing.slug);
+      if (!contentType || contentType === "store") {
+        return NextResponse.json(
+          { ok: false, error: "This queued item cannot be regenerated" },
+          { status: 400 }
+        );
+      }
+
+      const caption = buildCaption(existing.platform, existing.slug, contentType);
+      let imageUrl = existing.imageUrl;
+      let publishImageUrl = existing.publishImageUrl;
+      let videoUrl = existing.videoUrl;
+
+      if (existing.platform === "pinterest") {
+        const generated = await generatePinterestBySlug(existing.slug);
+        imageUrl = String(generated.image || "").split("?")[0].split("#")[0];
+        publishImageUrl = imageUrl;
+      } else if ((existing.assetType || "image") === "video") {
+        const generated = await buildRecipeVideo(existing.slug);
+        videoUrl = String(generated.video || "");
+      } else {
+        const generated = await renderInstagramBySlug(existing.slug);
+        imageUrl = String(generated.image || "");
+        publishImageUrl = String(generated.publishImage || generated.image || "")
+          .split("?")[0]
+          .split("#")[0];
+      }
+
+      const preflight = validateSocialPublishPreflight({
+        platform: existing.platform,
+        slug: existing.slug,
+        stage: "queue",
+        assetType: existing.assetType || "image",
+        imageUrl,
+        publishImageUrl,
+        videoUrl,
+        board: existing.board,
+        baseUrl: getSiteBase(),
+      });
+      if (!preflight.ok) {
+        return NextResponse.json(
+          { ok: false, error: preflight.reason },
+          { status: 400 }
+        );
+      }
+      if (!caption.trim()) {
+        return NextResponse.json(
+          { ok: false, error: "Generated caption was empty" },
+          { status: 400 }
+        );
+      }
+
+      const updated = await updateQueueItem(existing.id, {
+        caption,
+        imageUrl: preflight.normalized.imageUrl || undefined,
+        publishImageUrl: preflight.normalized.publishImageUrl || undefined,
+        videoUrl: preflight.normalized.videoUrl || undefined,
+        error: undefined,
+        errorCategory: undefined,
+      });
+      return NextResponse.json({
+        ok: true,
+        item: updated,
+        message: "Queued post regenerated and checked",
       });
     }
 

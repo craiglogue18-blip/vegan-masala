@@ -41,6 +41,13 @@ export function wrapWords(text: string, maxChars: number) {
   return lines;
 }
 
+function clampLines(lines: string[], maxLines: number) {
+  if (lines.length <= maxLines) return lines;
+  const kept = lines.slice(0, maxLines);
+  kept[maxLines - 1] = `${kept[maxLines - 1].replace(/[.,:;!?…-]+$/, "")}…`;
+  return kept;
+}
+
 export function fitWrappedTextBlock(options: {
   text: string;
   baseChars: number;
@@ -49,6 +56,7 @@ export function fitWrappedTextBlock(options: {
   maxHeight: number;
   minFontSize?: number;
   step?: number;
+  maxLines?: number;
 }) {
   const {
     text,
@@ -58,6 +66,7 @@ export function fitWrappedTextBlock(options: {
     maxHeight,
     minFontSize = 14,
     step = 2,
+    maxLines = Number.POSITIVE_INFINITY,
   } = options;
 
   const cleaned = cleanPromoText(text);
@@ -75,7 +84,7 @@ export function fitWrappedTextBlock(options: {
     const lineHeight = Math.max(fontSize + 4, Math.round(baseLineHeight * scale));
     const lines = wrapWords(cleaned, chars);
 
-    if (lines.length * lineHeight <= maxHeight) {
+    if (lines.length <= maxLines && lines.length * lineHeight <= maxHeight) {
       return {
         lines,
         fontSize,
@@ -93,7 +102,7 @@ export function fitWrappedTextBlock(options: {
   );
 
   return {
-    lines: wrapWords(cleaned, fallbackChars),
+    lines: clampLines(wrapWords(cleaned, fallbackChars), Math.max(1, maxLines)),
     fontSize: fallbackFont,
     lineHeight: fallbackLineHeight,
   };

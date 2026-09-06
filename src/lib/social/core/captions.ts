@@ -182,32 +182,36 @@ function recipeSignals(slug: string, content: ReturnType<typeof getEditorialCont
     recipe?.methodMarkdown || "",
     ...(recipe?.notes || []),
     recipe?.notesMarkdown || "",
-    recipe?.servingSuggestion || "",
   ].join(" ").toLowerCase();
 
-  const titleText = [
+  const identityText = [
     slug,
     content.title || "",
     content.description || "",
     content.introNote || "",
-    content.servingSuggestion || "",
+    ingredientsText,
   ].join(" ").toLowerCase();
 
-  const full = `${titleText} ${ingredientsText} ${methodText}`;
-  const has = (terms: string[]) => terms.some((t) => full.includes(t));
+  const full = `${identityText} ${methodText}`;
+  const hasWholeTerm = (text: string, term: string) => {
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`, "i").test(text);
+  };
+  const hasIdentity = (terms: string[]) => terms.some((term) => hasWholeTerm(identityText, term));
+  const hasMethod = (terms: string[]) => terms.some((term) => hasWholeTerm(methodText, term));
 
   return {
     full,
-    hasPotato: has(["potato", "potatoes", "aloo"]),
-    hasAubergine: has(["aubergine", "eggplant", "eggplants", "baingan"]),
-    hasChickpea: has(["chickpea", "chickpeas", "chana", "chole"]),
-    hasLentil: has(["lentil", "lentils", "dal", "dahl", "masoor", "moong", "urad"]),
-    hasRice: has(["rice", "basmati", "biryani"]),
-    hasTofu: has(["tofu"]),
-    hasCauliflower: has(["cauliflower", "gobi"]),
-    hasPastry: has(["pastry", "pie", "puff pastry", "filo"]),
-    isBaked: has(["bake", "baked", "oven"]),
-    isTempered: has(["temper", "tadka"]),
+    hasPotato: hasIdentity(["potato", "potatoes", "aloo"]),
+    hasAubergine: hasIdentity(["aubergine", "eggplant", "eggplants", "baingan"]),
+    hasChickpea: hasIdentity(["chickpea", "chickpeas", "chole"]),
+    hasLentil: hasIdentity(["lentil", "lentils", "dal", "dahl", "masoor", "moong", "urad"]),
+    hasRice: hasIdentity(["rice", "basmati", "biryani"]),
+    hasTofu: hasIdentity(["tofu"]),
+    hasCauliflower: hasIdentity(["cauliflower", "gobi"]),
+    hasPastry: hasIdentity(["pastry", "pie", "puff pastry", "filo"]),
+    isBaked: hasMethod(["bake", "baked", "oven"]),
+    isTempered: hasMethod(["temper", "tempering", "tadka"]),
   };
 }
 
@@ -402,9 +406,10 @@ function recipeMiddleOptions(profile: string, slug?: string, content?: ReturnTyp
 function recipeHook(slug: string, content: ReturnType<typeof getEditorialContent>) {
   const shortHook =
     shortEnough(content.socialHook, 115) ||
-    shortEnough(content.introNote, 115);
+    shortEnough(content.description, 150) ||
+    shortEnough(content.introNote, 150);
 
-  if (shortHook) return sentence(shortHook);
+  if (shortHook) return makeSentence(shortHook, 150);
 
   const profile = recipeProfile(slug, content);
 
