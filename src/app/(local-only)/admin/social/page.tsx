@@ -36,10 +36,10 @@ const tools:ToolCard[]=[
 {
 title:"Recipe Importer",
 
-href:"/admin/import",
+href:"http://127.0.0.1:3010/admin/import",
 
 description:
-"Import and prepare new recipes for the website, including the source content and recipe details.",
+"Open the local Mac tool to import and prepare new recipes, including source content and recipe details.",
 
 cta:"Open recipe importer"
 },
@@ -47,10 +47,10 @@ cta:"Open recipe importer"
 {
 title:"Recipe Pipeline",
 
-href:"/admin/pipeline",
+href:"http://127.0.0.1:3010/admin/pipeline",
 
 description:
-"Run the recipe production workflow and move new content through the generation pipeline.",
+"Open the local Mac tool to run the recipe production workflow and process new content safely.",
 
 cta:"Open recipe pipeline"
 },
