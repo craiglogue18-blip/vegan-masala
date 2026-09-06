@@ -321,6 +321,7 @@ export async function POST(req: Request) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(authorization ? { authorization } : {}),
         },
         body: JSON.stringify({
           slug: item.slug,
