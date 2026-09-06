@@ -3,11 +3,11 @@ import path from "node:path";
 import sharp from "sharp";
 import { put } from "@vercel/blob";
 
-const LOCAL_PUBLIC_GENERATED_DIR = path.join(
-  process.cwd(),
-  "public",
-  "generated"
-);
+const IS_SERVERLESS =
+  Boolean(process.env.VERCEL) || process.cwd().startsWith("/var/task");
+const LOCAL_PUBLIC_GENERATED_DIR = IS_SERVERLESS
+  ? path.join("/tmp", "generated")
+  : path.join(process.cwd(), "public", "generated");
 
 function ensureDir(dir: string) {
   fs.mkdirSync(dir, { recursive: true });
@@ -77,7 +77,7 @@ export async function saveGeneratedInstagramImage(
   }
 
   return {
-    url: process.env.VERCEL ? (blobUrl || `${getSiteBase()}${localUrl}`) : localUrl,
+    url: IS_SERVERLESS ? (blobUrl || `${getSiteBase()}${localUrl}`) : localUrl,
     publishUrl: blobUrl || `${getSiteBase()}${localUrl.split("?")[0]}`,
     storage: blobUrl ? ("blob" as const) : ("local" as const),
     path: blobPath || localFile,
