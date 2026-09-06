@@ -9,6 +9,7 @@ import {
   classifyQueueFailure,
   markQueueItemFailedWithMetadata,
   markQueueItemPostedWithMetadata,
+  MAX_AUTOMATIC_ATTEMPTS,
 } from "@/lib/social/core/queue";
 
 import { generatePinterestBySlug } from "@/lib/social/generatePinterest";
@@ -166,7 +167,7 @@ export async function POST(req: Request) {
       slug: string;
       platform: string;
       assetType?: string;
-      status: "posted" | "failed";
+      status: "posted" | "failed" | "retrying";
       error?: string;
     }> = [];
 
@@ -409,6 +410,9 @@ export async function POST(req: Request) {
         });
 
         const classification = classifyQueueFailure(message);
+        const willRetry =
+          classification.retryable &&
+          (item.attemptCount || 0) + 1 < MAX_AUTOMATIC_ATTEMPTS;
 
         await markQueueItemFailedWithMetadata(item.id, message, {
           attemptedAt,
@@ -420,7 +424,7 @@ export async function POST(req: Request) {
           slug: item.slug,
           platform: item.platform,
           assetType: item.assetType,
-          status: "failed",
+          status: willRetry ? "retrying" : "failed",
           error: message,
         });
       }
@@ -431,6 +435,7 @@ export async function POST(req: Request) {
       count,
       attempted: due.length,
       failed: results.filter((r) => r.status === "failed").length,
+      retrying: results.filter((r) => r.status === "retrying").length,
       results,
       message: "Due posts processed",
     });

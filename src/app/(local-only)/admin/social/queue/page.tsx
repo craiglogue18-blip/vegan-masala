@@ -29,6 +29,9 @@ type QueueItem = {
   publishImageUrl?: string;
   videoUrl?: string;
   requiresApproval?: boolean;
+  attemptCount?: number;
+  retryable?: boolean;
+  attemptedAt?: string;
 };
 
 type SlugOption = {
@@ -454,10 +457,11 @@ export default function SocialQueuePage() {
       }
 
       const failed = data?.failed ?? 0;
+      const retrying = data?.retrying ?? 0;
       const attempted = data?.attempted ?? 0;
       const count = data?.count ?? 0;
 
-      setLog(`Processed ${attempted}\nPosted: ${count}\nFailed: ${failed}`);
+      setLog(`Processed ${attempted}\nPosted: ${count}\nRetrying automatically: ${retrying}\nFailed: ${failed}`);
 
       if (failed > 0) {
         setShowDebug(true);
@@ -738,10 +742,11 @@ export default function SocialQueuePage() {
         }
 
         const failed = runData?.failed ?? 0;
+        const retrying = runData?.retrying ?? 0;
         const attempted = runData?.attempted ?? 0;
         const count = runData?.count ?? 0;
 
-        setLog(`Processed ${attempted}\nPosted: ${count}\nFailed: ${failed}`);
+        setLog(`Processed ${attempted}\nPosted: ${count}\nRetrying automatically: ${retrying}\nFailed: ${failed}`);
 
         if (failed > 0) {
           setShowDebug(true);
@@ -975,7 +980,12 @@ export default function SocialQueuePage() {
             ) : null}
 
             {item.error ? (
-              <div className="mt-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-300">
+              <div className={`mt-3 rounded-xl border p-3 text-xs ${item.status === "queued" && item.retryable ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-200" : "border-red-500/30 bg-red-500/10 text-red-300"}`}>
+                {item.status === "queued" && item.retryable ? (
+                  <div className="mb-1 font-bold">
+                    Temporary problem · automatic retry {Math.min((item.attemptCount || 0) + 1, 3)} of 3 at {new Date(item.scheduledFor).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </div>
+                ) : null}
                 {item.error}
               </div>
             ) : null}

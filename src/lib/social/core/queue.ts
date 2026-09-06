@@ -60,7 +60,7 @@ const QUEUE_DIR = path.join(ROOT, "generated");
 const QUEUE_FILE = path.join(QUEUE_DIR, "social-queue.json");
 const REDIS_ITEM_PREFIX = "social_queue:item:";
 const REDIS_LOCK_PREFIX = "social_queue:lock:";
-const MAX_AUTOMATIC_ATTEMPTS = 3;
+export const MAX_AUTOMATIC_ATTEMPTS = 3;
 const MAX_ITEMS_PER_RUN = 6;
 
 function getRedis() {
@@ -168,6 +168,17 @@ export function classifyQueueFailure(error: unknown): {
     message.includes("session has expired")
   ) {
     return { errorCategory: "authentication", retryable: false };
+  }
+
+  if (
+    message.includes("no permission") ||
+    message.includes("permission denied") ||
+    message.includes("insufficient permission") ||
+    message.includes("not authorized") ||
+    message.includes("not authorised") ||
+    message.includes("invalid scope")
+  ) {
+    return { errorCategory: "validation", retryable: false };
   }
 
   if (
