@@ -34,6 +34,28 @@ type ToolCard = {
 const tools:ToolCard[]=[
 
 {
+title:"Recipe Importer",
+
+href:"/admin/import",
+
+description:
+"Import and prepare new recipes for the website, including the source content and recipe details.",
+
+cta:"Open recipe importer"
+},
+
+{
+title:"Recipe Pipeline",
+
+href:"/admin/pipeline",
+
+description:
+"Run the recipe production workflow and move new content through the generation pipeline.",
+
+cta:"Open recipe pipeline"
+},
+
+{
 title:"Growth Dashboard",
 
 href:"/admin/growth",
@@ -187,13 +209,13 @@ Admin
 </div>
 
 <h1 className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">
-Social Publishing Hub
+ Vegan Masala Admin Hub
 </h1>
 
 <p className="mt-4 max-w-3xl text-sm text-[var(--text-soft)]">
 
-Manage Vegan Masala social automation from one place.
-Generate assets, build videos and schedule your publishing pipeline.
+Open every Vegan Masala administration tool from one place.
+Import recipes, generate content, build videos, schedule posts, and monitor growth and site health.
 
 </p>
 
@@ -385,7 +407,7 @@ Recommended workflow
 <div className="rounded-2xl bg-black/20 p-4">
 
 <b className="text-[var(--brand-gold)]">1.</b>
- Generate images in Content Generator
+ Import or prepare recipes in the Recipe Pipeline
 
 </div>
 
@@ -393,7 +415,7 @@ Recommended workflow
 <div className="rounded-2xl bg-black/20 p-4">
 
 <b className="text-[var(--brand-gold)]">2.</b>
- Generate recipe videos
+ Generate social images and recipe videos
 
 </div>
 
@@ -401,7 +423,14 @@ Recommended workflow
 <div className="rounded-2xl bg-black/20 p-4">
 
 <b className="text-[var(--brand-gold)]">3.</b>
- Queue 30 days of content
+ Preview and schedule content in the Social Queue
+
+</div>
+
+<div className="rounded-2xl bg-black/20 p-4">
+
+<b className="text-[var(--brand-gold)]">4.</b>
+ Review growth, publishing, SEO and app health
 
 </div>
 
