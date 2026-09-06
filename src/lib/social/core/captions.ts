@@ -404,12 +404,17 @@ function recipeMiddleOptions(profile: string, slug?: string, content?: ReturnTyp
 }
 
 function recipeHook(slug: string, content: ReturnType<typeof getEditorialContent>) {
-  const shortHook =
-    shortEnough(content.socialHook, 115) ||
-    shortEnough(content.description, 150) ||
-    shortEnough(content.introNote, 150);
-
+  const shortHook = shortEnough(content.socialHook, 115);
   if (shortHook) return makeSentence(shortHook, 150);
+
+  // The editorial description is the safest grounded summary of the actual
+  // dish. Prefer its first complete sentence even when the full description is
+  // longer than an on-card hook.
+  const descriptionHook = makeSentence(content.description, 150);
+  if (descriptionHook) return descriptionHook;
+
+  const introHook = makeSentence(content.introNote, 150);
+  if (introHook) return introHook;
 
   const profile = recipeProfile(slug, content);
 
@@ -964,28 +969,13 @@ export function buildPinterestCaption(slug: string, type: ContentType) {
 
   if (type === "recipe") {
     const hook = recipeHook(slug, content);
-
-    const bullets = pickDistinct(
-      slug,
-      [
-        `• good for weeknight cooking
-• useful leftovers
-• easy to serve with rice or roti`,
-        `• a good family-style dinner
-• balanced, savoury cooking
-• simple ingredients, properly cooked`,
-        `• strong weeknight option
-• works well the next day
-• easy to build into a regular rotation`,
-      ],
-      [hook]
-    );
+    const serving = recipeMiddle(slug, content, hook);
 
     return `${pinterestRecipeTitle(title, slug)}
 
 ${hook}
 
-${bullets}
+${serving}
 
 Get the full recipe:
 https://www.vegan-masala.com
