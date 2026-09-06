@@ -103,13 +103,13 @@ function getEditorialContent(slug: string, type: "recipe" | "guide") {
 
 function buildHook(editorial: ReturnType<typeof getEditorialContent>) {
   return cleanPromoText(
-    editorial.socialHook || editorial.introNote || editorial.description || editorial.title
+    editorial.socialHook || editorial.description || editorial.introNote || editorial.title
   );
 }
 
 function buildSubtitle(editorial: ReturnType<typeof getEditorialContent>) {
   return cleanPromoText(
-    editorial.description || editorial.servingSuggestion || editorial.title
+    editorial.servingSuggestion || editorial.description || editorial.title
   );
 }
 
@@ -323,16 +323,25 @@ async function badgeLayer(font: opentype.Font, type: "recipe" | "guide") {
 }
 
 async function textLayer(font: opentype.Font, title: string, hook: string, subtitle: string) {
-  const titleLines = wrapWords(cleanPromoText(title), 18);
+  const titleBlock = fitWrappedTextBlock({
+    text: title,
+    baseChars: 28,
+    baseFontSize: 68,
+    baseLineHeight: 62,
+    maxHeight: 125,
+    minFontSize: 38,
+    maxLines: 2,
+  });
+  const titleLines = titleBlock.lines;
 
   const hookBlock = fitWrappedTextBlock({
     text: hook,
     baseChars: 34,
     baseFontSize: 34,
     baseLineHeight: 36,
-    maxHeight: 130,
-    minFontSize: 20,
-    maxLines: 3,
+    maxHeight: 150,
+    minFontSize: 18,
+    maxLines: 6,
   });
 
   const subtitleBlock = fitWrappedTextBlock({
@@ -340,36 +349,27 @@ async function textLayer(font: opentype.Font, title: string, hook: string, subti
     baseChars: 46,
     baseFontSize: 24,
     baseLineHeight: 28,
-    maxHeight: 150,
-    minFontSize: 16,
-    maxLines: 4,
+    maxHeight: 135,
+    minFontSize: 15,
+    maxLines: 6,
   });
+
+  if (titleBlock.truncated || hookBlock.truncated || subtitleBlock.truncated) {
+    throw new Error("Pinterest artwork copy does not fit without truncation");
+  }
 
   const hookLines = hookBlock.lines;
   const subtitleLines = subtitleBlock.lines;
-
-  let titleFont = 72;
-  let titleLine = 62;
-
-  if (title.length > 28) {
-    titleFont = 64;
-    titleLine = 56;
-  }
-
-  if (title.length > 40) {
-    titleFont = 58;
-    titleLine = 50;
-  }
 
   const titleSvg = titleLines
     .map((line, i) =>
       makeShadowedTextPathSvg(
         line,
         font,
-        titleFont,
+        titleBlock.fontSize,
         BRAND.gold,
         74,
-        205 + i * titleLine,
+        205 + i * titleBlock.lineHeight,
         0.4,
         0.18,
         3,

@@ -700,12 +700,7 @@ export async function generateLatestPinterest() {
   }
 
   const slug = slugFromFile(chosen.file);
-  const editorial = getEditorialContent(slug, chosen.type);
-  const result = await createPost(
-    slug,
-    editorial.title || titleFromSlug(slug),
-    chosen.type
-  );
+  const result = await renderPinterestBySlug(slug);
 
   return {
     success: true,
@@ -725,12 +720,7 @@ export async function generatePinterestBySlug(slug: string) {
     throw new Error("Slug not found");
   }
 
-  const editorial = getEditorialContent(slug, type);
-  const result = await createPost(
-    slug,
-    editorial.title || titleFromSlug(slug),
-    type
-  );
+  const result = await renderPinterestBySlug(slug);
 
   return {
     success: true,

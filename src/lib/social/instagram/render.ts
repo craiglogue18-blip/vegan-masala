@@ -681,7 +681,16 @@ async function badgeLayer(font: opentype.Font, type: "recipe" | "guide") {
 }
 
 async function textLayer(font: opentype.Font, title: string, hook: string, subtitle: string) {
-  const titleLines = wrapWords(cleanPromoText(title), 30);
+  const titleBlock = fitWrappedTextBlock({
+    text: title,
+    baseChars: 34,
+    baseFontSize: 48,
+    baseLineHeight: 42,
+    maxHeight: 86,
+    minFontSize: 30,
+    maxLines: 2,
+  });
+  const titleLines = titleBlock.lines;
 
   const hookBlock = fitWrappedTextBlock({
     text: hook,
@@ -689,39 +698,21 @@ async function textLayer(font: opentype.Font, title: string, hook: string, subti
     baseFontSize: 22,
     baseLineHeight: 26,
     maxHeight: 112,
-    minFontSize: 17,
-    maxLines: 4,
+    minFontSize: 15,
+    maxLines: 6,
   });
 
   const hookLines = hookBlock.lines;
-
-  let titleFont = 48;
-  let titleLine = 42;
-
-  if (title.length > 26) {
-    titleFont = 44;
-    titleLine = 38;
-  }
-
-  if (title.length > 38) {
-    titleFont = 40;
-    titleLine = 35;
-  }
-
-  if (title.length > 52) {
-    titleFont = 36;
-    titleLine = 31;
-  }
 
   const titleSvg = titleLines
     .map((line, i) =>
       makeShadowedTextPathSvg(
         line,
         font,
-        titleFont,
+        titleBlock.fontSize,
         BRAND.gold,
         88,
-        210 + i * titleLine,
+        210 + i * titleBlock.lineHeight,
         0.42,
         0.18,
         3,
@@ -755,9 +746,13 @@ async function textLayer(font: opentype.Font, title: string, hook: string, subti
     baseFontSize: 21,
     baseLineHeight: 26,
     maxHeight: 80,
-    minFontSize: 16,
-    maxLines: 3,
+    minFontSize: 14,
+    maxLines: 5,
   });
+
+  if (titleBlock.truncated || hookBlock.truncated || subtitleBlock.truncated) {
+    throw new Error("Instagram artwork copy does not fit without truncation");
+  }
 
   const subtitleBaseY = hookBaseY + hookLines.length * hookBlock.lineHeight + 22;
 

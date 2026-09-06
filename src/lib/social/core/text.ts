@@ -75,6 +75,7 @@ export function fitWrappedTextBlock(options: {
       lines: [],
       fontSize: baseFontSize,
       lineHeight: baseLineHeight,
+      truncated: false,
     };
   }
 
@@ -89,6 +90,7 @@ export function fitWrappedTextBlock(options: {
         lines,
         fontSize,
         lineHeight,
+        truncated: false,
       };
     }
   }
@@ -105,5 +107,6 @@ export function fitWrappedTextBlock(options: {
     lines: clampLines(wrapWords(cleaned, fallbackChars), Math.max(1, maxLines)),
     fontSize: fallbackFont,
     lineHeight: fallbackLineHeight,
+    truncated: true,
   };
 }

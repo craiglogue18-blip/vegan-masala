@@ -820,6 +820,7 @@ async function mainClip(
 ) {
   const card = path.join(TEMP_DIR, "card.png");
   const overlay = path.join(TEMP_DIR, "main-overlay.png");
+  const brandedBackground = path.join(TEMP_DIR, "main-brand-background.png");
 
   const mask = Buffer.from(`
     <svg width="900" height="1040" xmlns="http://www.w3.org/2000/svg">
@@ -862,9 +863,10 @@ async function mainClip(
     .toFile(card);
 
   await renderMainOverlay(title, subtitle, overlay, logoPath);
+  await brandTextureBackground(brandedBackground);
 
   const filter = [
-    `[0:v]scale=1500:2667:force_original_aspect_ratio=increase,crop=1080:1920,eq=saturation=0.9:contrast=1.08:brightness=-0.02,boxblur=18:8,zoompan=z='min(zoom+0.0009,1.12)':d=${MAIN_DURATION * FPS}:x='iw/2-(iw/zoom/2)+sin(on/14)*10':y='ih/2-(ih/zoom/2)+cos(on/18)*8':s=1080x1920:fps=${FPS}[bg]`,
+    `[0:v]scale=1080:1920,zoompan=z='min(zoom+0.00025,1.025)':d=${MAIN_DURATION * FPS}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS}[bg]`,
     `[1:v]format=rgba,colorchannelmixer=aa=1[card]`,
     `[2:v]format=rgba[overlay]`,
     `[bg][card]overlay=(W-w)/2:350[tmp1]`,
@@ -876,7 +878,7 @@ async function mainClip(
     "-loop",
     "1",
     "-i",
-    image,
+    brandedBackground,
     "-loop",
     "1",
     "-i",
