@@ -545,13 +545,13 @@ async function brandTextureBackground(out: string) {
   if (fs.existsSync(texturePath)) {
     const texture = await sharp(texturePath)
       .resize(WIDTH, HEIGHT, { fit: "cover" })
-      .modulate({ brightness: 1.02, saturation: 0.72 })
+      .modulate({ brightness: 2.2, saturation: 0.9 })
       .png()
       .toBuffer();
 
     const wash = Buffer.from(`
       <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
-        <rect width="${WIDTH}" height="${HEIGHT}" fill="#081318" fill-opacity="0.42"/>
+        <rect width="${WIDTH}" height="${HEIGHT}" fill="#081318" fill-opacity="0.12"/>
       </svg>
     `);
 
@@ -563,7 +563,7 @@ async function brandTextureBackground(out: string) {
         background: BRAND.bg,
       },
     }).composite([
-      { input: texture, left: 0, top: 0, blend: "overlay" },
+      { input: texture, left: 0, top: 0, blend: "over" },
       { input: wash, left: 0, top: 0 },
     ]);
   }

@@ -205,8 +205,10 @@ async function backgroundLayer() {
 
   return sharp(bgPath)
     .resize(WIDTH, HEIGHT, { fit: "cover" })
-    .modulate({ brightness: 1.7, saturation: 1.2 })
-    .gamma(1.15)
+    // The source artwork is intentionally very dark. Lift it enough that the
+    // tile pattern survives export and remains visible on small queue previews.
+    .modulate({ brightness: 2.35, saturation: 1.05 })
+    .gamma(1.05)
     .png()
     .toBuffer();
 }

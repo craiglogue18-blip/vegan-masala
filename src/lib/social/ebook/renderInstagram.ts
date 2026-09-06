@@ -27,6 +27,18 @@ export async function renderInstagramEbookPromo() {
   ensureDir(OUTPUT);
 
   const coverPath = resolvePublicFile(EBOOK.coverImage);
+  const backgroundPath = resolvePublicFile("/images/page-background.jpg");
+
+  if (!fs.existsSync(backgroundPath)) {
+    throw new Error("Required social background image is missing");
+  }
+
+  const background = await sharp(backgroundPath)
+    .resize(WIDTH, HEIGHT, { fit: "cover" })
+    .modulate({ brightness: 2.35, saturation: 1.05 })
+    .gamma(1.05)
+    .png()
+    .toBuffer();
 
   const cover = await sharp(coverPath)
     .resize(430, 620, {
@@ -38,7 +50,7 @@ export async function renderInstagramEbookPromo() {
 
   const panel = Buffer.from(`
     <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
-      <rect width="${WIDTH}" height="${HEIGHT}" fill="#081318"/>
+      <rect width="${WIDTH}" height="${HEIGHT}" fill="#081318" fill-opacity="0.08"/>
       <rect x="20" y="20" width="${WIDTH - 40}" height="${HEIGHT - 40}" rx="34" fill="none" stroke="#c8a646" stroke-width="2.5"/>
 
       <rect x="70" y="110" width="470" height="700" rx="30" fill="#0d171c" opacity="0.95"/>
@@ -91,6 +103,7 @@ export async function renderInstagramEbookPromo() {
     },
   })
     .composite([
+      { input: background, left: 0, top: 0 },
       { input: panel, left: 0, top: 0 },
       { input: cover, left: 92, top: 150 },
     ])
