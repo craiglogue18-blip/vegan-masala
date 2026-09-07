@@ -71,6 +71,14 @@ function total(rows: EngagementRow[], event: string) {
   return rows.filter((row) => row.event === event).reduce((sum, row) => sum + row.count, 0);
 }
 
+function spiceKitchenRows(rows: EngagementRow[]) {
+  return rows.filter(
+    (row) =>
+      row.event === "affiliate_click" &&
+      (row.product.includes("spice-kitchen") || row.source.includes("spice-kitchen")),
+  );
+}
+
 function rank(rows: EngagementRow[], event: string, field: keyof EngagementRow, limit = 8) {
   const totals = new Map<string, number>();
   for (const row of rows) {
@@ -558,6 +566,12 @@ export async function getGrowthDashboard() {
     topAffiliateProducts: rank(current, "affiliate_click", "product"),
     topAffiliateSources: rank(current, "affiliate_click", "source"),
     topAffiliatePages: rank(current, "affiliate_click", "pagePath"),
+    spiceKitchen: {
+      clicks: spiceKitchenRows(current).reduce((sum, row) => sum + row.count, 0),
+      previousClicks: spiceKitchenRows(previous).reduce((sum, row) => sum + row.count, 0),
+      topPages: rank(spiceKitchenRows(current), "affiliate_click", "pagePath", 8),
+      livePlacements: 109,
+    },
     trending,
     social,
     services: {
@@ -602,6 +616,22 @@ export async function getGrowthDashboard() {
       youtube: { configured: dataSourceConfigured("YOUTUBE") },
       tiktok: { configured: dataSourceConfigured("TIKTOK") },
     },
+  };
+}
+
+export async function getSpiceKitchenAffiliateSummary() {
+  const [current, previous] = await Promise.all([
+    engagementWindow(28),
+    engagementWindow(28, 28),
+  ]);
+  const currentRows = spiceKitchenRows(current);
+  const previousRows = spiceKitchenRows(previous);
+  return {
+    clicks: currentRows.reduce((sum, row) => sum + row.count, 0),
+    previousClicks: previousRows.reduce((sum, row) => sum + row.count, 0),
+    topPages: rank(currentRows, "affiliate_click", "pagePath", 5),
+    livePlacements: 109,
+    trackingConnected: Boolean(redisClient()),
   };
 }
 

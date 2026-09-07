@@ -24,6 +24,13 @@ type MetaHealth = {
   facebookConfigured?: boolean;
 };
 
+type SpiceKitchenSummary = {
+  clicks: number;
+  previousClicks: number;
+  livePlacements: number;
+  trackingConnected: boolean;
+};
+
 type ToolCard = {
   title:string;
   href:string;
@@ -152,28 +159,32 @@ const [platformHealth,setPlatformHealth]=useState<PlatformHealth>({});
 const [metaHealth,setMetaHealth]=useState<MetaHealth>({});
 const [pinterestConnected,setPinterestConnected]=useState<boolean|null>(null);
 const [statusLoading,setStatusLoading]=useState(true);
+const [spiceKitchen,setSpiceKitchen]=useState<SpiceKitchenSummary|null>(null);
 
 useEffect(()=>{
   let active=true;
   async function loadStatus(){
     try{
-      const [queueRes,platformRes,metaRes,pinterestRes]=await Promise.all([
+      const [queueRes,platformRes,metaRes,pinterestRes,spiceKitchenRes]=await Promise.all([
         fetch("/api/admin/social/queue",{cache:"no-store"}),
         fetch("/api/admin/social/platform-health",{cache:"no-store"}),
         fetch("/api/admin/social/meta-health",{cache:"no-store"}),
         fetch("/api/pinterest/boards",{cache:"no-store"}),
+        fetch("/api/admin/growth/spice-kitchen",{cache:"no-store"}),
       ]);
-      const [queueData,platformData,metaData,pinterestData]=await Promise.all([
+      const [queueData,platformData,metaData,pinterestData,spiceKitchenData]=await Promise.all([
         queueRes.json().catch(()=>({})),
         platformRes.json().catch(()=>({})),
         metaRes.json().catch(()=>({})),
         pinterestRes.json().catch(()=>({})),
+        spiceKitchenRes.json().catch(()=>({})),
       ]);
       if(!active)return;
       setQueueItems(Array.isArray(queueData?.items)?queueData.items:[]);
       setPlatformHealth(platformData?.ok?platformData:{});
       setMetaHealth(metaData||{});
       setPinterestConnected(Boolean(pinterestData?.ok));
+      setSpiceKitchen(spiceKitchenData?.ok?spiceKitchenData:null);
     }finally{
       if(active)setStatusLoading(false);
     }
@@ -311,6 +322,22 @@ App recipe health
 
 </div>
 
+</section>
+
+<section className="mt-8 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#19170f] to-[var(--surface)] p-8">
+  <div className="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <div className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300/70">Affiliate status</div>
+      <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">Spice Kitchen</h2>
+      <p className="mt-2 text-sm text-[var(--text-soft)]">Awin partner traffic from recipe, guide and meal-planner placements.</p>
+    </div>
+    <Link href="/admin/growth" className="rounded-xl border border-amber-500/40 px-5 py-3 text-sm font-bold text-amber-200">Open affiliate reporting</Link>
+  </div>
+  <div className="mt-6 grid gap-4 sm:grid-cols-3">
+    <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Clicks · 28 days</div><div className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">{spiceKitchen?.clicks??"—"}</div></div>
+    <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Clickable pages</div><div className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">{spiceKitchen?.livePlacements??109}</div></div>
+    <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Tracking</div><div className={`mt-2 text-xl font-extrabold ${spiceKitchen?.trackingConnected?"text-emerald-300":"text-amber-300"}`}>{spiceKitchen?.trackingConnected?"Active":"Checking"}</div></div>
+  </div>
 </section>
 
 <section className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">

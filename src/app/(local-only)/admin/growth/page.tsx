@@ -180,6 +180,30 @@ export default async function GrowthDashboardPage() {
         )}
       </section>
 
+      <section className="mt-8 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#19170f] to-[var(--surface)] p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-amber-300/70">New affiliate partner</p>
+            <h2 className="mt-2 text-xl font-extrabold text-[var(--brand-gold)]">Spice Kitchen traffic</h2>
+            <p className="mt-2 text-sm text-[var(--text-soft)]">On-site clicks during the latest 28 days. Confirmed sales and commission appear in Awin performance above.</p>
+          </div>
+          <Link href="/guides/spices" className="rounded-xl border border-amber-500/40 px-4 py-2 text-sm font-bold text-amber-200 hover:bg-amber-500/10">View main placement</Link>
+        </div>
+        <div className="mt-5 grid gap-4 sm:grid-cols-3">
+          <Metric label="Spice Kitchen clicks" value={number(data.spiceKitchen.clicks)} note={data.engagementConnected ? delta(data.spiceKitchen.clicks, data.spiceKitchen.previousClicks) : "Engagement storage not connected"} />
+          <Metric label="Clickable pages" value={number(data.spiceKitchen.livePlacements)} note="107 recipes · spice guide · meal planner" />
+          <Metric label="Tracking" value={data.engagementConnected ? "Active" : "Needs setup"} note="Placement and referring page recorded for every click" />
+        </div>
+        <div className="mt-5 space-y-3">
+          {data.spiceKitchen.topPages.length ? data.spiceKitchen.topPages.map((item) => (
+            <div key={item.label} className="flex justify-between gap-4 border-b border-[var(--border)] pb-3 text-sm">
+              <span className="truncate text-[var(--text-soft)]">{item.label}</span>
+              <strong className="text-[var(--brand-gold)]">{item.count} click{item.count === 1 ? "" : "s"}</strong>
+            </div>
+          )) : <Empty>No Spice Kitchen clicks have been recorded yet.</Empty>}
+        </div>
+      </section>
+
       <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Social account reporting</h2>
         <p className="mt-2 text-sm text-[var(--text-soft)]">Live audience and analytics checks from the connected platform accounts.</p>
