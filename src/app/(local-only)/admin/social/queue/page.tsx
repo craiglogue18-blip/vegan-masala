@@ -211,6 +211,7 @@ export default function SocialQueuePage() {
   const [log, setLog] = useState("Waiting...");
   const [debugResponse, setDebugResponse] = useState("");
   const [showDebug, setShowDebug] = useState(false);
+  const [failedRegenerationIds, setFailedRegenerationIds] = useState<string[]>([]);
 
   const recipeSlugs = useMemo(
     () => availableSlugs.filter((item) => item.type === "recipe"),
@@ -580,6 +581,63 @@ export default function SocialQueuePage() {
     }
   }
 
+  async function regenerateQueueItem(item: QueueItem, maxAttempts = 3) {
+    let lastError = "Regeneration failed";
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      try {
+        const res = await fetch("/api/admin/social/queue", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: item.id, action: "regenerate" }),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+          return { id: item.id, slug: item.slug, ok: true as const };
+        }
+
+        lastError = data.error || "Regeneration failed";
+        if (res.status < 500 || attempt === maxAttempts) break;
+      } catch (error: any) {
+        lastError = error?.message || "Connection lost during regeneration";
+        if (attempt === maxAttempts) break;
+      }
+
+      setLog(`Connection interrupted. Retrying ${item.title} (${attempt + 1} of ${maxAttempts})…`);
+      await new Promise((resolve) => window.setTimeout(resolve, attempt * 1500));
+    }
+
+    return { id: item.id, slug: item.slug, ok: false as const, error: lastError };
+  }
+
+  async function regenerateItems(items: QueueItem[], label: string) {
+    setQueueLoading(true);
+    setDebugResponse("");
+    const results: Array<{ id: string; slug: string; ok: boolean; error?: string }> = [];
+
+    try {
+      for (let index = 0; index < items.length; index += 1) {
+        const item = items[index];
+        setLog(`${label} ${index + 1} of ${items.length}\n${item.title}`);
+        results.push(await regenerateQueueItem(item));
+      }
+
+      const failed = results.filter((result) => !result.ok);
+      setFailedRegenerationIds(failed.map((result) => result.id));
+      setLog(
+        failed.length
+          ? `Regenerated ${results.length - failed.length} of ${results.length}\nFailed after automatic retries: ${failed.length}`
+          : `Regenerated and checked all ${results.length} selected posts. Schedules preserved.`
+      );
+      setDebugResponse(JSON.stringify({ ok: failed.length === 0, results }, null, 2));
+      setShowDebug(failed.length > 0);
+      await loadQueue();
+    } finally {
+      setQueueLoading(false);
+    }
+  }
+
   async function regenerateQueuedItems() {
     if (!queuedItems.length) {
       setLog("There are no queued posts to regenerate.");
@@ -590,50 +648,14 @@ export default function SocialQueuePage() {
       return;
     }
 
-    setQueueLoading(true);
-    setDebugResponse("");
-    const results: Array<{ id: string; slug: string; ok: boolean; error?: string }> = [];
+    setFailedRegenerationIds([]);
+    await regenerateItems(queuedItems, "Regenerating");
+  }
 
-    try {
-      for (let index = 0; index < queuedItems.length; index += 1) {
-        const item = queuedItems[index];
-        setLog(`Regenerating ${index + 1} of ${queuedItems.length}\n${item.title}`);
-
-        try {
-          const res = await fetch("/api/admin/social/queue", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: item.id, action: "regenerate" }),
-          });
-          const data = await res.json().catch(() => ({}));
-          results.push({
-            id: item.id,
-            slug: item.slug,
-            ok: res.ok,
-            error: res.ok ? undefined : data.error || "Regeneration failed",
-          });
-        } catch (error: any) {
-          results.push({
-            id: item.id,
-            slug: item.slug,
-            ok: false,
-            error: error?.message || "Regeneration failed",
-          });
-        }
-      }
-
-      const failed = results.filter((result) => !result.ok);
-      setLog(
-        failed.length
-          ? `Regenerated ${results.length - failed.length} of ${results.length}\nFailed: ${failed.length}`
-          : `Regenerated and checked all ${results.length} queued posts. Schedules preserved.`
-      );
-      setDebugResponse(JSON.stringify({ ok: failed.length === 0, results }, null, 2));
-      setShowDebug(failed.length > 0);
-      await loadQueue();
-    } finally {
-      setQueueLoading(false);
-    }
+  async function retryFailedRegenerations() {
+    const items = queuedItems.filter((item) => failedRegenerationIds.includes(item.id));
+    if (!items.length) return;
+    await regenerateItems(items, "Retrying");
   }
 
   async function build30() {
@@ -1132,6 +1154,17 @@ export default function SocialQueuePage() {
                 </button>
               )}
 
+              {item.status === "queued" && (
+                <button
+                  type="button"
+                  disabled={queueLoading}
+                  onClick={() => regenerateItems([item], "Regenerating")}
+                  className="rounded-lg border border-sky-500/40 px-3 py-2 text-xs font-semibold text-sky-300 disabled:opacity-50"
+                >
+                  {queueLoading ? "Working..." : "Regenerate artwork"}
+                </button>
+              )}
+
               {item.status === "failed" && (
                 <button
                   type="button"
@@ -1567,6 +1600,16 @@ export default function SocialQueuePage() {
               >
                 {queueLoading ? "Working..." : `Regenerate all queued (${queuedItems.length})`}
               </button>
+
+              {failedRegenerationIds.length > 0 ? (
+                <button
+                  onClick={() => retryFailedRegenerations()}
+                  disabled={queueLoading}
+                  className="rounded-xl border border-yellow-500 px-6 py-3 font-bold text-yellow-300 disabled:opacity-50"
+                >
+                  {queueLoading ? "Retrying..." : `Retry failed regenerations (${failedRegenerationIds.length})`}
+                </button>
+              ) : null}
 
               <button
                 onClick={() => clearQueue()}
