@@ -866,9 +866,11 @@ async function mainClip(
   await brandTextureBackground(brandedBackground);
 
   const filter = [
-    `[0:v]scale=1080:1920,zoompan=z='min(zoom+0.00025,1.025)':d=${MAIN_DURATION * FPS}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS}[bg]`,
-    `[1:v]format=rgba,colorchannelmixer=aa=1[card]`,
-    `[2:v]format=rgba[overlay]`,
+    `[0:v]scale=1080:1920,zoompan=z='min(zoom+0.00018,1.018)':d=${MAIN_DURATION * FPS}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS}[brand]`,
+    `[1:v]scale=1200:2134,zoompan=z='min(zoom+0.0008,1.06)':d=${MAIN_DURATION * FPS}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS},boxblur=28:14,format=rgba,colorchannelmixer=aa=0.42[photo]`,
+    `[2:v]format=rgba,colorchannelmixer=aa=1[card]`,
+    `[3:v]format=rgba[overlay]`,
+    `[brand][photo]overlay=0:0[bg]`,
     `[bg][card]overlay=(W-w)/2:350[tmp1]`,
     `[tmp1][overlay]overlay=0:0,format=yuv420p[outv]`,
   ].join(";");
@@ -879,6 +881,10 @@ async function mainClip(
     "1",
     "-i",
     brandedBackground,
+    "-loop",
+    "1",
+    "-i",
+    image,
     "-loop",
     "1",
     "-i",
