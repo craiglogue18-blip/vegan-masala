@@ -2,6 +2,10 @@ export const AMAZON_ASSOCIATES_TAG = "veganmasala03-21";
 export const AWIN_PUBLISHER_ID = "3062927";
 export const ETHICAL_SUPERSTORE_ADVERTISER_ID = "3651";
 export const ETHICAL_SUPERSTORE_URL = "https://www.ethicalsuperstore.com/";
+export const SPICE_KITCHEN_ADVERTISER_ID = "128085";
+export const SPICE_KITCHEN_URL = "https://www.spicekitchenuk.com/";
+export const SPICE_KITCHEN_INDIAN_TIN_URL =
+  "https://www.spicekitchenuk.com/products/indianspicetinwithcover";
 
 export const AMAZON_PRODUCTS = {
   pressureCooker: {
@@ -73,6 +77,17 @@ export function ethicalSuperstoreAffiliateUrl(
 ) {
   return awinDeepLinkUrl({
     advertiserId: ETHICAL_SUPERSTORE_ADVERTISER_ID,
+    destinationUrl,
+    clickReference,
+  });
+}
+
+export function spiceKitchenAffiliateUrl(
+  clickReference: string,
+  destinationUrl = SPICE_KITCHEN_URL,
+) {
+  return awinDeepLinkUrl({
+    advertiserId: SPICE_KITCHEN_ADVERTISER_ID,
     destinationUrl,
     clickReference,
   });

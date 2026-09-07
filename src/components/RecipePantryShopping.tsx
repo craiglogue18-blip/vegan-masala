@@ -1,7 +1,11 @@
 import Image from "next/image";
 
 import AffiliateLink from "@/components/AffiliateLink";
-import { ethicalSuperstoreAffiliateUrl } from "@/lib/affiliate";
+import {
+  ethicalSuperstoreAffiliateUrl,
+  SPICE_KITCHEN_INDIAN_TIN_URL,
+  spiceKitchenAffiliateUrl,
+} from "@/lib/affiliate";
 
 type RecipeLike = {
   slug: string;
@@ -124,6 +128,42 @@ export default function RecipePantryShopping({
           </div>
         ))}
       </div>
+
+      {picks.some((pick) => pick.key === "spices") ? (
+        <div className="mt-5 grid gap-4 rounded-2xl border border-amber-300 bg-[#fff8e6] p-4 sm:grid-cols-[120px_1fr] sm:items-center">
+          <Image
+            src="/images/affiliates/spice-kitchen-indian-spice-tin.png"
+            alt="Spice Kitchen Indian Spice Tin with nine spices and blends"
+            width={2000}
+            height={2000}
+            className="mx-auto h-auto w-28 rounded-xl object-contain"
+          />
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-amber-800">
+              Spice Kitchen · Affiliate partner
+            </p>
+            <h3 className="mt-1 font-extrabold text-slate-950">Nine core Indian spices in one tin</h3>
+            <p className="mt-1 text-sm leading-6 text-slate-700">
+              A giftable masala dabba with foundational spices, a spice spoon and a mini recipe book.
+            </p>
+            <AffiliateLink
+              href={spiceKitchenAffiliateUrl(
+                `recipe-${recipe.slug}-spice-kitchen-tin`,
+                SPICE_KITCHEN_INDIAN_TIN_URL,
+              )}
+              title="Spice Kitchen Indian Spice Tin"
+              category="Recipe pantry"
+              network="Awin"
+              destinationLabel="Spice Kitchen"
+              placement={`recipe-${recipe.slug}`}
+              className="mt-3 inline-flex min-h-11 items-center rounded-xl bg-[#8b3f22] px-4 py-2 text-sm font-extrabold text-white transition hover:bg-[#71321b]"
+            >
+              View the Indian Spice Tin →
+            </AffiliateLink>
+            <p className="mt-2 text-xs text-slate-600">Paid affiliate link · No extra cost to you</p>
+          </div>
+        </div>
+      ) : null}
     </aside>
   );
 }

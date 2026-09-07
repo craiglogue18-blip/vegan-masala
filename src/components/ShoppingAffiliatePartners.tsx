@@ -1,6 +1,9 @@
 import Image from "next/image";
 import AffiliateLink from "@/components/AffiliateLink";
-import { ethicalSuperstoreAffiliateUrl } from "@/lib/affiliate";
+import {
+  ethicalSuperstoreAffiliateUrl,
+  spiceKitchenAffiliateUrl,
+} from "@/lib/affiliate";
 
 type ShoppingPartner = {
   name: string;
@@ -11,6 +14,13 @@ type ShoppingPartner = {
 };
 
 const configuredPartners: ShoppingPartner[] = [
+  {
+    name: "Spice Kitchen",
+    description: "Award-winning spice blends, Indian spice tins and cooking gifts from a family-run UK business.",
+    url: spiceKitchenAffiliateUrl("meal-planner-shopping"),
+    network: "Awin",
+    logo: "/images/affiliates/spice-kitchen-logo.png",
+  },
   {
     name: "Ethical Superstore",
     description: "Vegan cupboard ingredients and ethical household essentials.",

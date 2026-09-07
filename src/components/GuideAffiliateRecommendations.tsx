@@ -6,6 +6,8 @@ import {
   amazonUkProductUrl,
   amazonUkSearchUrl,
   ethicalSuperstoreAffiliateUrl,
+  SPICE_KITCHEN_INDIAN_TIN_URL,
+  spiceKitchenAffiliateUrl,
 } from "@/lib/affiliate";
 
 type Recommendation = {
@@ -223,6 +225,44 @@ export default function GuideAffiliateRecommendations({ slug }: { slug: string }
             >
               Visit Ethical Superstore →
             </AffiliateLink>
+          </div>
+        </article>
+      )}
+
+      {slug === "indian-spices-explained-for-beginners" && (
+        <article className="mt-6 grid gap-5 overflow-hidden rounded-2xl border border-[#dfad35]/50 bg-gradient-to-br from-[#fff9e9] to-[#f7e6b5] p-5 text-slate-950 sm:grid-cols-[180px_1fr] sm:items-center">
+          <div className="overflow-hidden rounded-xl bg-white p-3 shadow-sm">
+            <Image
+              src="/images/affiliates/spice-kitchen-indian-spice-tin.png"
+              alt="Spice Kitchen Indian Spice Tin with nine spices and blends"
+              width={2000}
+              height={2000}
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#9a5f13]">
+              Affiliate partner · Awin
+            </p>
+            <h3 className="mt-1 text-xl font-extrabold">Build your Indian spice collection</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-700">
+              Spice Kitchen&apos;s Indian Spice Tin brings nine foundational spices and blends together with a spice spoon and mini recipe book. UK delivery is free on orders over £25.
+            </p>
+            <AffiliateLink
+              href={spiceKitchenAffiliateUrl(
+                `guide-${slug}-indian-spice-tin`,
+                SPICE_KITCHEN_INDIAN_TIN_URL,
+              )}
+              title="Spice Kitchen Indian Spice Tin"
+              category={`Guide: ${slug}`}
+              network="Awin"
+              destinationLabel="Spice Kitchen"
+              placement={`guide-${slug}`}
+              className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#8b3f22] px-5 py-2 text-sm font-extrabold text-white transition hover:bg-[#71321b]"
+            >
+              View the Indian Spice Tin →
+            </AffiliateLink>
+            <p className="mt-2 text-xs text-slate-600">Paid affiliate link · No extra cost to you</p>
           </div>
         </article>
       )}
