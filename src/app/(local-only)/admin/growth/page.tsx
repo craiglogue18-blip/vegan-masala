@@ -41,6 +41,27 @@ function Metric({ label, value, note }: { label: string; value: string | number;
   );
 }
 
+function FollowerTarget({ platform, current, target }: { platform: string; current: number | null; target: number }) {
+  const known = current !== null;
+  const currentValue = current ?? 0;
+  const progress = known ? Math.min(100, Math.round((currentValue / target) * 100)) : 0;
+  return (
+    <div className="rounded-2xl border border-[var(--brand-gold)]/20 bg-black/15 p-5">
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">{platform}</p>
+          <p className="mt-2 text-3xl font-extrabold text-white">{known ? number(currentValue) : "—"}</p>
+        </div>
+        <p className="text-right text-xs text-[var(--text-soft)]">90-day target<br /><strong className="text-[var(--brand-gold)]">{number(target)}</strong></p>
+      </div>
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+        <div className="h-full rounded-full bg-[var(--brand-gold)] transition-all" style={{ width: `${progress}%` }} />
+      </div>
+      <p className="mt-2 text-xs text-[var(--text-soft)]">{known ? `${progress}% of target · ${number(Math.max(0, target - currentValue))} followers to go` : "Reconnect analytics to track progress"}</p>
+    </div>
+  );
+}
+
 function Empty({ children }: { children: React.ReactNode }) {
   return <p className="rounded-xl border border-dashed border-[var(--border)] bg-black/10 p-4 text-sm text-[var(--text-soft)]">{children}</p>;
 }
@@ -82,6 +103,22 @@ export default async function GrowthDashboardPage() {
       </header>
 
       <GrowthPulseChart points={data.growthTrend} />
+
+      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/25 bg-gradient-to-br from-[#172129] to-[#0b1217] p-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/65">Follower growth sprint</p>
+            <h2 className="mt-2 text-xl font-extrabold text-[var(--brand-gold)]">Facebook and Pinterest · 90-day targets</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">The weekly planner now prioritises five native Facebook Reels and 21 searchable Pinterest Pins each week. Review this panel weekly rather than reacting to daily fluctuations.</p>
+          </div>
+          <Link href="/admin/social/queue" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)] hover:bg-white/5">Review growth queue</Link>
+        </div>
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <FollowerTarget platform="Facebook" current={data.services.socialPerformance.facebook.followers} target={100} />
+          <FollowerTarget platform="Pinterest" current={data.services.socialPerformance.pinterest.followers} target={75} />
+          <FollowerTarget platform="Instagram reference" current={data.services.socialPerformance.instagram.followers} target={600} />
+        </div>
+      </section>
 
       <section className="mt-8">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">At a glance</h2>

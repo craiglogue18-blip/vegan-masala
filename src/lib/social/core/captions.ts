@@ -959,6 +959,8 @@ export function buildFacebookCaption(slug: string, type: ContentType) {
 
 ${middle}
 
+What would you serve with this: rice, roti, or something else?
+
 ${cta}\n${trackedContentUrl(slug, type, "facebook")}
 
 ${slugTags ? `${slugTags}\n` : ""}#veganmasala #plantbased #indianfood`;
@@ -970,6 +972,8 @@ ${slugTags ? `${slugTags}\n` : ""}#veganmasala #plantbased #indianfood`;
   return `${hook}
 
 ${middle}
+
+What is the one cooking question you would like this guide to answer?
 
 ${cta}\n${trackedContentUrl(slug, type, "facebook")}
 

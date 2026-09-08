@@ -1,4 +1,4 @@
-import { buildFacebookCaption, buildInstagramCaption, buildPinterestCaption } from "./captions";
+import { buildFacebookCaption, buildInstagramCaption, buildPinterestCaptionVariants } from "./captions";
 import { allContent, slugFromFile, titleFromSlug, type ContentType } from "./content";
 import { addQueueItem, allQueueItems, type QueueItem, type QueuePlatform } from "./queue";
 import { contentUrl } from "./urls";
@@ -11,12 +11,18 @@ import { youtubePublishingConfigured } from "../publishers/publishYouTube";
 const PLATFORM_TIMES: Record<QueuePlatform, { hour: number; minute: number }> = {
   pinterest: { hour: 9, minute: 15 },
   instagram: { hour: 12, minute: 15 },
-  facebook: { hour: 18, minute: 15 },
+  facebook: { hour: 18, minute: 30 },
   tiktok: { hour: 15, minute: 15 },
   youtube: { hour: 17, minute: 15 },
 };
 
-const PINTEREST_DAYS = [1, 2, 3, 4, 5] as const;
+const PLANNING_DAYS = [1, 2, 3, 4, 5, 6, 7] as const;
+const PINTEREST_TIMES = [
+  { hour: 8, minute: 15 },
+  { hour: 13, minute: 15 },
+  { hour: 20, minute: 15 },
+] as const;
+const FACEBOOK_REEL_DAYS = new Set([1, 2, 3, 4, 5]);
 const CROSS_POST_DAYS = new Set([2, 5]);
 
 type ContentCandidate = {
@@ -28,6 +34,7 @@ type ContentCandidate = {
 type WeeklySlot = ContentCandidate & {
   date: string;
   day: number;
+  pinterestTimeIndex: number;
   board: string;
   platforms: QueuePlatform[];
   existingPlatforms: QueuePlatform[];
@@ -53,8 +60,10 @@ function isoDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-function scheduleFor(date: string, platform: QueuePlatform) {
-  const { hour, minute } = PLATFORM_TIMES[platform];
+function scheduleFor(date: string, platform: QueuePlatform, pinterestTimeIndex = 0) {
+  const { hour, minute } = platform === "pinterest"
+    ? PINTEREST_TIMES[pinterestTimeIndex] || PINTEREST_TIMES[0]
+    : PLATFORM_TIMES[platform];
   return `${date}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00.000Z`;
 }
 
@@ -135,37 +144,43 @@ export async function planWeeklySocialPosts(options?: {
   ]);
 
   const slots: WeeklySlot[] = [];
-  for (const day of PINTEREST_DAYS) {
+  for (const day of PLANNING_DAYS) {
     const date = new Date(monday);
     date.setUTCDate(monday.getUTCDate() + day - 1);
     const dateString = isoDate(date);
     const existing = itemsForDate(items, dateString);
-    const existingPinterest = existing.find((item) => item.platform === "pinterest");
-    const preferredType: ContentType = day === 3 || day === 5 ? "guide" : "recipe";
-    const chosen = existingPinterest
-      ? candidates.find((item) => item.slug === existingPinterest.slug)
-      : chooseContent(candidates, items, excluded, dateString, preferredType);
+    for (let pinterestTimeIndex = 0; pinterestTimeIndex < PINTEREST_TIMES.length; pinterestTimeIndex++) {
+      const existingPinterest = existing.filter((item) => item.platform === "pinterest")[pinterestTimeIndex];
+      // Morning educational Pins broaden the mix; lunchtime stays recipe-led so it can become a Reel.
+      const preferredType: ContentType = pinterestTimeIndex === 0 && day % 2 === 1 ? "guide" : "recipe";
+      const chosen = existingPinterest
+        ? candidates.find((item) => item.slug === existingPinterest.slug)
+        : chooseContent(candidates, items, excluded, `${dateString}:${pinterestTimeIndex}`, preferredType);
 
-    if (!chosen) continue;
-    excluded.add(chosen.slug);
+      if (!chosen) continue;
+      excluded.add(chosen.slug);
 
-    const platforms: QueuePlatform[] = defaultBoard ? ["pinterest"] : [];
-    if (CROSS_POST_DAYS.has(day)) {
-      platforms.push("instagram", "facebook");
-      if (tiktokConnected) platforms.push("tiktok");
-      if (youtubeConnected) platforms.push("youtube");
+      const platforms: QueuePlatform[] = defaultBoard ? ["pinterest"] : [];
+      // The lunchtime item is the day's strongest cross-platform candidate.
+      if (pinterestTimeIndex === 1 && FACEBOOK_REEL_DAYS.has(day)) platforms.push("facebook");
+      if (pinterestTimeIndex === 1 && CROSS_POST_DAYS.has(day)) {
+        platforms.push("instagram");
+        if (tiktokConnected) platforms.push("tiktok");
+        if (youtubeConnected) platforms.push("youtube");
+      }
+
+      slots.push({
+        ...chosen,
+        date: dateString,
+        day,
+        pinterestTimeIndex,
+        board: chosen.type === "guide" ? guideBoard : recipeBoard,
+        platforms,
+        existingPlatforms: existing
+          .filter((item) => item.slug === chosen.slug)
+          .map((item) => item.platform),
+      });
     }
-
-    slots.push({
-      ...chosen,
-      date: dateString,
-      day,
-      board: chosen.type === "guide" ? guideBoard : recipeBoard,
-      platforms,
-      existingPlatforms: existing
-        .filter((item) => item.slug === chosen.slug)
-        .map((item) => item.platform),
-    });
   }
 
   const warnings: string[] = [];
@@ -214,7 +229,7 @@ export async function planWeeklySocialPosts(options?: {
     for (const platform of missing) {
       const url = trackedUrl(slot.slug, slot.type, platform);
       const caption = platform === "pinterest"
-        ? buildPinterestCaption(slot.slug, slot.type)
+        ? buildPinterestCaptionVariants(slot.slug, slot.type)[slot.pinterestTimeIndex % 2]
         : platform === "facebook"
           ? buildFacebookCaption(slot.slug, slot.type)
           : platform === "tiktok"
@@ -231,7 +246,7 @@ export async function planWeeklySocialPosts(options?: {
         caption,
         url,
         board: platform === "pinterest" ? slot.board : null,
-        scheduledFor: scheduleFor(slot.date, platform),
+        scheduledFor: scheduleFor(slot.date, platform, slot.pinterestTimeIndex),
         contentType: slot.type,
         assetType: isVideo ? "video" : "image",
         imageUrl: platform === "pinterest" ? pinterestUrl : "",
