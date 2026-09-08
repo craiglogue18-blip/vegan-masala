@@ -130,6 +130,17 @@ export default async function GrowthDashboardPage() {
         </div>
       </section>
 
+      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
+        <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Discovery signals</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">These are the early signs that content is reaching and helping people before follower growth appears. Platform APIs do not currently expose a reliable combined non-follower total, so the dashboard reports only verified figures.</p>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <Metric label="Pinterest impressions" value={data.services.socialPerformance.pinterest.impressions === null ? "—" : number(data.services.socialPerformance.pinterest.impressions)} note="Discovery in search, home and related feeds" />
+          <Metric label="Pinterest saves" value={data.services.socialPerformance.pinterest.saves === null ? "—" : number(data.services.socialPerformance.pinterest.saves)} note="Strong signal that a Pin is useful" />
+          <Metric label="Pinterest visits" value={data.services.socialPerformance.pinterest.outboundClicks === null ? "—" : number(data.services.socialPerformance.pinterest.outboundClicks)} note="Clicks sent to Vegan Masala" />
+          <Metric label="Facebook distribution" value={data.services.socialPerformance.facebook.impressions === null ? "—" : number(data.services.socialPerformance.facebook.impressions)} note={data.services.socialPerformance.facebook.impressions === null ? "Reach analytics permission is not available yet" : "Verified Page reach in the reporting window"} />
+        </div>
+      </section>
+
       <section className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">What needs attention?</h2>
@@ -254,6 +265,7 @@ export default async function GrowthDashboardPage() {
               <p className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">{item.followers === null ? "—" : number(item.followers)}</p>
               <p className="text-xs text-[var(--text-soft)]">{item.followers === null ? "Followers unavailable" : "Followers"}</p>
               {item.impressions !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.impressions)} impressions · {number(item.outboundClicks ?? 0)} outbound clicks</p>}
+              {item.saves !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.saves)} saves</p>}
               {item.views !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.views)} views in the latest 28 days</p>}
               {item.content !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.content)} published items</p>}
               {item.error && <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">{item.error}</p>}

@@ -161,8 +161,8 @@ JSON shape:
 
 Rules:
 - Instagram variants: Curiosity, Practical value, and Craving. Open with a dish-specific hook; use “full recipe via the link in our bio” because caption URLs are not clickable
-- Facebook variants: Story-led and Practical. Include the exact canonicalUrl as a natural next step
-- Pinterest variants: Search-friendly and Benefit-led. Put the exact dish name and primary ingredient early, include the exact canonicalUrl, and explain what the reader will learn
+- Facebook variants: Story-led and Practical. Include the exact canonicalUrl as a natural next step, ask one easy dish-specific question, and give a concrete reason to follow Vegan Masala
+- Pinterest variants: Search-friendly and Benefit-led. Put the exact dish name and primary ingredient early, include the exact canonicalUrl, explain what the reader will learn, and explicitly ask the reader to save it
 - TikTok variants: one sharp first-line hook, one concrete dish or technique detail, then “full recipe via our profile”; do not rely on a raw URL
 - YouTube descriptions: a clear two-sentence summary, name Vegan Masala and the dish clearly, then focused hashtags; do not claim a Shorts description URL is clickable
 - Every Instagram caption variant must end with 8 to 12 relevant hashtags, each on its own line
@@ -177,9 +177,9 @@ Rules:
 - pinterestImageHook: 1 sentence, more descriptive, more ingredient-led, more explicit
 - pinterestImageSubtitle: 1 sentence, mention serving style, texture, or what the dish contains
 - videoTitle: a natural, appetising display name for the dish, maximum 38 characters; remove SEO repetition, pipes, brackets, quote marks and the word "recipe"
-- videoHook: one striking opening line, maximum 56 characters; concrete and dish-specific, with no hashtags or ellipsis
+- videoHook: one striking opening line for the first two seconds, maximum 56 characters; lead with a texture reveal, mistake solved, transformation or useful payoff; concrete and dish-specific, with no hashtags or ellipsis
 - videoMainLine: one vivid sensory or practical payoff, maximum 64 characters; no generic praise, hashtags or ellipsis
-- videoOutroLine: one direct CTA, maximum 42 characters; no hashtags or ellipsis
+- videoOutroLine: one direct CTA, maximum 42 characters; prefer "Follow for vegan Indian recipes"; no hashtags or ellipsis
 - Prefer proven food-content angles: a texture reveal, a common cooking mistake solved, an ingredient transformation, an easy serving payoff, or a save-worthy technique
 - Never invent timings, ingredients, health claims, regional claims, or cooking methods that are absent from the source data
 - Use seasonContext only when it genuinely suits the dish; evergreen usefulness is better than a forced seasonal reference

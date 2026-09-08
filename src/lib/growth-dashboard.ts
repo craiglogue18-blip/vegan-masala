@@ -357,6 +357,7 @@ type SocialSnapshot = {
   content: number | null;
   impressions: number | null;
   outboundClicks: number | null;
+  saves: number | null;
   views: number | null;
   error: string | null;
   daily: Array<{ date: string; reach: number; clicks: number }>;
@@ -368,6 +369,7 @@ const emptySocial = (configured: boolean, error: string | null = null): SocialSn
   content: null,
   impressions: null,
   outboundClicks: null,
+  saves: null,
   views: null,
   error,
   daily: [],
@@ -418,7 +420,7 @@ async function getPinterestPerformance(): Promise<SocialSnapshot> {
     const url = new URL("https://api.pinterest.com/v5/user_account/analytics");
     url.searchParams.set("start_date", start.toISOString().slice(0, 10));
     url.searchParams.set("end_date", end.toISOString().slice(0, 10));
-    url.searchParams.set("metric_types", "IMPRESSION,OUTBOUND_CLICK");
+    url.searchParams.set("metric_types", "IMPRESSION,OUTBOUND_CLICK,SAVE");
     const headers = { Authorization: `Bearer ${token}` };
     const response = await fetch(url, { headers, cache: "no-store", signal: AbortSignal.timeout(8_000) });
     if (!response.ok) return emptySocial(true, "Connected for publishing; analytics permission is still needed");
@@ -449,6 +451,7 @@ async function getPinterestPerformance(): Promise<SocialSnapshot> {
       followers: followerReportingAvailable ? followers : null,
       impressions: sum("IMPRESSION"),
       outboundClicks: sum("OUTBOUND_CLICK"),
+      saves: sum("SAVE"),
       daily: daily
         .filter((row) => typeof row.date === "string")
         .map((row) => ({

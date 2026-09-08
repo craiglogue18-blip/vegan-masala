@@ -30,6 +30,23 @@ function ensureTrafficUrl(
   return `${text.trim()}\n\n${tracked}`;
 }
 
+function ensureFacebookDistribution(text: string) {
+  let result = String(text || "").trim();
+  if (!/\?/.test(result)) {
+    result += "\n\nWhat would you serve with this: rice, roti, or something else?";
+  }
+  if (!/follow vegan masala/i.test(result)) {
+    result += "\n\nFollow Vegan Masala for practical vegan Indian dinner ideas every week.";
+  }
+  return result;
+}
+
+function ensurePinterestDiscovery(text: string) {
+  const result = String(text || "").trim();
+  if (/save (this|it|the)/i.test(result)) return result;
+  return `${result}\n\nSave this recipe or guide so it is ready when you need it.`;
+}
+
 
 function ensureHashtags(
   text: string,
@@ -109,28 +126,26 @@ export async function getSocialCopyForSlug(slug: string) {
             : buildInstagramCaptionVariants(slug, type)
           ).map((variant) => ensureHashtags(variant, instagramFallbackTags(slug))),
 
-        facebookCaption: ensureTrafficUrl(ensureHashtags(
-          ai.facebookCaptionVariants[0] || buildFacebookCaption(slug, type),
-          facebookFallbackTags()
-        ), slug, type, "facebook"),
+        facebookCaption: ensureTrafficUrl(ensureHashtags(ensureFacebookDistribution(
+          ai.facebookCaptionVariants[0] || buildFacebookCaption(slug, type)
+        ), facebookFallbackTags()), slug, type, "facebook"),
         facebookCaptionVariants:
           (ai.facebookCaptionVariants.length > 0
             ? ai.facebookCaptionVariants
             : buildFacebookCaptionVariants(slug, type)
           ).map((variant) => ensureTrafficUrl(
-            ensureHashtags(variant, facebookFallbackTags()), slug, type, "facebook"
+            ensureHashtags(ensureFacebookDistribution(variant), facebookFallbackTags()), slug, type, "facebook"
           )),
 
-        pinterestCaption: ensureTrafficUrl(ensureHashtags(
-          ai.pinterestCaptionVariants[0] || buildPinterestCaption(slug, type),
-          pinterestFallbackTags()
-        ), slug, type, "pinterest"),
+        pinterestCaption: ensureTrafficUrl(ensureHashtags(ensurePinterestDiscovery(
+          ai.pinterestCaptionVariants[0] || buildPinterestCaption(slug, type)
+        ), pinterestFallbackTags()), slug, type, "pinterest"),
         pinterestCaptionVariants:
           (ai.pinterestCaptionVariants.length > 0
             ? ai.pinterestCaptionVariants
             : buildPinterestCaptionVariants(slug, type)
           ).map((variant) => ensureTrafficUrl(
-            ensureHashtags(variant, pinterestFallbackTags()), slug, type, "pinterest"
+            ensureHashtags(ensurePinterestDiscovery(variant), pinterestFallbackTags()), slug, type, "pinterest"
           )),
 
         tiktokCaption: ensureHashtags(
@@ -180,19 +195,17 @@ export async function getSocialCopyForSlug(slug: string) {
     instagramCaptionVariants: buildInstagramCaptionVariants(slug, type).map((variant) =>
       ensureHashtags(variant, instagramFallbackTags(slug))
     ),
-    facebookCaption: ensureTrafficUrl(ensureHashtags(
-      buildFacebookCaption(slug, type),
-      facebookFallbackTags()
-    ), slug, type, "facebook"),
+    facebookCaption: ensureTrafficUrl(ensureHashtags(ensureFacebookDistribution(
+      buildFacebookCaption(slug, type)
+    ), facebookFallbackTags()), slug, type, "facebook"),
     facebookCaptionVariants: buildFacebookCaptionVariants(slug, type).map((variant) =>
-      ensureTrafficUrl(ensureHashtags(variant, facebookFallbackTags()), slug, type, "facebook")
+      ensureTrafficUrl(ensureHashtags(ensureFacebookDistribution(variant), facebookFallbackTags()), slug, type, "facebook")
     ),
-    pinterestCaption: ensureTrafficUrl(ensureHashtags(
-      buildPinterestCaption(slug, type),
-      pinterestFallbackTags()
-    ), slug, type, "pinterest"),
+    pinterestCaption: ensureTrafficUrl(ensureHashtags(ensurePinterestDiscovery(
+      buildPinterestCaption(slug, type)
+    ), pinterestFallbackTags()), slug, type, "pinterest"),
     pinterestCaptionVariants: buildPinterestCaptionVariants(slug, type).map((variant) =>
-      ensureTrafficUrl(ensureHashtags(variant, pinterestFallbackTags()), slug, type, "pinterest")
+      ensureTrafficUrl(ensureHashtags(ensurePinterestDiscovery(variant), pinterestFallbackTags()), slug, type, "pinterest")
     ),
     tiktokCaption: ensureHashtags(
       buildInstagramCaption(slug, type),

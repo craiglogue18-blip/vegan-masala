@@ -328,10 +328,10 @@ function buildNaturalOutroTitle(type: "recipe" | "guide", slug: string) {
   }
 
   return pickFromSeed(slug, [
-    "Get The Full Recipe",
-    "Cook This At Home",
-    "Save This For Later",
-    "Make This Tonight",
+    "Follow For Vegan Indian Recipes",
+    "Follow For Your Next Curry Night",
+    "Save This And Follow For More",
+    "Follow For Practical Vegan Dinners",
   ]);
 }
 
