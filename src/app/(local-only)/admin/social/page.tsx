@@ -129,6 +129,17 @@ cta:"Open video tools"
 },
 
 {
+title:"Campaign Studio",
+
+href:"/admin/social/campaigns",
+
+description:
+"Create 9:16 stories and short videos for affiliate features, cooking lessons, ingredients, site tools and behind-the-recipe content.",
+
+cta:"Open campaign studio"
+},
+
+{
 title:"SEO Health",
 
 href:"/admin/seo/health",
@@ -292,6 +303,18 @@ className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold 
 >
 
 Social automation
+
+</Link>
+
+<Link
+
+href="/admin/social/campaigns"
+
+className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
+
+>
+
+Campaign studio
 
 </Link>
 
