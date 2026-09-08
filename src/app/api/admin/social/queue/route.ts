@@ -33,6 +33,9 @@ import { validateSocialPublishPreflight } from "@/lib/social/core/publishPreflig
 import { renderPinterestEbookPromo } from "@/lib/social/ebook/renderPinterest";
 import { renderInstagramBySlug } from "@/lib/social/instagram/render";
 import { getSocialCopyForSlug } from "@/lib/social/core/socialCopy";
+import { CAMPAIGNS, type CampaignKind } from "@/lib/social/campaigns/catalog";
+import { buildCampaignCopy } from "@/lib/social/campaigns/copy";
+import { renderCampaign } from "@/lib/social/campaigns/render";
 
 
 function getBaseUrl() {
@@ -186,6 +189,12 @@ export async function POST(req: Request) {
 
     const requestedKind =
       typeof body.kind === "string" ? body.kind.trim().toLowerCase() : "";
+
+    const campaignKind =
+      typeof body.campaignKind === "string" &&
+      CAMPAIGNS.some((campaign) => campaign.id === body.campaignKind)
+        ? (body.campaignKind as CampaignKind)
+        : undefined;
 
     const kind: QueueContentKind =
       requestedKind === "ebook" ? "ebook" : "standard";
@@ -369,6 +378,7 @@ export async function POST(req: Request) {
       publishImageUrl: normalizedPublishImageUrl,
       videoUrl: normalizedVideoUrl,
       requiresApproval: platform === "tiktok",
+      campaignKind,
     });
 
     return NextResponse.json({
@@ -441,12 +451,28 @@ export async function PATCH(req: Request) {
         );
       }
 
-      const caption = buildCaption(existing.platform, existing.slug, contentType);
+      let caption = buildCaption(existing.platform, existing.slug, contentType);
       let imageUrl = existing.imageUrl;
       let publishImageUrl = existing.publishImageUrl;
       let videoUrl = existing.videoUrl;
 
-      if (existing.platform === "pinterest") {
+      if (
+        existing.campaignKind &&
+        CAMPAIGNS.some((campaign) => campaign.id === existing.campaignKind)
+      ) {
+        const campaignKind = existing.campaignKind as CampaignKind;
+        const copy = await buildCampaignCopy(campaignKind, existing.slug);
+        const generated = await renderCampaign(
+          copy,
+          campaignKind,
+          (existing.assetType || "image") === "video" ? "video" : "story",
+          existing.slug
+        );
+        caption = copy.captionVariants[0] || copy.caption;
+        imageUrl = generated.image;
+        publishImageUrl = generated.publishImage;
+        videoUrl = generated.video || undefined;
+      } else if (existing.platform === "pinterest") {
         const generated = await generatePinterestBySlug(existing.slug);
         imageUrl = String(generated.image || "").split("?")[0].split("#")[0];
         publishImageUrl = imageUrl;

@@ -46,6 +46,7 @@ export type QueueItem = {
   videoUrl?: string;
   attemptCount?: number;
   requiresApproval?: boolean;
+  campaignKind?: string;
 };
 
 export type QueueAttemptMetadata = {
