@@ -495,6 +495,11 @@ function ctaByType(type: ContentType, slug: string) {
   ]);
 }
 
+function trackedContentUrl(slug: string, type: ContentType, platform: string) {
+  const section = type === "guide" ? "guides" : "recipes";
+  return `https://www.vegan-masala.com/${section}/${slug}?utm_source=${platform}&utm_medium=organic_social&utm_campaign=evergreen_content`;
+}
+
 function recipeHashtags(slug: string) {
   const base = [
     "#veganrecipes",
@@ -607,7 +612,7 @@ ${slugTags ? `${slugTags}\n` : ""}${guideHashtags(slug)}`;
 }
 
 export function buildInstagramCaption(slug: string, type: ContentType) {
-  return buildInstagramBody(slug, type);
+  return `${buildInstagramBody(slug, type)}\n\nFull ${type === "guide" ? "guide" : "recipe"} via the link in our bio.`;
 }
 
 
@@ -643,7 +648,9 @@ ${cta}
 
 ${guideHashtags(slug)}`;
 
-    return [warm, practical, punchy];
+    return [warm, practical, punchy].map(
+      (caption) => `${caption}\n\nFull guide via the link in our bio.`
+    );
   }
 
   const profile = recipeProfile(slug, content);
@@ -744,7 +751,9 @@ ${cta}
 
 ${recipeHashtags(slug)}`;
 
-  return [warm, practical, punchy];
+  return [warm, practical, punchy].map(
+    (caption) => `${caption}\n\nFull recipe via the link in our bio.`
+  );
 }
 
 
@@ -771,7 +780,9 @@ ${cta}
 
 #veganmasala #cookingtips #plantbased`;
 
-    return [warm, practical];
+    return [warm, practical].map(
+      (caption) => `${caption}\n\n${trackedContentUrl(slug, type, "facebook")}`
+    );
   }
 
   const profile = recipeProfile(slug, content);
@@ -841,7 +852,9 @@ ${cta}
 
 #veganmasala #plantbased #indianfood`;
 
-  return [warm, practical];
+  return [warm, practical].map(
+    (caption) => `${caption}\n\n${trackedContentUrl(slug, type, "facebook")}`
+  );
 }
 
 export function buildPinterestCaptionVariants(slug: string, type: ContentType) {
@@ -861,7 +874,7 @@ Useful for:
 • practical help you can use straight away
 
 Read the full guide:
-https://www.vegan-masala.com
+${trackedContentUrl(slug, type, "pinterest")}
 
 ${guideHashtags(slug)}`;
 
@@ -872,7 +885,7 @@ ${hook}
 A practical guide designed to make everyday cooking feel easier and more natural.
 
 Read the full guide:
-https://www.vegan-masala.com
+${trackedContentUrl(slug, type, "pinterest")}
 
 ${guideHashtags(slug)}`;
 
@@ -915,7 +928,7 @@ Good for:
 • ${benefit}
 
 Get the full recipe:
-https://www.vegan-masala.com
+${trackedContentUrl(slug, type, "pinterest")}
 
 ${recipeHashtags(slug)}`;
 
@@ -926,7 +939,7 @@ ${hook}
 ${inviting}
 
 Get the full recipe:
-https://www.vegan-masala.com
+${trackedContentUrl(slug, type, "pinterest")}
 
 ${recipeHashtags(slug)}`;
 
@@ -946,7 +959,7 @@ export function buildFacebookCaption(slug: string, type: ContentType) {
 
 ${middle}
 
-${cta}
+${cta}\n${trackedContentUrl(slug, type, "facebook")}
 
 ${slugTags ? `${slugTags}\n` : ""}#veganmasala #plantbased #indianfood`;
   }
@@ -958,7 +971,7 @@ ${slugTags ? `${slugTags}\n` : ""}#veganmasala #plantbased #indianfood`;
 
 ${middle}
 
-${cta}
+${cta}\n${trackedContentUrl(slug, type, "facebook")}
 
 ${slugTags ? `${slugTags}\n` : ""}#veganmasala #cookingtips #plantbased`;
 }
@@ -978,7 +991,7 @@ ${hook}
 ${serving}
 
 Get the full recipe:
-https://www.vegan-masala.com
+${trackedContentUrl(slug, type, "pinterest")}
 
 ${recipeHashtags(slug)}`;
   }
@@ -1008,7 +1021,7 @@ ${hook}
 ${bullets}
 
 Read the full guide:
-https://www.vegan-masala.com
+${trackedContentUrl(slug, type, "pinterest")}
 
 ${guideHashtags(slug)}`;
 }

@@ -14,6 +14,7 @@ import { findContentImage } from "@/lib/social/core/assets";
 import { getRecipeBySlug } from "@/lib/recipes";
 import { getGuideBySlug } from "@/lib/guides";
 import { getSocialCopyForSlug } from "@/lib/social/core/socialCopy";
+import { assertVisualDetail } from "@/lib/social/core/visualQuality";
 
 const execFileAsync = promisify(execFile);
 
@@ -112,6 +113,7 @@ function fitVideoTextBlock(options: {
       lines: [],
       fontSize: baseFontSize,
       lineHeight: baseLineHeight,
+      truncated: false,
     };
   }
 
@@ -126,6 +128,7 @@ function fitVideoTextBlock(options: {
         lines,
         fontSize,
         lineHeight,
+        truncated: false,
       };
     }
   }
@@ -151,6 +154,7 @@ function fitVideoTextBlock(options: {
     lines: safeLines,
     fontSize: fallbackFont,
     lineHeight: fallbackLineHeight,
+    truncated: fallbackLines.length > maxLines,
   };
 }
 
@@ -198,7 +202,7 @@ function sentenceForVideo(text: string, max: number) {
     if (next.length > max) break;
     result = next;
   }
-  return `${result.replace(/[,:;\-–—]+$/, "").trim()}…`;
+  return result.replace(/[,:;\-–—.!?]+$/, "").trim();
 }
 
 function naturalVideoTitle(title: string) {
@@ -370,6 +374,22 @@ async function resolveImage(slug: string) {
     return temp;
   }
 
+  const editorialImage =
+    type === "recipe"
+      ? (getRecipeBySlug(slug) as any)?.image
+      : (getGuideBySlug(slug) as any)?.image;
+  if (typeof editorialImage === "string" && editorialImage.trim()) {
+    const url = editorialImage.startsWith("http")
+      ? editorialImage
+      : `${getBaseUrl()}${editorialImage.startsWith("/") ? "" : "/"}${editorialImage}`;
+    const buffer = await fetchBuffer(url);
+    if (buffer) {
+      const temp = path.join(TEMP_DIR, `${slug}-source.png`);
+      await sharp(buffer).png().toFile(temp);
+      return temp;
+    }
+  }
+
   const token = getBlobToken();
 
   if (!token) {
@@ -532,22 +552,20 @@ function logoImageSvg(logoPath: string | null, x: number, y: number, w: number, 
 
 async function brandTextureBackground(out: string) {
   const texturePath = path.join(process.cwd(), "public", "images", "page-background.jpg");
+  let textureSource: string | Buffer | null = fs.existsSync(texturePath) ? texturePath : null;
+  if (!textureSource) {
+    textureSource = await fetchBuffer(`${getBaseUrl()}/images/page-background.jpg`);
+  }
+  if (!textureSource) {
+    throw new Error("Brand background could not be loaded; refusing to render a plain video");
+  }
 
-  let base = sharp({
-    create: {
-      width: WIDTH,
-      height: HEIGHT,
-      channels: 4,
-      background: BRAND.bg,
-    },
-  });
-
-  if (fs.existsSync(texturePath)) {
-    const texture = await sharp(texturePath)
+  const texture = await sharp(textureSource)
       .resize(WIDTH, HEIGHT, { fit: "cover" })
       .modulate({ brightness: 2.2, saturation: 0.9 })
       .png()
       .toBuffer();
+  await assertVisualDetail(texture, "Video brand background");
 
     const wash = Buffer.from(`
       <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
@@ -555,7 +573,7 @@ async function brandTextureBackground(out: string) {
       </svg>
     `);
 
-    base = sharp({
+  const base = sharp({
       create: {
         width: WIDTH,
         height: HEIGHT,
@@ -566,7 +584,6 @@ async function brandTextureBackground(out: string) {
       { input: texture, left: 0, top: 0, blend: "over" },
       { input: wash, left: 0, top: 0 },
     ]);
-  }
 
   await base.png().toFile(out);
 }
@@ -584,9 +601,9 @@ async function renderCard(
     baseChars: 18,
     baseFontSize: 88,
     baseLineHeight: 98,
-    maxHeight: 205,
-    minFontSize: 58,
-    maxLines: 2,
+    maxHeight: 270,
+    minFontSize: 48,
+    maxLines: 3,
   });
 
   const subtitleBlock = fitVideoTextBlock({
@@ -598,6 +615,9 @@ async function renderCard(
     minFontSize: 34,
     maxLines: 2,
   });
+  if (titleBlock.truncated || subtitleBlock.truncated) {
+    throw new Error("Video intro copy does not fit without truncation");
+  }
 
   const titleSvg = titleBlock.lines
     .map((l, i) =>
@@ -673,9 +693,9 @@ async function renderMainOverlay(
     baseChars: 22,
     baseFontSize: 62,
     baseLineHeight: 70,
-    maxHeight: 145,
-    minFontSize: 48,
-    maxLines: 2,
+    maxHeight: 220,
+    minFontSize: 40,
+    maxLines: 3,
   });
 
   const subtitleBlock = fitVideoTextBlock({
@@ -687,6 +707,9 @@ async function renderMainOverlay(
     minFontSize: 28,
     maxLines: 2,
   });
+  if (titleBlock.truncated || subtitleBlock.truncated) {
+    throw new Error("Video main-screen copy does not fit without truncation");
+  }
 
   const titleSvg = titleBlock.lines
     .map((l, i) =>
@@ -861,6 +884,7 @@ async function mainClip(
     ])
     .png()
     .toFile(card);
+  await assertVisualDetail(card, "Video recipe image", 12);
 
   await renderMainOverlay(title, subtitle, overlay, logoPath);
   await brandTextureBackground(brandedBackground);

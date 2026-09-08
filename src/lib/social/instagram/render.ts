@@ -17,6 +17,7 @@ import { saveGeneratedInstagramImage } from "../core/generatedAssets";
 import { updateManifest } from "../core/manifest";
 import { buildInstagramCaption, saveCaption } from "../core/captions";
 import { getSocialCopyForSlug } from "../core/socialCopy";
+import { assertVisualDetail } from "../core/visualQuality";
 
 const IS_SERVERLESS = Boolean(process.env.VERCEL) || process.cwd().startsWith("/var/task");
 const ROOT = IS_SERVERLESS ? "/tmp" : process.cwd();
@@ -59,6 +60,17 @@ async function resolveSourceImage(
   if (local) return local;
 
   const baseUrl = getBaseUrl();
+  const editorialImage =
+    type === "recipe"
+      ? (getRecipeBySlug(slug) as any)?.image
+      : (getGuideBySlug(slug) as any)?.image;
+  if (typeof editorialImage === "string" && editorialImage.trim()) {
+    const url = editorialImage.startsWith("http")
+      ? editorialImage
+      : `${baseUrl}${editorialImage.startsWith("/") ? "" : "/"}${editorialImage}`;
+    const buffer = await fetchBuffer(url);
+    if (buffer) return buffer;
+  }
   const exts = ["png", "jpg", "jpeg", "webp"];
 
   const candidateBases =
@@ -546,22 +558,12 @@ function makeShadowedTextPathSvg(
 }
 
 async function backgroundLayer() {
-  const bgPath = findBrandBackground();
-
-  if (!bgPath) {
-    return sharp({
-      create: {
-        width: WIDTH,
-        height: HEIGHT,
-        channels: 4,
-        background: BRAND.bg,
-      },
-    })
-      .png()
-      .toBuffer();
+  const background = await resolveBrandBackgroundBuffer();
+  if (!background) {
+    throw new Error("Brand background could not be loaded; refusing to render a plain post");
   }
 
-  return sharp(bgPath)
+  const rendered = await sharp(background)
     .resize(WIDTH, HEIGHT, { fit: "cover" })
     // The source artwork is intentionally very dark. Lift it enough that the
     // tile pattern survives JPEG export and remains visible in feed previews.
@@ -569,6 +571,8 @@ async function backgroundLayer() {
     .gamma(1.05)
     .png()
     .toBuffer();
+  await assertVisualDetail(rendered, "Instagram brand background");
+  return rendered;
 }
 
 async function darkOverlay() {
@@ -831,6 +835,7 @@ async function heroImageLayer(slug: string, type: "recipe" | "guide") {
     .composite([{ input: roundedMask, blend: "dest-in" }])
     .png()
     .toBuffer();
+  await assertVisualDetail(image, `${slug} hero image`, 12);
 
   const shadow = await sharp(
     Buffer.from(`

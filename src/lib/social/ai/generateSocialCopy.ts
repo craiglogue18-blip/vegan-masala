@@ -29,6 +29,14 @@ function safeString(value: unknown): string {
   return String(value || "").trim();
 }
 
+function ukSeasonContext(date = new Date()) {
+  const month = date.getUTCMonth() + 1;
+  if ([12, 1, 2].includes(month)) return "UK winter: warming dinners and batch cooking may be relevant";
+  if ([3, 4, 5].includes(month)) return "UK spring: fresher serving ideas and lighter meals may be relevant";
+  if ([6, 7, 8].includes(month)) return "UK summer: quick cooking, gatherings and lighter sides may be relevant";
+  return "UK autumn: back-to-routine dinners, batch cooking and warming spices may be relevant";
+}
+
 function extractJson(text: string): SocialCopyResult {
   const trimmed = text.trim();
   const start = trimmed.indexOf("{");
@@ -90,12 +98,22 @@ export async function generateSocialCopyForSlug(
           methodMarkdown: (source as any).methodMarkdown || "",
           notesMarkdown: (source as any).notesMarkdown || "",
           tags: (source as any).tags || [],
+          canonicalUrl: `https://www.vegan-masala.com/recipes/${slug}`,
+          audience: "UK home cooks interested in practical vegan Indian food",
+          objective: "Earn an intentional visit to the full recipe without clickbait",
+          currentDate: new Date().toISOString().slice(0, 10),
+          seasonContext: ukSeasonContext(),
         }
       : {
           type,
           slug,
           title: source.title,
           description: source.description || "",
+          canonicalUrl: `https://www.vegan-masala.com/guides/${slug}`,
+          audience: "UK home cooks interested in practical vegan Indian food",
+          objective: "Earn an intentional visit to the full guide without clickbait",
+          currentDate: new Date().toISOString().slice(0, 10),
+          seasonContext: ukSeasonContext(),
         };
 
   const response = await client.responses.create({
@@ -113,6 +131,8 @@ Write copy that is:
 - never generic or repetitive
 - never full of empty adjectives
 - never obviously AI-written
+- useful before promotional: give the viewer one real sensory, technique, timing, serving, or problem-solving detail
+- designed to make the right viewer want the complete recipe or guide, without withholding the basic answer or using false urgency
 
 Use the recipe data heavily.
 If the dish uses aubergine, potato, lentils, chickpeas, pastry, rice, tofu, or tempering, reflect that directly.
@@ -140,11 +160,11 @@ JSON shape:
 }
 
 Rules:
-- Instagram variants: Warm, Practical, Punchy
-- Facebook variants: Warm, Practical
-- Pinterest variants: Search-friendly, Inviting
-- TikTok variants: one punchy hook, one useful dish detail, then a short save/follow call to action
-- YouTube descriptions: a clear two-sentence summary, the full recipe URL placeholder https://www.vegan-masala.com, then relevant hashtags
+- Instagram variants: Curiosity, Practical value, and Craving. Open with a dish-specific hook; use “full recipe via the link in our bio” because caption URLs are not clickable
+- Facebook variants: Story-led and Practical. Include the exact canonicalUrl as a natural next step
+- Pinterest variants: Search-friendly and Benefit-led. Put the exact dish name and primary ingredient early, include the exact canonicalUrl, and explain what the reader will learn
+- TikTok variants: one sharp first-line hook, one concrete dish or technique detail, then “full recipe via our profile”; do not rely on a raw URL
+- YouTube descriptions: a clear two-sentence summary, name Vegan Masala and the dish clearly, then focused hashtags; do not claim a Shorts description URL is clickable
 - Every Instagram caption variant must end with 8 to 12 relevant hashtags, each on its own line
 - Every Facebook caption variant must end with 3 to 5 relevant hashtags
 - Every Pinterest caption variant must end with 5 to 8 relevant hashtags
@@ -160,6 +180,11 @@ Rules:
 - videoHook: one striking opening line, maximum 56 characters; concrete and dish-specific, with no hashtags or ellipsis
 - videoMainLine: one vivid sensory or practical payoff, maximum 64 characters; no generic praise, hashtags or ellipsis
 - videoOutroLine: one direct CTA, maximum 42 characters; no hashtags or ellipsis
+- Prefer proven food-content angles: a texture reveal, a common cooking mistake solved, an ingredient transformation, an easy serving payoff, or a save-worthy technique
+- Never invent timings, ingredients, health claims, regional claims, or cooking methods that are absent from the source data
+- Use seasonContext only when it genuinely suits the dish; evergreen usefulness is better than a forced seasonal reference
+- Never end a sentence halfway and never use an ellipsis
+- Keep captions below 1,200 characters so they stay readable and survive platform handling intact
 - Keep image and video text readable on the graphic
 - Treat the video fields as on-screen copy: short, punchy and instantly readable
         `.trim(),

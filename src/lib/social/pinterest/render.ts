@@ -16,6 +16,7 @@ import {
 import { saveGeneratedPinterestImage } from "../core/generatedAssets";
 import { updateManifest } from "../core/manifest";
 import { buildPinterestCaption, saveCaption } from "../core/captions";
+import { assertVisualDetail } from "../core/visualQuality";
 
 const ROOT = process.env.VERCEL ? "/tmp" : process.cwd();
 const OUTPUT = path.join(ROOT, "generated", "pinterest");
@@ -38,6 +39,18 @@ function getBaseUrl() {
 async function resolveSourceImage(slug: string, type: "recipe" | "guide") {
   const local = findContentImage(slug, type);
   if (local) return local;
+
+  const editorialImage =
+    type === "recipe"
+      ? (getRecipeBySlug(slug) as any)?.image
+      : (getGuideBySlug(slug) as any)?.image;
+  if (typeof editorialImage === "string" && editorialImage.trim()) {
+    const url = editorialImage.startsWith("http")
+      ? editorialImage
+      : `${getBaseUrl()}${editorialImage.startsWith("/") ? "" : "/"}${editorialImage}`;
+    const response = await fetch(url, { cache: "no-store" });
+    if (response.ok) return Buffer.from(await response.arrayBuffer());
+  }
 
   const folder = type === "recipe" ? "recipes" : "guides";
   for (const ext of ["png", "jpg", "jpeg", "webp"]) {
@@ -189,21 +202,18 @@ function makeShadowedTextPathSvg(
 
 async function backgroundLayer() {
   const bgPath = findBrandBackground();
-
-  if (!bgPath) {
-    return sharp({
-      create: {
-        width: WIDTH,
-        height: HEIGHT,
-        channels: 4,
-        background: BRAND.bg,
-      },
-    })
-      .png()
-      .toBuffer();
+  let background: string | Buffer | null = bgPath;
+  if (!background) {
+    const response = await fetch(`${getBaseUrl()}/images/page-background.jpg`, {
+      cache: "no-store",
+    });
+    if (response.ok) background = Buffer.from(await response.arrayBuffer());
+  }
+  if (!background) {
+    throw new Error("Brand background could not be loaded; refusing to render a plain pin");
   }
 
-  return sharp(bgPath)
+  const rendered = await sharp(background)
     .resize(WIDTH, HEIGHT, { fit: "cover" })
     // The source artwork is intentionally very dark. Lift it enough that the
     // tile pattern survives export and remains visible on small queue previews.
@@ -211,6 +221,8 @@ async function backgroundLayer() {
     .gamma(1.05)
     .png()
     .toBuffer();
+  await assertVisualDetail(rendered, "Pinterest brand background");
+  return rendered;
 }
 
 async function darkOverlay() {
@@ -474,6 +486,7 @@ async function heroImageLayer(slug: string, type: "recipe" | "guide") {
     .composite([{ input: roundedMask, blend: "dest-in" }])
     .png()
     .toBuffer();
+  await assertVisualDetail(image, `${slug} hero image`, 12);
 
   const shadow = await sharp(
     Buffer.from(`
