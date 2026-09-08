@@ -118,7 +118,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
       cta: "Get the free plan",
       caption: `Your next seven dinners are already planned. Get the free Vegan Masala dinner plan here: ${destinationUrl}\n\n#VeganDinner #VeganMealPlan #IndianFood #PlantBasedCooking #VeganMasala`,
       captionVariants: [], destinationUrl,
-      imagePath: "/images/social/newsletter/free-dinner-plan-feed-2026-09-background.png",
+      imagePath: "/images/home/collections/quick-meals.webp",
     };
   }
 
