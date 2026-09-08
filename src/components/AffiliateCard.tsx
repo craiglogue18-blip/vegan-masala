@@ -27,14 +27,28 @@ export default function AffiliateCard({
   imageAlt,
 }: AffiliateCardProps) {
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-[var(--brand-gold)]/10 blur-2xl"
-      />
+    <div className="relative flex min-h-[280px] flex-1 flex-col overflow-hidden bg-black">
+      {imageSrc ? (
+        <>
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? title}
+            fill
+            className="object-cover object-right transition duration-500 hover:scale-[1.025]"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black from-30% via-black/90 via-58% to-black/15" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+        </>
+      ) : (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-[var(--brand-gold)]/10 blur-2xl"
+        />
+      )}
 
-      <div className="relative flex flex-1 flex-col p-5 sm:p-6">
-        <div className={imageSrc ? "grid grid-cols-[minmax(0,1fr)_6.5rem] gap-4 sm:grid-cols-[minmax(0,1fr)_7.5rem]" : ""}>
+      <div className="relative z-10 flex flex-1 flex-col p-6 sm:p-7">
+        <div className={imageSrc ? "max-w-[84%] sm:max-w-[72%]" : ""}>
           <div className="min-w-0">
             <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]">
               <span
@@ -52,17 +66,6 @@ export default function AffiliateCard({
             <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">{description}</p>
           </div>
 
-          {imageSrc && (
-            <div className="relative mt-7 aspect-square w-full self-start overflow-hidden rounded-xl border border-[var(--brand-gold)]/30 bg-black/20 shadow-sm">
-              <Image
-                src={imageSrc}
-                alt={imageAlt ?? title}
-                fill
-                className="object-cover transition duration-300 hover:scale-[1.02]"
-                sizes="120px"
-              />
-            </div>
-          )}
         </div>
 
         {tip && (
@@ -71,7 +74,7 @@ export default function AffiliateCard({
           </p>
         )}
 
-        <div className="mt-auto pt-4">
+        <div className={`mt-auto pt-5 ${imageSrc ? "max-w-[84%] sm:max-w-[72%]" : ""}`}>
           <AffiliateLink
             href={href}
             title={title}
