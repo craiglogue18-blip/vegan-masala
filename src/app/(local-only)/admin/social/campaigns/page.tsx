@@ -139,6 +139,10 @@ export default function CampaignStudioPage() {
         <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {[['Teach','Ingredients, techniques and mistakes give people a reason to save.'],['Show process','Behind-the-recipe content feels human and builds trust.'],['Solve a problem','Meal planning and dinner ideas create useful website visits.'],['Recommend honestly','Affiliate features stay contextual, disclosed and helpful.']].map(([title, body]) => <div key={title} className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="font-extrabold text-white">{title}</div><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">{body}</p></div>)}
         </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {[['55%','Standard recipe'],['15%','Cooking moment'],['10%','Ingredient story'],['10%','Carousel'],['10%','Tips & process']].map(([share, label]) => <div key={label} className="rounded-xl border border-[var(--brand-gold)]/20 bg-black/15 p-4"><div className="text-2xl font-extrabold text-[var(--brand-gold)]">{share}</div><div className="mt-1 text-sm font-bold text-white">{label}</div></div>)}
+        </div>
+        <p className="mt-4 text-sm leading-6 text-[var(--text-soft)]">All formats use the bundled Rajdhani typeface. The standard recipe treatment remains the majority, while the alternative layouts appear often enough to stop the feed feeling repetitive.</p>
       </section>
     </main>
   );

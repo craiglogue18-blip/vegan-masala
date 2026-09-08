@@ -54,6 +54,8 @@ function campaignSlug(kind: CampaignKind, sourceSlug?: string) {
 }
 
 export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind, sourceSlug?: string) {
+  const teachingLayout = kind === "ingredient" || kind === "technique" || kind === "mistake";
+  const processLayout = kind === "behind-the-recipe";
   const [background, hero, logo, partnerLogo] = await Promise.all([
     preparedImage("/images/page-background.jpg", WIDTH, HEIGHT, 5),
     preparedImage(copy.imagePath, 900, 700),
@@ -75,14 +77,27 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
 
         <div style={{ display: "flex", fontSize: copy.title.length > 52 ? 66 : 78, lineHeight: 0.98, fontWeight: 700, color: "#e0b83e", marginTop: 44, maxWidth: 900 }}>{copy.title}</div>
 
-        <div style={{ display: "flex", width: 900, height: 700, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", marginTop: 44, boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
-          <img src={dataUrl(hero, "image/jpeg")} width={900} height={700} style={{ width: 900, height: 700, objectFit: "cover" }} />
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 48, maxWidth: 890 }}>
-          <div style={{ display: "flex", fontSize: 45, lineHeight: 1.08, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>
-          <div style={{ display: "flex", fontSize: 31, lineHeight: 1.22, color: "#f4f1e8", marginTop: 24 }}>{copy.body}</div>
-        </div>
+        {teachingLayout ? (
+          <div style={{ display: "flex", flexDirection: "row", gap: 42, marginTop: 54, alignItems: "center" }}>
+            <div style={{ display: "flex", width: 535, height: 720, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
+              <img src={dataUrl(hero, "image/jpeg")} width={535} height={720} style={{ width: 535, height: 720, objectFit: "cover" }} />
+            </div>
+            <div style={{ display: "flex", width: 320, flexDirection: "column" }}>
+              <div style={{ display: "flex", fontSize: 42, lineHeight: 1.05, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>
+              <div style={{ display: "flex", fontSize: 29, lineHeight: 1.2, color: "#f4f1e8", marginTop: 28 }}>{copy.body}</div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: "flex", width: 900, height: processLayout ? 820 : 700, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", marginTop: 44, boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
+              <img src={dataUrl(hero, "image/jpeg")} width={900} height={processLayout ? 820 : 700} style={{ width: 900, height: processLayout ? 820 : 700, objectFit: "cover" }} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", marginTop: processLayout ? 34 : 48, maxWidth: 890 }}>
+              <div style={{ display: "flex", fontSize: processLayout ? 39 : 45, lineHeight: 1.08, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>
+              <div style={{ display: "flex", fontSize: 31, lineHeight: 1.22, color: "#f4f1e8", marginTop: 24 }}>{copy.body}</div>
+            </div>
+          </>
+        )}
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
