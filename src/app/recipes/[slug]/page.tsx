@@ -805,6 +805,11 @@ export default async function RecipePage({
 
       <RecipeEquipment items={equipmentRecommendations} recipeSlug={recipe.slug} />
 
+      <RecipePantryShopping
+        recipe={{ slug: recipe.slug, title: recipe.title, ingredients, tags: recipe.tags }}
+        picks={pantryPicks}
+      />
+
       {depth && (
         <section className="mt-8 rounded-[2rem] border border-[var(--border)] bg-[var(--surface)]/95 p-6 shadow-sm lg:p-8">
           <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">Recipe-specific guidance</p>
@@ -928,10 +933,6 @@ export default async function RecipePage({
             )}
           </div>
 
-          <RecipePantryShopping
-            recipe={{ slug: recipe.slug, title: recipe.title, ingredients, tags: recipe.tags }}
-            picks={pantryPicks}
-          />
         </div>
       </section>
 
