@@ -83,6 +83,15 @@ function lastUseBySlug(items: QueueItem[]) {
   return result;
 }
 
+function seededScore(value: string) {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index++) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
 function chooseContent(
   candidates: ContentCandidate[],
   items: QueueItem[],
@@ -99,7 +108,7 @@ function chooseContent(
   return [...available].sort((a, b) => {
     const ageDifference = (lastUse.get(a.slug) || 0) - (lastUse.get(b.slug) || 0);
     if (ageDifference !== 0) return ageDifference;
-    return `${salt}:${a.slug}`.localeCompare(`${salt}:${b.slug}`);
+    return seededScore(`${salt}:${a.slug}`) - seededScore(`${salt}:${b.slug}`);
   })[0];
 }
 
