@@ -57,6 +57,7 @@ export type GscPerformanceSnapshotDto = {
   summary: GscPropertySummaryDto;
   topPages: GscTopPageDto[];
   topQueries: GscTopQueryDto[];
+  daily: Array<{ date: string; clicks: number; impressions: number }>;
 };
 
 export type GscServiceInput = {

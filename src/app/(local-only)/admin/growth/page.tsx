@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getGrowthDashboard } from "@/lib/growth-dashboard";
 import { AmazonReportImport } from "@/components/admin/AmazonReportImport";
+import { GrowthPulseChart } from "@/components/admin/GrowthPulseChart";
 
 export const dynamic = "force-dynamic";
 
@@ -79,6 +80,8 @@ export default async function GrowthDashboardPage() {
         </div>
         <p className="mt-5 text-xs text-[var(--text-soft)]/70">Updated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(data.generatedAt))}</p>
       </header>
+
+      <GrowthPulseChart points={data.growthTrend} />
 
       <section className="mt-8">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">At a glance</h2>

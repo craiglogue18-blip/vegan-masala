@@ -11,7 +11,7 @@ type QueryCommonInput = {
   device?: GscDevice;
 };
 
-type QueryDimension = "page" | "query";
+type QueryDimension = "page" | "query" | "date";
 
 function toNumber(value: unknown) {
   if (typeof value === "number" && Number.isFinite(value)) return value;

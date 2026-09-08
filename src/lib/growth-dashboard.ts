@@ -101,6 +101,22 @@ async function engagementWindow(days: number, offsetDays = 0) {
   return parseRows(hashes);
 }
 
+async function dailyEngagement(days: number) {
+  const redis = redisClient();
+  const dates = Array.from({ length: days }, (_, index) => {
+    const date = new Date(Date.now() - (days - 1 - index) * DAY_MS);
+    return isoDay(date);
+  });
+  if (!redis) return dates.map((date) => ({ date, actions: 0 }));
+  const hashes = await Promise.all(
+    dates.map((date) => redis.hgetall<Record<string, number | string>>(`engagement:${date}`))
+  );
+  return hashes.map((hash, index) => ({
+    date: dates[index],
+    actions: parseRows([hash]).reduce((sum, row) => sum + row.count, 0),
+  }));
+}
+
 async function getRecraftBalance() {
   const token = process.env.RECRAFT_API_TOKEN?.trim();
   if (!token) return { configured: false, credits: null, error: null };
@@ -343,6 +359,7 @@ type SocialSnapshot = {
   outboundClicks: number | null;
   views: number | null;
   error: string | null;
+  daily: Array<{ date: string; reach: number; clicks: number }>;
 };
 
 const emptySocial = (configured: boolean, error: string | null = null): SocialSnapshot => ({
@@ -353,6 +370,7 @@ const emptySocial = (configured: boolean, error: string | null = null): SocialSn
   outboundClicks: null,
   views: null,
   error,
+  daily: [],
 });
 
 async function getMetaAudience() {
@@ -404,7 +422,7 @@ async function getPinterestPerformance(): Promise<SocialSnapshot> {
     const headers = { Authorization: `Bearer ${token}` };
     const response = await fetch(url, { headers, cache: "no-store", signal: AbortSignal.timeout(8_000) });
     if (!response.ok) return emptySocial(true, "Connected for publishing; analytics permission is still needed");
-    const payload = (await response.json()) as { all?: { daily_metrics?: Array<{ metrics?: Record<string, unknown> }> } };
+    const payload = (await response.json()) as { all?: { daily_metrics?: Array<{ date?: unknown; metrics?: Record<string, unknown> }> } };
     const daily = payload.all?.daily_metrics ?? [];
     const sum = (metric: string) => daily.reduce((total, row) => total + (Number(row.metrics?.[metric]) || 0), 0);
     let followers = 0;
@@ -431,6 +449,13 @@ async function getPinterestPerformance(): Promise<SocialSnapshot> {
       followers: followerReportingAvailable ? followers : null,
       impressions: sum("IMPRESSION"),
       outboundClicks: sum("OUTBOUND_CLICK"),
+      daily: daily
+        .filter((row) => typeof row.date === "string")
+        .map((row) => ({
+          date: String(row.date),
+          reach: Number(row.metrics?.IMPRESSION) || 0,
+          clicks: Number(row.metrics?.OUTBOUND_CLICK) || 0,
+        })),
     };
   } catch {
     return emptySocial(configured, "Pinterest reporting is temporarily unavailable");
@@ -477,6 +502,7 @@ async function getYouTubePerformance(): Promise<SocialSnapshot> {
     analyticsUrl.searchParams.set("startDate", start.toISOString().slice(0, 10));
     analyticsUrl.searchParams.set("endDate", end.toISOString().slice(0, 10));
     analyticsUrl.searchParams.set("metrics", "views,estimatedMinutesWatched,subscribersGained");
+    analyticsUrl.searchParams.set("dimensions", "day");
 
     const [channelResponse, analyticsResponse] = await Promise.all([
       fetch(channelUrl, { headers, cache: "no-store", signal: AbortSignal.timeout(8_000) }),
@@ -486,15 +512,22 @@ async function getYouTubePerformance(): Promise<SocialSnapshot> {
     const channel = (await channelResponse.json()) as { items?: Array<{ statistics?: Record<string, unknown> }> };
     const statistics = channel.items?.[0]?.statistics ?? {};
     let views = Number(statistics.viewCount) || 0;
+    let daily: Array<{ date: string; reach: number; clicks: number }> = [];
     if (analyticsResponse.ok) {
       const analytics = (await analyticsResponse.json()) as { rows?: unknown[][] };
-      views = Number(analytics.rows?.[0]?.[0]) || 0;
+      daily = (analytics.rows ?? []).map((row) => ({
+        date: String(row[0] || ""),
+        reach: Number(row[1]) || 0,
+        clicks: 0,
+      })).filter((row) => Boolean(row.date));
+      views = daily.reduce((sum, row) => sum + row.reach, 0);
     }
     return {
       ...emptySocial(true),
       followers: Number(statistics.subscriberCount) || 0,
       content: Number(statistics.videoCount) || 0,
       views,
+      daily,
     };
   } catch {
     return emptySocial(true, "YouTube reporting is temporarily unavailable; reconnect OAuth if this persists");
@@ -506,10 +539,11 @@ export async function getGrowthDashboard() {
   const currentStart = new Date(now.getTime() - 28 * DAY_MS).toISOString().slice(0, 10);
   const previousStart = new Date(now.getTime() - 56 * DAY_MS).toISOString().slice(0, 10);
   const today = now.toISOString().slice(0, 10);
-  const [search, current, previous, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience, youtubePerformance, openAiCosts, amazonReport] = await Promise.all([
+  const [search, current, previous, engagementDaily, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience, youtubePerformance, openAiCosts, amazonReport] = await Promise.all([
     getGscPerformanceSnapshot({ rowLimit: 8 }),
     engagementWindow(28),
     engagementWindow(28, 28),
+    dailyEngagement(28),
     allQueueItems().catch(() => []),
     getTrendingRecipesWithCounts(8).catch(() => []),
     getRecraftBalance(),
@@ -557,6 +591,27 @@ export async function getGrowthDashboard() {
     })),
   };
 
+  const searchDaily = new Map(
+    (search.ok ? search.data.daily : []).map((row) => [row.date, row])
+  );
+  const socialDaily = new Map<string, number>();
+  for (const row of [...pinterestPerformance.daily, ...youtubePerformance.daily]) {
+    socialDaily.set(row.date, (socialDaily.get(row.date) ?? 0) + row.reach);
+  }
+  const publishedDaily = new Map<string, number>();
+  for (const item of queue.filter((entry) => entry.status === "posted")) {
+    const date = (item.postedAt || item.completedAt || item.scheduledFor).slice(0, 10);
+    publishedDaily.set(date, (publishedDaily.get(date) ?? 0) + 1);
+  }
+  const growthTrend = engagementDaily.map((row) => ({
+    date: row.date,
+    searchImpressions: searchDaily.get(row.date)?.impressions ?? 0,
+    searchClicks: searchDaily.get(row.date)?.clicks ?? 0,
+    siteActions: row.actions,
+    socialReach: socialDaily.get(row.date) ?? 0,
+    published: publishedDaily.get(row.date) ?? 0,
+  }));
+
   return {
     generatedAt: new Date().toISOString(),
     search,
@@ -574,6 +629,7 @@ export async function getGrowthDashboard() {
     },
     trending,
     social,
+    growthTrend,
     services: {
       recraft,
       kit: {

@@ -157,7 +157,7 @@ export async function getGscPerformanceSnapshot(
     const previous = resolveComparisonRange(input, current);
     const rowLimit = clampRowLimit(input.rowLimit);
 
-    const [currentSummary, previousSummary, pageRows, queryRows] = await Promise.all([
+    const [currentSummary, previousSummary, pageRows, queryRows, dailyRows] = await Promise.all([
       querySummaryMetrics({
         startDate: current.startDate,
         endDate: current.endDate,
@@ -181,6 +181,13 @@ export async function getGscPerformanceSnapshot(
         startDate: current.startDate,
         endDate: current.endDate,
         rowLimit,
+        country: input.country,
+        device: input.device,
+      }),
+      queryDimensionMetrics("date", {
+        startDate: current.startDate,
+        endDate: current.endDate,
+        rowLimit: 40,
         country: input.country,
         device: input.device,
       }),
@@ -222,6 +229,9 @@ export async function getGscPerformanceSnapshot(
         },
         topPages,
         topQueries,
+        daily: dailyRows
+          .filter((row) => Boolean(row.key))
+          .map((row) => ({ date: row.key as string, clicks: row.clicks, impressions: row.impressions })),
       },
     };
   } catch (err) {
