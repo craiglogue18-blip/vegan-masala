@@ -407,24 +407,63 @@ async function getMetaAudience() {
     if (!response.ok) throw new Error("permission");
     return response.json() as Promise<Record<string, unknown>>;
   };
+
+  const dailyInsights = async (id: string | undefined, metric: string) => {
+    if (!token || !id) return [] as Array<{ date: string; reach: number; clicks: number }>;
+    const end = new Date();
+    const start = new Date(end.getTime() - 28 * DAY_MS);
+    const url = new URL(`https://graph.facebook.com/v23.0/${encodeURIComponent(id)}/insights`);
+    url.searchParams.set("metric", metric);
+    url.searchParams.set("period", "day");
+    url.searchParams.set("since", start.toISOString().slice(0, 10));
+    url.searchParams.set("until", end.toISOString().slice(0, 10));
+    url.searchParams.set("access_token", token);
+    const response = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(8_000) });
+    if (!response.ok) throw new Error("insights_permission");
+    const payload = (await response.json()) as {
+      data?: Array<{ values?: Array<{ value?: unknown; end_time?: unknown }> }>;
+    };
+    return (payload.data?.[0]?.values ?? []).map((value) => ({
+      date: String(value.end_time || "").slice(0, 10),
+      reach: Number(value.value) || 0,
+      clicks: 0,
+    })).filter((value) => value.date);
+  };
   const unavailable = (configured: boolean) => emptySocial(
     configured,
     configured ? "Connected for publishing; audience reporting permission is still needed" : null,
   );
-  const [facebookResult, instagramResult] = await Promise.allSettled([
+  const [facebookResult, instagramResult, facebookInsights, instagramInsights] = await Promise.allSettled([
     // fan_count is the supported Page audience field. Requesting an unavailable
     // companion field can make Meta reject the whole response.
     request(pageId, "fan_count"),
     request(igId, "followers_count,media_count"),
+    dailyInsights(pageId, "page_impressions_unique"),
+    dailyInsights(igId, "reach"),
   ]);
   const facebook = facebookResult.status === "fulfilled" ? facebookResult.value : null;
   const instagram = instagramResult.status === "fulfilled" ? instagramResult.value : null;
+  const facebookDaily = facebookInsights.status === "fulfilled" ? facebookInsights.value : [];
+  const instagramDaily = instagramInsights.status === "fulfilled" ? instagramInsights.value : [];
   return {
     facebook: facebook
-      ? { ...emptySocial(true), followers: Number(facebook.fan_count) || 0 }
+      ? {
+          ...emptySocial(true),
+          followers: Number(facebook.fan_count) || 0,
+          impressions: facebookDaily.reduce((sum, row) => sum + row.reach, 0),
+          daily: facebookDaily,
+          error: facebookInsights.status === "rejected" ? "Page Insights permission must be renewed" : null,
+        }
       : unavailable(Boolean(token && pageId)),
     instagram: instagram
-      ? { ...emptySocial(true), followers: Number(instagram.followers_count) || 0, content: Number(instagram.media_count) || 0 }
+      ? {
+          ...emptySocial(true),
+          followers: Number(instagram.followers_count) || 0,
+          content: Number(instagram.media_count) || 0,
+          impressions: instagramDaily.reduce((sum, row) => sum + row.reach, 0),
+          daily: instagramDaily,
+          error: instagramInsights.status === "rejected" ? "Instagram Insights permission must be renewed" : null,
+        }
       : unavailable(Boolean(token && igId)),
   };
 }
@@ -625,7 +664,12 @@ export async function getGrowthDashboard() {
     (search.ok ? search.data.daily : []).map((row) => [row.date, row])
   );
   const socialDaily = new Map<string, number>();
-  for (const row of [...pinterestPerformance.daily, ...youtubePerformance.daily]) {
+  for (const row of [
+    ...metaAudience.facebook.daily,
+    ...metaAudience.instagram.daily,
+    ...pinterestPerformance.daily,
+    ...youtubePerformance.daily,
+  ]) {
     socialDaily.set(row.date, (socialDaily.get(row.date) ?? 0) + row.reach);
   }
   const publishedDaily = new Map<string, number>();
