@@ -5,6 +5,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
 import ffmpegPath from "ffmpeg-static";
+import OpenAI from "openai";
 import satori from "satori";
 import sharp from "sharp";
 
@@ -83,13 +84,43 @@ async function recraftImage(prompt: string, reference?: Buffer, strength = 0.42)
   return Buffer.from(await download.arrayBuffer());
 }
 
+async function hasCookingAction(buffer: Buffer) {
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey) return true;
+  try {
+    const client = new OpenAI({ apiKey });
+    const response = await client.responses.create({
+      model: "gpt-5.4",
+      input: [{
+        role: "user",
+        content: [
+          { type: "input_text", text: "Quality-check this social campaign source photograph. Return only JSON: {\"hands\":boolean,\"utensilTouchesFood\":boolean,\"panOnHob\":boolean,\"visibleCookingAction\":boolean,\"platedDishDominates\":boolean,\"containsText\":boolean}. Be strict: a spoon resting nearby is not cooking action." },
+          { type: "input_image", image_url: `data:image/jpeg;base64,${buffer.toString("base64")}` },
+        ],
+      }] as any,
+    });
+    const match = response.output_text.match(/\{[\s\S]*\}/);
+    if (!match) return false;
+    const result = JSON.parse(match[0]);
+    return Boolean(result.hands && result.utensilTouchesFood && result.panOnHob && result.visibleCookingAction && !result.platedDishDominates && !result.containsText);
+  } catch {
+    return false;
+  }
+}
+
 async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, original: Buffer) {
   if (style === "hero" || !copy.dishName) return [original];
   const ingredients = (copy.visualIngredients || []).map((item) => item.slice(0, 42)).join(", ").slice(0, 300);
   const shared = `Premium photorealistic editorial food photography of ${copy.dishName}. Authentic vegan Indian food, dark navy patterned tile setting, warm natural light and rich realistic texture. Ingredients visible where appropriate: ${ingredients}.`;
   if (style === "cooking") {
-    const scene = await recraftImage(`${shared} REQUIRED ACTION: transform the referenced finished dish into an in-progress cooking photograph while preserving the exact same visible vegetables, sauce colour, texture and ingredient proportions. Show an adult cook from shoulders down at a domestic hob, one hand holding the same pan and the other actively stirring the same food with a wooden spoon. Clear steam and motion. No bowls, plates or finished serving. Do not substitute ingredients, change the curry, or invent garnish.`, original, 0.58);
-    return [await preparedBuffer(scene, 960, 1500, 42)];
+    const action = `${copy.title}. ${copy.body}`;
+    const prompt = `DOCUMENTARY PHOTOGRAPH OF HUMAN HANDS ACTIVELY COOKING. The hands and utensil are the main subject and fill the frame. An adult home cook is shown from shoulders down at a lit domestic hob: one hand firmly holds a wide pan while the other hand visibly stirs with a wooden spoon. Strong rising steam, visible utensil motion and ingredients still cooking in the pan. Verified recipe action for context: ${action}. Dark navy tiled kitchen, warm side light. NO finished dish, NO serving bowl, NO plate, NO tabletop food portrait, NO garnish shot. The result must visibly contain two human hands, a spoon touching food, a pan and an active hob.`;
+    let scene = await recraftImage(prompt);
+    if (!(await hasCookingAction(scene))) {
+      scene = await recraftImage(`FAILED ATTEMPT CORRECTION: compose the camera tightly around the cook's two hands and physical stirring action. Crop out every plate and serving bowl. A wooden spoon must visibly move through food inside a pan sitting directly on a lit burner. ${prompt}`);
+    }
+    if (!(await hasCookingAction(scene))) throw new Error("Recraft did not produce a verifiable cooking action. No preview was saved; generate again to try a fresh scene.");
+    return [await preparedBuffer(scene, 960, 1500, 42), await preparedBuffer(original, 960, 1500, 42)];
   }
   if (style === "ingredient") {
     const scene = await recraftImage(`${shared} STRICT INGREDIENT FLAT-LAY ONLY. No cooked dish, no curry, no combined mixture and no serving bowl. Show 6 to 9 actual raw ingredients from the supplied list as separate, clearly identifiable items with generous space between them: whole vegetables, loose spices in individual plain bowls, herbs and oil. Straight overhead view on one dark navy stone worktop, balanced editorial arrangement.`);
@@ -157,6 +188,7 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
           <div style={{ display: "flex", position: "absolute", left: 28, right: 28, bottom: 20, flexDirection: "column", padding: "28px 34px 25px", borderRadius: 28, background: "linear-gradient(90deg, rgba(0,0,0,.97), rgba(0,0,0,.78))" }}><div style={{ display: "flex", fontSize: 56, lineHeight: 1, fontWeight: 700, color: "#f0c75e" }}>{copy.title}</div><div style={{ display: "flex", fontSize: 28, lineHeight: 1.16, color: "#fff", marginTop: 15 }}>{copy.hook}</div></div>
         </div> : <div style={{ display: "flex", position: "relative", width: 948, height: 1320, borderRadius: 44, overflow: "hidden", border: "3px solid #b28a25", marginTop: 42, boxShadow: "0 28px 80px rgba(0,0,0,.55)" }}>
           <img src={dataUrl(hero)} width={948} height={1320} style={{ width: 948, height: 1320, objectFit: "cover", borderRadius: 41 }} />
+          {style === "cooking" && heroes[1] ? <div style={{ display: "flex", position: "absolute", right: 34, top: 34, width: 285, height: 365, padding: 9, borderRadius: 28, backgroundColor: "#071018", border: "3px solid #d9b348", boxShadow: "0 16px 40px rgba(0,0,0,.55)" }}><img src={dataUrl(heroes[1])} width={267} height={347} style={{ width: 267, height: 347, objectFit: "cover", borderRadius: 19 }} /></div> : null}
           <div style={{ display: "flex", position: "absolute", inset: 0, background: style === "ingredient" ? "linear-gradient(180deg, rgba(3,8,12,.05), rgba(3,8,12,.15) 55%, rgba(3,8,12,.92) 100%)" : "linear-gradient(180deg, rgba(3,8,12,.02), rgba(3,8,12,.08) 50%, rgba(3,8,12,.94) 100%)" }} />
           <div style={{ display: "flex", position: "absolute", left: 30, right: 30, bottom: 30, flexDirection: "column", padding: "30px 34px 27px", borderRadius: 28, background: "linear-gradient(90deg, rgba(0,0,0,.97), rgba(0,0,0,.82) 72%, rgba(0,0,0,.60))" }}>
             <div style={{ display: "flex", fontSize: copy.title.length > 48 ? 55 : 68, lineHeight: 1, fontWeight: 700, color: "#f0c75e" }}>{copy.title}</div>
