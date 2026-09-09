@@ -48,6 +48,10 @@ function dayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function canonicalHost(value: string) {
+  return value.toLowerCase().replace(/^www\./, "");
+}
+
 export async function POST(request: Request) {
   const userAgent = request.headers.get("user-agent") || "";
   if (!userAgent || BOT_PATTERN.test(userAgent)) {
@@ -55,10 +59,15 @@ export async function POST(request: Request) {
   }
 
   const origin = request.headers.get("origin");
-  const expectedHost = new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.vegan-masala.com").host;
+  const expectedHost = canonicalHost(
+    new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.vegan-masala.com").host,
+  );
   if (origin) {
     try {
-      if (new URL(origin).host !== expectedHost && process.env.NODE_ENV === "production") {
+      if (
+        canonicalHost(new URL(origin).host) !== expectedHost &&
+        process.env.NODE_ENV === "production"
+      ) {
         return NextResponse.json({ ok: false }, { status: 403 });
       }
     } catch {
