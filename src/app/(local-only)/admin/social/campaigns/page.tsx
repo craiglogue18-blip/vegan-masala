@@ -101,11 +101,12 @@ export default function CampaignStudioPage() {
           </div> : null}
 
           <div className="mt-6">
-            <div className="text-sm font-bold text-[var(--brand-gold)]">Format</div>
+            <div className="text-sm font-bold text-[var(--brand-gold)]">Delivery format</div>
             <div className="mt-2 grid grid-cols-2 gap-3">
               <button onClick={() => setFormat("story")} className={`rounded-xl border px-4 py-3 font-bold ${format === "story" ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] text-white"}`}>Story · 9:16</button>
               <button onClick={() => setFormat("video")} className={`rounded-xl border px-4 py-3 font-bold ${format === "video" ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] text-white"}`}>Video · 12 sec</button>
             </div>
+            <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">This chooses a still Story or an animated version of the same card. It does not create a carousel or a new Recraft cooking scene.</p>
           </div>
 
           <button disabled={loading || !selected || (selected.source !== "none" && !slug)} onClick={generate} className="mt-7 w-full rounded-xl bg-[var(--brand-red)] px-5 py-4 font-extrabold text-white disabled:opacity-50">{loading ? "Generating…" : `Generate ${format}`}</button>
@@ -140,9 +141,9 @@ export default function CampaignStudioPage() {
           {[['Teach','Ingredients, techniques and mistakes give people a reason to save.'],['Show process','Behind-the-recipe content feels human and builds trust.'],['Solve a problem','Meal planning and dinner ideas create useful website visits.'],['Recommend honestly','Affiliate features stay contextual, disclosed and helpful.']].map(([title, body]) => <div key={title} className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="font-extrabold text-white">{title}</div><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">{body}</p></div>)}
         </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {[['55%','Standard recipe'],['15%','Cooking moment'],['10%','Ingredient story'],['10%','Carousel'],['10%','Tips & process']].map(([share, label]) => <div key={label} className="rounded-xl border border-[var(--brand-gold)]/20 bg-black/15 p-4"><div className="text-2xl font-extrabold text-[var(--brand-gold)]">{share}</div><div className="mt-1 text-sm font-bold text-white">{label}</div></div>)}
+          {[['LIVE','Standard recipe'],['LIVE','Teaching card'],['LIVE','Process card'],['NOT BUILT','Cooking scene'],['NOT BUILT','Carousel']].map(([status, label]) => <div key={label} className="rounded-xl border border-[var(--brand-gold)]/20 bg-black/15 p-4"><div className={`text-sm font-extrabold ${status === 'LIVE' ? 'text-emerald-300' : 'text-amber-300'}`}>{status}</div><div className="mt-1 text-sm font-bold text-white">{label}</div></div>)}
         </div>
-        <p className="mt-4 text-sm leading-6 text-[var(--text-soft)]">All formats use the bundled Rajdhani typeface. The standard recipe treatment remains the majority, while the alternative layouts appear often enough to stop the feed feeling repetitive.</p>
+        <p className="mt-4 text-sm leading-6 text-[var(--text-soft)]">All live formats use the bundled Rajdhani typeface. Cooking scenes and true multi-image carousels are shown as unavailable until their generators and publishers are genuinely implemented.</p>
       </section>
     </main>
   );

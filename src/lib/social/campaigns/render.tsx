@@ -39,10 +39,13 @@ function dataUrl(buffer: Buffer, mime = "image/png") {
   return `data:${mime};base64,${buffer.toString("base64")}`;
 }
 
-async function preparedImage(assetPath: string, width: number, height: number, minimumDetail = 10) {
+async function preparedImage(assetPath: string, width: number, height: number, minimumDetail = 10, radius = 0) {
   const buffer = await assetBuffer(assetPath);
   await assertVisualDetail(buffer, "Campaign source image", minimumDetail);
-  return sharp(buffer).resize(width, height, { fit: "cover", position: "centre" }).jpeg({ quality: 91 }).toBuffer();
+  const image = sharp(buffer).resize(width, height, { fit: "cover", position: "centre" }).jpeg({ quality: 91 });
+  if (!radius) return image.toBuffer();
+  const mask = Buffer.from(`<svg width="${width}" height="${height}"><rect width="${width}" height="${height}" rx="${radius}" ry="${radius}" fill="#fff"/></svg>`);
+  return image.composite([{ input: mask, blend: "dest-in" }]).png().toBuffer();
 }
 
 async function preparedLogo(assetPath: string) {
@@ -58,7 +61,7 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
   const processLayout = kind === "behind-the-recipe";
   const [background, hero, logo, partnerLogo] = await Promise.all([
     preparedImage("/images/page-background.jpg", WIDTH, HEIGHT, 5),
-    preparedImage(copy.imagePath, 900, 700),
+    preparedImage(copy.imagePath, teachingLayout ? 535 : 900, processLayout ? 820 : teachingLayout ? 720 : 700, 10, 36),
     preparedLogo("/brand/logo-flat.png"),
     copy.partnerLogoPath ? preparedLogo(copy.partnerLogoPath) : Promise.resolve(null),
   ]);
@@ -80,7 +83,7 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
         {teachingLayout ? (
           <div style={{ display: "flex", flexDirection: "row", gap: 42, marginTop: 54, alignItems: "center" }}>
             <div style={{ display: "flex", width: 535, height: 720, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
-              <img src={dataUrl(hero, "image/jpeg")} width={535} height={720} style={{ width: 535, height: 720, objectFit: "cover" }} />
+              <img src={dataUrl(hero)} width={535} height={720} style={{ width: 535, height: 720, objectFit: "cover", borderRadius: 35 }} />
             </div>
             <div style={{ display: "flex", width: 320, flexDirection: "column" }}>
               <div style={{ display: "flex", fontSize: 42, lineHeight: 1.05, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>
@@ -90,7 +93,7 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
         ) : (
           <>
             <div style={{ display: "flex", width: 900, height: processLayout ? 820 : 700, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", marginTop: 44, boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
-              <img src={dataUrl(hero, "image/jpeg")} width={900} height={processLayout ? 820 : 700} style={{ width: 900, height: processLayout ? 820 : 700, objectFit: "cover" }} />
+              <img src={dataUrl(hero)} width={900} height={processLayout ? 820 : 700} style={{ width: 900, height: processLayout ? 820 : 700, objectFit: "cover", borderRadius: 35 }} />
             </div>
             <div style={{ display: "flex", flexDirection: "column", marginTop: processLayout ? 34 : 48, maxWidth: 890 }}>
               <div style={{ display: "flex", fontSize: processLayout ? 39 : 45, lineHeight: 1.08, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>

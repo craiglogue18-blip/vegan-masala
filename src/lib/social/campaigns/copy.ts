@@ -32,7 +32,19 @@ const SPICES: Array<{ match: RegExp; name: string; image: string; fact: string }
 ];
 
 function clean(value: unknown, fallback = "") {
-  return String(value || fallback).replace(/\s+/g, " ").trim();
+  return String(value || fallback)
+    .replace(/1½/g, "1 1/2")
+    .replace(/½/g, "1/2")
+    .replace(/¼/g, "1/4")
+    .replace(/¾/g, "3/4")
+    .replace(/⅓/g, "1/3")
+    .replace(/⅔/g, "2/3")
+    .replace(/⅛/g, "1/8")
+    .replace(/⅜/g, "3/8")
+    .replace(/⅝/g, "5/8")
+    .replace(/⅞/g, "7/8")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function firstSentence(value: string, max = 150) {
@@ -41,17 +53,6 @@ function firstSentence(value: string, max = 150) {
   if (sentence.length <= max) return sentence;
   const clipped = sentence.slice(0, max + 1).replace(/\s+\S*$/, "").replace(/[,:;\-–—]+$/, "");
   return `${clipped}.`;
-}
-
-function fitCompleteText(value: unknown, fallbackValue: string, max: number) {
-  const candidate = clean(value, fallbackValue);
-  if (candidate.length <= max) return candidate;
-  const complete = candidate.slice(0, max + 1).match(/^.*[.!?](?=\s|$)/)?.[0]?.trim();
-  if (complete && complete.length >= Math.min(45, max / 2)) return complete;
-  const fallback = clean(fallbackValue);
-  if (fallback && fallback !== candidate) return fitCompleteText(fallback, "", max);
-  const clipped = candidate.slice(0, max + 1).replace(/\s+\S*$/, "").replace(/[,:;\-–—.!?]+$/, "").trim();
-  return clipped ? `${clipped}.` : "";
 }
 
 function tracked(path: string, campaign: CampaignKind) {
@@ -159,12 +160,12 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
 
   if (kind === "mistake") {
     return {
-      eyebrow: "COMMON COOKING MISTAKE",
-      title: "Don’t rush the flavour base",
-      hook: step,
-      body: `${recipe.title} rewards attention to the order and texture of each step—not just the ingredient list.`,
+      eyebrow: "METHOD CHECKPOINT",
+      title: `Start ${recipe.title} properly`,
+      hook: `The first verified step in this recipe:`,
+      body: step,
       cta: "Follow the full method",
-      caption: `The ingredient list is only half the recipe. In ${recipe.title}, the order and texture of each step build the final flavour. Start here: ${destinationUrl}\n\n#CookingMistakes #IndianCooking #CookingTips #VeganRecipes #VeganMasala`,
+      caption: `${step} Follow the complete, tested ${recipe.title} method here: ${destinationUrl}\n\n#IndianCooking #CookingTips #VeganRecipes #VeganMasala`,
       captionVariants: [], destinationUrl, imagePath,
     };
   }
@@ -202,10 +203,12 @@ function parseAi(text: string, base: CampaignCopy): CampaignCopy | null {
       : [];
     return {
       ...base,
-      title: fitCompleteText(data.title, base.title, 78).replace(/[.!?]$/, ""),
-      hook: fitCompleteText(data.hook, base.hook, 125),
-      body: fitCompleteText(data.body, base.body, 210),
-      cta: fitCompleteText(data.cta, base.cta, 38).replace(/[.!?]$/, ""),
+      // On-artwork claims remain deterministic and grounded in the source page.
+      // AI may improve caption phrasing, but must not rewrite visible recipe facts.
+      title: base.title,
+      hook: base.hook,
+      body: base.body,
+      cta: base.cta,
       caption: captions[0] || base.caption,
       captionVariants: captions.length ? captions : [base.caption],
     };

@@ -37,8 +37,8 @@ export const CAMPAIGNS: CampaignDefinition[] = [
   },
   {
     id: "mistake",
-    label: "Common mistake",
-    description: "Explain one avoidable cooking mistake using the selected content as the source.",
+    label: "Method checkpoint",
+    description: "Highlight one verified step from the selected recipe without inventing a cooking mistake.",
     source: "recipe-or-guide",
   },
   {
