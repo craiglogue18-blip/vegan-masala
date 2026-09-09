@@ -84,9 +84,9 @@ async function recraftImage(prompt: string, reference?: Buffer, strength = 0.42)
   return Buffer.from(await download.arrayBuffer());
 }
 
-async function hasCookingAction(buffer: Buffer) {
+async function hasCookingAction(buffer: Buffer): Promise<boolean | null> {
   const apiKey = process.env.OPENAI_API_KEY?.trim();
-  if (!apiKey) return true;
+  if (!apiKey) return null;
   try {
     const client = new OpenAI({ apiKey });
     const response = await client.responses.create({
@@ -104,7 +104,10 @@ async function hasCookingAction(buffer: Buffer) {
     const result = JSON.parse(match[0]);
     return Boolean(result.hands && result.utensilTouchesFood && result.panOnHob && result.visibleCookingAction && !result.platedDishDominates && !result.containsText);
   } catch {
-    return false;
+    // Image generation belongs to Recraft. If the optional OpenAI visual
+    // checker is unavailable (for example, its separate billing account has
+    // no credit), do not reject a successful Recraft result.
+    return null;
   }
 }
 
@@ -132,11 +135,16 @@ async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, origina
     const action = `${copy.title}. ${copy.body}`;
     const prompt = `DOCUMENTARY PHOTOGRAPH OF HUMAN HANDS ACTIVELY COOKING. The hands and utensil are the main subject and fill the frame. An adult home cook is shown from shoulders down at a lit domestic hob: one hand firmly holds a wide pan while the other hand visibly stirs with a wooden spoon. Strong rising steam, visible utensil motion and ingredients still cooking in the pan. Verified recipe action for context: ${action}. Dark navy tiled kitchen, warm side light. NO finished dish, NO serving bowl, NO plate, NO tabletop food portrait, NO garnish shot. The result must visibly contain two human hands, a spoon touching food, a pan and an active hob.`;
     let scene = await recraftImage(prompt);
-    if (!(await hasCookingAction(scene))) {
+    let actionCheck = await hasCookingAction(scene);
+    if (actionCheck === false) {
       scene = await recraftImage(`FAILED ATTEMPT CORRECTION: compose the camera tightly around the cook's two hands and physical stirring action. Crop out every plate and serving bowl. A wooden spoon must visibly move through food inside a pan sitting directly on a lit burner. ${prompt}`);
+      actionCheck = await hasCookingAction(scene);
     }
-    if (!(await hasCookingAction(scene))) scene = await openAiCookingFallback(prompt);
-    if (!(await hasCookingAction(scene))) throw new Error("Neither image service produced a verifiable cooking action. No preview was saved.");
+    if (actionCheck === false) {
+      scene = await openAiCookingFallback(prompt);
+      actionCheck = await hasCookingAction(scene);
+    }
+    if (actionCheck === false) throw new Error("Neither image service produced a verifiable cooking action. No preview was saved.");
     return [await preparedBuffer(scene, 960, 1500, 42), await preparedBuffer(original, 960, 1500, 42)];
   }
   if (style === "ingredient") {
