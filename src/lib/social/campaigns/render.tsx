@@ -198,14 +198,25 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
 
       <div style={{ display: "flex", flexDirection: "column", padding: "70px 66px 54px", height: HEIGHT, position: "relative" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 3 }}>
-          <div style={{ display: "flex", fontSize: 46, letterSpacing: 3, fontWeight: 700, color: "#f0c75e" }}>{style === "carousel-cover" ? "CAROUSEL" : style === "collage" ? "RECIPE STORY" : style === "ingredient" ? "INGREDIENT STORY" : style === "cooking" ? "COOKING MOMENT" : "HERO RECIPE"}</div>
+          <div style={{ display: "flex", fontSize: 46, letterSpacing: 3, fontWeight: 700, color: "#f0c75e" }}>{style === "carousel-cover" ? copy.eyebrow : style === "collage" ? "RECIPE STORY" : style === "ingredient" ? "INGREDIENT STORY" : style === "cooking" ? "COOKING MOMENT" : "HERO RECIPE"}</div>
           <img src={dataUrl(logo)} width={220} height={125} style={{ objectFit: "contain" }} />
         </div>
         <div style={{ display: "flex", width: 250, height: 3, backgroundColor: "#d9b348", marginTop: 16 }} />
 
-        {style === "carousel-cover" ? <div style={{ display: "flex", position: "relative", height: 1200, marginTop: 90 }}>
-          {[0,1,2].map((item) => <div key={item} style={{ display: "flex", position: "absolute", left: 30 + item * 205, top: item === 1 ? 0 : 100, width: 470, height: 930, padding: 16, borderRadius: 54, backgroundColor: "#090d10", border: "4px solid #d9b348", transform: `rotate(${item === 0 ? -5 : item === 2 ? 5 : 0}deg)`, zIndex: item === 1 ? 2 : 1 }}><img src={dataUrl(heroes[item] || hero)} width={438} height={898} style={{ width: 438, height: 898, objectFit: "cover", borderRadius: 38 }} /></div>)}
-          <div style={{ display: "flex", position: "absolute", left: 70, right: 70, bottom: 10, padding: "28px 34px", borderRadius: 28, backgroundColor: "rgba(3,8,12,.90)", fontSize: 54, lineHeight: 1.02, fontWeight: 700, color: "#f0c75e", zIndex: 4 }}>{copy.title}</div>
+        {style === "carousel-cover" ? <div style={{ display: "flex", position: "relative", height: 1280, marginTop: 44 }}>
+          {[0,1,2].map((item) => <div key={item} style={{ display: "flex", position: "absolute", left: 30 + item * 205, top: item === 1 ? 0 : 82, width: 470, height: 820, padding: 16, borderRadius: 54, backgroundColor: "#090d10", border: "4px solid #d9b348", transform: `rotate(${item === 0 ? -5 : item === 2 ? 5 : 0}deg)`, zIndex: item === 1 ? 2 : 1 }}><img src={dataUrl(heroes[item] || hero)} width={438} height={788} style={{ width: 438, height: 788, objectFit: "cover", borderRadius: 38 }} /></div>)}
+          <div style={{ display: "flex", position: "absolute", left: 34, right: 34, bottom: 0, flexDirection: "column", padding: "34px 38px 32px", borderRadius: 30, background: "linear-gradient(105deg, rgba(0,0,0,.98), rgba(3,8,12,.91))", border: "2px solid rgba(217,179,72,.72)", zIndex: 4 }}>
+            <div style={{ display: "flex", fontSize: copy.title.length > 48 ? 49 : 58, lineHeight: 1.02, fontWeight: 700, color: "#f0c75e" }}>{copy.title}</div>
+            <div style={{ display: "flex", width: 120, height: 3, backgroundColor: "#d9b348", marginTop: 22 }} />
+            <div style={{ display: "flex", flexDirection: "column", marginTop: 22 }}>
+              <div style={{ display: "flex", fontSize: 21, letterSpacing: 2, fontWeight: 700, color: "#d9b348" }}>WHY IT MATTERS</div>
+              <div style={{ display: "flex", fontSize: 29, lineHeight: 1.16, color: "#fff", marginTop: 7 }}>{copy.hook}</div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", marginTop: 20 }}>
+              <div style={{ display: "flex", fontSize: 21, letterSpacing: 2, fontWeight: 700, color: "#d9b348" }}>FROM THE RECIPE</div>
+              <div style={{ display: "flex", fontSize: 26, lineHeight: 1.15, color: "#e6e0d3", marginTop: 7 }}>{copy.detail || copy.body}</div>
+            </div>
+          </div>
         </div> : style === "collage" ? <div style={{ display: "flex", position: "relative", width: 948, height: 1320, marginTop: 42 }}>
           <div style={{ display: "flex", position: "absolute", left: 0, top: 0, width: 590, height: 1050, borderRadius: 42, overflow: "hidden", border: "3px solid #b28a25" }}><img src={dataUrl(heroes[1] || hero)} width={590} height={1050} style={{ width: 590, height: 1050, objectFit: "cover", borderRadius: 39 }} /></div>
           <div style={{ display: "flex", position: "absolute", right: 0, top: 65, width: 330, height: 470, borderRadius: 35, overflow: "hidden", border: "3px solid #b28a25" }}><img src={dataUrl(heroes[0] || hero)} width={330} height={470} style={{ width: 330, height: 470, objectFit: "cover", borderRadius: 32 }} /></div>
