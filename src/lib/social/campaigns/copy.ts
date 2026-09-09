@@ -17,6 +17,8 @@ export type CampaignCopy = {
   imagePath: string;
   partnerLogoPath?: string;
   disclosure?: string;
+  dishName?: string;
+  visualIngredients?: string[];
 };
 
 const SPICES: Array<{ match: RegExp; name: string; image: string; fact: string }> = [
@@ -148,6 +150,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
   const step = firstSentence(instructions[0] || recipe.description || "Cook the masala until it is fragrant.", 145);
   const nextStep = firstSentence(instructions[1] || recipe.description || recipe.introNote || "Continue with the complete recipe method.", 145);
   const practicalNote = firstSentence(recipe.notes?.[0] || recipe.servingSuggestion || recipe.introNote || recipe.description || "", 170);
+  const visualContext = { dishName: recipe.title, visualIngredients: ingredients.slice(0, 9).map((item) => clean(item)) };
 
   if (kind === "ingredient") {
     return {
@@ -158,7 +161,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
       detail: practicalNote,
       cta: "See it in the recipe",
       caption: `${spice.fact} See how it is used in ${recipe.title}: ${destinationUrl}\n\n#IndianSpices #CookingTips #VeganIndianFood #LearnToCook #VeganMasala`,
-      captionVariants: [], destinationUrl, imagePath: spice.image,
+      captionVariants: [], destinationUrl, imagePath: spice.image, ...visualContext,
     };
   }
 
@@ -171,7 +174,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
       detail: practicalNote,
       cta: "Follow the full method",
       caption: `${step} Follow the complete, tested ${recipe.title} method here: ${destinationUrl}\n\n#IndianCooking #CookingTips #VeganRecipes #VeganMasala`,
-      captionVariants: [], destinationUrl, imagePath,
+      captionVariants: [], destinationUrl, imagePath, ...visualContext,
     };
   }
 
@@ -184,7 +187,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
       detail: practicalNote,
       cta: "Cook the full recipe",
       caption: `Behind the finished plate: ${step} Explore the complete ${recipe.title} recipe: ${destinationUrl}\n\n#BehindTheRecipe #FoodProcess #VeganIndianFood #HomeCooking #VeganMasala`,
-      captionVariants: [], destinationUrl, imagePath,
+      captionVariants: [], destinationUrl, imagePath, ...visualContext,
     };
   }
 
@@ -196,7 +199,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
     detail: practicalNote,
     cta: "Get the complete method",
     caption: `${step} It is one of the details that makes ${recipe.title} work. Get the complete method: ${destinationUrl}\n\n#CookingTechnique #IndianCooking #VeganRecipes #CookingTips #VeganMasala`,
-    captionVariants: [], destinationUrl, imagePath,
+    captionVariants: [], destinationUrl, imagePath, ...visualContext,
   };
 }
 

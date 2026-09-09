@@ -52,17 +52,78 @@ async function preparedLogo(assetPath: string) {
   return sharp(await assetBuffer(assetPath)).resize({ width: 300, height: 170, fit: "contain" }).png().toBuffer();
 }
 
+async function recraftImage(prompt: string, reference?: Buffer) {
+  const token = process.env.RECRAFT_API_TOKEN?.trim();
+  if (!token) throw new Error("Recraft is not connected, so this visual style cannot be generated accurately.");
+  const styleId = process.env.RECRAFT_STYLE_ID?.trim();
+  let response: Response;
+  if (reference) {
+    const form = new FormData();
+    const png = await sharp(reference).png().toBuffer();
+    form.set("image", new Blob([new Uint8Array(png)], { type: "image/png" }), "recipe-reference.png");
+    form.set("prompt", prompt.slice(0, 950));
+    form.set("strength", "0.42");
+    form.set("model", "recraftv3");
+    if (styleId) form.set("style_id", styleId);
+    response = await fetch("https://external.api.recraft.ai/v1/images/imageToImage", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: form });
+  } else {
+    response = await fetch("https://external.api.recraft.ai/v1/images/generations", {
+      method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ prompt: prompt.slice(0, 950), model: process.env.RECRAFT_MODEL?.trim() || "recraftv4", ...(styleId ? { style_id: styleId } : {}) }),
+    });
+  }
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(`Recraft generation failed: ${payload?.message || payload?.error || response.status}`);
+  const url = payload?.data?.[0]?.url || payload?.image?.url;
+  if (!url) throw new Error("Recraft returned no campaign image.");
+  const download = await fetch(url, { cache: "no-store" });
+  if (!download.ok) throw new Error("The generated Recraft image could not be downloaded.");
+  return Buffer.from(await download.arrayBuffer());
+}
+
+async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, original: Buffer) {
+  if (style === "hero" || !copy.dishName) return [original];
+  const ingredients = (copy.visualIngredients || []).join(", ");
+  const shared = `Premium photorealistic editorial food photography for ${copy.dishName}. Authentic vegan Indian food, dark navy patterned tile setting inspired by Vegan Masala, warm natural light, rich realistic texture, no words, no lettering, no logo, no watermark. Key ingredients: ${ingredients}.`;
+  if (style === "cooking") {
+    const scene = await recraftImage(`${shared} Show an adult home cook from shoulders down, stirring the dish in a real pan on a hob, visible hands and wooden spoon, gentle steam, candid in-progress cooking moment, not a finished plated close-up. Keep the food recognisable from the reference image.`, original);
+    return [await preparedBuffer(scene, 960, 1500, 42)];
+  }
+  if (style === "ingredient") {
+    const scene = await recraftImage(`${shared} Create an overhead ingredient story flat-lay: the recognisable finished dish in a smaller pan on the right, its actual vegetables and spices arranged naturally on the left, coherent scale, dark tabletop, editorial composition.`);
+    return [await preparedBuffer(scene, 960, 1500, 42)];
+  }
+  const [process, serving] = await Promise.all([
+    recraftImage(`${shared} Close in-progress pan view with a wooden spoon moving through the food and gentle steam; preserve the recipe's recognisable ingredients.`, original),
+    recraftImage(`${shared} Finished serving scene from a different overhead angle with rice or flatbread only if appropriate, restrained styling, preserve the recipe's recognisable ingredients.`, original),
+  ]);
+  return [
+    await preparedBuffer(process, 438, 898, 38),
+    await preparedBuffer(original, 438, 898, 38),
+    await preparedBuffer(serving, 438, 898, 38),
+  ];
+}
+
+async function preparedBuffer(buffer: Buffer, width: number, height: number, radius = 0) {
+  const image = sharp(buffer).resize(width, height, { fit: "cover", position: "centre" });
+  if (!radius) return image.jpeg({ quality: 91 }).toBuffer();
+  const mask = Buffer.from(`<svg width="${width}" height="${height}"><rect width="${width}" height="${height}" rx="${radius}" ry="${radius}" fill="#fff"/></svg>`);
+  return image.composite([{ input: mask, blend: "dest-in" }]).png().toBuffer();
+}
+
 function campaignSlug(kind: CampaignKind, sourceSlug?: string) {
   return `campaign-${kind}${sourceSlug ? `-${sourceSlug}` : ""}`.slice(0, 150);
 }
 
 export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind, sourceSlug?: string, style: CampaignStyle = "hero") {
-  const [background, hero, logo, partnerLogo] = await Promise.all([
+  const [background, originalHero, logo, partnerLogo] = await Promise.all([
     preparedImage("/images/page-background.jpg", WIDTH, HEIGHT, 5),
     preparedImage(copy.imagePath, 960, 1500, 10, 42),
     preparedLogo("/brand/logo-flat.png"),
     copy.partnerLogoPath ? preparedLogo(copy.partnerLogoPath) : Promise.resolve(null),
   ]);
+  const heroes = await campaignVisuals(copy, style, originalHero);
+  const hero = heroes[0];
 
   const svg = await satori(
     <div style={{ width: WIDTH, height: HEIGHT, display: "flex", flexDirection: "column", position: "relative", backgroundColor: "#071018", color: "white", overflow: "hidden", fontFamily: "Rajdhani" }}>
@@ -78,7 +139,7 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
         <div style={{ display: "flex", width: 250, height: 3, backgroundColor: "#d9b348", marginTop: 16 }} />
 
         {style === "carousel-cover" ? <div style={{ display: "flex", position: "relative", height: 1200, marginTop: 90 }}>
-          {[0,1,2].map((item) => <div key={item} style={{ display: "flex", position: "absolute", left: 30 + item * 205, top: item === 1 ? 0 : 100, width: 470, height: 930, padding: 16, borderRadius: 54, backgroundColor: "#090d10", border: "4px solid #d9b348", transform: `rotate(${item === 0 ? -5 : item === 2 ? 5 : 0}deg)`, zIndex: item === 1 ? 2 : 1 }}><img src={dataUrl(hero)} width={438} height={898} style={{ width: 438, height: 898, objectFit: "cover", borderRadius: 38 }} /></div>)}
+          {[0,1,2].map((item) => <div key={item} style={{ display: "flex", position: "absolute", left: 30 + item * 205, top: item === 1 ? 0 : 100, width: 470, height: 930, padding: 16, borderRadius: 54, backgroundColor: "#090d10", border: "4px solid #d9b348", transform: `rotate(${item === 0 ? -5 : item === 2 ? 5 : 0}deg)`, zIndex: item === 1 ? 2 : 1 }}><img src={dataUrl(heroes[item] || hero)} width={438} height={898} style={{ width: 438, height: 898, objectFit: "cover", borderRadius: 38 }} /></div>)}
           <div style={{ display: "flex", position: "absolute", left: 70, right: 70, bottom: 10, padding: "28px 34px", borderRadius: 28, backgroundColor: "rgba(3,8,12,.90)", fontSize: 54, lineHeight: 1.02, fontWeight: 700, color: "#f0c75e", zIndex: 4 }}>{copy.title}</div>
         </div> : <div style={{ display: "flex", position: "relative", width: 948, height: 1320, borderRadius: 44, overflow: "hidden", border: "3px solid #b28a25", marginTop: 42, boxShadow: "0 28px 80px rgba(0,0,0,.55)" }}>
           <img src={dataUrl(hero)} width={948} height={1320} style={{ width: 948, height: 1320, objectFit: "cover", borderRadius: 41 }} />

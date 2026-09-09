@@ -71,7 +71,8 @@ export default function CampaignStudioPage() {
     : result?.copy?.caption ? [result.copy.caption] : [];
 
   async function generate() {
-    setLoading(true); setStatus(format === "video" ? "Building a 12-second campaign video…" : "Building story artwork…"); setResult(null); setCaptionIndex(0);
+    const usesRecraft = style !== "hero";
+    setLoading(true); setStatus(usesRecraft ? "Creating new campaign photography with Recraft… this can take a minute." : format === "video" ? "Building a 12-second campaign video…" : "Building story artwork…"); setResult(null); setCaptionIndex(0);
     try {
       const response = await fetch("/api/admin/social/campaigns", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -151,7 +152,7 @@ export default function CampaignStudioPage() {
                 ["ingredient", "Ingredient story"], ["carousel-cover", "Carousel cover"],
               ] as const).map(([value, label]) => <button key={value} onClick={() => setStyle(value)} className={`rounded-xl border px-3 py-3 text-sm font-bold ${style === value ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] text-white"}`}>{label}</button>)}
             </div>
-            <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">Carousel cover creates the opening artwork only; it is queued as one image.</p>
+            <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">Cooking, ingredient and carousel-cover styles generate new source photography with Recraft. Carousel cover creates the opening artwork only and is queued as one image.</p>
           </div>
 
           <div className="mt-6">
