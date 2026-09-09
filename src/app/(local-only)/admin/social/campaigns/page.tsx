@@ -19,7 +19,7 @@ export default function CampaignStudioPage() {
   const [sources, setSources] = useState<Source[]>([]);
   const [kind, setKind] = useState("affiliate");
   const [format, setFormat] = useState<"story" | "video">("story");
-  const [style, setStyle] = useState<"hero" | "cooking" | "ingredient" | "carousel-cover">("hero");
+  const [style, setStyle] = useState<"hero" | "cooking" | "ingredient" | "collage" | "carousel-cover">("hero");
   const [queuePlatform, setQueuePlatform] = useState<"instagram" | "facebook" | "tiktok" | "youtube">("instagram");
   const [scheduledFor, setScheduledFor] = useState(() => {
     const date = new Date(Date.now() + 60 * 60 * 1000);
@@ -149,10 +149,11 @@ export default function CampaignStudioPage() {
             <div className="mt-2 grid grid-cols-2 gap-3">
               {([
                 ["hero", "Hero recipe"], ["cooking", "Cooking moment"],
-                ["ingredient", "Ingredient story"], ["carousel-cover", "Carousel cover"],
+                ["ingredient", "Ingredient story"], ["collage", "Photo collage"],
+                ["carousel-cover", "Carousel cover"],
               ] as const).map(([value, label]) => <button key={value} onClick={() => setStyle(value)} className={`rounded-xl border px-3 py-3 text-sm font-bold ${style === value ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] text-white"}`}>{label}</button>)}
             </div>
-            <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">Cooking, ingredient and carousel-cover styles generate new source photography with Recraft. Carousel cover creates the opening artwork only and is queued as one image.</p>
+            <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">Cooking, ingredient, collage and carousel-cover styles generate new source photography with Recraft. Collage arranges three views into one post image; carousel cover creates the opening artwork only.</p>
           </div>
 
           <div className="mt-6">
@@ -161,7 +162,7 @@ export default function CampaignStudioPage() {
               <button onClick={() => setFormat("story")} className={`rounded-xl border px-4 py-3 font-bold ${format === "story" ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] text-white"}`}>Story · 9:16</button>
               <button onClick={() => setFormat("video")} className={`rounded-xl border px-4 py-3 font-bold ${format === "video" ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] text-white"}`}>Video · 12 sec</button>
             </div>
-            <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">This chooses a still Story or an animated version of the same card. It does not create a carousel or a new Recraft cooking scene.</p>
+            <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">This chooses a still Story or a 12-second animated version of the selected design.</p>
           </div>
 
           <button disabled={loading || !selected || (selected.source !== "none" && !slug)} onClick={generate} className="mt-7 w-full rounded-xl bg-[var(--brand-red)] px-5 py-4 font-extrabold text-white disabled:opacity-50">{loading ? "Generating…" : `Generate ${format}`}</button>
@@ -207,9 +208,9 @@ export default function CampaignStudioPage() {
           {[['Teach','Ingredients, techniques and mistakes give people a reason to save.'],['Show process','Behind-the-recipe content feels human and builds trust.'],['Solve a problem','Meal planning and dinner ideas create useful website visits.'],['Recommend honestly','Affiliate features stay contextual, disclosed and helpful.']].map(([title, body]) => <div key={title} className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="font-extrabold text-white">{title}</div><p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">{body}</p></div>)}
         </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {[['LIVE','Standard recipe'],['LIVE','Teaching card'],['LIVE','Process card'],['NOT BUILT','Cooking scene'],['NOT BUILT','Carousel']].map(([status, label]) => <div key={label} className="rounded-xl border border-[var(--brand-gold)]/20 bg-black/15 p-4"><div className={`text-sm font-extrabold ${status === 'LIVE' ? 'text-emerald-300' : 'text-amber-300'}`}>{status}</div><div className="mt-1 text-sm font-bold text-white">{label}</div></div>)}
+          {[['LIVE','Hero recipe'],['LIVE','Cooking scene'],['LIVE','Ingredient story'],['LIVE','Photo collage'],['COVER ONLY','Carousel']].map(([status, label]) => <div key={label} className="rounded-xl border border-[var(--brand-gold)]/20 bg-black/15 p-4"><div className={`text-sm font-extrabold ${status === 'LIVE' ? 'text-emerald-300' : 'text-amber-300'}`}>{status}</div><div className="mt-1 text-sm font-bold text-white">{label}</div></div>)}
         </div>
-        <p className="mt-4 text-sm leading-6 text-[var(--text-soft)]">All live formats use the bundled Rajdhani typeface. Cooking scenes and true multi-image carousels are shown as unavailable until their generators and publishers are genuinely implemented.</p>
+        <p className="mt-4 text-sm leading-6 text-[var(--text-soft)]">All live formats use the bundled Rajdhani typeface. Photo collage produces one publishable image containing three distinct views. True multi-slide carousel publishing remains separate from its cover artwork.</p>
       </section>
     </main>
   );

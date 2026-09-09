@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     const definition = CAMPAIGNS.find((item) => item.id === kind);
     if (!definition) return NextResponse.json({ ok: false, error: "Choose a valid campaign" }, { status: 400 });
     if (!(["story", "video"] as string[]).includes(format)) return NextResponse.json({ ok: false, error: "Choose story or video" }, { status: 400 });
-    if (!(["hero", "cooking", "ingredient", "carousel-cover"] as string[]).includes(style)) return NextResponse.json({ ok: false, error: "Choose a valid visual style" }, { status: 400 });
+    if (!(["hero", "cooking", "ingredient", "collage", "carousel-cover"] as string[]).includes(style)) return NextResponse.json({ ok: false, error: "Choose a valid visual style" }, { status: 400 });
     if (definition.source !== "none" && !slug) return NextResponse.json({ ok: false, error: "Choose source content" }, { status: 400 });
 
     const copy = await buildCampaignCopy(kind, slug || undefined);

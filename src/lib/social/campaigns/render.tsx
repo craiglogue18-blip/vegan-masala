@@ -86,7 +86,7 @@ async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, origina
   const ingredients = (copy.visualIngredients || []).join(", ");
   const shared = `Premium photorealistic editorial food photography for ${copy.dishName}. Authentic vegan Indian food, dark navy patterned tile setting inspired by Vegan Masala, warm natural light, rich realistic texture, no words, no lettering, no logo, no watermark. Key ingredients: ${ingredients}.`;
   if (style === "cooking") {
-    const scene = await recraftImage(`${shared} Show an adult home cook from shoulders down, stirring the dish in a real pan on a hob, visible hands and wooden spoon, gentle steam, candid in-progress cooking moment, not a finished plated close-up. Keep the food recognisable from the reference image.`, original);
+    const scene = await recraftImage(`${shared} Documentary cooking action scene. An adult home cook shown from shoulders down is actively stirring ${copy.dishName} in a wide steel or cast-iron pan on a lit domestic gas hob. Both hands visible, one holding the pan and one moving a wooden spoon through the food. Clearly visible rising steam, ingredients mid-cook, apron and real kitchen background. This must look like active cooking, not a finished plated dish and not a food close-up.`);
     return [await preparedBuffer(scene, 960, 1500, 42)];
   }
   if (style === "ingredient") {
@@ -97,6 +97,13 @@ async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, origina
     recraftImage(`${shared} Close in-progress pan view with a wooden spoon moving through the food and gentle steam; preserve the recipe's recognisable ingredients.`, original),
     recraftImage(`${shared} Finished serving scene from a different overhead angle with rice or flatbread only if appropriate, restrained styling, preserve the recipe's recognisable ingredients.`, original),
   ]);
+  if (style === "collage") {
+    return [
+      await preparedBuffer(process, 960, 1500, 42),
+      await preparedBuffer(original, 960, 1500, 42),
+      await preparedBuffer(serving, 960, 1500, 42),
+    ];
+  }
   return [
     await preparedBuffer(process, 438, 898, 38),
     await preparedBuffer(original, 438, 898, 38),
@@ -133,7 +140,7 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
 
       <div style={{ display: "flex", flexDirection: "column", padding: "70px 66px 54px", height: HEIGHT, position: "relative" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 3 }}>
-          <div style={{ display: "flex", fontSize: 46, letterSpacing: 3, fontWeight: 700, color: "#f0c75e" }}>{style === "carousel-cover" ? "CAROUSEL" : style === "ingredient" ? "INGREDIENT STORY" : style === "cooking" ? "COOKING MOMENT" : "HERO RECIPE"}</div>
+          <div style={{ display: "flex", fontSize: 46, letterSpacing: 3, fontWeight: 700, color: "#f0c75e" }}>{style === "carousel-cover" ? "CAROUSEL" : style === "collage" ? "RECIPE STORY" : style === "ingredient" ? "INGREDIENT STORY" : style === "cooking" ? "COOKING MOMENT" : "HERO RECIPE"}</div>
           <img src={dataUrl(logo)} width={220} height={125} style={{ objectFit: "contain" }} />
         </div>
         <div style={{ display: "flex", width: 250, height: 3, backgroundColor: "#d9b348", marginTop: 16 }} />
@@ -141,10 +148,15 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
         {style === "carousel-cover" ? <div style={{ display: "flex", position: "relative", height: 1200, marginTop: 90 }}>
           {[0,1,2].map((item) => <div key={item} style={{ display: "flex", position: "absolute", left: 30 + item * 205, top: item === 1 ? 0 : 100, width: 470, height: 930, padding: 16, borderRadius: 54, backgroundColor: "#090d10", border: "4px solid #d9b348", transform: `rotate(${item === 0 ? -5 : item === 2 ? 5 : 0}deg)`, zIndex: item === 1 ? 2 : 1 }}><img src={dataUrl(heroes[item] || hero)} width={438} height={898} style={{ width: 438, height: 898, objectFit: "cover", borderRadius: 38 }} /></div>)}
           <div style={{ display: "flex", position: "absolute", left: 70, right: 70, bottom: 10, padding: "28px 34px", borderRadius: 28, backgroundColor: "rgba(3,8,12,.90)", fontSize: 54, lineHeight: 1.02, fontWeight: 700, color: "#f0c75e", zIndex: 4 }}>{copy.title}</div>
+        </div> : style === "collage" ? <div style={{ display: "flex", position: "relative", width: 948, height: 1320, marginTop: 42 }}>
+          <div style={{ display: "flex", position: "absolute", left: 0, top: 0, width: 590, height: 1050, borderRadius: 42, overflow: "hidden", border: "3px solid #b28a25" }}><img src={dataUrl(heroes[1] || hero)} width={590} height={1050} style={{ width: 590, height: 1050, objectFit: "cover", borderRadius: 39 }} /></div>
+          <div style={{ display: "flex", position: "absolute", right: 0, top: 65, width: 330, height: 470, borderRadius: 35, overflow: "hidden", border: "3px solid #b28a25" }}><img src={dataUrl(heroes[0] || hero)} width={330} height={470} style={{ width: 330, height: 470, objectFit: "cover", borderRadius: 32 }} /></div>
+          <div style={{ display: "flex", position: "absolute", right: 0, top: 560, width: 330, height: 490, borderRadius: 35, overflow: "hidden", border: "3px solid #b28a25" }}><img src={dataUrl(heroes[2] || hero)} width={330} height={490} style={{ width: 330, height: 490, objectFit: "cover", borderRadius: 32 }} /></div>
+          <div style={{ display: "flex", position: "absolute", left: 28, right: 28, bottom: 20, flexDirection: "column", padding: "28px 34px 25px", borderRadius: 28, background: "linear-gradient(90deg, rgba(0,0,0,.97), rgba(0,0,0,.78))" }}><div style={{ display: "flex", fontSize: 56, lineHeight: 1, fontWeight: 700, color: "#f0c75e" }}>{copy.title}</div><div style={{ display: "flex", fontSize: 28, lineHeight: 1.16, color: "#fff", marginTop: 15 }}>{copy.hook}</div></div>
         </div> : <div style={{ display: "flex", position: "relative", width: 948, height: 1320, borderRadius: 44, overflow: "hidden", border: "3px solid #b28a25", marginTop: 42, boxShadow: "0 28px 80px rgba(0,0,0,.55)" }}>
           <img src={dataUrl(hero)} width={948} height={1320} style={{ width: 948, height: 1320, objectFit: "cover", borderRadius: 41 }} />
           <div style={{ display: "flex", position: "absolute", inset: 0, background: style === "ingredient" ? "linear-gradient(180deg, rgba(3,8,12,.05), rgba(3,8,12,.15) 55%, rgba(3,8,12,.92) 100%)" : "linear-gradient(180deg, rgba(3,8,12,.02), rgba(3,8,12,.08) 50%, rgba(3,8,12,.94) 100%)" }} />
-          <div style={{ display: "flex", position: "absolute", left: 46, right: 46, bottom: 48, flexDirection: "column" }}>
+          <div style={{ display: "flex", position: "absolute", left: 30, right: 30, bottom: 30, flexDirection: "column", padding: "30px 34px 27px", borderRadius: 28, background: "linear-gradient(90deg, rgba(0,0,0,.97), rgba(0,0,0,.82) 72%, rgba(0,0,0,.60))" }}>
             <div style={{ display: "flex", fontSize: copy.title.length > 48 ? 55 : 68, lineHeight: 1, fontWeight: 700, color: "#f0c75e" }}>{copy.title}</div>
             <div style={{ display: "flex", fontSize: 30, lineHeight: 1.18, color: "#fff", marginTop: 20 }}>{copy.hook}</div>
           </div>
