@@ -61,7 +61,7 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
   const processLayout = kind === "behind-the-recipe";
   const [background, hero, logo, partnerLogo] = await Promise.all([
     preparedImage("/images/page-background.jpg", WIDTH, HEIGHT, 5),
-    preparedImage(copy.imagePath, teachingLayout ? 535 : 900, processLayout ? 820 : teachingLayout ? 720 : 700, 10, 36),
+    preparedImage(copy.imagePath, teachingLayout ? 535 : 900, processLayout ? 820 : teachingLayout ? 820 : 700, 10, 36),
     preparedLogo("/brand/logo-flat.png"),
     copy.partnerLogoPath ? preparedLogo(copy.partnerLogoPath) : Promise.resolve(null),
   ]);
@@ -81,14 +81,20 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
         <div style={{ display: "flex", fontSize: copy.title.length > 52 ? 66 : 78, lineHeight: 0.98, fontWeight: 700, color: "#e0b83e", marginTop: 44, maxWidth: 900 }}>{copy.title}</div>
 
         {teachingLayout ? (
-          <div style={{ display: "flex", flexDirection: "row", gap: 42, marginTop: 54, alignItems: "center" }}>
-            <div style={{ display: "flex", width: 535, height: 720, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
-              <img src={dataUrl(hero)} width={535} height={720} style={{ width: 535, height: 720, objectFit: "cover", borderRadius: 35 }} />
+          <div style={{ display: "flex", flexDirection: "column", marginTop: 48 }}>
+            <div style={{ display: "flex", flexDirection: "row", gap: 42, alignItems: "center" }}>
+              <div style={{ display: "flex", width: 535, height: 820, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
+                <img src={dataUrl(hero)} width={535} height={820} style={{ width: 535, height: 820, objectFit: "cover", borderRadius: 35 }} />
+              </div>
+              <div style={{ display: "flex", width: 320, flexDirection: "column" }}>
+                <div style={{ display: "flex", fontSize: 38, lineHeight: 1.08, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>
+                <div style={{ display: "flex", fontSize: 27, lineHeight: 1.22, color: "#f4f1e8", marginTop: 30 }}>{copy.body}</div>
+              </div>
             </div>
-            <div style={{ display: "flex", width: 320, flexDirection: "column" }}>
-              <div style={{ display: "flex", fontSize: 42, lineHeight: 1.05, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>
-              <div style={{ display: "flex", fontSize: 29, lineHeight: 1.2, color: "#f4f1e8", marginTop: 28 }}>{copy.body}</div>
-            </div>
+            {copy.detail ? <div style={{ display: "flex", flexDirection: "column", marginTop: 38, padding: "25px 30px 22px", borderRadius: 24, border: "2px solid rgba(224,184,62,.55)", backgroundColor: "rgba(3,8,12,.76)" }}>
+              <div style={{ display: "flex", fontSize: 21, letterSpacing: 2.6, fontWeight: 700, color: "#d7ad39" }}>PRACTICAL NOTE</div>
+              <div style={{ display: "flex", fontSize: 28, lineHeight: 1.18, color: "#f4f1e8", marginTop: 9 }}>{copy.detail}</div>
+            </div> : null}
           </div>
         ) : (
           <>

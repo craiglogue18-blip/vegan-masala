@@ -9,6 +9,7 @@ export type CampaignCopy = {
   title: string;
   hook: string;
   body: string;
+  detail?: string;
   cta: string;
   caption: string;
   captionVariants: string[];
@@ -145,6 +146,8 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
   const sourceText = [...ingredients, ...instructions].join(" ");
   const spice = SPICES.find((item) => item.match.test(sourceText)) || SPICES[0];
   const step = firstSentence(instructions[0] || recipe.description || "Cook the masala until it is fragrant.", 145);
+  const nextStep = firstSentence(instructions[1] || recipe.description || recipe.introNote || "Continue with the complete recipe method.", 145);
+  const practicalNote = firstSentence(recipe.notes?.[0] || recipe.servingSuggestion || recipe.introNote || recipe.description || "", 170);
 
   if (kind === "ingredient") {
     return {
@@ -152,6 +155,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
       title: `Why ${spice.name.toLowerCase()} matters`,
       hook: spice.fact,
       body: `${spice.name} is part of the flavour story in ${recipe.title}.`,
+      detail: practicalNote,
       cta: "See it in the recipe",
       caption: `${spice.fact} See how it is used in ${recipe.title}: ${destinationUrl}\n\n#IndianSpices #CookingTips #VeganIndianFood #LearnToCook #VeganMasala`,
       captionVariants: [], destinationUrl, imagePath: spice.image,
@@ -162,8 +166,9 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
     return {
       eyebrow: "METHOD CHECKPOINT",
       title: `Start ${recipe.title} properly`,
-      hook: `The first verified step in this recipe:`,
-      body: step,
+      hook: step,
+      body: `Next: ${nextStep}`,
+      detail: practicalNote,
       cta: "Follow the full method",
       caption: `${step} Follow the complete, tested ${recipe.title} method here: ${destinationUrl}\n\n#IndianCooking #CookingTips #VeganRecipes #VeganMasala`,
       captionVariants: [], destinationUrl, imagePath,
@@ -176,6 +181,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
       title: recipe.title,
       hook: clean(recipe.socialHook || recipe.introNote || recipe.description, "The finished plate starts with the details you do not see."),
       body: step,
+      detail: practicalNote,
       cta: "Cook the full recipe",
       caption: `Behind the finished plate: ${step} Explore the complete ${recipe.title} recipe: ${destinationUrl}\n\n#BehindTheRecipe #FoodProcess #VeganIndianFood #HomeCooking #VeganMasala`,
       captionVariants: [], destinationUrl, imagePath,
@@ -187,6 +193,7 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
     title: `One useful step from ${recipe.title}`,
     hook: step,
     body: firstSentence(recipe.description || recipe.introNote || `Use this step when you cook ${recipe.title}.`, 145),
+    detail: practicalNote,
     cta: "Get the complete method",
     caption: `${step} It is one of the details that makes ${recipe.title} work. Get the complete method: ${destinationUrl}\n\n#CookingTechnique #IndianCooking #VeganRecipes #CookingTips #VeganMasala`,
     captionVariants: [], destinationUrl, imagePath,
