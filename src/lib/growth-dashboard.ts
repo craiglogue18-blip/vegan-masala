@@ -729,6 +729,13 @@ export async function getGrowthDashboard() {
         error: awinCurrent.error || awinPrevious.error,
       },
       amazon: amazonReport,
+      payhip: {
+        configured: Boolean(process.env.PAYHIP_API_KEY?.trim()),
+        purchases: total(current, "payhip_purchase"),
+        refunds: total(current, "payhip_refund"),
+        revenue: total(current, "payhip_revenue") / 100,
+        refundedValue: total(current, "payhip_refund_value") / 100,
+      },
       socialPerformance: {
         facebook: metaAudience.facebook,
         instagram: metaAudience.instagram,

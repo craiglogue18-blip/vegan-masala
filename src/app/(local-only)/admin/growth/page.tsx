@@ -318,6 +318,14 @@ export default async function GrowthDashboardPage() {
 
       <section className="mt-8 grid gap-6 xl:grid-cols-3">
         <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Payhip sales</h2>
+          <p className="mt-2 text-sm text-[var(--text-soft)]">Verified store orders received during the latest 28 days.</p>
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <Metric label="Purchases" value={data.services.payhip.purchases} note={`${data.services.payhip.refunds} refunds`} />
+            <Metric label="Net revenue" value={money(data.services.payhip.revenue - data.services.payhip.refundedValue, "GBP")} note={data.services.payhip.configured ? "Signed webhook active" : "Webhook not configured"} />
+          </div>
+        </article>
+        <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Affiliate interest</h2>
           <p className="mt-2 text-sm text-[var(--text-soft)]">Most-clicked products across affiliate partners.</p>
           <div className="mt-5 space-y-3">
