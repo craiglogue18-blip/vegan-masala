@@ -12,7 +12,7 @@ import { getBrandFont } from "@/lib/social/core/brand";
 import { saveGeneratedInstagramImage, saveGeneratedVideo } from "@/lib/social/core/generatedAssets";
 import { assertVisualDetail } from "@/lib/social/core/visualQuality";
 import type { CampaignCopy } from "@/lib/social/campaigns/copy";
-import type { CampaignFormat, CampaignKind } from "@/lib/social/campaigns/catalog";
+import type { CampaignFormat, CampaignKind, CampaignStyle } from "@/lib/social/campaigns/catalog";
 
 const execFileAsync = promisify(execFile);
 const WIDTH = 1080;
@@ -56,12 +56,10 @@ function campaignSlug(kind: CampaignKind, sourceSlug?: string) {
   return `campaign-${kind}${sourceSlug ? `-${sourceSlug}` : ""}`.slice(0, 150);
 }
 
-export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind, sourceSlug?: string) {
-  const teachingLayout = kind === "ingredient" || kind === "technique" || kind === "mistake";
-  const processLayout = kind === "behind-the-recipe";
+export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind, sourceSlug?: string, style: CampaignStyle = "hero") {
   const [background, hero, logo, partnerLogo] = await Promise.all([
     preparedImage("/images/page-background.jpg", WIDTH, HEIGHT, 5),
-    preparedImage(copy.imagePath, teachingLayout ? 535 : 900, processLayout ? 820 : teachingLayout ? 820 : 700, 10, 36),
+    preparedImage(copy.imagePath, 960, 1500, 10, 42),
     preparedLogo("/brand/logo-flat.png"),
     copy.partnerLogoPath ? preparedLogo(copy.partnerLogoPath) : Promise.resolve(null),
   ]);
@@ -72,49 +70,32 @@ export async function renderCampaignStory(copy: CampaignCopy, kind: CampaignKind
       <div style={{ position: "absolute", inset: 0, display: "flex", background: "linear-gradient(180deg, rgba(3,8,12,.08), rgba(3,8,12,.30) 48%, rgba(3,8,12,.86) 100%)" }} />
       <div style={{ position: "absolute", inset: 28, border: "3px solid #b28a25", borderRadius: 42, display: "flex" }} />
 
-      <div style={{ display: "flex", flexDirection: "column", padding: "82px 78px 58px", height: HEIGHT, position: "relative" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", backgroundColor: "#9d3131", borderRadius: 30, padding: "14px 26px 11px", fontSize: 25, letterSpacing: 3.2, fontWeight: 700 }}>{copy.eyebrow}</div>
-          {partnerLogo ? <div style={{ display: "flex", backgroundColor: "rgba(255,255,255,.94)", borderRadius: 22, padding: "8px 18px" }}><img src={dataUrl(partnerLogo)} width={190} height={90} style={{ objectFit: "contain" }} /></div> : null}
+      <div style={{ display: "flex", flexDirection: "column", padding: "70px 66px 54px", height: HEIGHT, position: "relative" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 3 }}>
+          <div style={{ display: "flex", fontSize: 46, letterSpacing: 3, fontWeight: 700, color: "#f0c75e" }}>{style === "carousel-cover" ? "CAROUSEL" : style === "ingredient" ? "INGREDIENT STORY" : style === "cooking" ? "COOKING MOMENT" : "HERO RECIPE"}</div>
+          <img src={dataUrl(logo)} width={220} height={125} style={{ objectFit: "contain" }} />
         </div>
+        <div style={{ display: "flex", width: 250, height: 3, backgroundColor: "#d9b348", marginTop: 16 }} />
 
-        <div style={{ display: "flex", fontSize: copy.title.length > 52 ? 66 : 78, lineHeight: 0.98, fontWeight: 700, color: "#e0b83e", marginTop: 44, maxWidth: 900 }}>{copy.title}</div>
-
-        {teachingLayout ? (
-          <div style={{ display: "flex", flexDirection: "column", marginTop: 48 }}>
-            <div style={{ display: "flex", flexDirection: "row", gap: 42, alignItems: "center" }}>
-              <div style={{ display: "flex", width: 535, height: 820, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
-                <img src={dataUrl(hero)} width={535} height={820} style={{ width: 535, height: 820, objectFit: "cover", borderRadius: 35 }} />
-              </div>
-              <div style={{ display: "flex", width: 320, flexDirection: "column" }}>
-                <div style={{ display: "flex", fontSize: 38, lineHeight: 1.08, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>
-                <div style={{ display: "flex", fontSize: 27, lineHeight: 1.22, color: "#f4f1e8", marginTop: 30 }}>{copy.body}</div>
-              </div>
-            </div>
-            {copy.detail ? <div style={{ display: "flex", flexDirection: "column", marginTop: 38, padding: "25px 30px 22px", borderRadius: 24, border: "2px solid rgba(224,184,62,.55)", backgroundColor: "rgba(3,8,12,.76)" }}>
-              <div style={{ display: "flex", fontSize: 21, letterSpacing: 2.6, fontWeight: 700, color: "#d7ad39" }}>PRACTICAL NOTE</div>
-              <div style={{ display: "flex", fontSize: 28, lineHeight: 1.18, color: "#f4f1e8", marginTop: 9 }}>{copy.detail}</div>
-            </div> : null}
+        {style === "carousel-cover" ? <div style={{ display: "flex", position: "relative", height: 1200, marginTop: 90 }}>
+          {[0,1,2].map((item) => <div key={item} style={{ display: "flex", position: "absolute", left: 30 + item * 205, top: item === 1 ? 0 : 100, width: 470, height: 930, padding: 16, borderRadius: 54, backgroundColor: "#090d10", border: "4px solid #d9b348", transform: `rotate(${item === 0 ? -5 : item === 2 ? 5 : 0}deg)`, zIndex: item === 1 ? 2 : 1 }}><img src={dataUrl(hero)} width={438} height={898} style={{ width: 438, height: 898, objectFit: "cover", borderRadius: 38 }} /></div>)}
+          <div style={{ display: "flex", position: "absolute", left: 70, right: 70, bottom: 10, padding: "28px 34px", borderRadius: 28, backgroundColor: "rgba(3,8,12,.90)", fontSize: 54, lineHeight: 1.02, fontWeight: 700, color: "#f0c75e", zIndex: 4 }}>{copy.title}</div>
+        </div> : <div style={{ display: "flex", position: "relative", width: 948, height: 1320, borderRadius: 44, overflow: "hidden", border: "3px solid #b28a25", marginTop: 42, boxShadow: "0 28px 80px rgba(0,0,0,.55)" }}>
+          <img src={dataUrl(hero)} width={948} height={1320} style={{ width: 948, height: 1320, objectFit: "cover", borderRadius: 41 }} />
+          <div style={{ display: "flex", position: "absolute", inset: 0, background: style === "ingredient" ? "linear-gradient(180deg, rgba(3,8,12,.05), rgba(3,8,12,.15) 55%, rgba(3,8,12,.92) 100%)" : "linear-gradient(180deg, rgba(3,8,12,.02), rgba(3,8,12,.08) 50%, rgba(3,8,12,.94) 100%)" }} />
+          <div style={{ display: "flex", position: "absolute", left: 46, right: 46, bottom: 48, flexDirection: "column" }}>
+            <div style={{ display: "flex", fontSize: copy.title.length > 48 ? 55 : 68, lineHeight: 1, fontWeight: 700, color: "#f0c75e" }}>{copy.title}</div>
+            <div style={{ display: "flex", fontSize: 30, lineHeight: 1.18, color: "#fff", marginTop: 20 }}>{copy.hook}</div>
           </div>
-        ) : (
-          <>
-            <div style={{ display: "flex", width: 900, height: processLayout ? 820 : 700, borderRadius: 38, overflow: "hidden", border: "3px solid #b28a25", marginTop: 44, boxShadow: "0 24px 70px rgba(0,0,0,.48)" }}>
-              <img src={dataUrl(hero)} width={900} height={processLayout ? 820 : 700} style={{ width: 900, height: processLayout ? 820 : 700, objectFit: "cover", borderRadius: 35 }} />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", marginTop: processLayout ? 34 : 48, maxWidth: 890 }}>
-              <div style={{ display: "flex", fontSize: processLayout ? 39 : 45, lineHeight: 1.08, fontWeight: 700, color: "#e0b83e" }}>{copy.hook}</div>
-              <div style={{ display: "flex", fontSize: 31, lineHeight: 1.22, color: "#f4f1e8", marginTop: 24 }}>{copy.body}</div>
-            </div>
-          </>
-        )}
+        </div>}
 
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", zIndex: 5 }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", backgroundColor: "#d9b348", color: "#071018", padding: "15px 25px 12px", borderRadius: 19, fontSize: 30, fontWeight: 700 }}>{copy.cta} &gt;</div>
             <div style={{ display: "flex", fontSize: 22, marginTop: 16, color: "#fff" }}>vegan-masala.com</div>
             {copy.disclosure ? <div style={{ display: "flex", fontSize: 18, marginTop: 8, color: "#d6d0c2" }}>{copy.disclosure}</div> : null}
           </div>
-          <img src={dataUrl(logo)} width={240} height={140} style={{ objectFit: "contain" }} />
+          {partnerLogo ? <div style={{ display: "flex", backgroundColor: "rgba(255,255,255,.94)", borderRadius: 18, padding: "7px 14px" }}><img src={dataUrl(partnerLogo)} width={185} height={82} style={{ objectFit: "contain" }} /></div> : null}
         </div>
       </div>
     </div>,
@@ -146,8 +127,8 @@ async function renderAnimatedStory(storyBuffer: Buffer, slug: string) {
   }
 }
 
-export async function renderCampaign(copy: CampaignCopy, kind: CampaignKind, format: CampaignFormat, sourceSlug?: string) {
-  const story = await renderCampaignStory(copy, kind, sourceSlug);
+export async function renderCampaign(copy: CampaignCopy, kind: CampaignKind, format: CampaignFormat, sourceSlug?: string, style: CampaignStyle = "hero") {
+  const story = await renderCampaignStory(copy, kind, sourceSlug, style);
   if (format === "story") return { ...story, video: "" };
   const video = await renderAnimatedStory(story.buffer, campaignSlug(kind, sourceSlug));
   return { ...story, video: video.url, videoStorage: video.storage, videoPath: video.path };

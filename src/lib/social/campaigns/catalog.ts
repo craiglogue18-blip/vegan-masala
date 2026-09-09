@@ -8,6 +8,7 @@ export type CampaignKind =
   | "dinner-plan";
 
 export type CampaignFormat = "story" | "video";
+export type CampaignStyle = "hero" | "cooking" | "ingredient" | "carousel-cover";
 
 export type CampaignDefinition = {
   id: CampaignKind;

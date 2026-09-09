@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 type Campaign = { id: string; label: string; description: string; source: "none" | "recipe" | "recipe-or-guide" };
 type Source = { slug: string; title?: string; label?: string; type?: string };
 type Result = {
-  ok?: boolean; error?: string; image?: string; publishImage?: string; video?: string;
+  ok?: boolean; error?: string; image?: string; publishImage?: string; video?: string; kind?: string; slug?: string | null; style?: string;
   copy?: { title?: string; hook?: string; caption?: string; captionVariants?: string[]; destinationUrl?: string; disclosure?: string };
 };
 
@@ -19,6 +19,13 @@ export default function CampaignStudioPage() {
   const [sources, setSources] = useState<Source[]>([]);
   const [kind, setKind] = useState("affiliate");
   const [format, setFormat] = useState<"story" | "video">("story");
+  const [style, setStyle] = useState<"hero" | "cooking" | "ingredient" | "carousel-cover">("hero");
+  const [queuePlatform, setQueuePlatform] = useState<"instagram" | "facebook" | "tiktok" | "youtube">("instagram");
+  const [scheduledFor, setScheduledFor] = useState(() => {
+    const date = new Date(Date.now() + 60 * 60 * 1000);
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return date.toISOString().slice(0, 16);
+  });
   const [slug, setSlug] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
@@ -53,6 +60,12 @@ export default function CampaignStudioPage() {
     }
   }, [availableSources, selected, slug]);
 
+  useEffect(() => {
+    if (format === "story" && (queuePlatform === "tiktok" || queuePlatform === "youtube")) {
+      setQueuePlatform("instagram");
+    }
+  }, [format, queuePlatform]);
+
   const captions = result?.copy?.captionVariants?.length
     ? result.copy.captionVariants
     : result?.copy?.caption ? [result.copy.caption] : [];
@@ -62,12 +75,42 @@ export default function CampaignStudioPage() {
     try {
       const response = await fetch("/api/admin/social/campaigns", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kind, format, slug: selected?.source === "none" ? "" : slug }),
+        body: JSON.stringify({ kind, format, style, slug: selected?.source === "none" ? "" : slug }),
       });
       const data = await json(response) as Result;
       if (!response.ok || !data.ok) throw new Error(data.error || "Generation failed");
       setResult(data); setStatus("Campaign generated and checked. Nothing has been queued or published.");
     } catch (error: any) { setStatus(error?.message || "Generation failed"); }
+    finally { setLoading(false); }
+  }
+
+  async function addPreviewToQueue() {
+    if (!result?.image || !result.copy?.destinationUrl) return;
+    setLoading(true); setStatus("Adding the approved preview to the queue…");
+    try {
+      const source = sources.find((item) => item.slug === result.slug);
+      const queueSlug = result.slug || "spices";
+      const response = await fetch("/api/admin/social/queue", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: queueSlug,
+          title: result.copy.title || "Vegan Masala campaign",
+          platform: queuePlatform,
+          caption: captions[captionIndex] || result.copy.caption || "",
+          url: result.copy.destinationUrl,
+          scheduledFor: new Date(scheduledFor).toISOString(),
+          contentType: source?.type === "guide" || !result.slug ? "guide" : "recipe",
+          assetType: format === "video" ? "video" : "image",
+          imageUrl: result.image,
+          publishImageUrl: result.publishImage || result.image,
+          videoUrl: format === "video" ? result.video : "",
+          campaignKind: kind,
+        }),
+      });
+      const data = await json(response);
+      if (!response.ok || !data.ok) throw new Error(data.error || "Could not add preview to queue");
+      setStatus(`Approved preview added to the ${queuePlatform} queue.`);
+    } catch (error: any) { setStatus(error?.message || "Could not add preview to queue"); }
     finally { setLoading(false); }
   }
 
@@ -101,6 +144,17 @@ export default function CampaignStudioPage() {
           </div> : null}
 
           <div className="mt-6">
+            <div className="text-sm font-bold text-[var(--brand-gold)]">Visual style</div>
+            <div className="mt-2 grid grid-cols-2 gap-3">
+              {([
+                ["hero", "Hero recipe"], ["cooking", "Cooking moment"],
+                ["ingredient", "Ingredient story"], ["carousel-cover", "Carousel cover"],
+              ] as const).map(([value, label]) => <button key={value} onClick={() => setStyle(value)} className={`rounded-xl border px-3 py-3 text-sm font-bold ${style === value ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] text-white"}`}>{label}</button>)}
+            </div>
+            <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">Carousel cover creates the opening artwork only; it is queued as one image.</p>
+          </div>
+
+          <div className="mt-6">
             <div className="text-sm font-bold text-[var(--brand-gold)]">Delivery format</div>
             <div className="mt-2 grid grid-cols-2 gap-3">
               <button onClick={() => setFormat("story")} className={`rounded-xl border px-4 py-3 font-bold ${format === "story" ? "border-[var(--brand-gold)] bg-[var(--brand-gold)] text-black" : "border-[var(--border)] text-white"}`}>Story · 9:16</button>
@@ -129,6 +183,17 @@ export default function CampaignStudioPage() {
               <textarea readOnly value={captions[captionIndex] || ""} className="mt-3 min-h-[330px] w-full rounded-2xl border border-[var(--border)] bg-black/30 p-5 leading-7 text-white" />
               {result.copy?.disclosure ? <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-100">Affiliate disclosure included: {result.copy.disclosure}</div> : null}
               {result.copy?.destinationUrl ? <a href={result.copy.destinationUrl} target="_blank" rel="noreferrer" className="mt-4 block break-all text-sm text-sky-300">Tracked website destination: {result.copy.destinationUrl}</a> : null}
+              <div className="mt-6 rounded-2xl border border-[var(--border)] bg-black/20 p-5">
+                <div className="font-extrabold text-[var(--brand-gold)]">Approve and schedule</div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <select value={queuePlatform} onChange={(event) => setQueuePlatform(event.target.value as typeof queuePlatform)} className="rounded-xl border border-[var(--border)] bg-black/30 px-4 py-3 text-white">
+                    <option value="instagram">Instagram</option><option value="facebook">Facebook</option>
+                    {format === "video" ? <><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></> : null}
+                  </select>
+                  <input type="datetime-local" value={scheduledFor} onChange={(event) => setScheduledFor(event.target.value)} className="rounded-xl border border-[var(--border)] bg-black/30 px-4 py-3 text-white" />
+                </div>
+                <button disabled={loading || !scheduledFor || (format === "video" && !result.video)} onClick={addPreviewToQueue} className="mt-4 w-full rounded-xl bg-[var(--brand-red)] px-5 py-4 font-extrabold text-white disabled:opacity-50">Add this preview to queue</button>
+              </div>
             </div>
           </div>}
         </section>
