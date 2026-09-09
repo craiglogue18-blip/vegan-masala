@@ -1,8 +1,9 @@
 "use client";
 
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { recordEngagement } from "@/lib/dinner-plan-tracking";
 
 type RecipeSummary = {
   title: string;
@@ -95,6 +96,16 @@ export default function RecipesClient({ recipes }: { recipes: RecipeSummary[] })
   }, [recipes, deferredQuery, cuisine, tag, sort]);
 
   const hasFilters = Boolean(query.trim() || cuisine !== "all" || tag !== "all");
+
+  useEffect(() => {
+    if (!deferredQuery.trim() && cuisine === "all" && tag === "all") return;
+    const timer = window.setTimeout(() => recordEngagement("site_search", {
+      product: deferredQuery.trim() || "filters-only",
+      category: filtered.length ? "results" : "zero-results",
+      placement: `${cuisine}:${tag}`,
+    }), 800);
+    return () => window.clearTimeout(timer);
+  }, [deferredQuery, cuisine, tag, filtered.length]);
 
   function clearFilters() {
     setQuery("");

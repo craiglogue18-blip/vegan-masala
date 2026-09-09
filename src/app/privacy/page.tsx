@@ -102,6 +102,14 @@ export default function PrivacyPage() {
           analytics and, following approval, advertising. Optional technologies are
           controlled through the consent message shown to eligible visitors.
         </p>
+        <p className="mt-4 text-[var(--text-soft)] leading-7">
+          We also collect privacy-conscious, first-party aggregate measurements such as
+          page visits, broad traffic source, device class, scroll milestones and actions
+          such as saving or sharing a recipe. A random identifier lasts only for the
+          current browser tab. We do not place an analytics cookie, retain a full IP
+          address, collect an email address or create a device fingerprint for this
+          reporting.
+        </p>
       </section>
 
       <section className="mt-12">

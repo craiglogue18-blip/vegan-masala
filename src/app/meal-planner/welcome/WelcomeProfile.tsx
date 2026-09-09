@@ -2,6 +2,7 @@
 
 import { ArrowRight, Check, Leaf } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { recordEngagement } from "@/lib/dinner-plan-tracking";
 import { useEffect, useState } from "react";
 
 import {
@@ -50,6 +51,7 @@ export default function WelcomeProfile() {
   function saveProfile() {
     localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
     localStorage.removeItem(PROFILE_SKIPPED_KEY);
+    recordEngagement("preferences_complete", { category: profile.goal, product: profile.spice });
     router.push("/meal-planner/build");
   }
 

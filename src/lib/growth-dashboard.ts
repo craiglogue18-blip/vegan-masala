@@ -14,10 +14,13 @@ type EngagementRow = {
   event: string;
   pagePath: string;
   source: string;
+  medium: string;
   campaign: string;
   placement: string;
   category: string;
   product: string;
+  landingPage: string;
+  device: string;
   count: number;
 };
 
@@ -51,15 +54,25 @@ function parseRows(hashes: Array<Record<string, number | string> | null>) {
   const rows: EngagementRow[] = [];
   for (const hash of hashes) {
     for (const [key, rawCount] of Object.entries(hash ?? {})) {
-      const [event, pagePath, source, campaign, placement, category, product] = key.split(":");
+      const parts = key.split(":");
+      const legacy = parts.length <= 7;
+      const [event, pagePath, source] = parts;
+      const medium = legacy ? "none" : parts[3];
+      const campaign = parts[legacy ? 3 : 4];
+      const placement = parts[legacy ? 4 : 5];
+      const category = parts[legacy ? 5 : 6];
+      const product = parts[legacy ? 6 : 7];
       rows.push({
         event: event || "unknown",
         pagePath: pagePath || "unknown",
         source: source || "none",
+        medium: medium || "none",
         campaign: campaign || "none",
         placement: placement || "none",
         category: category || "none",
         product: product || "none",
+        landingPage: legacy ? pagePath || "unknown" : parts[8] || "unknown",
+        device: legacy ? "unknown" : parts[9] || "unknown",
         count: Number(rawCount) || 0,
       });
     }
@@ -107,14 +120,20 @@ async function dailyEngagement(days: number) {
     const date = new Date(Date.now() - (days - 1 - index) * DAY_MS);
     return isoDay(date);
   });
-  if (!redis) return dates.map((date) => ({ date, actions: 0 }));
+  if (!redis) return dates.map((date) => ({ date, actions: 0, pageViews: 0, sessions: 0 }));
   const hashes = await Promise.all(
     dates.map((date) => redis.hgetall<Record<string, number | string>>(`engagement:${date}`))
   );
-  return hashes.map((hash, index) => ({
-    date: dates[index],
-    actions: parseRows([hash]).reduce((sum, row) => sum + row.count, 0),
-  }));
+  return hashes.map((hash, index) => {
+    const rows = parseRows([hash]);
+    const passive = new Set(["page_view", "session_start", "scroll_depth"]);
+    return {
+      date: dates[index],
+      actions: rows.filter((row) => !passive.has(row.event)).reduce((sum, row) => sum + row.count, 0),
+      pageViews: total(rows, "page_view"),
+      sessions: total(rows, "session_start"),
+    };
+  });
 }
 
 async function getRecraftBalance() {
@@ -564,7 +583,11 @@ export async function getGrowthDashboard() {
   ]);
 
   const currentEvents = {
+    sessions: total(current, "session_start"),
+    pageViews: total(current, "page_view"),
+    engagedVisits: total(current, "engaged_visit"),
     affiliateClicks: total(current, "affiliate_click"),
+    affiliateImpressions: total(current, "affiliate_impression"),
     commerceClicks: total(current, "commerce_click"),
     planViews: total(current, "dinner_plan_view"),
     planStarts: total(current, "dinner_plan_form_start"),
@@ -573,7 +596,11 @@ export async function getGrowthDashboard() {
     planDownloads: total(current, "dinner_plan_download"),
   };
   const previousEvents = {
+    sessions: total(previous, "session_start"),
+    pageViews: total(previous, "page_view"),
+    engagedVisits: total(previous, "engaged_visit"),
     affiliateClicks: total(previous, "affiliate_click"),
+    affiliateImpressions: total(previous, "affiliate_impression"),
     commerceClicks: total(previous, "commerce_click"),
     planViews: total(previous, "dinner_plan_view"),
     planStarts: total(previous, "dinner_plan_form_start"),
@@ -611,6 +638,7 @@ export async function getGrowthDashboard() {
     searchImpressions: searchDaily.get(row.date)?.impressions ?? 0,
     searchClicks: searchDaily.get(row.date)?.clicks ?? 0,
     siteActions: row.actions,
+    siteVisits: row.sessions,
     socialReach: socialDaily.get(row.date) ?? 0,
     published: publishedDaily.get(row.date) ?? 0,
   }));
@@ -624,6 +652,14 @@ export async function getGrowthDashboard() {
     topAffiliateProducts: rank(current, "affiliate_click", "product"),
     topAffiliateSources: rank(current, "affiliate_click", "source"),
     topAffiliatePages: rank(current, "affiliate_click", "pagePath"),
+    topTrafficSources: rank(current, "session_start", "source", 10),
+    topLandingPages: rank(current, "session_start", "landingPage", 10),
+    topDevices: rank(current, "session_start", "device", 6),
+    topEngagementEvents: [...new Set(current.map((row) => row.event))]
+      .map((event) => ({ label: event, count: total(current, event) }))
+      .filter((item) => !["page_view", "session_start"].includes(item.label))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 12),
     spiceKitchen: {
       clicks: spiceKitchenRows(current).reduce((sum, row) => sum + row.count, 0),
       previousClicks: spiceKitchenRows(previous).reduce((sum, row) => sum + row.count, 0),

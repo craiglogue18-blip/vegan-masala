@@ -74,6 +74,12 @@ export default async function GrowthDashboardPage() {
   const signupRate = data.current.planViews
     ? data.current.planConfirmed / data.current.planViews
     : 0;
+  const engagementRate = data.current.sessions
+    ? data.current.engagedVisits / data.current.sessions
+    : 0;
+  const affiliateCtr = data.current.affiliateImpressions
+    ? affiliateClicks / data.current.affiliateImpressions
+    : 0;
 
   const priorities: string[] = [];
   if (!search) priorities.push("Connect or repair Search Console credentials to unlock search reporting.");
@@ -123,10 +129,41 @@ export default async function GrowthDashboardPage() {
       <section className="mt-8">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">At a glance</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <Metric label="Website sessions" value={number(data.current.sessions)} note={data.engagementConnected ? delta(data.current.sessions, data.previous.sessions) : "Engagement storage not connected"} />
+          <Metric label="Page views" value={number(data.current.pageViews)} note={data.current.sessions ? `${(data.current.pageViews / data.current.sessions).toFixed(1)} pages per session` : "New measurement begins after deployment"} />
+          <Metric label="Engaged visits" value={number(data.current.engagedVisits)} note={`${percent(engagementRate)} of sessions reached 30 seconds`} />
           <Metric label="Google clicks" value={search ? number(search.summary.current.clicks) : "—"} note={search ? delta(search.summary.current.clicks, search.summary.previous.clicks) : "Search Console data unavailable"} />
           <Metric label="Search impressions" value={search ? number(search.summary.current.impressions) : "—"} note={search ? `${percent(search.summary.current.ctr)} click-through rate` : "Search Console data unavailable"} />
-          <Metric label="Affiliate clicks" value={number(affiliateClicks)} note={data.engagementConnected ? delta(affiliateClicks, previousAffiliateClicks) : "Engagement storage not connected"} />
+          <Metric label="Affiliate clicks" value={number(affiliateClicks)} note={data.current.affiliateImpressions ? `${percent(affiliateCtr)} of ${number(data.current.affiliateImpressions)} viewable placements` : data.engagementConnected ? delta(affiliateClicks, previousAffiliateClicks) : "Engagement storage not connected"} />
           <Metric label="Confirmed dinner plans" value={number(data.current.planConfirmed)} note={`${percent(signupRate)} of dinner-plan visits`} />
+        </div>
+      </section>
+
+      <section className="mt-8 grid gap-6 xl:grid-cols-3">
+        {[
+          ["Traffic sources", data.topTrafficSources, "First source recorded for each anonymous browser session"],
+          ["Landing pages", data.topLandingPages, "Pages where measured sessions began"],
+          ["Device mix", data.topDevices, "Broad device class only; no fingerprinting"],
+        ].map(([heading, rows, description]) => (
+          <article key={String(heading)} className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+            <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">{String(heading)}</h2>
+            <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">{String(description)}</p>
+            <div className="mt-5 space-y-3">
+              {(rows as Array<{ label: string; count: number }>).length ? (rows as Array<{ label: string; count: number }>).map((item) => (
+                <div key={item.label} className="flex justify-between gap-4 border-b border-[var(--border)] pb-3 text-sm"><span className="truncate text-[var(--text-soft)]">{titleCase(item.label)}</span><strong className="text-[var(--brand-gold)]">{number(item.count)}</strong></div>
+              )) : <Empty>Measurement starts with the new analytics deployment.</Empty>}
+            </div>
+          </article>
+        ))}
+      </section>
+
+      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
+        <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Visitor interactions</h2>
+        <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">Anonymous, first-party actions recorded across recipes, search, lead capture and the meal planner.</p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {data.topEngagementEvents.length ? data.topEngagementEvents.map((item) => (
+            <div key={item.label} className="flex items-center justify-between gap-4 rounded-xl bg-black/15 p-4 text-sm"><span className="text-[var(--text-soft)]">{titleCase(item.label)}</span><strong className="text-[var(--brand-gold)]">{number(item.count)}</strong></div>
+          )) : <Empty>New interaction events will appear after this deployment begins collecting data.</Empty>}
         </div>
       </section>
 

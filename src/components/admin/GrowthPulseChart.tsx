@@ -7,6 +7,7 @@ type Point = {
   searchImpressions: number;
   searchClicks: number;
   siteActions: number;
+  siteVisits: number;
   socialReach: number;
   published: number;
 };
@@ -14,6 +15,7 @@ type Point = {
 const SERIES = [
   { key: "searchImpressions", label: "Google discovery", colour: "#d6b25e" },
   { key: "searchClicks", label: "Google visits", colour: "#58c4f1" },
+  { key: "siteVisits", label: "Website sessions", colour: "#a88cff" },
   { key: "siteActions", label: "Website actions", colour: "#71d49b" },
   { key: "socialReach", label: "Social reach & views", colour: "#ec7aa8" },
   { key: "published", label: "Posts published", colour: "#f28b54" },
@@ -97,7 +99,7 @@ export function GrowthPulseChart({ points }: { points: Point[] }) {
         </svg>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
         {totals.map((series) => (
           <button
             key={series.key}

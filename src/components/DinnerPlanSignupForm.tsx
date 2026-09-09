@@ -75,13 +75,10 @@ export function DinnerPlanSignupForm() {
 export function DinnerPlanConfirmationTracker() {
   useEffect(() => {
     const pendingSignupId = window.localStorage.getItem(DINNER_PLAN_PENDING_KEY);
-    const completedSignupId = window.localStorage.getItem(DINNER_PLAN_COMPLETED_KEY);
-    const signupId = pendingSignupId || completedSignupId || createDinnerPlanSignupId();
+    if (!pendingSignupId) return;
+    const signupId = pendingSignupId;
 
-    if (
-      completedSignupId !== signupId &&
-      window.sessionStorage.getItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY) !== signupId
-    ) {
+    if (window.sessionStorage.getItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY) !== signupId) {
       window.__vmDinnerPlanRegistrationRequested = true;
       window.__vmDinnerPlanRegistrationEventId = signupId;
       window.dispatchEvent(new Event("vegan-masala:complete-registration"));

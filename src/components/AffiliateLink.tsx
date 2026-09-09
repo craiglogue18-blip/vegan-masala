@@ -1,6 +1,6 @@
 "use client";
 
-import type { MouseEventHandler, ReactNode } from "react";
+import { useEffect, useRef, type MouseEventHandler, type ReactNode } from "react";
 import { recordEngagement } from "@/lib/dinner-plan-tracking";
 
 declare global {
@@ -30,6 +30,23 @@ export default function AffiliateLink({
   className,
   children,
 }: AffiliateLinkProps) {
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const element = linkRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") return;
+    let recorded = false;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!recorded && entry?.isIntersecting && entry.intersectionRatio >= 0.5) {
+        recorded = true;
+        recordEngagement("affiliate_impression", { category, product: title, placement, source: network });
+        observer.disconnect();
+      }
+    }, { threshold: 0.5 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [category, network, placement, title]);
+
   const trackClick: MouseEventHandler<HTMLAnchorElement> = () => {
     const event = {
       affiliate_network: network,
@@ -52,6 +69,7 @@ export default function AffiliateLink({
 
   return (
     <a
+      ref={linkRef}
       href={href}
       target="_blank"
       rel="sponsored nofollow noopener noreferrer"

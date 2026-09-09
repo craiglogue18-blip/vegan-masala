@@ -13,7 +13,7 @@ export default function CookiesPage() {
       </h1>
 
       <p className="mt-6 text-[var(--text-soft)] leading-7">
-        Last updated: 19 August 2026
+        Last updated: 9 September 2026
       </p>
 
       <section className="mt-10 space-y-6 text-[var(--text-soft)] leading-7">
@@ -59,6 +59,19 @@ export default function CookiesPage() {
               These help us understand how visitors use the site (for example,
               which pages are most popular). We use this to improve recipes and
               content. Analytics cookies should be treated as optional.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-extrabold text-[var(--brand-gold)]">
+              First-party aggregate measurement
+            </h3>
+            <p className="mt-2">
+              Vegan Masala measures anonymous page visits, broad referral and campaign
+              source, device class, scroll milestones and selected actions. It uses a
+              random identifier held in session storage for the current browser tab,
+              rather than an analytics cookie. Full IP addresses, names, email addresses
+              and device fingerprints are not retained in this analytics store.
             </p>
           </div>
 

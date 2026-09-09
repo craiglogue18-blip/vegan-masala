@@ -9,6 +9,7 @@ import SiteShell from "@/components/SiteShell";
 import AdSenseScript from "@/components/AdSenseScript";
 import MetaPixel from "@/components/MetaPixel";
 import PrivacyChoicesButton from "@/components/PrivacyChoicesButton";
+import SiteAnalytics from "@/components/SiteAnalytics";
 
 export const viewport: Viewport = {
   themeColor: "#07131d",
@@ -237,6 +238,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
         <AdSenseScript />
         <MetaPixel />
+        <SiteAnalytics />
         <div className="relative min-h-screen">
           <div
             aria-hidden="true"

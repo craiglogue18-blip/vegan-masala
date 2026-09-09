@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
+import { recordEngagement } from "@/lib/dinner-plan-tracking";
 
 const storageEvent = "vegan-masala:saved-recipes-change";
 const recordedThisVisit = new Set<string>();
@@ -35,11 +36,13 @@ export default function RecipeEngagement({ slug, title }: { slug: string; title:
     const current = new Set(JSON.parse(localStorage.getItem("vegan-masala:saved-recipes") || "[]") as string[]);
     if (current.has(slug)) current.delete(slug);
     else current.add(slug);
+    recordEngagement(current.has(slug) ? "recipe_save" : "recipe_unsave", { product: slug });
     localStorage.setItem("vegan-masala:saved-recipes", JSON.stringify([...current]));
     window.dispatchEvent(new Event(storageEvent));
   }
 
   async function shareRecipe() {
+    recordEngagement("recipe_share", { product: slug });
     if (typeof navigator.share === "function") await navigator.share({ title, url: window.location.href });
     else await navigator.clipboard.writeText(window.location.href);
   }

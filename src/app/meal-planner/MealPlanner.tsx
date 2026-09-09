@@ -8,6 +8,7 @@ import ShoppingAffiliatePartners from "@/components/ShoppingAffiliatePartners";
 import { ArrowLeftRight, CheckCircle2, Circle, Pencil, Plus, Search, Trash2, UtensilsCrossed, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { recordEngagement } from "@/lib/dinner-plan-tracking";
 
 import InstallAppButton from "./InstallAppButton";
 import { PROFILE_SKIPPED_KEY, readPlannerProfile } from "./profile";
@@ -680,6 +681,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
     setCustomShoppingItems([]);
     setSaveMessage("");
     setGeneration(nextGeneration);
+    recordEngagement("plan_created", { category: preference, product: `${days}-days` });
     router.push("/meal-planner");
   }
 
@@ -753,6 +755,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
       JSON.stringify({ people, days, startDate, meals, preference, useLeftovers, generation, swaps, mealStatuses, mealOverrides, cookedSlots, checkedShoppingItems, shoppingStatuses, shoppingOverrides, customShoppingItems })
     );
     setSaveMessage("Plan saved on this device.");
+    recordEngagement("plan_saved", { category: preference, product: `${days}-days` });
   }
 
   function startNewPlan() {
@@ -901,6 +904,7 @@ export default function MealPlanner({ recipes, view }: { recipes: PlannerRecipe[
   }
 
   async function exportShoppingList() {
+    recordEngagement("shopping_exported", { product: `${neededShoppingItems.length}-items` });
     const text = [
       "Vegan Masala weekly shopping list",
       "",

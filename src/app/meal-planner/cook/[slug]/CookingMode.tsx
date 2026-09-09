@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Check, CheckCircle2, Clock3, ListChecks, Play, V
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { recordEngagement } from "@/lib/dinner-plan-tracking";
 
 type CookingRecipe = { slug: string; title: string; image?: string; ingredients: string[]; steps: string[]; stepVideos?: (string | null)[]; totalMinutes: number };
 type WakeLockSentinel = { release: () => Promise<void>; released: boolean };
@@ -30,6 +31,10 @@ export default function CookingMode({ recipe, batchMultiplier = 1 }: { recipe: C
   const currentStep = recipe.steps[step] ?? "";
   const currentVideo = recipe.stepVideos?.[step] ?? null;
   const suggestedTimer = useMemo(() => timerMinutes(currentStep), [currentStep]);
+
+  useEffect(() => {
+    recordEngagement("cook_started", { product: recipe.slug });
+  }, [recipe.slug]);
 
   useEffect(() => {
     if (secondsLeft === null || secondsLeft <= 0) return;
@@ -137,7 +142,7 @@ export default function CookingMode({ recipe, batchMultiplier = 1 }: { recipe: C
 
             <div className="grid grid-cols-2 gap-3">
               <button type="button" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))} className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] px-4 py-3.5 font-extrabold disabled:opacity-30"><ArrowLeft aria-hidden="true" size={19} /> Back</button>
-              {step < recipe.steps.length - 1 ? <button type="button" onClick={() => setStep((value) => Math.min(recipe.steps.length - 1, value + 1))} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand-red)] px-4 py-3.5 font-extrabold text-white">Next <ArrowRight aria-hidden="true" size={19} /></button> : <Link href="/meal-planner" className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-700 px-4 py-3.5 font-extrabold text-white"><Check aria-hidden="true" size={19} /> Finish</Link>}
+              {step < recipe.steps.length - 1 ? <button type="button" onClick={() => setStep((value) => Math.min(recipe.steps.length - 1, value + 1))} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--brand-red)] px-4 py-3.5 font-extrabold text-white">Next <ArrowRight aria-hidden="true" size={19} /></button> : <Link href="/meal-planner" onClick={() => recordEngagement("cook_completed", { product: recipe.slug })} className="inline-flex items-center justify-center gap-2 rounded-xl bg-green-700 px-4 py-3.5 font-extrabold text-white"><Check aria-hidden="true" size={19} /> Finish</Link>}
             </div>
           </div>
         ) : <div className="p-8 text-center"><h2 className="text-2xl">Cooking mode isn&apos;t ready for this recipe yet</h2><p className="mt-2 text-[var(--text-soft)]">Its method is not structured into usable steps, so nothing has been rewritten or guessed.</p><Link href={`/recipes/${recipe.slug}`} className="mt-5 inline-flex rounded-xl bg-[var(--brand-red)] px-5 py-3 font-extrabold text-white">View the full recipe</Link></div>}

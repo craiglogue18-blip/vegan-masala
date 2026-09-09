@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   Instagram,
   Youtube,
   Facebook,
   Pin,
   Music2,
-  Mail,
 } from "lucide-react";
+import { recordEngagement } from "@/lib/dinner-plan-tracking";
 
 export default function ContactPage() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -30,9 +29,11 @@ export default function ContactPage() {
     });
 
     if (res.ok) {
+      recordEngagement("contact_submit", { category: "success" });
       setStatus("sent");
       e.currentTarget.reset();
     } else {
+      recordEngagement("contact_submit", { category: "failed" });
       setStatus("error");
     }
   }
@@ -41,7 +42,7 @@ export default function ContactPage() {
     <main className="mx-auto max-w-6xl px-6 py-12">
       <h1 className="text-4xl font-bold text-[var(--brand-gold)]">Contact</h1>
       <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
-        Partnerships, questions, recipe requests or brand collaborations — I'd love to hear from you.
+        Partnerships, questions, recipe requests or brand collaborations — I&apos;d love to hear from you.
       </p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-2">
