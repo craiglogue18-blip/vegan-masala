@@ -58,6 +58,15 @@ function firstSentence(value: string, max = 150) {
   return `${clipped}.`;
 }
 
+function sentenceAt(value: string, index: number, max = 150) {
+  const sentences = clean(value).match(/[^.!?]+[.!?](?:\s|$)|[^.!?]+$/g) || [];
+  return firstSentence(sentences[index] || "", max);
+}
+
+function headline(value: string, fallbackValue: string) {
+  return firstSentence(value || fallbackValue, 68).replace(/[.!?]+$/, "");
+}
+
 function tracked(path: string, campaign: CampaignKind) {
   const url = new URL(path, "https://www.vegan-masala.com");
   url.searchParams.set("utm_source", "social");
@@ -150,6 +159,9 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
   const step = firstSentence(instructions[0] || recipe.description || "Cook the masala until it is fragrant.", 145);
   const nextStep = firstSentence(instructions[1] || recipe.description || recipe.introNote || "Continue with the complete recipe method.", 145);
   const practicalNote = firstSentence(recipe.notes?.[0] || recipe.servingSuggestion || recipe.introNote || recipe.description || "", 170);
+  const noteSource = recipe.notes?.[0] || recipe.introNote || recipe.description || "";
+  const noteLead = sentenceAt(noteSource, 0, 78);
+  const noteReason = sentenceAt(noteSource, 1, 145);
   const visualContext = { dishName: recipe.title, visualIngredients: ingredients.slice(0, 9).map((item) => clean(item)) };
 
   if (kind === "ingredient") {
@@ -168,8 +180,8 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
   if (kind === "mistake") {
     return {
       eyebrow: "METHOD CHECKPOINT",
-      title: `Start ${recipe.title} properly`,
-      hook: step,
+      title: headline(noteLead, `Before you cook ${recipe.title}`),
+      hook: noteReason || step,
       body: `Next: ${nextStep}`,
       detail: practicalNote,
       cta: "Follow the full method",
@@ -193,9 +205,9 @@ function fallback(kind: CampaignKind, slug?: string): CampaignCopy {
 
   return {
     eyebrow: "SAVE THIS TECHNIQUE",
-    title: `One useful step from ${recipe.title}`,
-    hook: step,
-    body: firstSentence(recipe.description || recipe.introNote || `Use this step when you cook ${recipe.title}.`, 145),
+    title: headline(noteLead, `A useful technique for ${recipe.title}`),
+    hook: noteReason || step,
+    body: step,
     detail: practicalNote,
     cta: "Get the complete method",
     caption: `${step} It is one of the details that makes ${recipe.title} work. Get the complete method: ${destinationUrl}\n\n#CookingTechnique #IndianCooking #VeganRecipes #CookingTips #VeganMasala`,
@@ -209,7 +221,7 @@ function parseAi(text: string, base: CampaignCopy): CampaignCopy | null {
     const end = text.lastIndexOf("}");
     const data = JSON.parse(text.slice(start, end + 1));
     const captions = Array.isArray(data.captionVariants)
-      ? data.captionVariants.map((item: unknown) => clean(item)).filter(Boolean).slice(0, 3)
+      ? data.captionVariants.map((item: unknown) => clean(item)).filter((item: string) => Boolean(item) && item.includes(base.destinationUrl) && !item.includes("...")).slice(0, 3)
       : [];
     return {
       ...base,
@@ -238,7 +250,7 @@ export async function buildCampaignCopy(kind: CampaignKind, slug?: string) {
       input: [
         {
           role: "system",
-          content: `You create premium social campaigns for Vegan Masala, a UK vegan Indian cooking website. Rewrite only from the supplied verified material. Lead with a useful, curiosity-building hook in the first line. Sound like a knowledgeable human cook, not an advert or AI. Use a specific technique, sensory detail, honest problem, question or behind-the-scenes moment. Never invent an ingredient, claim, price, discount or result. No clickbait, ellipses, unfinished sentences, generic hype or #fyp. Keep on-art text concise. Preserve affiliate disclosure and the exact destination URL in every affiliate caption. For affiliate content, recommend contextually and never imply personal use unless supplied. Return strict JSON: {"title":"","hook":"","body":"","cta":"","captionVariants":["","",""]}. Each caption should give value before its CTA, include the exact destination URL, and end with 4-7 focused hashtags.`,
+          content: `You create premium social captions for Vegan Masala, a UK vegan Indian cooking website. Use only the supplied verified material. Every caption must name the selected dish or subject, lead with one concrete recipe-specific detail, explain why it matters to the cook, then invite an intentional visit. Sound like a knowledgeable human cook. Never write generic phrases such as "one useful step", "come together properly", "elevate your cooking", "game changer" or "delicious journey". Never invent an ingredient, claim, price, discount or result. No clickbait, ellipses, unfinished sentences or #fyp. Preserve affiliate disclosure when supplied. Return strict JSON: {"title":"","hook":"","body":"","cta":"","captionVariants":["","",""]}. Each complete caption must include the exact destination URL and end with 4-7 focused hashtags.`,
         },
         { role: "user", content: JSON.stringify({ kind, slug, verifiedMaterial: base, currentDate: new Date().toISOString().slice(0, 10), audience: "UK home cooks seeking practical vegan Indian food", objective: "earn an intentional website visit or save" }) },
       ],

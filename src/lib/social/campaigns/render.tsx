@@ -52,7 +52,7 @@ async function preparedLogo(assetPath: string) {
   return sharp(await assetBuffer(assetPath)).resize({ width: 300, height: 170, fit: "contain" }).png().toBuffer();
 }
 
-async function recraftImage(prompt: string, reference?: Buffer) {
+async function recraftImage(prompt: string, reference?: Buffer, strength = 0.42) {
   const token = process.env.RECRAFT_API_TOKEN?.trim();
   if (!token) throw new Error("Recraft is not connected, so this visual style cannot be generated accurately.");
   const styleId = process.env.RECRAFT_STYLE_ID?.trim();
@@ -64,7 +64,7 @@ async function recraftImage(prompt: string, reference?: Buffer) {
     const png = await sharp(reference).png().toBuffer();
     form.set("image", new Blob([new Uint8Array(png)], { type: "image/png" }), "recipe-reference.png");
     form.set("prompt", guardedPrompt.slice(0, 950));
-    form.set("strength", "0.42");
+    form.set("strength", String(strength));
     form.set("model", "recraftv3");
     if (styleId) form.set("style_id", styleId);
     response = await fetch("https://external.api.recraft.ai/v1/images/imageToImage", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: form });
@@ -88,28 +88,28 @@ async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, origina
   const ingredients = (copy.visualIngredients || []).map((item) => item.slice(0, 42)).join(", ").slice(0, 300);
   const shared = `Premium photorealistic editorial food photography of ${copy.dishName}. Authentic vegan Indian food, dark navy patterned tile setting, warm natural light and rich realistic texture. Ingredients visible where appropriate: ${ingredients}.`;
   if (style === "cooking") {
-    const scene = await recraftImage(`${shared} Documentary cooking action scene. An adult home cook shown from shoulders down is actively stirring ${copy.dishName} in a wide steel or cast-iron pan on a lit domestic gas hob. Both hands visible, one holding the pan and one moving a wooden spoon through the food. Clearly visible rising steam, ingredients mid-cook, apron and real kitchen background. This must look like active cooking, not a finished plated dish and not a food close-up.`);
+    const scene = await recraftImage(`${shared} REQUIRED ACTION: transform the referenced finished dish into an in-progress cooking photograph while preserving the exact same visible vegetables, sauce colour, texture and ingredient proportions. Show an adult cook from shoulders down at a domestic hob, one hand holding the same pan and the other actively stirring the same food with a wooden spoon. Clear steam and motion. No bowls, plates or finished serving. Do not substitute ingredients, change the curry, or invent garnish.`, original, 0.58);
     return [await preparedBuffer(scene, 960, 1500, 42)];
   }
   if (style === "ingredient") {
-    const scene = await recraftImage(`${shared} Create an overhead ingredient story flat-lay: the recognisable finished dish in a smaller pan on the right, its actual vegetables and spices arranged naturally on the left, coherent scale, dark tabletop, editorial composition.`);
+    const scene = await recraftImage(`${shared} STRICT INGREDIENT FLAT-LAY ONLY. No cooked dish, no curry, no combined mixture and no serving bowl. Show 6 to 9 actual raw ingredients from the supplied list as separate, clearly identifiable items with generous space between them: whole vegetables, loose spices in individual plain bowls, herbs and oil. Straight overhead view on one dark navy stone worktop, balanced editorial arrangement.`);
     return [await preparedBuffer(scene, 960, 1500, 42)];
   }
-  const [process, ingredientsScene] = await Promise.all([
-    recraftImage(`${shared} ACTION PANEL: waist-level documentary kitchen photograph of hands actively stirring the food in a wide pan on a lit hob, wooden spoon moving through the ingredients, clear rising steam, apron and softly blurred kitchen behind. No plated presentation.`),
-    recraftImage(`${shared} INGREDIENT PANEL: strict overhead flat-lay on a dark stone worktop. Raw vegetables and loose spices arranged around small plain ceramic bowls, with a small finished serving at one edge. No hands, no hob, no cooking action.`),
+  const [detailView, overheadView] = await Promise.all([
+    recraftImage(`${shared} SAME-DISH DETAIL VIEW. Preserve exactly the referenced recipe: identical vegetables, sauce colour, consistency, garnish, pan and dark navy tabletop. Create a tight low-angle macro crop that highlights texture and steam. Change only camera distance and angle; do not reinterpret the food or add ingredients.`, original, 0.2),
+    recraftImage(`${shared} SAME-DISH OVERHEAD VIEW. Preserve exactly the referenced recipe: identical vegetables, sauce colour, consistency, garnish, pan and the same dark navy tabletop environment. Create a wider straight-down composition with subtle unlabelled serving utensils. Change only camera framing; do not reinterpret the food or add accompaniments.`, original, 0.26),
   ]);
   if (style === "collage") {
     return [
-      await preparedBuffer(process, 960, 1500, 42),
+      await preparedBuffer(detailView, 960, 1500, 42),
       await preparedBuffer(original, 960, 1500, 42),
-      await preparedBuffer(ingredientsScene, 960, 1500, 42),
+      await preparedBuffer(overheadView, 960, 1500, 42),
     ];
   }
   return [
-    await preparedBuffer(process, 438, 898, 38),
+    await preparedBuffer(detailView, 438, 898, 38),
     await preparedBuffer(original, 438, 898, 38),
-    await preparedBuffer(ingredientsScene, 438, 898, 38),
+    await preparedBuffer(overheadView, 438, 898, 38),
   ];
 }
 
