@@ -108,6 +108,22 @@ async function hasCookingAction(buffer: Buffer) {
   }
 }
 
+async function openAiCookingFallback(prompt: string) {
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey) throw new Error("Recraft could not produce cooking action and the fallback image service is not connected.");
+  const client = new OpenAI({ apiKey });
+  const response = await client.images.generate({
+    model: "gpt-image-1.5",
+    prompt: `Create a premium photorealistic vertical editorial cooking photograph. ${prompt} The final output is photography only with absolutely no writing, labels, logos or watermark.`,
+    size: "1024x1536",
+    quality: "medium",
+    output_format: "jpeg",
+  });
+  const encoded = response.data?.[0]?.b64_json;
+  if (!encoded) throw new Error("The fallback image service returned no cooking photograph.");
+  return Buffer.from(encoded, "base64");
+}
+
 async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, original: Buffer) {
   if (style === "hero" || !copy.dishName) return [original];
   const ingredients = (copy.visualIngredients || []).map((item) => item.slice(0, 42)).join(", ").slice(0, 300);
@@ -119,7 +135,8 @@ async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, origina
     if (!(await hasCookingAction(scene))) {
       scene = await recraftImage(`FAILED ATTEMPT CORRECTION: compose the camera tightly around the cook's two hands and physical stirring action. Crop out every plate and serving bowl. A wooden spoon must visibly move through food inside a pan sitting directly on a lit burner. ${prompt}`);
     }
-    if (!(await hasCookingAction(scene))) throw new Error("Recraft did not produce a verifiable cooking action. No preview was saved; generate again to try a fresh scene.");
+    if (!(await hasCookingAction(scene))) scene = await openAiCookingFallback(prompt);
+    if (!(await hasCookingAction(scene))) throw new Error("Neither image service produced a verifiable cooking action. No preview was saved.");
     return [await preparedBuffer(scene, 960, 1500, 42), await preparedBuffer(original, 960, 1500, 42)];
   }
   if (style === "ingredient") {
