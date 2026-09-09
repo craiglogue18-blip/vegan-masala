@@ -56,12 +56,14 @@ async function recraftImage(prompt: string, reference?: Buffer) {
   const token = process.env.RECRAFT_API_TOKEN?.trim();
   if (!token) throw new Error("Recraft is not connected, so this visual style cannot be generated accurately.");
   const styleId = process.env.RECRAFT_STYLE_ID?.trim();
+  const photographyGuard = "PURE PHOTOGRAPH ONLY. ZERO TEXT OR TYPOGRAPHY ANYWHERE: no words, letters, numbers, captions, labels, packaging, recipe cards, posters, signs, logos, watermarks, interfaces or decorative writing. Use only unlabelled bowls, jars and utensils.";
+  const guardedPrompt = `${photographyGuard} ${prompt}`.slice(0, 710) + ` ${photographyGuard}`;
   let response: Response;
   if (reference) {
     const form = new FormData();
     const png = await sharp(reference).png().toBuffer();
     form.set("image", new Blob([new Uint8Array(png)], { type: "image/png" }), "recipe-reference.png");
-    form.set("prompt", prompt.slice(0, 950));
+    form.set("prompt", guardedPrompt.slice(0, 950));
     form.set("strength", "0.42");
     form.set("model", "recraftv3");
     if (styleId) form.set("style_id", styleId);
@@ -69,7 +71,7 @@ async function recraftImage(prompt: string, reference?: Buffer) {
   } else {
     response = await fetch("https://external.api.recraft.ai/v1/images/generations", {
       method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ prompt: prompt.slice(0, 950), model: process.env.RECRAFT_MODEL?.trim() || "recraftv4", ...(styleId ? { style_id: styleId } : {}) }),
+      body: JSON.stringify({ prompt: guardedPrompt.slice(0, 950), model: process.env.RECRAFT_MODEL?.trim() || "recraftv4", ...(styleId ? { style_id: styleId } : {}) }),
     });
   }
   const payload = await response.json().catch(() => ({}));
@@ -83,8 +85,8 @@ async function recraftImage(prompt: string, reference?: Buffer) {
 
 async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, original: Buffer) {
   if (style === "hero" || !copy.dishName) return [original];
-  const ingredients = (copy.visualIngredients || []).join(", ");
-  const shared = `Premium photorealistic editorial food photography for ${copy.dishName}. Authentic vegan Indian food, dark navy patterned tile setting inspired by Vegan Masala, warm natural light, rich realistic texture, no words, no lettering, no logo, no watermark. Key ingredients: ${ingredients}.`;
+  const ingredients = (copy.visualIngredients || []).map((item) => item.slice(0, 42)).join(", ").slice(0, 300);
+  const shared = `Premium photorealistic editorial food photography of ${copy.dishName}. Authentic vegan Indian food, dark navy patterned tile setting, warm natural light and rich realistic texture. Ingredients visible where appropriate: ${ingredients}.`;
   if (style === "cooking") {
     const scene = await recraftImage(`${shared} Documentary cooking action scene. An adult home cook shown from shoulders down is actively stirring ${copy.dishName} in a wide steel or cast-iron pan on a lit domestic gas hob. Both hands visible, one holding the pan and one moving a wooden spoon through the food. Clearly visible rising steam, ingredients mid-cook, apron and real kitchen background. This must look like active cooking, not a finished plated dish and not a food close-up.`);
     return [await preparedBuffer(scene, 960, 1500, 42)];
@@ -93,21 +95,21 @@ async function campaignVisuals(copy: CampaignCopy, style: CampaignStyle, origina
     const scene = await recraftImage(`${shared} Create an overhead ingredient story flat-lay: the recognisable finished dish in a smaller pan on the right, its actual vegetables and spices arranged naturally on the left, coherent scale, dark tabletop, editorial composition.`);
     return [await preparedBuffer(scene, 960, 1500, 42)];
   }
-  const [process, serving] = await Promise.all([
-    recraftImage(`${shared} Close in-progress pan view with a wooden spoon moving through the food and gentle steam; preserve the recipe's recognisable ingredients.`, original),
-    recraftImage(`${shared} Finished serving scene from a different overhead angle with rice or flatbread only if appropriate, restrained styling, preserve the recipe's recognisable ingredients.`, original),
+  const [process, ingredientsScene] = await Promise.all([
+    recraftImage(`${shared} ACTION PANEL: waist-level documentary kitchen photograph of hands actively stirring the food in a wide pan on a lit hob, wooden spoon moving through the ingredients, clear rising steam, apron and softly blurred kitchen behind. No plated presentation.`),
+    recraftImage(`${shared} INGREDIENT PANEL: strict overhead flat-lay on a dark stone worktop. Raw vegetables and loose spices arranged around small plain ceramic bowls, with a small finished serving at one edge. No hands, no hob, no cooking action.`),
   ]);
   if (style === "collage") {
     return [
       await preparedBuffer(process, 960, 1500, 42),
       await preparedBuffer(original, 960, 1500, 42),
-      await preparedBuffer(serving, 960, 1500, 42),
+      await preparedBuffer(ingredientsScene, 960, 1500, 42),
     ];
   }
   return [
     await preparedBuffer(process, 438, 898, 38),
     await preparedBuffer(original, 438, 898, 38),
-    await preparedBuffer(serving, 438, 898, 38),
+    await preparedBuffer(ingredientsScene, 438, 898, 38),
   ];
 }
 
