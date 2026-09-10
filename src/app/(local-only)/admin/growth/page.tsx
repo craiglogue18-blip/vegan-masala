@@ -207,6 +207,35 @@ export default async function GrowthDashboardPage() {
               </div>
             ))}
           </div>
+          <div className="mt-6 border-t border-[var(--border)] pt-5">
+            <h3 className="text-sm font-extrabold uppercase tracking-wider text-white">Results by promotion</h3>
+            <div className="mt-3 space-y-2">
+              {data.dinnerPlanViewsByPromotion.length ? data.dinnerPlanViewsByPromotion.map((item) => {
+                const confirmed = data.dinnerPlanConfirmedByPromotion.find((row) => row.label === item.label)?.count ?? 0;
+                const rate = item.count ? (confirmed / item.count) * 100 : 0;
+                return (
+                  <div key={item.label} className="flex items-center justify-between gap-4 rounded-xl bg-black/15 px-4 py-3 text-sm">
+                    <span className="text-[var(--text-soft)]">{titleCase(item.label)}</span>
+                    <strong className="text-[var(--brand-gold)]">{number(confirmed)} confirmed · {rate.toFixed(1)}%</strong>
+                  </div>
+                );
+              }) : <p className="text-sm leading-6 text-[var(--text-soft)]">Homepage, recipe, header and footer promotion results will appear here as visits build.</p>}
+            </div>
+          </div>
+          <div className="mt-6 border-t border-[var(--border)] pt-5">
+            <h3 className="text-sm font-extrabold uppercase tracking-wider text-white">Form activity by placement</h3>
+            <div className="mt-3 space-y-2">
+              {data.dinnerPlanStartsByPlacement.length ? data.dinnerPlanStartsByPlacement.map((item) => {
+                const submitted = data.dinnerPlanSubmitsByPlacement.find((row) => row.label === item.label)?.count ?? 0;
+                return (
+                  <div key={item.label} className="flex items-center justify-between gap-4 rounded-xl bg-black/15 px-4 py-3 text-sm">
+                    <span className="text-[var(--text-soft)]">{titleCase(item.label)}</span>
+                    <strong className="text-[var(--brand-gold)]">{number(submitted)} / {number(item.count)} submitted</strong>
+                  </div>
+                );
+              }) : <p className="text-sm leading-6 text-[var(--text-soft)]">Hero and lower-page form results will appear here as visitors interact with the new page.</p>}
+            </div>
+          </div>
         </article>
       </section>
 

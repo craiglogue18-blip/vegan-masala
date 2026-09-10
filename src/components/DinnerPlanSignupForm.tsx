@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   createDinnerPlanSignupId,
   DINNER_PLAN_COMPLETED_KEY,
@@ -11,10 +11,11 @@ import {
 
 const KIT_FORM_ACTION = "https://app.kit.com/forms/9816369/subscriptions";
 
-export function DinnerPlanSignupForm() {
-  const [submitting, setSubmitting] = useState(false);
-  const started = useRef(false);
+type DinnerPlanSignupFormProps = {
+  placement?: "hero" | "bottom";
+};
 
+export function DinnerPlanPageTracker() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     recordEngagement("dinner_plan_view", {
@@ -24,10 +25,18 @@ export function DinnerPlanSignupForm() {
     });
   }, []);
 
+  return null;
+}
+
+export function DinnerPlanSignupForm({ placement = "hero" }: DinnerPlanSignupFormProps) {
+  const [submitting, setSubmitting] = useState(false);
+  const started = useRef(false);
+  const emailId = useId();
+
   const markStarted = () => {
     if (started.current) return;
     started.current = true;
-    recordEngagement("dinner_plan_form_start");
+    recordEngagement("dinner_plan_form_start", { placement });
   };
 
   const prepareSignup = () => {
@@ -35,18 +44,18 @@ export function DinnerPlanSignupForm() {
     window.localStorage.setItem(DINNER_PLAN_PENDING_KEY, signupId);
     window.localStorage.removeItem(DINNER_PLAN_COMPLETED_KEY);
     window.sessionStorage.removeItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY);
-    recordEngagement("dinner_plan_form_submit");
+    recordEngagement("dinner_plan_form_submit", { placement });
     setSubmitting(true);
   };
 
   return (
     <form action={KIT_FORM_ACTION} method="post" onSubmit={prepareSignup} className="mt-7">
-      <label htmlFor="dinner-plan-email" className="block text-sm font-bold text-white">
+      <label htmlFor={emailId} className="block text-sm font-bold text-white">
         Where should we send your free plan?
       </label>
       <div className="mt-3 flex flex-col gap-3 sm:flex-row">
         <input
-          id="dinner-plan-email"
+          id={emailId}
           name="email_address"
           type="email"
           autoComplete="email"

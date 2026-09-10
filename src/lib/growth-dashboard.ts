@@ -699,6 +699,10 @@ export async function getGrowthDashboard() {
     topTrafficSources: rank(current, "session_start", "source", 10),
     topLandingPages: rank(current, "session_start", "landingPage", 10),
     topDevices: rank(current, "session_start", "device", 6),
+    dinnerPlanViewsByPromotion: rank(current, "dinner_plan_view", "placement", 8),
+    dinnerPlanConfirmedByPromotion: rank(current, "dinner_plan_confirmed", "placement", 8),
+    dinnerPlanStartsByPlacement: rank(current, "dinner_plan_form_start", "placement", 8),
+    dinnerPlanSubmitsByPlacement: rank(current, "dinner_plan_form_submit", "placement", 8),
     topEngagementEvents: [...new Set(current.map((row) => row.event))]
       .map((event) => ({ label: event, count: total(current, event) }))
       .filter((item) => !["page_view", "session_start"].includes(item.label))
