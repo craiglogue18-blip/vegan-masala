@@ -74,6 +74,17 @@ cta:"Open growth dashboard"
 },
 
 {
+title:"Newsletter Studio",
+
+href:"/admin/newsletters",
+
+description:
+"Generate branded newsletters from real recipe data, review every section, then create a Kit draft or confirm delivery to your subscribers.",
+
+cta:"Open newsletter studio"
+},
+
+{
 title:"Health Dashboard",
 
 href:"/admin/social/health",
@@ -473,14 +484,14 @@ Recommended workflow
 <div className="rounded-2xl bg-black/20 p-4">
 
 <b className="text-[var(--brand-gold)]">3.</b>
- Preview and schedule content in the Social Queue
+ Preview and schedule social content or prepare a Kit newsletter
 
 </div>
 
 <div className="rounded-2xl bg-black/20 p-4">
 
 <b className="text-[var(--brand-gold)]">4.</b>
- Review growth, publishing, SEO and app health
+ Confirm publishing, then review growth, SEO and app health
 
 </div>
 

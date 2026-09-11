@@ -1,0 +1,43 @@
+# Midjourney Prompts — Vegetable Bhuna (North Indian Vegetable Curry)
+File: content/recipes/vegetable-bhuna-north-indian-vegetable-curry.mdx
+Slug: vegetable-bhuna-north-indian-vegetable-curry
+Hero reference: https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png
+
+## 1) HERO (generate first)
+Vegetable Bhuna (North Indian Vegetable Curry), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 1: Heat 1 teaspoon oil in a large skillet over medium-high heat. Add 1/2 teaspoon dried fenugreek leaves, then add 2 cups cauliflower florets and 1/4 teaspoon salt. Cover and cook for 3 to 4 minutes, stirring once, until the edges start to brown., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 2: Add 1 - 2 cups chopped vegetables and the remaining 1/4 teaspoon salt. If the pan looks dry, add 2 to 3 tablespoons water. Cover and cook until the cauliflower is just tender but still holds its shape., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 3: Transfer the vegetables to a bowl and set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 4: In the same skillet, heat 2 teaspoons oil over medium heat. Add 1 cup chopped red onion and cook for 5 to 8 minutes, stirring and adding splashes of water as needed, until golden and softened., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 5: Stir in 1 tablespoon ginger-garlic paste and cook for 30 seconds. Add 1/2 - 1 teaspoon garam masala, 1/4 teaspoon turmeric, 1 teaspoon ground coriander, 1/2 teaspoon smoked paprika, and 1/4 teaspoon salt. Stir until the spices smell cooked., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 6: Mix in 2 tablespoons tomato paste, then add 1/3 cup non-dairy yogurt and 1/2 cup or more water or non-dairy milk. Simmer until the masala turns glossy and the tomato paste loses its raw taste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 7: Return the cooked vegetables and 1 cup cooked or canned drained chickpeas to the skillet. Fold gently so the vegetables stay intact, then lower the heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 8: In a small skillet, heat 1 teaspoon oil over medium-high heat. Add 1/2 teaspoon cumin seeds and 1 bay leaf. Once the cumin darkens slightly, add 1/2 cup onion, 1 bell pepper, and 1/4 teaspoon dried fenugreek leaves. Sauté for 3 to 4 minutes, until the pepper is softened at the edges but still a little crisp., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 9: Stir the tempered onion and pepper mixture into the curry. Cover, turn off the heat, and let it sit for 5 minutes before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/vegetable-bhuna-north-indian-vegetable-curry.png Vegetable Bhuna (North Indian Vegetable Curry) cooking step 10: Finish with cilantro, pepper flakes, and a squeeze of lemon juice., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegetable Bhuna (North Indian Vegetable Curry), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

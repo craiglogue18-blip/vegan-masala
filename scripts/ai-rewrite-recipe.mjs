@@ -364,12 +364,26 @@ Return only the requested structured data.
           type: "object",
           additionalProperties: false,
           properties: {
-            description: { type: "string" },
-            ingredients: { type: "array", items: { type: "string" } },
-            instructions: { type: "array", items: { type: "string" } },
-            notes: { type: "array", items: { type: "string" } },
-            introNote: { type: "string" },
-            servingSuggestion: { type: "string" },
+            description: { type: "string", minLength: 50, maxLength: 160 },
+            ingredients: {
+              type: "array",
+              items: { type: "string", minLength: 1 },
+              minItems: ingredients.length,
+              maxItems: ingredients.length,
+            },
+            instructions: {
+              type: "array",
+              items: { type: "string", minLength: 1 },
+              minItems: Math.max(3, Math.ceil(instructions.length * 0.75)),
+            },
+            notes: {
+              type: "array",
+              items: { type: "string", minLength: 1 },
+              minItems: 2,
+              maxItems: 6,
+            },
+            introNote: { type: "string", minLength: 30, maxLength: 220 },
+            servingSuggestion: { type: "string", minLength: 20, maxLength: 180 },
           },
           required: [
             "description",

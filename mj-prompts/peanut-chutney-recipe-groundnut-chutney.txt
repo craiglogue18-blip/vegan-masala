@@ -1,0 +1,40 @@
+# Midjourney Prompts — Peanut Chutney Recipe | Groundnut Chutney
+File: content/recipes/peanut-chutney-recipe-groundnut-chutney.mdx
+Slug: peanut-chutney-recipe-groundnut-chutney
+Hero reference: https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png
+
+## 1) HERO (generate first)
+Peanut Chutney Recipe | Groundnut Chutney, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 1: Heat 1 tablespoon oil in a pan over low heat and add 2 tablespoons chana dal., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 2: Stir the chana dal often and toast until it turns deep golden, taking care not to let it burn., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 3: Remove the chana dal from the pan and set it aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 4: In the same pan, add ½ cup peanuts and roast over low to medium-low heat for 4 to 5 minutes, until crisp and lightly browned., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 5: Add 12 to 15 curry leaves, 2 to 3 green chilies, 2 garlic cloves, and 1 pinch asafoetida, then sauté for about 1 minute until the curry leaves turn crisp., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 6: Stir in 1 tablespoon white sesame seeds and turn off the heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 7: Let the mixture cool to room temperature, then transfer it to a blender along with the roasted chana dal and salt to taste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 8: Add ¾ cup water and blend until smooth, adding a little more water only if needed for the texture you like., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/peanut-chutney-recipe-groundnut-chutney.png Peanut Chutney Recipe | Groundnut Chutney cooking step 9: Transfer the peanut chutney to a bowl and serve., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Peanut Chutney Recipe | Groundnut Chutney, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

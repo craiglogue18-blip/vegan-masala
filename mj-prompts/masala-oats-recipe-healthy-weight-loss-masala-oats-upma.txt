@@ -1,0 +1,40 @@
+# Midjourney Prompts — Vegetable Masala Oats
+File: content/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.mdx
+Slug: masala-oats-recipe-healthy-weight-loss-masala-oats-upma
+Hero reference: https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png
+
+## 1) HERO (generate first)
+Vegetable Masala Oats, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 1: In a large kadai, heat 2 tbsp vegan ghee or neutral oil over medium heat. Add 1 bay leaf, 1 tsp cumin seeds, 4 pods cardamom, ½ tsp cloves, and 1 inch cinnamon stick, sautéing until the spices release their aroma., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 2: Add ½ onion and 2 green chillies, cooking until the onion becomes soft and translucent., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 3: Incorporate ½ carrot, 5 green beans, 2 tbsp peas, and ½ tomato, stirring for about a minute until the tomato softens., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 4: Add ½ tsp turmeric powder, 1 tsp red chilli powder, 1 tsp coriander powder, ½ tsp cumin powder, 1 tsp pav bhaji masala, and ½ tsp salt, sautéing until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 5: Stir in 1 cup palak and cook for 2 minutes until wilted., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 6: Pour in 3 cups water, bringing the mixture to a rolling boil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 7: Once boiling, add 1 cup rolled oats, stirring well to combine., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 8: Cover and simmer for 15 to 20 minutes, adjusting with additional water as needed, until the oats are tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/masala-oats-recipe-healthy-weight-loss-masala-oats-upma.png Vegetable Masala Oats cooking step 9: Finally, mix in 2 tsp lemon juice and 2 tbsp chopped coriander before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegetable Masala Oats, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

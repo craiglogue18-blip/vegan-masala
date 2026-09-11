@@ -1,0 +1,37 @@
+# Midjourney Prompts — Mushroom Matar Masala (Mushroom Pea curry)
+File: content/recipes/mushroom-matar-masala-mushroom-pea-curry.mdx
+Slug: mushroom-matar-masala-mushroom-pea-curry
+Hero reference: https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png
+
+## 1) HERO (generate first)
+Mushroom Matar Masala (Mushroom Pea curry), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png Mushroom Matar Masala (Mushroom Pea curry) cooking step 1: Blend 3/4 cup chopped red onion, 5 cloves garlic, 1 inch peeled ginger, and 1 hot green chili with a few tablespoons of water until smooth., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png Mushroom Matar Masala (Mushroom Pea curry) cooking step 2: Heat 1 tsp oil in a large skillet over medium heat. Add the onion-garlic-ginger puree and cook for 5 to 7 minutes, stirring occasionally, until the raw smell of onion has disappeared., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png Mushroom Matar Masala (Mushroom Pea curry) cooking step 3: In the same blender, blend 2 chopped tomatoes and 1/4 cup cashews until smooth, adding water if necessary to achieve a thick purée. This allows the flavors to intensify as it cooks., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png Mushroom Matar Masala (Mushroom Pea curry) cooking step 4: Add the tomato-cashew mixture, 1 to 2 tsp garam masala, 1 tsp paprika, and 1 tsp dried fenugreek leaves to the skillet. Stir and cook for 2-3 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png Mushroom Matar Masala (Mushroom Pea curry) cooking step 5: Introduce 6 to 8 oz sliced mushrooms, 15 oz drained chickpeas, and 1/2 cup water along with 1/2 tsp salt and 1/4 tsp sugar. Mix well., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png Mushroom Matar Masala (Mushroom Pea curry) cooking step 6: Cover and simmer for 10 minutes, checking occasionally to prevent scorching. If the mixture thickens too much, add more water as needed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png Mushroom Matar Masala (Mushroom Pea curry) cooking step 7: After 10 minutes, taste and adjust salt, spice (adding cayenne if desired), and consistency with more water. Stir in 3/4 cup peas and 1 cup chopped spinach if using. Bring to a gentle boil for 1-2 minutes before removing from heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/mushroom-matar-masala-mushroom-pea-curry.png Mushroom Matar Masala (Mushroom Pea curry) cooking step 8: Garnish with fresh cilantro and serve warm over rice, grains, or alongside flatbread., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Mushroom Matar Masala (Mushroom Pea curry), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

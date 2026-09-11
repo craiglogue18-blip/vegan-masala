@@ -1,7 +1,7 @@
 # Midjourney Prompts — Samosa Pie
 File: content/recipes/vegan-samosa-pie.mdx
 Slug: vegan-samosa-pie
-Hero reference: https://vegan-masala.com/images/recipes/vegan-samosa-pie.png
+Hero reference: https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png
 
 ## 1) HERO (generate first)
 Samosa Pie, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,34 +10,34 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 1: Heat the oil and toast the cumin and coriander seeds until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 1: Heat the 1 tsp oil in a pan over medium heat. Add the ¼ tsp cumin seeds and ¼ tsp coriander seeds and let them sizzle for a few seconds until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 2: Add the onion, chilli, and cashews; cook until softened., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 2: Add the ¼ cup red onion, chopped, 1 green chilli, finely chopped, and 2 tbsp chopped cashews. Cook for 3 to 4 minutes, stirring often, until the onion softens., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 3: Stir in the spices, ginger, and garlic powder., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 3: Stir in the 2 tsp minced ginger, ½ tsp garlic powder, ¾ tsp turmeric, ½ tsp ground cumin, ½ tsp ground coriander, and ¼ tsp cayenne (to taste). Cook for 30 seconds so the spices bloom in the oil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 4: Add the potatoes, salt, and water; cook until tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 4: Add the 2 cups potatoes, cubed, ½ tsp salt, and ⅓ cup water. Cover and cook until the potatoes are tender and most of the water has cooked off., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 5: Mash some potatoes for texture, then mix in the peas, herbs, and lemon juice., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 5: Mash some of the potatoes with the back of the spoon, then stir in the ¼ cup green peas, 2 tbsp chopped coriander, 2 tbsp chopped mint, 1 tsp lemon juice, and ½ tsp chaat masala or amchur., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 6: Let the filling cool slightly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 6: Let the filling cool until just warm. It should be thick enough to hold its shape; if it is wet, cook it uncovered for a minute or two longer., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 7: Roll the puff pastry to double its size and place the filling on one half., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 7: Heat the oven to 200°C. Roll out the 1 sheet puff pastry to roughly double its size., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 8
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 8: Fold the pastry over, seal the edges, and cut steam vents., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 8: Spoon the filling onto one half of the pastry, leaving a border around the edges. Fold the other half over, press to seal, and cut a few steam vents on top., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 9
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 9: Bake at 200°C for 18–22 minutes until golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 9: Bake for 18 to 22 minutes, until the pastry is deep golden and crisp underneath., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 10
-https://vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 10: Cool slightly before slicing and serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-samosa-pie.png Samosa Pie cooking step 10: Rest for 5 minutes before slicing so the filling settles and the pastry stays clean-cut., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Samosa Pie, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

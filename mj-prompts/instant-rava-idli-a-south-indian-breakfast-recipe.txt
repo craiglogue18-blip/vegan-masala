@@ -1,0 +1,22 @@
+# Midjourney Prompts — Instant Rava Idli
+File: content/recipes/instant-rava-idli-a-south-indian-breakfast-recipe.mdx
+Slug: instant-rava-idli-a-south-indian-breakfast-recipe
+Hero reference: https://www.vegan-masala.com/images/recipes/instant-rava-idli-a-south-indian-breakfast-recipe.png
+
+## 1) HERO (generate first)
+Instant Rava Idli, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/instant-rava-idli-a-south-indian-breakfast-recipe.png Instant Rava Idli cooking step 1: In a wok, dry roast 1 cup of semolina and 1/2 cup of rice flour over medium-low heat until they turn a light brown and release a pleasant nutty aroma. Set aside to cool slightly, then mix in 2 cups of plant-based yogurt, 1/4 tsp of baking soda, 2 tsp of minced ginger, a handful of minced cilantro, and salt to taste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/instant-rava-idli-a-south-indian-breakfast-recipe.png Instant Rava Idli cooking step 2: Gradually add 1/2 to 1 1/2 cups of plant-based milk, mixing until the batter reaches a slightly lighter consistency than pancake batter. In a small pan, heat 1/2 tsp of coconut oil for tempering, add 1/2 tsp of mustard seeds, and let them splutter; then add 2-3 minced green chillies, 6-7 curry leaves, and 1/4 tsp of asafetida. Pour the tempering over the batter and fold it in gently., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/instant-rava-idli-a-south-indian-breakfast-recipe.png Instant Rava Idli cooking step 3: Allow the batter to rest for at least 15 minutes. Grease the idli plates and fill each depression with the batter, filling them almost to the brim. Carefully stack the plates and transfer them to a steamer, steaming for 10 to 12 minutes until the idlis are set—test by inserting a toothpick; it should come out clean. Serve the warm idlis with your choice of sambar or chutney., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Instant Rava Idli, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

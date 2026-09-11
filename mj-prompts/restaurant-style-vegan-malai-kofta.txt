@@ -1,0 +1,46 @@
+# Midjourney Prompts — Restaurant-Style Vegan Malai Kofta
+File: content/recipes/restaurant-style-vegan-malai-kofta.mdx
+Slug: restaurant-style-vegan-malai-kofta
+Hero reference: https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png
+
+## 1) HERO (generate first)
+Restaurant-Style Vegan Malai Kofta, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 1: In a saucepan, add the 12 ounces Yukon Gold potatoes, cover with cold water, and season generously with salt. Boil until just fork-tender, about 10-12 minutes; drain and set aside to dry., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 2: Add the 1 cup soaked cashews to a high-powered blender along with the 3 chopped tomatoes, 1 ¼ cups unsweetened plant-based milk, and 1 tablespoon lemon juice. Blend until smooth and creamy; set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 3: In a heavy-bottomed pan, heat 1 tablespoon unrefined coconut oil over medium-high heat. Add the whole spices: 4-6 green cardamom pods, 2 cinnamon sticks, 4 cloves, and 1 teaspoon cumin seeds, sautéing until fragrant, about 45-60 seconds., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 4: Add 1 extra large chopped onion and cook until softened and turning golden, about 4-5 minutes. Stir in 4 chopped garlic cloves, 1 ½ tablespoons chopped ginger, and 1-2 chopped green chilies (if using) and cook for another minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 5: Incorporate the ground spices: ½ teaspoon ground coriander, 1-2 teaspoons Indian red chili powder, and 1 teaspoon ground turmeric, stirring frequently for 30 seconds before adding your blended tomato-cashew mixture and bringing to a simmer., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 6: Add 1 ½ teaspoons kosher salt and cover. Let simmer for 15 minutes, stirring occasionally until thickened., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 7: Transfer the mixture back to the blender and blend until completely smooth. Return the gravy to the pan, crush 1 tablespoon dried fenugreek leaves (if using) into the gravy, and add ½ teaspoon garam masala. Stir in 1 cup chopped cilantro and keep warm., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 8: In a food processor, pulse the drained Yukon Gold potatoes until just crumbled. Add the 16 ounces crumbled tofu, blending until resembling ricotta., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 9: To the potato-tofu mixture, add 5 tablespoons cornstarch, 1 tablespoon minced ginger, 1 teaspoon garam masala, 1 teaspoon red chili powder, and salt to taste. Knead until combined and roll into 18 balls, about 40-50 grams each., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 10: For frying, heat 2 inches of vegetable oil in a wok over medium heat. Check the temperature by frying a small piece of dough; it should sizzle and rise. Fry kofta in batches until crisp and golden, about 5-8 minutes. For baking, preheat the oven to 425ºF (218ºC) and bake on a lined baking sheet for 30-35 minutes, flipping halfway through., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 11
+https://www.vegan-masala.com/images/recipes/restaurant-style-vegan-malai-kofta.png Restaurant-Style Vegan Malai Kofta cooking step 11: To serve, warm the gravy and gently add the kofta, spooning sauce over them. Garnish with additional cilantro and serve with naan or rice, keeping any leftovers stored separately to maintain texture., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Restaurant-Style Vegan Malai Kofta, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

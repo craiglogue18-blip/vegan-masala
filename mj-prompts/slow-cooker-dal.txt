@@ -1,0 +1,28 @@
+# Midjourney Prompts — Slow cooker dal
+File: content/recipes/slow-cooker-dal.mdx
+Slug: slow-cooker-dal
+Hero reference: https://www.vegan-masala.com/images/recipes/slow-cooker-dal.png
+
+## 1) HERO (generate first)
+Slow cooker dal, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/slow-cooker-dal.png Slow cooker dal cooking step 1: Put the 300g yellow split peas, 1 chopped onion, 200g chopped tomatoes, thumb of grated ginger, 2 tsp ground cumin, 2 tsp ground turmeric, 1 crushed garlic clove, 10 freeze-dried curry leaves and 700ml hot vegetable stock into the slow cooker. Add most of the 1 thinly sliced green chilli and stir well., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/slow-cooker-dal.png Slow cooker dal cooking step 2: Cook on high for 4 hours, or until the split peas are fully tender and the dal has broken down into a thick, spoonable consistency. Stir once or twice if you can., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/slow-cooker-dal.png Slow cooker dal cooking step 3: Season with salt and freshly ground black pepper. If the dal looks too loose, leave it uncovered for a few minutes to reduce slightly; if it is very thick, loosen with a splash of hot water., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/slow-cooker-dal.png Slow cooker dal cooking step 4: For the tempering, heat 2 tbsp vegetable or sunflower oil in a small saucepan until hot. Add the remaining 1 sliced garlic clove and fry until golden, then tip it over the dal., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/slow-cooker-dal.png Slow cooker dal cooking step 5: Finish with the remaining green chilli and serve at once with lemon wedges for squeezing., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Slow cooker dal, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

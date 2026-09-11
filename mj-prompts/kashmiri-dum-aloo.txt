@@ -1,7 +1,7 @@
 # Midjourney Prompts — Kashmiri Dum Aloo
 File: content/recipes/kashmiri-dum-aloo.mdx
 Slug: kashmiri-dum-aloo
-Hero reference: https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png
+Hero reference: https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png
 
 ## 1) HERO (generate first)
 Kashmiri Dum Aloo, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,28 +10,28 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 1: Blend soaked almonds, ginger, garam masala, cayenne, coriander, sugar, and a little water into a smooth paste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 1: Blend the soaked 60g almonds, 1 inch ginger, grated, 1 tsp garam masala, 1/4 tsp cayenne pepper, 2 tbsp fresh coriander, chopped, 1 tsp sugar and a little water to a smooth paste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 2: Toss cubed potatoes with oil, chilli powder, turmeric, and salt., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 2: Toss 3 medium potatoes, cubed, with 2 tbsp oil, 1 tsp chilli powder, 1/2 tsp turmeric and 1 tsp salt until the pieces are well coated., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 3: Roast at 200°C for about 30 minutes until fork tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 3: Roast the potatoes at 200°C for about 30 minutes, until they are tender at the edges and taking on a little colour., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 4: Bring the spice paste to a simmer in a saucepan., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 4: Scrape the almond spice paste into a saucepan and bring it to a gentle simmer over low heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 5: Add half the coconut milk and the roasted potatoes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 5: Add half of the 1 tin coconut milk and the roasted potatoes, then stir to coat the potatoes in the sauce., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 6: Cover and simmer on low for 15–20 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 6: Cover and simmer on low for 15–20 minutes, stirring once or twice, until the masala thickens and clings to the potatoes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 7: Stir in the remaining coconut milk, lemon juice, and freshly chopped herbs., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 7: Stir in the remaining coconut milk and 1 tbsp lemon juice, then cook for 2 minutes more., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 8
-https://vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 8: Adjust salt and serve hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/kashmiri-dum-aloo.png Kashmiri Dum Aloo cooking step 8: Taste and adjust the seasoning if needed, then serve hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Kashmiri Dum Aloo, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

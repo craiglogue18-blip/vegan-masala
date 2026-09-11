@@ -1,0 +1,49 @@
+# Midjourney Prompts — Bread Pakora Recipe (Bread Pakoda)
+File: content/recipes/bread-pakora-recipe-bread-pakoda.mdx
+Slug: bread-pakora-recipe-bread-pakoda
+Hero reference: https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png
+
+## 1) HERO (generate first)
+Bread Pakora Recipe (Bread Pakoda), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 1: Steam or boil 1 ½ cups potatoes until just tender. If using, cook the ¼ cup green peas with them, then drain well., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 2: Peel and mash the potatoes in a bowl. Keep the mash fairly coarse so the filling holds its shape., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 3: Heat 1 tablespoon oil in a pan. Add 1 sprig curry leaves, 1 pinch asafoetida, 2 green chilies, and 1 teaspoon ginger paste. Cook briefly until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 4: Add ½ teaspoon red chili powder, ½ teaspoon garam masala, and ⅛ teaspoon turmeric. Stir for a few seconds so the spices bloom in the oil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 5: Add the mashed potatoes, ¼ cup green peas, ½ teaspoon salt, and 3 tablespoons coriander leaves. Mix well, then finish with 1 tablespoon lemon juice and adjust the seasoning if needed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 6: Lay out 6 slices bread. Spread the potato filling on 3 slices, cover with the remaining slices, press lightly, and cut each sandwich into triangles if you like., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 7: In a bowl, mix ¾ cup gram flour, 2 to 3 tablespoons rice flour, ½ teaspoon red chili powder, ⅛ teaspoon turmeric, ½ teaspoon salt, and ½ to ¾ teaspoon carom seeds., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 8: Add water gradually to make a thick, smooth batter that coats the bread without running off too quickly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 9: Heat oil in a pan for shallow or deep frying. Test a little batter first; it should rise steadily without browning at once., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 10: Dip each bread sandwich in the batter, let the excess drip off, and slide it into the hot oil. Fry a few at a time without crowding the pan., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 11
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 11: Cook on medium heat until one side is golden and crisp, then turn and fry the other side. Drain on a rack or paper., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 12
+https://www.vegan-masala.com/images/recipes/bread-pakora-recipe-bread-pakoda.png Bread Pakora Recipe (Bread Pakoda) cooking step 12: For air frying, make the batter slightly thicker, coat the sandwiches, and place them on parchment. Air fry at 200°C (400°F) for 8 minutes, turn carefully, then air fry for 6 to 7 minutes more until crisp and browned., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Bread Pakora Recipe (Bread Pakoda), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

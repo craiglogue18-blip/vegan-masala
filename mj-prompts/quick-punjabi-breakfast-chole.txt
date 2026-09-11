@@ -1,0 +1,43 @@
+# Midjourney Prompts — Punjabi Breakfast Chole
+File: content/recipes/quick-punjabi-breakfast-chole.mdx
+Slug: quick-punjabi-breakfast-chole
+Hero reference: https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png
+
+## 1) HERO (generate first)
+Punjabi Breakfast Chole, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 1: In a large saucepan, add 1 can of drained and rinsed chickpeas, 1/2 tsp baking powder, 1 tsp salt, 1 tea bag, and 3 cups of water. Bring to a boil, then lower the heat and simmer for 15 minutes until the chickpeas are tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 2: While the chickpeas are cooking, prepare the onion, green chili, and other spices so they are ready to use., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 3: In a large non-stick wok or saucepan, heat 2 tbsp oil over medium heat, then add 1 bay leaf, 2 cardamom pods, 1-inch cinnamon stick, and 1 tsp whole cumin seeds. Fry for 1-2 minutes until the spices start to sputter., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 4: Add the finely chopped onion and cook until golden brown, about 10-15 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 5: Stir in the grated ginger, minced garlic, and diced green chili, cooking for another 1-2 minutes until aromatic., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 6: Add the curry spices: ½ tsp kasuri methi, ¼ tsp turmeric powder, 1 tsp chili powder, 1 tsp coriander powder, ½ tsp cumin powder, ½ tsp garam masala, and 1 tsp aamchur. Allow the spices to cook for about 1 minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 7: Incorporate 1½ cups of crushed tomatoes, cooking on medium-low heat while stirring regularly until the tomatoes break down and some liquid evaporates, about 5-7 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 8: Remove the tea bag from the chickpeas and then add the chickpeas with their cooking water to the tomato mixture. Stir well, bring to a gentle boil, and let it simmer for 5-10 minutes. Adjust the seasoning and add more water if a thinner consistency is desired., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 9: In a small frying pan, heat 3 tbsp oil for tempering. Once hot, add 2 dried red chilies, ¼ tsp turmeric powder, ¼ tsp garam masala, and optional ¼ tsp red chili powder. Cook for 1-2 minutes until the spices are fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/quick-punjabi-breakfast-chole.png Punjabi Breakfast Chole cooking step 10: Drizzle the tempering oil over the hot chole just before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Punjabi Breakfast Chole, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

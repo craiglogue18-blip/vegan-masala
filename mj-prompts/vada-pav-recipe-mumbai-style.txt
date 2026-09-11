@@ -1,0 +1,61 @@
+# Midjourney Prompts — Vada Pav Recipe (Mumbai Style)
+File: content/recipes/vada-pav-recipe-mumbai-style.mdx
+Slug: vada-pav-recipe-mumbai-style
+Hero reference: https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png
+
+## 1) HERO (generate first)
+Vada Pav Recipe (Mumbai Style), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 1: Soak ½ cup tamarind in 1.75 cups hot water for 30 to 40 minutes. Squeeze the pulp well and strain it into a bowl., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 2: Heat 1 teaspoon of the oil in a small pan on low heat. Add ½ teaspoon cumin seeds and let them crackle, then stir in ½ teaspoon ginger powder, ¼ teaspoon red chilli powder, and 1 pinch asafoetida for a few seconds., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 3: Add the tamarind pulp, then cook for 2 to 3 minutes. Stir in 7 to 8 tablespoons jaggery and salt or black salt, and simmer until the chutney thickens. Let it cool., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 4: Boil or steam 350 grams of potatoes until fork-tender. Peel and mash them while still warm., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 5: Crush 1 to 2 green chillies and 6 to 7 cloves of garlic to a semi-fine paste with a mortar and pestle., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 6: Heat the remaining 1 teaspoon oil in a small pan. Add ½ teaspoon mustard seeds and let them pop, then add 7 to 8 curry leaves, 1 pinch asafoetida, and ⅛ teaspoon turmeric powder., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 7: Add the green chilli-garlic paste and cook just until the raw smell fades. Do not let the garlic brown., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 8: Mix the tempering into the mashed potatoes with 1 to 2 tablespoons chopped coriander leaves and salt. Shape the mixture into small to medium flattened balls and set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 9: In a bowl, whisk 1 to 1.25 cups gram flour, ⅛ teaspoon turmeric powder, 1 pinch asafoetida, and 1 pinch baking soda if using. Add ½ cup water gradually to make a thick, smooth batter that coats the potato balls., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 10: Heat oil for deep frying in a kadai. Dip each potato patty into the batter and coat it evenly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 11
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 11: Fry the coated vadas in hot oil until golden and crisp, turning them as needed for even colour. Drain on paper towels., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 12
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 12: If using, fry 3 to 4 green chillies until blistered and season them with a little salt., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 13
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 13: For the green chutney, blend 1 cup chopped coriander leaves, 1 to 2 cloves of garlic, 2 to 3 drops lemon juice, 2 to 3 green chillies, and salt to a coarse paste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 14
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 14: Split the 8 pav without cutting all the way through. Spread green chutney, tamarind chutney, and dry garlic chutney, if using, inside each roll., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 15
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 15: Place one hot vada in each pav and serve at once with the fried chillies., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 16
+https://www.vegan-masala.com/images/recipes/vada-pav-recipe-mumbai-style.png Vada Pav Recipe (Mumbai Style) cooking step 16: Serve the vada pav right away, while the pav is still soft and the vada stays crisp., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vada Pav Recipe (Mumbai Style), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

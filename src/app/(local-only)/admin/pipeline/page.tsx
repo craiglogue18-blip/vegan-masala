@@ -10,6 +10,7 @@ export default function AdminPipelinePage() {
   const [importUrl, setImportUrl] = useState("");
 
   const [skipRewrite, setSkipRewrite] = useState(false);
+  const [skipRecraftImage, setSkipRecraftImage] = useState(true);
   const [skipQuantities, setSkipQuantities] = useState(false);
   const [skipStructure, setSkipStructure] = useState(false);
   const [skipImages, setSkipImages] = useState(false);
@@ -57,6 +58,7 @@ export default function AdminPipelinePage() {
           slug,
           importUrl,
           skipRewrite,
+          skipRecraftImage,
           skipQuantities,
           skipStructure,
           skipImages,
@@ -158,6 +160,10 @@ export default function AdminPipelinePage() {
           <label className="flex items-center gap-3 text-sm text-[var(--text-soft)]">
             <input type="checkbox" checked={skipRewrite} onChange={(e) => setSkipRewrite(e.target.checked)} />
             Skip AI rewrite
+          </label>
+          <label className="flex items-center gap-3 text-sm text-[var(--text-soft)]">
+            <input type="checkbox" checked={skipRecraftImage} onChange={(e) => setSkipRecraftImage(e.target.checked)} />
+            Skip new Recraft hero images
           </label>
           <label className="flex items-center gap-3 text-sm text-[var(--text-soft)]">
             <input type="checkbox" checked={skipQuantities} onChange={(e) => setSkipQuantities(e.target.checked)} />

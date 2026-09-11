@@ -41,6 +41,11 @@ yarn-error.log*
 next-env.d.ts
 vegan-masala.zip
 
+# local working copies and rendered review artefacts
+*.bak-*
+/output/
+/tmp/
+
 # local artifacts
 vegan-masala.zip
 

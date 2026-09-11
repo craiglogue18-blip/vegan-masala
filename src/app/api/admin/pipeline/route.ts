@@ -70,6 +70,7 @@ export async function POST(req: Request) {
   const importUrl = String(body?.importUrl ?? "").trim();
 
   const skipRewrite = !!body?.skipRewrite;
+  const skipRecraftImage = !!body?.skipRecraftImage;
   const skipQuantities = !!body?.skipQuantities;
   const skipStructure = !!body?.skipStructure;
   const skipImages = !!body?.skipImages;
@@ -105,6 +106,7 @@ export async function POST(req: Request) {
   }
 
   if (skipRewrite) args.push("--skip-rewrite");
+  if (skipRecraftImage) args.push("--skip-recraft-image");
   if (skipQuantities) args.push("--skip-quantities");
   if (skipStructure) args.push("--skip-structure");
   if (skipImages) args.push("--skip-images");

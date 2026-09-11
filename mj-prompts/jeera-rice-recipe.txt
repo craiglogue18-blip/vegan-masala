@@ -1,0 +1,28 @@
+# Midjourney Prompts — Jeera Rice Recipe
+File: content/recipes/jeera-rice-recipe.mdx
+Slug: jeera-rice-recipe
+Hero reference: https://www.vegan-masala.com/images/recipes/jeera-rice-recipe.png
+
+## 1) HERO (generate first)
+Jeera Rice Recipe, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/jeera-rice-recipe.png Jeera Rice Recipe cooking step 1: Heat 1 tsp oil in a skillet over medium heat. Add 2 teaspoons cumin seeds, 2 bay leaves, 4 green cardamom pods and 4 cloves, and let them sizzle until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/jeera-rice-recipe.png Jeera Rice Recipe cooking step 2: Stir in 2 cups raw basmati rice and cook for about 1 minute, just until the grains look opaque at the edges., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/jeera-rice-recipe.png Jeera Rice Recipe cooking step 3: Pour in 4 cups water and add salt to taste; it should taste a little saltier than you want the finished rice. Add a generous pinch of saffron and bring to a boil over medium-high heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/jeera-rice-recipe.png Jeera Rice Recipe cooking step 4: As the rice cooks, stir once or twice so it does not catch. When most of the water has been absorbed, cover the pot tightly, lower the heat to the smallest flame and cook for 15 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/jeera-rice-recipe.png Jeera Rice Recipe cooking step 5: Turn off the heat and leave the rice covered for 10 minutes. Fluff gently with a fork before serving so the grains stay separate., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Jeera Rice Recipe, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

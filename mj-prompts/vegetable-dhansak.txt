@@ -1,0 +1,37 @@
+# Midjourney Prompts — Vegetable dhansak
+File: content/recipes/vegetable-dhansak.mdx
+Slug: vegetable-dhansak
+Hero reference: https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png
+
+## 1) HERO (generate first)
+Vegetable dhansak, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png Vegetable dhansak cooking step 1: Preheat the oven to 200C/180C Fan/Gas 6., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png Vegetable dhansak cooking step 2: On a baking tray, combine 500g sweet potatoes (cubed) and 1 small cauliflower (cut into florets) with ½ tbsp oil and a pinch of salt and pepper. Roast for 20–25 minutes until golden brown., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png Vegetable dhansak cooking step 3: In a large casserole pan, heat the remaining ½ tbsp oil over medium heat. Add 1 large onion (thinly sliced) and fry for about 5 minutes until it turns golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png Vegetable dhansak cooking step 4: Stir in 2 carrots (cubed), 3 garlic cloves (grated), 20g ginger (grated), 1 tsp turmeric, and 1 heaped tbsp garam masala, cooking for another minute until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png Vegetable dhansak cooking step 5: Add 200g lentils to the pot, followed by the 400g tin of chopped tomatoes and 600ml vegetable stock. Bring to a boil, then reduce to a simmer for 15 minutes, stirring occasionally., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png Vegetable dhansak cooking step 6: Introduce the roasted sweet potatoes and cauliflower, cooking for an additional 10 minutes until the lentils are soft and the sauce thickens., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png Vegetable dhansak cooking step 7: Finally, add 150g green beans or peas and cook for another 5 minutes. If the sauce thickens too much, add a splash of water to reach your desired consistency., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/vegetable-dhansak.png Vegetable dhansak cooking step 8: Taste and adjust seasoning before serving with basmati rice, a dollop of vegan yoghurt, flatbreads, and fresh coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegetable dhansak, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

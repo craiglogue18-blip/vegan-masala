@@ -1,0 +1,34 @@
+# Midjourney Prompts — Vegetable balti
+File: content/recipes/vegetable-balti.mdx
+Slug: vegetable-balti
+Hero reference: https://www.vegan-masala.com/images/recipes/vegetable-balti.png
+
+## 1) HERO (generate first)
+Vegetable balti, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegetable-balti.png Vegetable balti cooking step 1: To prepare the curry paste, blend together 12 garlic cloves, 3 pieces of ginger, 8 red chillies, 3 tbsp ground cumin, 3 tbsp ground coriander, 1 tbsp ground cinnamon, 3 tbsp garam masala, and 3 tbsp tomato purée with 125ml/4fl oz of water until smooth. Use one quarter immediately and freeze the remainder in ice-cube trays or small containers for future use., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegetable-balti.png Vegetable balti cooking step 2: Heat 1 tsp vegetable oil in a wok, saucepan, or karahi pan over medium heat. Add 1 thinly sliced onion and cook for 3–4 minutes, stirring until it begins to soften., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegetable-balti.png Vegetable balti cooking step 3: In a separate lidded saucepan, combine 300g rinsed long-grain rice with 600ml water. Bring to a boil, then reduce heat to the lowest setting, cover, and cook for 15 minutes. Remove from heat while keeping the lid on until the balti is finished., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegetable-balti.png Vegetable balti cooking step 4: Stir in one quarter of the prepared curry paste with the onions and cook for 2–3 minutes, allowing the spices to bloom. Add ½ small cauliflower head, ½ small butternut squash, 1 courgette, and 2 peppers, stirring well to combine., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vegetable-balti.png Vegetable balti cooking step 5: Pour in the 400g tin of chopped tomatoes and the remaining 400ml water, along with 1 crumbled vegetable stock cube. Simmer uncovered for 15–20 minutes, or until the vegetables are tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vegetable-balti.png Vegetable balti cooking step 6: In the final 2 minutes of cooking, stir in 160g frozen peas. Season with the zest and juice of 1 lime, along with salt and freshly ground black pepper to taste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/vegetable-balti.png Vegetable balti cooking step 7: Serve the balti alongside the fluffy rice, garnished with 2 tbsp chopped fresh coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegetable balti, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

@@ -1,0 +1,34 @@
+# Midjourney Prompts — Tarka dal
+File: content/recipes/tarka-dal.mdx
+Slug: tarka-dal
+Hero reference: https://www.vegan-masala.com/images/recipes/tarka-dal.png
+
+## 1) HERO (generate first)
+Tarka dal, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/tarka-dal.png Tarka dal cooking step 1: In a saucepan, combine the 250g chana dal with 900ml of the water. Bring to a boil, skim off any froth, then cover and reduce to a simmer for 35–40 minutes, stirring regularly until the lentils are tender; adjust with more water if needed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/tarka-dal.png Tarka dal cooking step 2: Once the lentils are cooked, remove from heat and whisk to break them down. Set aside to thicken and cool slightly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/tarka-dal.png Tarka dal cooking step 3: While the lentils are cooking, heat 3 tbsp vegetable oil in a frying pan over medium heat. Add 1 tbsp cumin seeds and fry for 20–30 seconds until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/tarka-dal.png Tarka dal cooking step 4: Incorporate the chopped onion, pricked green chillies, and ginger strips; sauté for 4–5 minutes until the onion is softened and golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/tarka-dal.png Tarka dal cooking step 5: Purée the 3 garlic cloves and 3 medium tomatoes in a food processor, then add the mixture to the pan, stirring to combine., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/tarka-dal.png Tarka dal cooking step 6: Mix in the ¾ tsp ground turmeric, ¾ tsp garam masala, 1½ tsp ground coriander, the remaining 100ml water, and 1 tsp salt. Stir well and let it simmer for 15–20 minutes until the oil rises to the surface., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/tarka-dal.png Tarka dal cooking step 7: Stir in the cooked lentils, adding more water as needed to reach your desired consistency. Bring to a gentle boil and taste for seasoning. Just before serving, fold in 2 tbsp chopped fresh coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Tarka dal, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

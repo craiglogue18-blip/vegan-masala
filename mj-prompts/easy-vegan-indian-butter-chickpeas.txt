@@ -1,0 +1,31 @@
+# Midjourney Prompts — Easy Vegan Indian “Butter” Chickpeas
+File: content/recipes/easy-vegan-indian-butter-chickpeas.mdx
+Slug: easy-vegan-indian-butter-chickpeas
+Hero reference: https://www.vegan-masala.com/images/recipes/easy-vegan-indian-butter-chickpeas.png
+
+## 1) HERO (generate first)
+Easy Vegan Indian “Butter” Chickpeas, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/easy-vegan-indian-butter-chickpeas.png Easy Vegan Indian “Butter” Chickpeas cooking step 1: If using soy curls, prepare according to package directions, then drain and squeeze out excess water before setting aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/easy-vegan-indian-butter-chickpeas.png Easy Vegan Indian “Butter” Chickpeas cooking step 2: In a small bowl, combine 1 teaspoon garlic powder, 1 teaspoon onion powder, 2 Tablespoons dried minced onions, 1 Tablespoon + 1 teaspoon curry powder, 1 teaspoon garam masala, ½ teaspoon smoked paprika, and cayenne pepper; set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/easy-vegan-indian-butter-chickpeas.png Easy Vegan Indian “Butter” Chickpeas cooking step 3: In a large deep skillet or Dutch oven, heat 1 cup finely diced onions over medium-high heat, sautéing for 7 to 9 minutes until softened. Lower the heat to medium, and add 1 Tablespoon minced garlic, 1 Tablespoon minced ginger, and 2 Tablespoons tomato paste. Sauté, stirring constantly for one minute, then add the spice mixture and sauté for another minute to bloom the spices., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/easy-vegan-indian-butter-chickpeas.png Easy Vegan Indian “Butter” Chickpeas cooking step 4: Pour in 1 cup vegetable broth, 1 can (14 oz) petite diced tomatoes, and 2 Tablespoons reduced sodium tamari, scraping the bottom of the pot to release any adhered spices. Stir to incorporate, increase heat to bring to a boil, then lower to a simmer. Add 2 cans (15 oz each) drained and rinsed chickpeas and simmer on low for 5 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/easy-vegan-indian-butter-chickpeas.png Easy Vegan Indian “Butter” Chickpeas cooking step 5: Stir in 1 cup light coconut milk and cayenne pepper, continuing to simmer for another 5 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/easy-vegan-indian-butter-chickpeas.png Easy Vegan Indian “Butter” Chickpeas cooking step 6: Taste and adjust seasonings as needed before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Easy Vegan Indian “Butter” Chickpeas, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

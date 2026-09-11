@@ -1,0 +1,37 @@
+# Midjourney Prompts — Sweet Potato Chickpea Curry (Easy + Vegan)
+File: content/recipes/sweet-potato-chickpea-curry-easy-vegan.mdx
+Slug: sweet-potato-chickpea-curry-easy-vegan
+Hero reference: https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png
+
+## 1) HERO (generate first)
+Sweet Potato Chickpea Curry (Easy + Vegan), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png Sweet Potato Chickpea Curry (Easy + Vegan) cooking step 1: Preheat the oven to 450°F (230°C)., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png Sweet Potato Chickpea Curry (Easy + Vegan) cooking step 2: In a small bowl, combine the cubed sweet potatoes with 1 tablespoon of the olive oil or aquafaba, 1/2 teaspoon salt, and fresh cracked pepper, tossing to coat. Spread the mixture evenly on a lined baking sheet., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png Sweet Potato Chickpea Curry (Easy + Vegan) cooking step 3: Roast the sweet potatoes for about 30 minutes or until they are fork-tender and lightly browned., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png Sweet Potato Chickpea Curry (Easy + Vegan) cooking step 4: While the sweet potatoes roast, prepare the curry base. In a skillet over medium heat, add the remaining 1 tablespoon oil or aquafaba and 1 chopped onion, then sauté for 3 to 5 minutes until the onion becomes translucent., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png Sweet Potato Chickpea Curry (Easy + Vegan) cooking step 5: Stir in 4 minced garlic cloves, 1 tablespoon minced ginger, 1 teaspoon curry powder, 2 teaspoons cumin, 2 teaspoons coriander, 1 1/2 teaspoons turmeric, and 1 1/2 teaspoons garam masala. Sauté for 1 minute to bloom the spices., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png Sweet Potato Chickpea Curry (Easy + Vegan) cooking step 6: Add 1 x 15 oz can chickpeas, drained and rinsed, 1 x 15 oz can diced tomatoes, 1 cup vegetable broth, 1 1/2 teaspoons salt, and 1/4 teaspoon nutmeg. Stir well and cook for 2 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png Sweet Potato Chickpea Curry (Easy + Vegan) cooking step 7: Pour in the coconut milk and 1 tablespoon lemon juice, stirring to combine. Reduce the heat to low and let it gently simmer for 3 to 5 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/sweet-potato-chickpea-curry-easy-vegan.png Sweet Potato Chickpea Curry (Easy + Vegan) cooking step 8: Once the sweet potatoes are roasted, carefully incorporate them into the curry sauce. Cook for an additional 5 minutes until the sauce reaches your desired consistency, then serve hot, garnished with fresh cilantro., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Sweet Potato Chickpea Curry (Easy + Vegan), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

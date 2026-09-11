@@ -1,0 +1,28 @@
+# Midjourney Prompts — Masala French Toast
+File: content/recipes/masala-french-toast-savory-bombay-toast.mdx
+Slug: masala-french-toast-savory-bombay-toast
+Hero reference: https://www.vegan-masala.com/images/recipes/masala-french-toast-savory-bombay-toast.png
+
+## 1) HERO (generate first)
+Masala French Toast, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/masala-french-toast-savory-bombay-toast.png Masala French Toast cooking step 1: In a wide bowl, combine 2 tablespoons of finely minced red onion, 1 teaspoon of minced green chili, ¼ teaspoon of ground turmeric, ½ teaspoon of kosher salt, 2 tablespoons of finely chopped cilantro, and ⅓ cup of plant-based milk. Whisk these ingredients together until well combined., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/masala-french-toast-savory-bombay-toast.png Masala French Toast cooking step 2: Dip one slice of bread into the mixture, pressing down gently with a fork to ensure it absorbs the eggless mixture. Flip the bread and repeat on the other side., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/masala-french-toast-savory-bombay-toast.png Masala French Toast cooking step 3: Heat a non-stick pan over medium heat and add 2 tablespoons of oil. Once hot, carefully place the soaked bread in the pan, adding some extra onions from the mixture on top. Cook for about a minute or until the bottom side turns golden brown., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/masala-french-toast-savory-bombay-toast.png Masala French Toast cooking step 4: Flip the bread and cook for another minute until the other side is golden brown. Repeat with the second slice of bread., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/masala-french-toast-savory-bombay-toast.png Masala French Toast cooking step 5: Serve hot, accompanied by ketchup and cilantro mint chutney., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Masala French Toast, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

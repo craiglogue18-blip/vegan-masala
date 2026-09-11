@@ -1,0 +1,25 @@
+# Midjourney Prompts — Kachumber (Easy 10-Minute Indian Salad)
+File: content/recipes/kachumber-easy-10-minute-indian-salad.mdx
+Slug: kachumber-easy-10-minute-indian-salad
+Hero reference: https://www.vegan-masala.com/images/recipes/kachumber-easy-10-minute-indian-salad.png
+
+## 1) HERO (generate first)
+Kachumber (Easy 10-Minute Indian Salad), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/kachumber-easy-10-minute-indian-salad.png Kachumber (Easy 10-Minute Indian Salad) cooking step 1: Wash and chop the 1 cup cucumber, 1/2 cup red onion, 1 cup tomato, and the small optional green chili pepper into small pieces., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/kachumber-easy-10-minute-indian-salad.png Kachumber (Easy 10-Minute Indian Salad) cooking step 2: In a bowl, combine the chopped vegetables with 1 tablespoon chopped cilantro leaves, 1/2 teaspoon roasted cumin powder, 1/4 teaspoon red chili powder, 2 teaspoons lemon juice, and 1/4 teaspoon salt., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/kachumber-easy-10-minute-indian-salad.png Kachumber (Easy 10-Minute Indian Salad) cooking step 3: Toss gently so the vegetables stay crisp, then taste and adjust salt or lemon if needed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/kachumber-easy-10-minute-indian-salad.png Kachumber (Easy 10-Minute Indian Salad) cooking step 4: Finish with a few extra cilantro leaves if you like, and serve right away., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Kachumber (Easy 10-Minute Indian Salad), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

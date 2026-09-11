@@ -1,7 +1,7 @@
 # Midjourney Prompts — Dum Aloo (Mughlai Style)
 File: content/recipes/dum-aloo-recipe-mughlai-style.mdx
 Slug: dum-aloo-recipe-mughlai-style
-Hero reference: https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png
+Hero reference: https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png
 
 ## 1) HERO (generate first)
 Dum Aloo (Mughlai Style), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,34 +10,31 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 1: Boil potatoes until almost tender. Drain, cool slightly, peel and prick with a fork., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 1: Boil the 3 medium potatoes until just tender. Drain, cool slightly, peel if needed, and prick them with a fork so they take in the masala., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 2: Blend soaked cashews, onions, ginger, garlic, and fennel seeds into a smooth paste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 2: Blend 1 large onion, chopped, 1 inch ginger, grated, 3 garlic cloves, and 1 tsp fennel seeds with a little water to a smooth paste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 3: Stir in plant yoghurt and blend briefly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 3: Stir 3 tbsp unsweetened plant yoghurt into the paste and blend briefly until even., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 4: Heat oil in a heavy pan and add the whole spices., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 4: Heat 2 tbsp oil in a heavy pan. Add 1 tsp shahi jeera, 1 small cinnamon stick, 3 cloves, 2 green cardamom pods, and 1 bay leaf. Let them sizzle for a few seconds., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 5: Add the prepared onion-cashew paste and cook on low, stirring often, until thick and glossy., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 5: Add the onion paste and cook on low, stirring often, until the raw smell goes and the masala turns thick, darker, and glossy., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 6: Add turmeric, chilli powder, coriander, and garam masala. Stir well., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 6: Add 1 tsp turmeric, 1 tsp chilli powder, 1 tsp garam masala, and 1 tsp salt. Stir for a minute so the spices bloom in the masala., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 7: Add baby potatoes and coat them in the gravy., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 7: Add the potatoes and turn them gently so they are coated all over., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 8
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 8: Pour in water, season with salt, and mix., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 8: Pour in 1 cup water, bring it to a gentle simmer, then cover tightly and cook on low for 10 to 12 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 9
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 9: Cover tightly and cook on low heat for 10–12 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
-
-### Step 10
-https://vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 10: Rest briefly, garnish with fresh coriander, and serve., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/dum-aloo-recipe-mughlai-style.png Dum Aloo (Mughlai Style) cooking step 9: Uncover and cook for a minute or two if needed to thicken the gravy slightly. Finish with 2 tbsp fresh coriander, chopped, and rest for a few minutes before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Dum Aloo (Mughlai Style), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

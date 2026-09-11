@@ -1,0 +1,25 @@
+# Midjourney Prompts — Sambar
+File: content/recipes/sambar.mdx
+Slug: sambar
+Hero reference: https://www.vegan-masala.com/images/recipes/sambar.png
+
+## 1) HERO (generate first)
+Sambar, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/sambar.png Sambar cooking step 1: In a large, deep pan, bring 1.5 litres/2½ pints of water to a boil. Add 100g of toor dal, 1 chopped onion, 100g chopped carrots, 100g chopped pumpkin, 100g green beans, and 1 chopped tomato. Lower the heat to medium-low and simmer uncovered for 30 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/sambar.png Sambar cooking step 2: Stir in 1½ tsp ground turmeric, 1½ tsp sugar, and 1½ tsp salt, then simmer gently for a further 15 minutes, or until the dal is tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/sambar.png Sambar cooking step 3: Meanwhile, prepare the masala by heating 50ml of vegetable oil in a frying pan over medium heat. Add 1 tsp chana dal, 1 tsp fenugreek seeds, 1 tsp coriander seeds, 4 dried Kashmiri chillies, a handful of fresh curry leaves and 1 tsp asafoetida. Fry for 30 seconds to one minute, or until fragrant. Transfer this mixture to a spice grinder, blend to a paste, and stir it into the simmering vegetables., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/sambar.png Sambar cooking step 4: For the tarka, heat 2 tbsp of vegetable oil in a clean frying pan over medium heat. Add 1 finely chopped onion, 1 tsp black mustard seeds, and 1½ tsp fenugreek seeds. Fry for about 10 minutes until the onion softens and turns golden-brown. Pour this tarka into the sambar and mix well before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Sambar, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

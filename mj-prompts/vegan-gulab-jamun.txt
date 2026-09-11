@@ -1,0 +1,37 @@
+# Midjourney Prompts — Vegan Gulab Jamun
+File: content/recipes/vegan-gulab-jamun.mdx
+Slug: vegan-gulab-jamun
+Hero reference: https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png
+
+## 1) HERO (generate first)
+Vegan Gulab Jamun, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png Vegan Gulab Jamun cooking step 1: In a saucepan, combine 1 ½ cups sugar and 1 ½ cups water. Bring to a boil, then reduce to a simmer and add the crushed cardamom and 1 tbsp lemon juice. Cook for another five minutes before turning off the heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png Vegan Gulab Jamun cooking step 2: In a mixing bowl, combine 2 ½ cups white bread crumbs with ½ cup blended cashew cream, adding the cream gradually until you form a smooth, pliable dough that is not too stiff or dry., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png Vegan Gulab Jamun cooking step 3: Divide the dough into 14 pieces and roll each piece into a smooth ball, ensuring no cracks are visible on the surface. Grease your palms with a little oil to help with shaping., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png Vegan Gulab Jamun cooking step 4: Heat vegetable oil in a wok or deep fryer to about 300°F (150°C). Ensure the oil is not too hot, as this could result in quick browning without thorough cooking., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png Vegan Gulab Jamun cooking step 5: Carefully add a few jamuns at a time into the hot oil, ensuring not to overcrowd the pan. The oil should bubble gently. Use a slotted ladle to keep them moving until they attain a deep reddish color., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png Vegan Gulab Jamun cooking step 6: Once cooked, remove the jamuns to a plate lined with paper towels. While still warm and manageable, poke small holes in each jamun using a thin pin or needle to facilitate syrup absorption., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png Vegan Gulab Jamun cooking step 7: Immerse the jamuns in the warm syrup, ensuring they are fully submerged. Allow them to soak for at least 3 hours before serving, giving them time to absorb the syrup., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/vegan-gulab-jamun.png Vegan Gulab Jamun cooking step 8: Serve the jamuns drizzled with syrup and a sprinkle of chopped nuts if desired., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegan Gulab Jamun, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

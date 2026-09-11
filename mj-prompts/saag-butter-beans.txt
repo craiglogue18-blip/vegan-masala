@@ -1,0 +1,28 @@
+# Midjourney Prompts — Saag Butter Beans
+File: content/recipes/saag-butter-beans.mdx
+Slug: saag-butter-beans
+Hero reference: https://www.vegan-masala.com/images/recipes/saag-butter-beans.png
+
+## 1) HERO (generate first)
+Saag Butter Beans, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/saag-butter-beans.png Saag Butter Beans cooking step 1: In a large skillet, heat 1 teaspoon of oil over medium heat. Once hot, add 1/2 teaspoon cumin seeds and cook until they turn dark brown and fragrant, about 1 to 3 minutes. Add 2 bay leaves and a 1-inch cinnamon stick, stirring for 10 seconds before mixing in 2 teaspoons ground coriander, 1/2 teaspoon Kashmiri chili powder, 1/2 to 1 teaspoon garam masala, 1/2 teaspoon dried fenugreek leaves, and 1/4 to 1/2 teaspoon black pepper. If the spices begin to smoke, reduce the heat to medium-low and stir in 1 cup chopped red onion and 1/4 teaspoon of the salt., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/saag-butter-beans.png Saag Butter Beans cooking step 2: Raise the heat back to medium and cook, adding splashes of water as needed, until the onion is slightly browned and coated with the spices, about 6 to 8 minutes. Once roasted, mix in 1 tablespoon ginger garlic paste and 1 tablespoon tomato paste, followed by a splash of water. Add the remaining 1/4 teaspoon salt, then stir in 7 to 8 ounces of frozen spinach, 1 cup of water, and 1/4 cup non-dairy yogurt. Gently fold in 15 ounces of drained butter beans. Cover and simmer for 6 to 8 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/saag-butter-beans.png Saag Butter Beans cooking step 3: Taste and adjust salt and spices. If the consistency is too thick, add more water or non-dairy milk to reach your desired texture. For a thicker saag, cook uncovered for another minute or two. Garnish with pepper flakes and vegan parmesan., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/saag-butter-beans.png Saag Butter Beans cooking step 4: In a small skillet, heat 1 teaspoon of oil over medium heat. Break 1 whole red chili in half and add it to the oil, cooking until it begins to change color. Add 1 sliced clove of garlic, stirring until golden on the edges and fragrant; if needed, cook over medium-low heat for another minute or two., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/saag-butter-beans.png Saag Butter Beans cooking step 5: Drizzle the garlic chili oil over the saag butter beans. Serve with naan, roti, or over rice for a fulfilling meal, or try it spooned over sourdough for a unique toast option., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Saag Butter Beans, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

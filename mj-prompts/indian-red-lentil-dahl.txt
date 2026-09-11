@@ -1,7 +1,7 @@
 # Midjourney Prompts — Creamy Red Lentil Dahl
 File: content/recipes/indian-red-lentil-dahl.mdx
 Slug: indian-red-lentil-dahl
-Hero reference: https://vegan-masala.com/images/recipes/indian-red-lentil-dahl.png
+Hero reference: https://www.vegan-masala.com/images/recipes/indian-red-lentil-dahl.png
 
 ## 1) HERO (generate first)
 Creamy Red Lentil Dahl, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,25 +10,25 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 1: Heat the coconut oil in a saucepan and sauté the onion until soft., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 1: Heat 2 tbsp coconut oil in a saucepan over medium heat. Add 1 large onion, chopped, and cook until soft and lightly golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 2: Add the garlic and ginger; cook until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 2: Stir in 3 garlic cloves, minced, and 1-inch piece of ginger, grated. Cook for 30 seconds, until the raw edge fades., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 3: Stir in the turmeric, cumin, paprika, and garam masala. Cook briefly to release their aroma., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 3: Add 1 tsp turmeric, 1 tsp paprika, 1 tsp garam masala, and 1 tsp ground cumin. Stir for a minute so the spices bloom in the oil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 4: Add the rinsed lentils and vegetable broth. Bring to a simmer and cook for 8–10 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 4: Add 2 medium tomatoes, chopped, and cook until they break down into a thick masala and the oil starts to show at the edges., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 5: Stir in the coconut milk and chopped tomatoes. Simmer until the lentils are soft., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 5: Stir in 1 cup red lentils, rinsed, and 4 cups vegetable broth. Bring to a gentle simmer and cook for 8 to 10 minutes, stirring now and then., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-https://vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 6: Adjust seasoning with salt, pepper, coconut sugar, and lemon juice., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 6: Add 1 tin coconut milk and 1 tsp salt. Simmer until the lentils are very soft and the dal has a creamy, spoonable body., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-https://vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 7: Serve with rice and garnish with fresh coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/indian-red-lentil-dahl.png Creamy Red Lentil Dahl cooking step 7: Taste and adjust with coconut sugar, if needed, and 1 tbsp lemon juice. Finish with 2 tbsp fresh coriander, chopped, and serve hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Creamy Red Lentil Dahl, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

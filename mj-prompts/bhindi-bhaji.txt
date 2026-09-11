@@ -1,0 +1,25 @@
+# Midjourney Prompts — Bhindi Bhaji
+File: content/recipes/bhindi-bhaji.mdx
+Slug: bhindi-bhaji
+Hero reference: https://www.vegan-masala.com/images/recipes/bhindi-bhaji.png
+
+## 1) HERO (generate first)
+Bhindi Bhaji, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/bhindi-bhaji.png Bhindi Bhaji cooking step 1: In a large wok or frying pan, heat 2 tablespoons of sunflower oil over medium heat. Once hot, add 1 teaspoon of cumin seeds; when they sizzle, add 8 thinly sliced garlic cloves and 15g of thinly sliced ginger. Saute for 1 minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/bhindi-bhaji.png Bhindi Bhaji cooking step 2: Next, add 500g of prepared bhindi (okra) and 2–3 halved green chillies. Stir and cook for 8 minutes, allowing the okra to soften., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/bhindi-bhaji.png Bhindi Bhaji cooking step 3: Incorporate 2 teaspoons of tomato purée, 1 teaspoon of turmeric, 1 teaspoon of salt, 1 teaspoon of amchoor, and 2 teaspoons of ground coriander. Stir well and cook for another 2 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/bhindi-bhaji.png Bhindi Bhaji cooking step 4: Finally, stir in 175ml of coconut milk and simmer for 8 more minutes, until the bhindi is tender yet retains its bite. Serve hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Bhindi Bhaji, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

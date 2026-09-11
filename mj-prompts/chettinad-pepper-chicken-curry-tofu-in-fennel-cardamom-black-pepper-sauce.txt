@@ -1,0 +1,40 @@
+# Midjourney Prompts — Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce)
+File: content/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.mdx
+Slug: chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce
+Hero reference: https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png
+
+## 1) HERO (generate first)
+Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 1: Press and tear the 14 ounces of tofu into 3/4" pieces, then place them in a bowl. Add 1 tablespoon of non-dairy yogurt and toss to coat evenly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 2: In a small bowl, combine 2 teaspoons of freshly ground black pepper, 1 tablespoon of ground coriander, 1/8 teaspoon of fennel seed powder, 1/2 teaspoon of cayenne, and 1/4 teaspoon of salt. Reserve 1 teaspoon of this spice mix to add to the sauce, then toss the remaining mix with the tofu for an even coating., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 3: To cook the tofu, heat 2 teaspoons of oil in a skillet over medium-high heat. When hot, add the tofu and cook for 8 minutes, flipping every 2-3 minutes, until golden on most edges. Remove from the skillet and set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 4: In the same skillet, add 2 teaspoons of oil and heat over medium. When hot, add 1/4 teaspoon of fennel seeds, cooking for about 15 seconds until they start changing color. Add the 2 green cardamom pods and 2-inch cinnamon stick, stirring for another 10 seconds until fragrant. Mix in 1 1/2 cups of chopped onion and a pinch of salt, cooking for 2 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 5: Stir in 10 curry leaves and 1 dried red chili (or chili flakes), cooking until the onion is golden, about 5-7 minutes, adding splashes of water to encourage even cooking., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 6: Incorporate 1 cup of chopped tomato, 1/2 teaspoon of salt, and a splash of water, stirring until the tomatoes become jammy, about 3-5 minutes. Press down on larger tomato pieces to aid this process., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 7: Add the reserved spice mix, 2 tablespoons of ginger garlic paste, and another splash of water, cooking for an additional minute if using minced ginger and garlic. Pour in 1 cup of water and 1 teaspoon of lime juice, mixing well, and bring to a boil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 8: Gently fold the crispy tofu into the sauce, cover, and simmer for another 3-5 minutes. For added creaminess, stir in 3 tablespoons of coconut cream or more non-dairy yogurt. Remove from heat and garnish with cilantro and extra lime juice as desired., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/chettinad-pepper-chicken-curry-tofu-in-fennel-cardamom-black-pepper-sauce.png Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce) cooking step 9: Serve the curry with naan, dosa, or rice for a fulfilling meal., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Chettinad Pepper Chicken Curry (Tofu in Fennel Cardamom Black Pepper Sauce), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

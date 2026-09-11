@@ -1,0 +1,43 @@
+# Midjourney Prompts — Tofu Kondattam (South Indian Spicy Crispy Tofu)
+File: content/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.mdx
+Slug: tofu-kondattam-south-indian-spicy-crispy-tofu
+Hero reference: https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png
+
+## 1) HERO (generate first)
+Tofu Kondattam (South Indian Spicy Crispy Tofu), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 1: Preheat the oven to 400°F (205°C)., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 2: Place the pressed tofu in a bowl. Add 1 teaspoon oil and toss gently., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 3: Mix 1/2 teaspoon salt, 1/8 teaspoon turmeric, 1 teaspoon Kashmiri chili powder, 1/2 teaspoon black pepper, 1/2 teaspoon garlic powder, and 2 tablespoons cornstarch in a small bowl. Sprinkle over the tofu and toss until the pieces are evenly coated., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 4: Spread the tofu on a parchment-lined baking sheet in a single layer and bake for 22 to 28 minutes, until crisp at the edges. For stovetop cooking, heat 1 teaspoon of the divided oil in a skillet over medium-high heat and cook the tofu until browned and crisp on most sides, about 5 to 6 minutes total. Remove to a plate., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 5: In the same skillet, heat the remaining 1 teaspoon oil over medium-high heat. Add 2 small dried red chilies and 10 curry leaves and stir for a few seconds until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 6: Add 3/4 cup sliced onion and 1/4 teaspoon salt. Cook for 3 to 4 minutes, stirring often, until the edges take on some colour. Add a splash of water if the pan looks dry., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 7: Stir in 1 slit green chili and 2 to 3 tablespoons sliced green bell pepper. Cook for 1 minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 8: Add 2 tablespoons ginger garlic paste, 1 1/2 teaspoons Kashmiri chili powder, 1/2 to 1 teaspoon garam masala, 2 tablespoons soy sauce, and 2 tablespoons ketchup. Cook for 1 to 2 minutes, stirring through the onions and peppers., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 9: Stir in 1 teaspoon cornstarch mixed with 1/2 cup water and simmer until the sauce turns glossy and lightly thickened., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/tofu-kondattam-south-indian-spicy-crispy-tofu.png Tofu Kondattam (South Indian Spicy Crispy Tofu) cooking step 10: Add the tofu and toss to coat. Turn off the heat, then finish with green onions, cilantro, and a squeeze of lime juice., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Tofu Kondattam (South Indian Spicy Crispy Tofu), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

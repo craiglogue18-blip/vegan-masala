@@ -1,0 +1,43 @@
+# Midjourney Prompts — Masala Fried Rice with Turmeric Onion Raita
+File: content/recipes/masala-fried-rice-with-turmeric-onion-raita.mdx
+Slug: masala-fried-rice-with-turmeric-onion-raita
+Hero reference: https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png
+
+## 1) HERO (generate first)
+Masala Fried Rice with Turmeric Onion Raita, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 1: Heat 1 teaspoon oil in a large skillet over medium heat. Add 1/2 teaspoon cumin seeds and let them crackle for about 1 minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 2: Stir in 1/2 cup chopped onion, 4 cloves garlic, and 1 inch ginger. Cook for 3 minutes, until the onion softens and loses its raw edge., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 3: Add 1 teaspoon ground coriander, 1 teaspoon garam masala, 1/2 teaspoon smoked paprika, and 1/4 to 1/2 teaspoon cayenne. Stir and cook for 1 minute so the spices bloom in the oil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 4: Add 1.5 to 2 cups chopped vegetables and 1/4 teaspoon salt, then pour in 1/4 cup water. Cook for 8 to 9 minutes, stirring now and then, until the harder vegetables begin to soften., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 5: Stir in 1/2 cup carrot, 1 cup peppers, and 1/2 cup green peas. Cover and cook for 3 to 4 minutes, until the vegetables are crisp-tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 6: Add 3 cups cooked rice and lemon juice to taste. Toss well, breaking up any clumps, and cook for 2 minutes until the rice is hot. Adjust with the remaining salt as needed, then take the pan off the heat and rest for 2 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 7: While the rice cooks, whisk 1 cup plain unsweetened non-dairy yogurt with 1/4 cup water until smooth., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 8: In a small saucepan, heat 1 teaspoon oil over medium heat. Add 1/2 teaspoon mustard seeds and cook until they pop, then add 6 curry leaves, if using, and 1/4 cup sliced onion. Cook for 3 minutes, stirring often, until the onion softens., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 9: Stir in 1/2 teaspoon turmeric and 1/4 teaspoon cayenne for a few seconds, then add the yogurt mixture and 1/4 teaspoon salt. Simmer gently for 2 minutes without letting it boil. Fold in chopped cilantro or mint if you like., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/masala-fried-rice-with-turmeric-onion-raita.png Masala Fried Rice with Turmeric Onion Raita cooking step 10: Serve the fried rice with the turmeric onion raita spooned over the top or passed at the table., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Masala Fried Rice with Turmeric Onion Raita, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

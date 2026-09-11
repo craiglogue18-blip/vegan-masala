@@ -1,7 +1,7 @@
 # Midjourney Prompts — Bengali Phulkopir Aloo Dalna
 File: content/recipes/bengali-phulkopir-aloo-dalna.mdx
 Slug: bengali-phulkopir-aloo-dalna
-Hero reference: https://vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png
+Hero reference: https://www.vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png
 
 ## 1) HERO (generate first)
 Bengali Phulkopir Aloo Dalna, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,19 +10,22 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 1: Heat oil in a pan and add mustard and cumin seeds. Once they splutter, add grated ginger and slit green chillies., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 1: Heat 2 tbsp oil in a pan over medium heat. Add 1 tsp mustard seeds and 1 tsp cumin seeds, and let them crackle., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 2: Stir in the turmeric, coriander, and chilli powder, and sauté for a minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 2: Add 1 inch ginger, grated, and 2 green chillies, finely chopped. Stir for 20 to 30 seconds until the raw smell eases., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 3: Add diced potatoes and cauliflower florets. Mix well to coat the vegetables with the spices., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 3: Stir in 1 tsp chilli powder, 1/2 tsp turmeric powder and 2 tsp coriander powder. Cook briefly so the spices bloom in the oil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 4: Pour in the water, add salt, and cover the pan. Cook on medium heat until the vegetables are tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 4: Add 1 small cauliflower, cut into florets, and 3 medium potatoes, cubed. Turn them through the masala until the surface is well coated., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 5: Once cooked, garnish with fresh coriander before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 5: Pour in 1 cup water and add 1 tsp salt. Cover and cook on medium heat until the potatoes are tender and the cauliflower is soft but still holding its shape., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/bengali-phulkopir-aloo-dalna.png Bengali Phulkopir Aloo Dalna cooking step 6: Uncover and simmer for a few minutes if needed to reduce the liquid slightly. Finish with 2 tbsp fresh coriander, chopped, and serve hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Bengali Phulkopir Aloo Dalna, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

@@ -1,0 +1,25 @@
+# Midjourney Prompts — Coconut dal with kidney beans
+File: content/recipes/coconut-dal-with-kidney-beans.mdx
+Slug: coconut-dal-with-kidney-beans
+Hero reference: https://www.vegan-masala.com/images/recipes/coconut-dal-with-kidney-beans.png
+
+## 1) HERO (generate first)
+Coconut dal with kidney beans, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/coconut-dal-with-kidney-beans.png Coconut dal with kidney beans cooking step 1: Melt 37.5g of the vegan butter in a frying pan over low-medium heat. Add the onion, garlic and ginger paste, curry powder and chilli or cayenne, and cook for 6-8 minutes, stirring often, until the onion has softened and the spices smell cooked out., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/coconut-dal-with-kidney-beans.png Coconut dal with kidney beans cooking step 2: Add the chopped tomatoes, coconut milk, a pinch of salt and plenty of black pepper. Bring to a boil, then lower the heat and simmer until the tomatoes have lost their raw edge and the sauce has started to thicken., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/coconut-dal-with-kidney-beans.png Coconut dal with kidney beans cooking step 3: Stir in the lentils, kidney beans and remaining 37.5g vegan butter. Simmer gently for about 30 minutes, stirring now and then, until the dal is creamy and the beans are well coated., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/coconut-dal-with-kidney-beans.png Coconut dal with kidney beans cooking step 4: Take the pan off the heat and leave the dal to sit for a few minutes before serving. Taste and adjust the seasoning if needed, add a splash of water if it has thickened too much, and garnish with fresh coriander if using., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Coconut dal with kidney beans, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

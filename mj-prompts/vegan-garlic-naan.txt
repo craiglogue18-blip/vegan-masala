@@ -1,7 +1,7 @@
 # Midjourney Prompts — Garlic Naan
 File: content/recipes/vegan-garlic-naan.mdx
 Slug: vegan-garlic-naan
-Hero reference: IMAGE_URL
+Hero reference: https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png
 
 ## 1) HERO (generate first)
 Garlic Naan, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,28 +10,28 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-IMAGE_URL Garlic Naan cooking step 1: In a bowl, melt the vegan butter and mix in the minced garlic. Set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png Garlic Naan cooking step 1: In a large bowl, combine 2 cups all-purpose flour, 1.5 Tbsp granulated sugar, 1 tsp baking powder, and 0.5 tsp salt., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-IMAGE_URL Garlic Naan cooking step 2: In a large bowl, combine the flour, salt, sugar, and baking powder., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png Garlic Naan cooking step 2: Add 0.5 cup unsweetened soy yoghurt and 0.25 cup unsweetened soy milk, then mix until a soft dough forms., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-IMAGE_URL Garlic Naan cooking step 3: Mix in the soy yoghurt and soy milk until a soft dough forms., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png Garlic Naan cooking step 3: Turn the dough onto a lightly floured surface and knead for a few minutes until smooth and supple., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-IMAGE_URL Garlic Naan cooking step 4: Knead the dough on a floured surface for a few minutes until smooth., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png Garlic Naan cooking step 4: Divide the dough into equal portions and shape each piece into a ball., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-IMAGE_URL Garlic Naan cooking step 5: Divide the dough into equal portions and roll each into a ball., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png Garlic Naan cooking step 5: Roll each ball into an oval about 0.5 cm thick., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-IMAGE_URL Garlic Naan cooking step 6: Roll each ball into an oval shape about 0.5 cm thick., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png Garlic Naan cooking step 6: Heat a non-stick pan over medium heat and cook each naan for 2 to 3 minutes on each side, until spotted and lightly golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-IMAGE_URL Garlic Naan cooking step 7: Heat a non-stick pan over medium heat and cook each naan for 2-3 minutes on each side until golden brown., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png Garlic Naan cooking step 7: Melt 1.5 Tbsp unsalted vegan butter, then stir in 2 minced garlic cloves and set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 8
-IMAGE_URL Garlic Naan cooking step 8: Brush each naan with the garlic butter and sprinkle with chopped coriander before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/vegan-garlic-naan.png Garlic Naan cooking step 8: Brush the hot naan with the garlic butter and finish with 0.5 cup fresh coriander, chopped., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Garlic Naan, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

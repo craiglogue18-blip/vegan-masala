@@ -1,0 +1,43 @@
+# Midjourney Prompts — Tomato Chutney Recipe (For Idli & Dosa)
+File: content/recipes/tomato-chutney-recipe-for-idli-amp-dosa.mdx
+Slug: tomato-chutney-recipe-for-idli-amp-dosa
+Hero reference: https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png
+
+## 1) HERO (generate first)
+Tomato Chutney Recipe (For Idli & Dosa), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 1: Heat 1 tablespoon oil in a frying pan over low heat. Add 1 teaspoon urad dal and fry until it turns a deep maroon-brown without burning., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 2: Add 2 to 3 dry red chilies, 1 to 2 cloves if using, 4 to 5 black peppercorns, and 1 inch ginger. Stir for a few seconds until the chilies darken slightly and the ginger loses its raw edge., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 3: Add 1.5 cups tomatoes, 1 pinch asafoetida, and salt to taste. Cook on medium-low heat for 6 to 7 minutes, stirring often, until the tomatoes soften and reduce., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 4: If the mixture starts sticking, add a splash of water and keep cooking until it turns jammy and the moisture cooks off., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 5: Turn off the heat and let the mixture cool slightly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 6: Transfer to a small blender or chutney grinder. Add 2 tablespoons water, or a little more if needed, and grind until smooth., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 7: For the tempering, heat ½ tablespoon oil in the same pan. Add ½ teaspoon mustard seeds and let them crackle., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 8: Add 7 to 8 curry leaves, 2 to 3 fenugreek seeds, 1 pinch asafoetida, and 1 dry red chili. Let the curry leaves crisp up, but do not let the spices burn., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 9: Add the blended chutney back to the pan and cook on low heat for 3 to 4 minutes. Add a little hot water if the chutney is too thick., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/tomato-chutney-recipe-for-idli-amp-dosa.png Tomato Chutney Recipe (For Idli & Dosa) cooking step 10: Taste and adjust salt if needed. Serve warm or at room temperature., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Tomato Chutney Recipe (For Idli & Dosa), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

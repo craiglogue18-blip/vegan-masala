@@ -1,0 +1,37 @@
+# Midjourney Prompts — Veg Biryani | Vegetable Biryani Recipe
+File: content/recipes/veg-biryani-vegetable-biryani-recipe.mdx
+Slug: veg-biryani-vegetable-biryani-recipe
+Hero reference: https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png
+
+## 1) HERO (generate first)
+Veg Biryani | Vegetable Biryani Recipe, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png Veg Biryani | Vegetable Biryani Recipe cooking step 1: Rinse 1 cup basmati rice until the water runs clear. Soak it in fresh water for 15 minutes, then drain well., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png Veg Biryani | Vegetable Biryani Recipe cooking step 2: Heat 2 tablespoons oil in a pot, pressure cooker, or Instant Pot on medium heat. Add 1 large thinly sliced onion and cook until deep golden at the edges., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png Veg Biryani | Vegetable Biryani Recipe cooking step 3: Add 1/2 teaspoon cumin seeds and 1/2 teaspoon mustard seeds. Let them crackle, then stir in 1 teaspoon ginger-garlic paste and cook until the raw smell fades., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png Veg Biryani | Vegetable Biryani Recipe cooking step 4: Add 1/2 teaspoon turmeric powder and 1 teaspoon garam masala. Stir for about 30 seconds so the spices bloom in the hot oil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png Veg Biryani | Vegetable Biryani Recipe cooking step 5: Add 1 cup mixed vegetables and 2 medium chopped tomatoes. Cook until the tomatoes soften and the masala thickens slightly and the vegetables are coated., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png Veg Biryani | Vegetable Biryani Recipe cooking step 6: Stir in the drained rice, then add 2 cups water and salt to taste. Mix gently so the grains stay intact., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png Veg Biryani | Vegetable Biryani Recipe cooking step 7: If using an Instant Pot, cook on high pressure for 5 minutes and let the pressure release naturally for 5 minutes before opening. In a pressure cooker, cook for 2 whistles, then rest off the heat. In a pot, cover and cook on low until the rice is done and the water is absorbed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/veg-biryani-vegetable-biryani-recipe.png Veg Biryani | Vegetable Biryani Recipe cooking step 8: Rest the biryani for 5 minutes, then fluff gently with a fork. Finish with fresh coriander leaves., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Veg Biryani | Vegetable Biryani Recipe, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

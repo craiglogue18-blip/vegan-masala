@@ -1,0 +1,31 @@
+# Midjourney Prompts — Vegan Chicken Madras
+File: content/recipes/vegan-chicken-madras.mdx
+Slug: vegan-chicken-madras
+Hero reference: https://www.vegan-masala.com/images/recipes/vegan-chicken-madras.png
+
+## 1) HERO (generate first)
+Vegan Chicken Madras, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegan-chicken-madras.png Vegan Chicken Madras cooking step 1: In a large frying pan, heat 1 tablespoon of neutral oil over medium heat. Add 1 pack of shredded seitan chyck’n and fry until golden and crispy; then, remove from the pan., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegan-chicken-madras.png Vegan Chicken Madras cooking step 2: In the same pan, add 5 cardamom pods, 1 cinnamon stick, and 1 teaspoon of cumin seeds, allowing them to bloom for about 30 seconds., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegan-chicken-madras.png Vegan Chicken Madras cooking step 3: Add the chopped onion and sauté for 5 minutes until softened. Then stir in 1 tablespoon of garlic puree and cook for another minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegan-chicken-madras.png Vegan Chicken Madras cooking step 4: Incorporate 2 tablespoons of tomato puree, ½ teaspoon salt, 1 teaspoon turmeric powder, 1 teaspoon chilli, and 2 tablespoons of madras curry powder. Stir well to combine and cook the spices for a few minutes, then pour in 400ml of water., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vegan-chicken-madras.png Vegan Chicken Madras cooking step 5: Return the crispy seitan to the pan, cover, and let simmer for 20 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vegan-chicken-madras.png Vegan Chicken Madras cooking step 6: Before serving, stir in a small handful of chopped fresh coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegan Chicken Madras, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

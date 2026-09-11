@@ -1,0 +1,40 @@
+# Midjourney Prompts — Vegan blackeye bean curry
+File: content/recipes/vegan-blackeye-bean-curry.mdx
+Slug: vegan-blackeye-bean-curry
+Hero reference: https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png
+
+## 1) HERO (generate first)
+Vegan blackeye bean curry, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 1: If using tinned beans, drain and rinse the 2 x 410g/14oz tins of black-eyed beans. Mash a few beans lightly with a fork so the curry has a little body., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 2: Set a small heavy-based frying pan over medium heat. Add 1 tbsp cumin seeds, 1 tbsp coriander seeds, 1 tsp fennel seeds, ¼ tsp fenugreek seeds and 1cm/½in stick cinnamon. Toast for a few minutes, stirring often, until the spices smell nutty and the coriander darkens slightly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 3: Tip the toasted spices into a grinder or mortar, then blend to a fine powder. Stir in ½ - 2 tsp crushed chilli flakes and set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 4: Heat 4 tbsp vegetable oil in a medium pot over medium heat. Add 1 tsp black mustard seeds and 10 curry leaves, then remove the pot from the heat, cover straight away and let them crackle., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 5: Return the pot to the heat and add 1 medium onion, finely chopped. Cook until soft and golden at the edges, stirring so it colours evenly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 6: Add 2 garlic cloves, crushed, and 5cm/2in piece fresh ginger, grated. Cook for about 30 seconds, just until the raw smell eases off., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 7: Add the beans, the ground spice mixture, salt to taste and 550ml/1 pint water. Stir well and bring to a boil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 8: Lower the heat, cover and simmer for 20 minutes, stirring now and then, until the beans are well seasoned and the gravy has a little thickness., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/vegan-blackeye-bean-curry.png Vegan blackeye bean curry cooking step 9: Stir through 2 tbsp coriander leaves, chopped, and 2 tbsp fresh coconut, grated, if using. Taste and adjust the salt before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegan blackeye bean curry, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

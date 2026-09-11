@@ -1,0 +1,43 @@
+# Midjourney Prompts — Dosa Recipe
+File: content/recipes/dosa-recipe.mdx
+Slug: dosa-recipe
+Hero reference: https://www.vegan-masala.com/images/recipes/dosa-recipe.png
+
+## 1) HERO (generate first)
+Dosa Recipe, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 1: In a large bowl, combine 2 cups rice, ½ cup urad dal, 2 tablespoons chana dal, ½ teaspoon fenugreek seeds, and ½ cup poha. Cover with water by 2 to 3 inches and soak for 8 hours., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 2: Drain the soaked mixture and transfer it to a blender. Add 1 cup of the 1½ cups water and blend until smooth with a slight fine grain from the rice., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 3: Check the batter; it should be thick but pourable. Add the remaining ½ cup water little by little only if needed to loosen it., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 4: Transfer the batter to a large bowl, cover, and leave it in a warm place for at least 8 hours or overnight, until it looks puffy and lightly risen., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 5: Stir in salt to taste after fermentation. The batter should fall from the spoon in a steady ribbon; if it feels too tight, stir in a small splash of water., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 6: Heat a griddle over medium-high heat until a few drops of water sizzle and disappear within 5 seconds., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 7: Pour a ladleful of batter in the centre of the griddle and spread it quickly in a thin spiral with the base of the ladle., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 8: Drizzle a little vegetable oil or use cooking spray around the edges. If using spray, lower the heat briefly before spraying., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 9: Cook until the edges turn lacy and golden and the surface is dry. Ease the dosa off with a flat spatula and serve at once., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/dosa-recipe.png Dosa Recipe cooking step 10: Repeat with the remaining batter, stirring the batter lightly between dosas if it settles., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Dosa Recipe, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

@@ -1,0 +1,46 @@
+# Midjourney Prompts — Indian Pancakes with Spiced Potato Filling
+File: content/recipes/indian-pancakes-with-spiced-potato-filling.mdx
+Slug: indian-pancakes-with-spiced-potato-filling
+Hero reference: https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png
+
+## 1) HERO (generate first)
+Indian Pancakes with Spiced Potato Filling, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 1: Bring a large saucepan of water to the boil. Peel the 4 potatoes and cut them into chunks, then cook for 10-15 minutes until tender. Drain and set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 2: In a bowl, mix 130 g gram flour and 130 g plain flour with ½ tsp bicarbonate of soda and ½ tsp salt., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 3: Use a pestle and mortar or grinder to lightly crush 1 tsp mustard seeds, 1 tsp cumin seeds, and 1 tsp coriander seeds, then add them to the flour mixture., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 4: Gradually whisk in 400 ml water until smooth; if there are lumps, use a stick blender to blend until the batter is completely smooth., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 5: Heat a small frying pan over medium heat and add 3 tbsp oil. Once hot, add 1 clove chopped garlic, 1 chopped red chilli, and 1 grated cm ginger, along with 1 tsp garam masala and 1 tsp turmeric. Fry gently for a couple of minutes, stirring frequently, then remove from heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 6: Mash the drained potatoes with 2 tbsp dairy-free milk until smooth. Season with salt and black pepper to taste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 7: Pour the spiced oil into the mashed potatoes, then add the juice of 1 lemon and the 4 chopped spring onions. Mix until well combined., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 8: Heat a large frying pan on high and add a small splash of oil, spreading it with a spatula. Spoon in some batter and swirl to coat the pan evenly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 9: Cook until the bottom is golden and small bubbles form on top, then flip and cook the other side for about a minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 10: Return to the original side and spread about a sixth of the potato mixture over the pancake. Heat through for another minute, then transfer to a plate. Roll up and cut in half., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 11
+https://www.vegan-masala.com/images/recipes/indian-pancakes-with-spiced-potato-filling.png Indian Pancakes with Spiced Potato Filling cooking step 11: Repeat with remaining batter and filling, keeping cooked pancakes warm in a medium oven until ready to serve., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Indian Pancakes with Spiced Potato Filling, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

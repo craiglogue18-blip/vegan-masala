@@ -1,0 +1,55 @@
+# Midjourney Prompts — Jalebi Recipe (Traditional Method)
+File: content/recipes/jalebi-recipe-traditional-method.mdx
+Slug: jalebi-recipe-traditional-method
+Hero reference: https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png
+
+## 1) HERO (generate first)
+Jalebi Recipe (Traditional Method), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 1: In a mixing bowl, combine 1 cup all-purpose flour, 2 tablespoons gram flour, 1 pinch baking soda, and ⅛ teaspoon turmeric powder., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 2: Mix the dry ingredients well before gradually adding 1 cup water. Depending on the flour's quality, you may need ¾ to 1 cup of water., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 3: Stir the batter with a spatula, breaking down any lumps until smooth, then whisk briskly for about 4 minutes to aerate., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 4: Cover the batter and set it aside in a warm place for 12 to 15 hours for fermentation; in colder climates, extend this to 20 to 24 hours., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 5: After fermentation, the batter should be bubbly and a bit thinner; stir gently, then add 1 to 2 tablespoons of all-purpose flour to thicken., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 6: Transfer the batter to a squeezy bottle or piping bag for shaping., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 7: In a saucepan, combine 1 cup sugar, ½ cup water, and ¼ teaspoon saffron strands. Heat on low, stirring to dissolve the sugar., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 8: Cook the syrup until it reaches one-thread consistency, then add ¼ teaspoon lime juice and stir. Keep the syrup warm off the heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 9: Heat oil for frying in a kadai, ensuring it reaches 350°F (176°C) by testing with a small amount of batter; it should rise immediately., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 10: Squeeze the batter into concentric circles in the hot oil, starting from the center or moving outward. Shapes may vary—practice for better control., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 11
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 11: Fry until golden, turning once, then remove with a bamboo skewer or tongs, allowing excess oil to drip off., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 12
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 12: Immediately immerse the fried jalebi in the warm sugar syrup for 2 to 3 minutes, turning to coat evenly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 13
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 13: Place on a tray lined with foil or parchment to drain the excess syrup, and repeat the process until all batter is used., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 14
+https://www.vegan-masala.com/images/recipes/jalebi-recipe-traditional-method.png Jalebi Recipe (Traditional Method) cooking step 14: Serve the jalebi hot, warm, or at room temperature., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Jalebi Recipe (Traditional Method), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

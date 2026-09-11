@@ -1,0 +1,49 @@
+# Midjourney Prompts — The Best Jackfruit Curry
+File: content/recipes/the-best-jackfruit-curry.mdx
+Slug: the-best-jackfruit-curry
+Hero reference: https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png
+
+## 1) HERO (generate first)
+The Best Jackfruit Curry, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 1: Drain and rinse 2 cans jackfruit well, then pull the pieces apart with your hands, discarding any tough cores., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 2: Set the Instant Pot to Sauté and heat 1 tablespoon coconut oil. Add 1 1/2 teaspoons cumin seeds and 1 1/2 teaspoons black mustard seeds, and cook for about 45 seconds until they start to pop., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 3: Add 1 large diced yellow onion and cook for 5 to 6 minutes, stirring often, until softened and lightly golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 4: Stir in 6 cloves minced garlic, 2 inches minced ginger, and 1 diced serrano pepper. Cook for 1 to 2 minutes, stirring so the garlic does not catch., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 5: Add 2 teaspoons garam masala, 1 teaspoon ground turmeric, 1 teaspoon coriander, 1 teaspoon sweet or hot paprika, 1 teaspoon Kashmiri red chili powder, 6 to 8 curry leaves, and 1 1/2 teaspoons kosher salt. Stir for 30 seconds to bloom the spices., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 6: Pour in 3/4 cup water and scrape the base of the pot well to loosen any browned bits., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 7: Add 1 can full-fat coconut milk, the shredded jackfruit, and 3 chopped sweet potatoes. Stir to combine, then cancel Sauté., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 8: Seal the lid and pressure cook on high for 6 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 9: Let the pressure release naturally for 10 minutes, then vent the remaining steam., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 10: Open the pot and stir in 1 can tomato sauce and 4 to 5 cups chopped baby kale or baby spinach. Set the pot to Sauté and simmer for 2 to 3 minutes, until the greens wilt and the sauce thickens slightly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 11
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 11: Stir in 1 tablespoon lemon juice or lime juice and 1/2 cup chopped cilantro. Taste and adjust salt if needed before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 12
+https://www.vegan-masala.com/images/recipes/the-best-jackfruit-curry.png The Best Jackfruit Curry cooking step 12: For stovetop cooking, follow the same order in a heavy pot, then simmer covered until the sweet potatoes are tender and the jackfruit has taken on the masala., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+The Best Jackfruit Curry, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

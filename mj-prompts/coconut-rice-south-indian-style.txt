@@ -1,0 +1,37 @@
+# Midjourney Prompts — Coconut Rice, south Indian style
+File: content/recipes/coconut-rice-south-indian-style.mdx
+Slug: coconut-rice-south-indian-style
+Hero reference: https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png
+
+## 1) HERO (generate first)
+Coconut Rice, south Indian style, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png Coconut Rice, south Indian style cooking step 1: Drain the soaked 1.5 cups basmati rice and add it to a saucepan with 1 cup coconut milk, 1 1/4 cups water, and salt to taste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png Coconut Rice, south Indian style cooking step 2: Bring to a boil, then cover with a tight-fitting lid, lower the heat, and cook for 15 minutes until the rice is tender and the liquid is absorbed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png Coconut Rice, south Indian style cooking step 3: While the rice cooks, heat 1/2 tablespoon oil in a small skillet over medium heat. Add 1 tablespoon chana dal, 1 teaspoon urad dal, and 2 dry red chili peppers, and toast until the dals turn golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png Coconut Rice, south Indian style cooking step 4: Grind or crush the toasted chana dal, urad dal, and chilies to a coarse powder; set aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png Coconut Rice, south Indian style cooking step 5: In the same skillet, heat the remaining 1/2 tablespoon oil. Add 1 tablespoon mustard seeds and let them splutter., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png Coconut Rice, south Indian style cooking step 6: Stir in the remaining 1 teaspoon urad dal, 1/4 cup chopped cashews, and 1 sprig curry leaves. Cook until the urad dal and cashews are golden and the curry leaves look crisp., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png Coconut Rice, south Indian style cooking step 7: Add 3/4 cup shredded coconut and sauté briefly until it turns lightly golden and smells nutty., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/coconut-rice-south-indian-style.png Coconut Rice, south Indian style cooking step 8: Fold the coconut mixture and the ground dal powder through the rice with a fork, taking care not to break the grains. Taste and add more salt only if needed, then serve warm., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Coconut Rice, south Indian style, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

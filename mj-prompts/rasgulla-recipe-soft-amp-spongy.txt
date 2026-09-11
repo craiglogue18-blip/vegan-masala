@@ -1,0 +1,67 @@
+# Midjourney Prompts — Rasgulla Recipe (Soft & Spongy)
+File: content/recipes/rasgulla-recipe-soft-amp-spongy.mdx
+Slug: rasgulla-recipe-soft-amp-spongy
+Hero reference: https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png
+
+## 1) HERO (generate first)
+Rasgulla Recipe (Soft & Spongy), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 1: In a pan, bring 1 litre of whole milk to a boil over low to medium heat, stirring occasionally to prevent browning., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 2: As the milk heats, line a strainer with cheesecloth or muslin., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 3: Once boiling, reduce the heat to the lowest and add 1 to 3 tablespoons of lemon juice, stirring gently to curdle the milk. Start with 1 tablespoon and add more if necessary., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 4: When the milk has curdled completely with green whey separating, switch off the heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 5: Pour the curdled milk into the lined strainer and rinse thoroughly under cool running water to remove any tangy flavor., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 6: Squeeze gently to remove excess water, then place a weight on the chenna for 7 to 8 minutes, or hang it for about 30 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 7: After this time, the chenna should be neither too moist nor too dry. Add 1 teaspoon of sooji to the chenna and knead until it becomes smooth and slightly greasy, about 10 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 8: Pinch off small portions of the chenna and roll into smooth balls. Cover the balls with a moist kitchen towel., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 9: In a large pot, combine 2 cups of sugar with 1 litre of water, stirring until the sugar dissolves. If desired, add 1 tablespoon of plant-based milk to remove impurities., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 10: Once the mixture is hot and impurities float to the surface, either skim them off or strain the solution through cheesecloth., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 11
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 11: Reserve ½ cup of the sugar solution and 1 cup for later use, then bring the remaining 2.5 cups back to a boil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 12
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 12: Gently slide the chenna balls into the bubbling sugar solution, making sure not to stir but to shake the pot gently., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 13
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 13: Cover with a lid and cook over medium heat. After 4 minutes, add ¼ cup of the reserved sugar solution, shake, cover again, and cook for another 4 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 14
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 14: Repeat the addition of ¼ cup of reserved sugar solution, cover, and cook for 2 more minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 15
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 15: To check for doneness, place a rasgulla in a bowl of water; if it sinks, it’s cooked. Alternatively, press a rasgulla gently; it should bounce back., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 16
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 16: Once cooked, transfer each rasgulla to the reserved sugar solution and cover., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 17
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 17: Allow the syrup to cool slightly before combining it back with the rasgullas. Add 1 to 2 tablespoons of rose water, stir gently, and let soak for at least 30 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 18
+https://www.vegan-masala.com/images/recipes/rasgulla-recipe-soft-amp-spongy.png Rasgulla Recipe (Soft & Spongy) cooking step 18: Serve the rasgullas with a little syrup in each bowl, garnished with slivered almonds or pistachios if desired., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Rasgulla Recipe (Soft & Spongy), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

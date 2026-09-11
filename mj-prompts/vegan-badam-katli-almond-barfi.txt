@@ -1,0 +1,37 @@
+# Midjourney Prompts — Vegan Badam Katli (Almond Barfi)
+File: content/recipes/vegan-badam-katli-almond-barfi.mdx
+Slug: vegan-badam-katli-almond-barfi
+Hero reference: https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png
+
+## 1) HERO (generate first)
+Vegan Badam Katli (Almond Barfi), Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png Vegan Badam Katli (Almond Barfi) cooking step 1: Set a heavy-bottomed pot over medium heat and add 1¼ cups sugar, ½ cup water and 1 tsp rose water, if using. Stir just until the sugar dissolves and the syrup turns clear., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png Vegan Badam Katli (Almond Barfi) cooking step 2: Add ½ tsp saffron and 1 tsp ground cardamom. Bring the syrup to a boil, then lower the heat and simmer for about 5 minutes, stirring often, until it looks slightly thickened., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png Vegan Badam Katli (Almond Barfi) cooking step 3: Check for one-string consistency by lifting a little syrup from the pot and letting it cool for a moment. Press it between your thumb and forefinger; it should form a single thin thread., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png Vegan Badam Katli (Almond Barfi) cooking step 4: Add 2 cups blanched almond flour and 1 tsp cornstarch all at once. Stir firmly for 2 to 3 minutes until the mixture turns thick and starts to leave the sides of the pot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png Vegan Badam Katli (Almond Barfi) cooking step 5: Stir in 1 tsp pure vanilla extract and 1 tbsp avocado oil. Keep mixing until the mixture gathers into a soft dough and pulls cleanly from the bottom of the pot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png Vegan Badam Katli (Almond Barfi) cooking step 6: Transfer the hot dough to a lightly oiled surface. When it is cool enough to handle, oil your hands and knead it briefly until smooth and pliable., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png Vegan Badam Katli (Almond Barfi) cooking step 7: Roll the dough between two sheets of parchment into a square about 1/4 inch thick. Let it cool for about 30 minutes, until set., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/vegan-badam-katli-almond-barfi.png Vegan Badam Katli (Almond Barfi) cooking step 8: Cut into diamonds or small squares with a sharp knife or pizza cutter. Lift the pieces carefully and let them finish cooling before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegan Badam Katli (Almond Barfi), Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

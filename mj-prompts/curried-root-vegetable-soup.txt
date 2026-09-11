@@ -1,0 +1,31 @@
+# Midjourney Prompts — Curried Root Vegetable Soup
+File: content/recipes/curried-root-vegetable-soup.mdx
+Slug: curried-root-vegetable-soup
+Hero reference: https://www.vegan-masala.com/images/recipes/curried-root-vegetable-soup.png
+
+## 1) HERO (generate first)
+Curried Root Vegetable Soup, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/curried-root-vegetable-soup.png Curried Root Vegetable Soup cooking step 1: Heat 4 tbsp rapeseed oil in a large pan over a gentle heat. Add the 2 diced onions, 4 crushed garlic cloves and 1 tbsp grated ginger, then cover and sweat for about 10 minutes, stirring now and then, until the onions are soft., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/curried-root-vegetable-soup.png Curried Root Vegetable Soup cooking step 2: Raise the heat slightly and stir in 1 tbsp korma curry powder, 1 tsp turmeric, 1 tsp cumin, ½ tsp coriander and ½ tsp garam masala. Cook for 2 minutes, stirring so the spices bloom in the oil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/curried-root-vegetable-soup.png Curried Root Vegetable Soup cooking step 3: Add 300 g swede, 300 g parsnips, 300 g carrots and 200 g potatoes. Stir for a few minutes so the vegetables are well coated in the masala., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/curried-root-vegetable-soup.png Curried Root Vegetable Soup cooking step 4: Pour in 1.2 L vegetable stock, then season with freshly ground salt and freshly ground pepper to taste. Bring to a boil, lower to a simmer, cover and cook for 25-30 minutes, until the vegetables are tender and the swede breaks down easily when pressed against the pan., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/curried-root-vegetable-soup.png Curried Root Vegetable Soup cooking step 5: Blend the soup to your preferred texture. Leave a little body if you want a more rustic finish, then taste and adjust the seasoning if needed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/curried-root-vegetable-soup.png Curried Root Vegetable Soup cooking step 6: Reheat gently before serving, if required., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Curried Root Vegetable Soup, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

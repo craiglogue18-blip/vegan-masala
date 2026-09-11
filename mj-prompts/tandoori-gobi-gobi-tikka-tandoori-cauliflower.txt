@@ -1,0 +1,46 @@
+# Midjourney Prompts — Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower
+File: content/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.mdx
+Slug: tandoori-gobi-gobi-tikka-tandoori-cauliflower
+Hero reference: https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png
+
+## 1) HERO (generate first)
+Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 1: If your yogurt is loose, drain it in a fine sieve set over a bowl for 45 minutes to 1 hour so the marinade clings properly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 2: Bring a pot of water to a boil with a small pinch of the black salt. Add the cauliflower florets and simmer for 3 to 4 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 3: Turn off the heat and leave the cauliflower in the hot water for 7 to 8 minutes, then drain very well., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 4: In a mixing bowl, combine ½ to ¾ cup plant-based yogurt, ½ tablespoon ginger garlic paste, ½ or 1 teaspoon red chili powder, ½ or 1 teaspoon garam masala, ½ teaspoon turmeric powder, 1 teaspoon coriander powder, 1 teaspoon chaat masala, ½ teaspoon carom seeds, 1 teaspoon dried fenugreek leaves, 2 tablespoons roasted gram flour, 1 or 2 teaspoons lemon juice, 1 tablespoon oil, and black salt to taste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 5: Add the drained cauliflower to the marinade and coat each floret gently. Taste the marinade and adjust salt or spice if needed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 6: Cover and refrigerate for at least 1 hour. A longer marination gives the cauliflower a deeper masala edge., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 7: Heat the oven to 200°C (395°F) for 15 minutes. Line a tray with foil or parchment and set a rack over it., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 8: Arrange the marinated cauliflower on the rack in a single layer., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 9
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 9: Grill for 20 to 25 minutes, turning halfway through, until the edges are browned and the cauliflower is tender at the stem., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 10: Transfer to a platter and serve while hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 11
+https://www.vegan-masala.com/images/recipes/tandoori-gobi-gobi-tikka-tandoori-cauliflower.png Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower cooking step 11: Serve hot with mint chutney, sliced onion, and lemon wedges., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Tandoori Gobi | Gobi Tikka | Tandoori Cauliflower, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

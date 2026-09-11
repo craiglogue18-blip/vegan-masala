@@ -1,7 +1,7 @@
 # Midjourney Prompts — Mushroom Masala
 File: content/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.mdx
 Slug: mushroom-masala-recipe-punjabi-mushroom-curry
-Hero reference: https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png
+Hero reference: https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png
 
 ## 1) HERO (generate first)
 Mushroom Masala, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,37 +10,31 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 1: Blend the onion, ginger, and garlic into a smooth paste., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 1: Heat 2 tbsp oil in a pan over medium heat. Add 1 tsp cumin seeds, 1 bay leaf, 1 small cinnamon stick, 4 whole cloves and 4 green cardamoms. Let them sizzle for a few seconds., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 2: Blend the tomatoes into a smooth puree., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 2: Add 1 large onion, finely chopped and cook, stirring often, until it turns deep golden and the mixture becomes thick., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 3: Heat oil in a pan and add cumin seeds, bay leaf, cinnamon, cardamom, and cloves., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 3: Add 4 cloves garlic, minced and 1 inch ginger, grated. Stir for 30 seconds, just until the raw smell softens., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 4: Add the onion paste and sauté until golden and thick., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 4: Stir in 1 tsp turmeric, 1 tsp chilli powder and 2 tsp coriander powder. Cook for a minute so the spices bloom in the oil., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 5: Stir in the tomato puree and cook until the oil separates from the masala., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 5: Add 200 ml tomato puree and 1 tsp salt. Cook until the masala thickens and the oil starts to appear around the edges., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 6: Mix in turmeric, chilli powder, and coriander powder., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 6: Add 200 g mushrooms, sliced and stir well so they are coated in the masala., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 7: Add the mushrooms and combine well., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 7: Pour in 1 cup water, then cover and simmer for 8 to 10 minutes, until the mushrooms are tender and the gravy has body., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 8
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 8: Pour in the water and season with salt., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 8: Uncover and cook briefly if the gravy looks too thin. Finish with 1 tsp garam masala, 1 tsp dried fenugreek leaves (kasuri methi) and 2 tbsp fresh coriander, chopped., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 9
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 9: Cover and simmer until the mushrooms are tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
-
-### Step 10
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 10: Finish with garam masala, dried fenugreek leaves, and fresh coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
-
-### Step 11
-https://vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 11: Serve hot with rice or flatbreads., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/mushroom-masala-recipe-punjabi-mushroom-curry.png Mushroom Masala cooking step 9: Serve hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Mushroom Masala, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

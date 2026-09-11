@@ -1,0 +1,31 @@
+# Midjourney Prompts — Vegan Chicken Tikka Masala
+File: content/recipes/vegan-chicken-tikka-masala.mdx
+Slug: vegan-chicken-tikka-masala
+Hero reference: https://www.vegan-masala.com/images/recipes/vegan-chicken-tikka-masala.png
+
+## 1) HERO (generate first)
+Vegan Chicken Tikka Masala, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegan-chicken-tikka-masala.png Vegan Chicken Tikka Masala cooking step 1: Heat 2 tablespoons of oil in a large, heavy-based saucepan. Add 1 finely diced large onion and a pinch of salt, sautéing on low heat for about 10 minutes until the onion is soft, translucent, and starting to brown slightly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegan-chicken-tikka-masala.png Vegan Chicken Tikka Masala cooking step 2: Stir in 4 grated garlic cloves and a grated thumb-sized piece of ginger, cooking for 1 minute until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegan-chicken-tikka-masala.png Vegan Chicken Tikka Masala cooking step 3: Add 2 teaspoons of garam masala, 1 teaspoon of chili powder (if using), 1 teaspoon of cumin, 1 teaspoon of ground cardamom, 1 teaspoon of dried fenugreek leaves (if using), and 1 teaspoon of turmeric. Incorporate a splash of water to prevent the spices from scorching, cooking for another minute to bloom the spices., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegan-chicken-tikka-masala.png Vegan Chicken Tikka Masala cooking step 4: Mix in 1 tablespoon of tomato puree and cook for an additional minute before adding 1 tin of finely chopped tomatoes, 1 tin of coconut milk, and 320 g of plant-based chick’n., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/vegan-chicken-tikka-masala.png Vegan Chicken Tikka Masala cooking step 5: Simmer on medium-low heat for 20 minutes, or until the sauce thickens and becomes creamy. Season to taste with salt and the juice of 1/2 lemon., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/vegan-chicken-tikka-masala.png Vegan Chicken Tikka Masala cooking step 6: Serve garnished with a small handful of finely chopped coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegan Chicken Tikka Masala, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

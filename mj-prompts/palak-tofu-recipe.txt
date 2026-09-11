@@ -1,7 +1,7 @@
 # Midjourney Prompts — Palak Tofu Curry
 File: content/recipes/palak-tofu-recipe.mdx
 Slug: palak-tofu-recipe
-Hero reference: https://vegan-masala.com/images/recipes/palak-tofu-recipe.png
+Hero reference: https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png
 
 ## 1) HERO (generate first)
 Palak Tofu Curry, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,37 +10,37 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 1: Sauté spinach, green chillies and cashews in a pan until the spinach is wilted, then blend the mixture into a smooth puree., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 1: Put 200 g spinach, 2 green chillies, 30 g cashews and 2 tbsp of the water in a pan and cook just until the spinach is wilted., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 2: Heat oil in the same pan and sauté whole spices if using until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 2: Blend the spinach mixture to a smooth puree and set it aside., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 3: Add the chopped onion and cook until soft and lightly golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 3: Heat 2 tbsp oil in the same pan over medium heat. Add the whole spices, if using, and let them sizzle for a few seconds until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 4: Stir in the minced garlic and cook briefly until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 4: Add 1 large onion, finely chopped, and cook slowly until soft and lightly golden., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 5: Add the chopped tomatoes and cook until they are soft and jammy., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 5: Stir in 4 cloves garlic, minced, and cook for about 30 seconds, just until the raw smell fades., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 6: Incorporate the garam masala and cook until aromatic., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 6: Add 1 medium tomato, chopped, and cook until it breaks down and turns jammy., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 7: Pour in the water and simmer until the onions are completely soft., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 7: Mix in 1 tsp garam masala and stir for a few seconds so it blooms in the masala., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 8
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 8: Stir in the spinach puree and simmer gently for a few minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 8: Pour in the remaining water and 1 tsp salt, then simmer until the onion is fully soft and the masala has some body., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 9
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 9: Add the cubed tofu and cook for an additional 3–5 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 9: Stir in the spinach puree and simmer gently for 3 to 4 minutes, stirring now and then., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 10
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 10: Finish with dried fenugreek leaves and stir in the optional oat cream., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 10: Add 200 g firm tofu, cubed, and cook for 3 to 5 minutes so it takes on the gravy., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 11
-https://vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 11: Serve hot with roti, naan, or basmati rice., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/palak-tofu-recipe.png Palak Tofu Curry cooking step 11: Finish with 1 tsp dried fenugreek leaves and 100 ml oat cream. Stir through, then turn off the heat and let it sit for a minute before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Palak Tofu Curry, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

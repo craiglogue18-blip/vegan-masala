@@ -1,0 +1,37 @@
+# Midjourney Prompts — Walnut Chutney
+File: content/recipes/walnut-chutney.mdx
+Slug: walnut-chutney
+Hero reference: https://www.vegan-masala.com/images/recipes/walnut-chutney.png
+
+## 1) HERO (generate first)
+Walnut Chutney, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/walnut-chutney.png Walnut Chutney cooking step 1: Heat 1/2 tbsp cooking oil in a cast-iron skillet or pan over medium heat. Add 1 cup raw walnuts and roast until they smell nutty and take on a light colour., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/walnut-chutney.png Walnut Chutney cooking step 2: Add 1/3 cup black gram lentils and 1 tsp cumin seeds. Keep stirring until the lentils are lightly browned and the cumin is fragrant, then turn off the heat and let the mixture cool slightly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/walnut-chutney.png Walnut Chutney cooking step 3: Transfer the cooled walnut-lentil mixture to a blender. Add 7-8 green chilies or 2-3 Serrano peppers, 1/2 inch ginger, 3/4 cup vegan yogurt, salt to taste, and 1 tbsp frozen shredded coconut if using., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/walnut-chutney.png Walnut Chutney cooking step 4: Blend to a smooth chutney, adding a little more water only if needed for the blade to move. Taste and adjust salt or green chilies if you want more heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 5
+https://www.vegan-masala.com/images/recipes/walnut-chutney.png Walnut Chutney cooking step 5: Pour the chutney into a serving bowl., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 6
+https://www.vegan-masala.com/images/recipes/walnut-chutney.png Walnut Chutney cooking step 6: In the same pan, heat the remaining 1/2 tbsp oil; add 1 tsp black mustard seeds. When they splutter, add 2-4 dried red chilies and few curry leaves, if using., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 7
+https://www.vegan-masala.com/images/recipes/walnut-chutney.png Walnut Chutney cooking step 7: Once the red chilies darken, stir in 1/4 tsp cayenne pepper powder and turn off the heat., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 8
+https://www.vegan-masala.com/images/recipes/walnut-chutney.png Walnut Chutney cooking step 8: Spoon the tempering over the chutney and mix lightly before serving., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Walnut Chutney, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

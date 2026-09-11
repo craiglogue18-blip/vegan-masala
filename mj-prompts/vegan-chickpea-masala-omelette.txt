@@ -1,0 +1,25 @@
+# Midjourney Prompts — Vegan Chickpea Masala Omelette
+File: content/recipes/vegan-chickpea-masala-omelette.mdx
+Slug: vegan-chickpea-masala-omelette
+Hero reference: https://www.vegan-masala.com/images/recipes/vegan-chickpea-masala-omelette.png
+
+## 1) HERO (generate first)
+Vegan Chickpea Masala Omelette, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
+
+Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and replace the reference above.
+
+## 2) STEPS (use hero as reference image)
+### Step 1
+https://www.vegan-masala.com/images/recipes/vegan-chickpea-masala-omelette.png Vegan Chickpea Masala Omelette cooking step 1: In a medium bowl, whisk together 1 1/2 cups besan, 1 teaspoon sea salt, 1/2 teaspoon baking powder, 1/2 teaspoon ground turmeric, 1 teaspoon ground coriander, 1/4 teaspoon ground red chilli (if using), and 1/2 teaspoon ajwain. Gradually add 1 1/2 cups warm water and mix until smooth; set aside for 5-10 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 2
+https://www.vegan-masala.com/images/recipes/vegan-chickpea-masala-omelette.png Vegan Chickpea Masala Omelette cooking step 2: Heat a medium crepe pan over medium-low heat and drizzle about 1/2 teaspoon olive oil. Use a ladle to pour half a cup of batter onto the pan, swirling it from the centre to create an approximately 18-20 cm circle. Increase the heat to medium and allow it to cook until bubbles appear on the surface, about 2-3 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 3
+https://www.vegan-masala.com/images/recipes/vegan-chickpea-masala-omelette.png Vegan Chickpea Masala Omelette cooking step 3: Once bubbles form, scatter the chopped onion, tomato, green chilli, and coriander evenly across the batter. Carefully flip the omelette to cook the vegetable side for an additional 1-2 minutes, or until golden brown., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 4
+https://www.vegan-masala.com/images/recipes/vegan-chickpea-masala-omelette.png Vegan Chickpea Masala Omelette cooking step 4: Transfer the omelette to a serving plate and enjoy it warm with green chutney or your favourite hot sauce. Repeat with the remaining batter and vegetables., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+## 3) PINTEREST (optional 2:3)
+Vegan Chickpea Masala Omelette, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

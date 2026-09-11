@@ -1,7 +1,7 @@
 # Midjourney Prompts — Matar Tofu Curry
 File: content/recipes/matar-tofu-recipe.mdx
 Slug: matar-tofu-recipe
-Hero reference: https://vegan-masala.com/images/recipes/matar-tofu-recipe.png
+Hero reference: https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png
 
 ## 1) HERO (generate first)
 Matar Tofu Curry, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,31 +10,31 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 1: Heat oil in a pan and add cumin seeds until they begin to sizzle., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 1: Heat 2 tbsp oil in a pan over medium heat. Add 1 tsp cumin seeds and let them sizzle for a few seconds., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 2: Add the onion and cook until golden and soft., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 2: Add 1 large onion, finely chopped, and cook until soft and golden at the edges., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 3: Stir in the garlic and ginger, cooking for 1 minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 3: Stir in 4 cloves garlic, minced, and 1 inch ginger, grated. Cook for 1 minute, until the raw smell fades., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 4: Add the chopped tomatoes and cook until thickened and the oil separates., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 4: Add 2 medium tomatoes, chopped, and cook until they break down and the masala thickens., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 5: Mix in the turmeric, coriander, chilli powder, and salt., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 5: Mix in 1 tsp turmeric, 1 tsp chilli powder, 1 tsp salt, and 1 tbsp of the fresh coriander. Cook for a minute., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 6: Add the tofu cubes and green peas along with the water., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 6: Add 150 g green peas and 200 g firm tofu, cubed, then pour in 1 cup water., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 7: Simmer for 10–12 minutes until the curry thickens., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 7: Simmer for 10 to 12 minutes, stirring now and then, until the curry has body and the tofu is warmed through., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 8
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 8: Finish with garam masala and garnish with fresh coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 8: Stir in 1 tsp garam masala and finish with the remaining 1 tbsp fresh coriander., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 9
-https://vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 9: Serve hot with rice or flatbreads., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/matar-tofu-recipe.png Matar Tofu Curry cooking step 9: Serve hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Matar Tofu Curry, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3

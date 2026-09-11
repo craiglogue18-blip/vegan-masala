@@ -1,7 +1,7 @@
 # Midjourney Prompts — Madras Curry Tofu Casserole
 File: content/recipes/madras-curry-tofu-casserole.mdx
 Slug: madras-curry-tofu-casserole
-Hero reference: https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png
+Hero reference: https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png
 
 ## 1) HERO (generate first)
 Madras Curry Tofu Casserole, Indian cooking, finished dish plated, rustic Indian home kitchen, natural window light, professional food photography, realistic textures, shot on 85mm lens --style raw --v 6 --ar 1:1
@@ -10,31 +10,34 @@ Tip: Upload your chosen Recraft hero to Midjourney, copy its image URL, and repl
 
 ## 2) STEPS (use hero as reference image)
 ### Step 1
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 1: Preheat oven to 200°C., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 1: Preheat the oven to 200°C., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 2
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 2: Grind the fenugreek seeds, peppercorns, dried red chillies, and cardamom pods to create a spice mix, then add the cumin, mustard, and turmeric., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 2: Grind 1/4 tsp fenugreek seeds, 1/2 tsp peppercorns, 2 dried red chillies and 2 green cardamom pods to a coarse spice mix. Stir in 1 tsp turmeric, 1 tsp ground cumin and 1 tsp ground mustard., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 3
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 3: Toss tofu with 1 tsp oil and bake for 10 minutes., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 3: Heat 2 tbsp oil in an ovenproof dish or casserole over medium heat. Add 1 large onion, finely chopped, and cook until it starts to soften., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 4
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 4: Add onion, garlic, curry leaves, and remaining oil to the dish., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 4: Add 4 cloves garlic, minced, and 6 curry leaves. Cook for 1 minute, then stir in the spice mix and cook for another minute until fragrant., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 5
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 5: Sprinkle the spice mix over the onion mixture and bake for another 10–15 minutes until onions soften., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 5: Add 200 ml passata or smooth tomato purée and 1 medium tomato, chopped. Cook until the tomatoes lose their raw edge and the masala thickens slightly., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 6
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 6: Stir in tomato, tomato puree, coconut milk, salt, and mushrooms., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 6: Stir in 200 g firm tofu, cubed, 200 g mushrooms, sliced, and 1 tsp salt. Mix well so everything is coated., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 7
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 7: Return to oven and bake for 25–30 minutes until sauce thickens., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 7: Pour in 1 tin coconut milk and bring the mixture to a gentle simmer., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 8
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 8: Taste and adjust seasoning as needed., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 8: Transfer to the oven and bake for 25–30 minutes, stirring once halfway through, until the sauce has reduced and the mushrooms are tender., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ### Step 9
-https://vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 9: Serve with rice or flatbreads, garnished with coriander and a squeeze of lemon., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 9: Remove from the oven and stir in 1 tbsp lemon juice. Finish with 2 tbsp fresh coriander, chopped., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
+
+### Step 10
+https://www.vegan-masala.com/images/recipes/madras-curry-tofu-casserole.png Madras Curry Tofu Casserole cooking step 10: Taste and adjust salt or lemon if needed, then serve hot., realistic Indian home kitchen, natural window light, professional food photography, shot on 85mm lens --style raw --v 6 --ar 1:1 --iw 1.5
 
 ## 3) PINTEREST (optional 2:3)
 Madras Curry Tofu Casserole, Indian recipe, Pinterest-style recipe image, overhead shot, bold appetising colours, rustic Indian food styling, natural light, professional food photography --style raw --v 6 --ar 2:3
