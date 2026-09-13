@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 
 import SiteShell from "@/components/SiteShell";
 import AdSenseScript from "@/components/AdSenseScript";
@@ -239,6 +240,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AdSenseScript />
         <MetaPixel />
         <SiteAnalytics />
+        <Analytics />
         <div className="relative min-h-screen">
           <div
             aria-hidden="true"
