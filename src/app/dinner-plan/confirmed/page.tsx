@@ -1,19 +1,24 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import {
+  BreadGuideDownloadLink,
   DinnerPlanConfirmationTracker,
   DinnerPlanDownloadLink,
 } from "@/components/DinnerPlanSignupForm";
 
 export const metadata: Metadata = {
-  title: "Your 7-Day Dinner Plan is ready",
-  description: "Confirmation and download page for the Vegan Masala 7-Day Dinner Plan.",
+  title: "Your free Vegan Masala guides are ready",
+  description: "Confirmation and download page for the Vegan Masala free guide bundle.",
   robots: { index: false, follow: false },
 };
 
 const downloadUrl =
   process.env.NEXT_PUBLIC_DINNER_PLAN_DOWNLOAD_URL?.trim() ||
   "/downloads/vegan-masala-7-day-dinner-plan.pdf";
+
+const breadGuideUrl =
+  process.env.NEXT_PUBLIC_BREAD_GUIDE_DOWNLOAD_URL?.trim() ||
+  "/downloads/vegan-masala-authentic-indian-vegan-breads-guide.pdf";
 
 export default function DinnerPlanConfirmedPage() {
   return (
@@ -25,14 +30,17 @@ export default function DinnerPlanConfirmedPage() {
             Email confirmed
           </p>
           <h1 className="mt-4 text-4xl font-extrabold leading-tight text-white sm:text-5xl">
-            Your 7-Day Vegan Indian Dinner Plan is ready
+            Your free Vegan Masala guides are ready
           </h1>
           <p className="mt-6 text-lg leading-8 text-[var(--text-soft)]">
-            Thank you for confirming your email. Your plan includes seven dinners,
-            one organised shopping list and practical preparation notes.
+            Thank you for confirming your email. Your free bundle includes the seven-day
+            dinner plan and our illustrated 13-page guide to authentic Indian vegan breads.
           </p>
 
-          <DinnerPlanDownloadLink href={downloadUrl} />
+          <div className="mt-8 flex flex-col items-start gap-3">
+            <DinnerPlanDownloadLink href={downloadUrl} />
+            <BreadGuideDownloadLink href={breadGuideUrl} />
+          </div>
 
           <p className="mt-6 text-sm leading-6 text-[var(--text-soft)]/80">
             You can bookmark this page. We only measure this confirmation when your

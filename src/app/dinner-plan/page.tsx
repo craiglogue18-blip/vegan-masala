@@ -6,9 +6,9 @@ import {
 } from "@/components/DinnerPlanSignupForm";
 
 export const metadata: Metadata = {
-  title: "Free 7-Day Vegan Indian Dinner Plan",
+  title: "Free Vegan Indian Dinner Plan + Authentic Breads Guide",
   description:
-    "Seven flavour-packed vegan Indian dinners, one shopping list and practical preparation notes — free from Vegan Masala.",
+    "Seven flavour-packed vegan Indian dinners plus a 13-page illustrated guide to authentic Indian vegan breads — free from Vegan Masala.",
 };
 
 export default function DinnerPlanPage() {
@@ -29,20 +29,21 @@ export default function DinnerPlanPage() {
       <section className="relative grid overflow-hidden rounded-3xl border border-[var(--brand-gold)]/45 bg-black/75 shadow-2xl lg:grid-cols-[1.08fr_0.92fr]">
         <div className="relative z-10 p-7 sm:p-10 lg:p-12">
           <p className="text-sm font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">
-            Free 6-page printable plan
+            Free 19-page printable bundle
           </p>
           <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] text-white sm:text-6xl">
             Stop wondering what to cook this week
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">
-            Get a complete week of satisfying vegan Indian dinners, organised into one
-            practical plan you can save, print and actually follow.
+            Get a complete week of satisfying vegan Indian dinners plus our illustrated
+            guide to authentic Indian vegan breads. Save them, print them and cook with them.
           </p>
           <ul className="mt-6 grid gap-3 text-sm font-semibold text-white sm:grid-cols-2">
             <li className="rounded-xl bg-white/5 px-3 py-2">✓ 7 tested recipe links</li>
             <li className="rounded-xl bg-white/5 px-3 py-2">✓ One grouped shopping list</li>
             <li className="rounded-xl bg-white/5 px-3 py-2">✓ 25-45 minute dinners</li>
             <li className="rounded-xl bg-white/5 px-3 py-2">✓ Prep and leftover guidance</li>
+            <li className="rounded-xl bg-white/5 px-3 py-2 sm:col-span-2">✓ Bonus 13-page guide to roti, naan, poori and tandoor technique</li>
           </ul>
           <DinnerPlanSignupForm placement="hero" />
         </div>
@@ -76,6 +77,25 @@ export default function DinnerPlanPage() {
         <p className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3">No paid subscription</p>
         <p className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3">Unsubscribe at any time</p>
       </div>
+
+      <section className="mt-8 grid overflow-hidden rounded-3xl border border-[var(--brand-gold)]/35 bg-black/55 md:grid-cols-[0.8fr_1.2fr]">
+        <div className="relative min-h-[260px]">
+          <Image
+            src="/images/editorial/home-kitchen-chapati.jpg"
+            alt="Two home cooks shaping chapati dough together"
+            fill
+            sizes="(min-width: 768px) 40vw, 100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+        </div>
+        <div className="p-7 sm:p-9">
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">New bonus guide included</p>
+          <h2 className="mt-3 text-3xl font-extrabold text-white">Authentic Indian Vegan Breads</h2>
+          <p className="mt-4 leading-7 text-[var(--text-soft)]">A 13-page illustrated guide to chapati, naan, poori, regional grains, tandoor technique and the cultural place of bread at the Indian table. It includes practical troubleshooting and four Vegan Masala recipes.</p>
+          <p className="mt-4 text-sm font-bold text-[var(--brand-gold)]">Both PDFs unlock after one confirmed signup.</p>
+        </div>
+      </section>
 
       <section className="py-14 sm:py-20">
         <div className="mx-auto max-w-3xl text-center">
@@ -112,8 +132,8 @@ export default function DinnerPlanPage() {
 
       <section className="my-14 overflow-hidden rounded-3xl border border-[var(--brand-gold)]/40 bg-gradient-to-br from-[var(--brand-red)]/20 via-black/70 to-black/70 p-7 text-center sm:my-20 sm:p-12">
         <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">Make this week easier</p>
-        <h2 className="mx-auto mt-3 max-w-3xl text-3xl font-extrabold text-white sm:text-5xl">Get the plan, shopping list and prep guide free</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">Enter your email and confirm it to open the PDF immediately. Save it on your phone or print the planning pages for the kitchen.</p>
+        <h2 className="mx-auto mt-3 max-w-3xl text-3xl font-extrabold text-white sm:text-5xl">Get both free guides</h2>
+        <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">Enter your email and confirm it to open both PDFs immediately: the dinner plan and the illustrated Indian breads guide.</p>
         <div className="mx-auto max-w-2xl text-left">
           <DinnerPlanSignupForm placement="bottom" />
         </div>
@@ -126,7 +146,7 @@ export default function DinnerPlanPage() {
             ["Is it genuinely free?", "Yes. There is no purchase or paid subscription required."],
             ["How many people does it feed?", "Each recipe serves approximately four, and the shopping list is planned on that basis."],
             ["Can I change the order?", "Absolutely. Swap days, repeat a favourite or freeze a portion - the plan is there to support real life."],
-            ["What happens after I sign up?", "Confirm your email, then the download page opens with your PDF. You may also receive occasional Vegan Masala cooking inspiration."],
+            ["What happens after I sign up?", "Confirm your email, then the download page opens with both PDFs. You may also receive occasional Vegan Masala cooking inspiration."],
           ].map(([question, answer]) => (
             <article key={question} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
               <h3 className="text-lg font-extrabold text-[var(--brand-gold)]">{question}</h3>

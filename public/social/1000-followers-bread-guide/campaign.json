@@ -1,0 +1,18 @@
+{
+  "name": "1,000 followers and free Indian breads guide",
+  "format": "Instagram and Facebook carousel",
+  "status": "ready_for_review",
+  "slides": [
+    "01-thank-you-1000.png",
+    "02-why-bread-matters.png",
+    "03-free-bread-guide.png",
+    "04-follow-and-visit.png"
+  ],
+  "story": "instagram-story-link-sticker.png",
+  "caption": "caption.txt",
+  "primaryDestination": "https://www.vegan-masala.com/bread-guide?utm_source=instagram&utm_medium=organic_social&utm_campaign=1000_followers_bread_guide&utm_content=carousel",
+  "storyDestination": "https://www.vegan-masala.com/bread-guide?utm_source=instagram&utm_medium=organic_social&utm_campaign=1000_followers_bread_guide&utm_content=story_link",
+  "facebookDestination": "https://www.facebook.com/profile.php?id=61576464682288",
+  "instagramProfile": "https://www.instagram.com/veganmasalaonline/",
+  "notes": "Do not publish automatically. Use the primary destination as the Instagram bio link while the campaign is active. Existing newsletter subscribers should receive a direct guide link rather than being asked to subscribe again."
+}

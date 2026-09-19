@@ -8,6 +8,8 @@ const ALLOWED_EVENTS = new Set([
   "dinner_plan_form_submit",
   "dinner_plan_confirmed",
   "dinner_plan_download",
+  "bread_guide_view",
+  "bread_guide_download",
   "affiliate_click",
   "affiliate_impression",
   "commerce_click",

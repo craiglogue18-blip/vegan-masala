@@ -12,7 +12,8 @@ import {
 const KIT_FORM_ACTION = "https://app.kit.com/forms/9816369/subscriptions";
 
 type DinnerPlanSignupFormProps = {
-  placement?: "hero" | "bottom";
+  placement?: "hero" | "bottom" | "bread-guide-hero" | "bread-guide-bottom";
+  offer?: "dinner-plan" | "bread-guide";
 };
 
 export function DinnerPlanPageTracker() {
@@ -28,7 +29,23 @@ export function DinnerPlanPageTracker() {
   return null;
 }
 
-export function DinnerPlanSignupForm({ placement = "hero" }: DinnerPlanSignupFormProps) {
+export function BreadGuidePageTracker() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    recordEngagement("bread_guide_view", {
+      source: params.get("utm_source") || "direct",
+      campaign: params.get("utm_campaign") || "none",
+      placement: params.get("utm_content") || "bread-guide-page",
+    });
+  }, []);
+
+  return null;
+}
+
+export function DinnerPlanSignupForm({
+  placement = "hero",
+  offer = "dinner-plan",
+}: DinnerPlanSignupFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const started = useRef(false);
   const emailId = useId();
@@ -51,7 +68,9 @@ export function DinnerPlanSignupForm({ placement = "hero" }: DinnerPlanSignupFor
   return (
     <form action={KIT_FORM_ACTION} method="post" onSubmit={prepareSignup} className="mt-7">
       <label htmlFor={emailId} className="block text-sm font-bold text-white">
-        Where should we send your free plan?
+        {offer === "bread-guide"
+          ? "Where should we send your free bread guide?"
+          : "Where should we send your free plan?"}
       </label>
       <div className="mt-3 flex flex-col gap-3 sm:flex-row">
         <input
@@ -71,7 +90,11 @@ export function DinnerPlanSignupForm({ placement = "hero" }: DinnerPlanSignupFor
           disabled={submitting}
           className="min-h-12 rounded-xl bg-[var(--brand-red)] px-6 font-extrabold text-white shadow transition hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
         >
-          {submitting ? "Sending…" : "Send my free plan"}
+          {submitting
+            ? "Sending…"
+            : offer === "bread-guide"
+              ? "Send my free bread guide"
+              : "Send my free plan"}
         </button>
       </div>
       <p className="mt-3 text-xs leading-5 text-[var(--text-soft)]/75">
@@ -106,10 +129,23 @@ export function DinnerPlanDownloadLink({ href }: { href: string }) {
     <a
       href={href}
       onClick={() => recordEngagement("dinner_plan_download")}
-      className="mt-8 inline-flex rounded-full bg-[var(--brand-gold)] px-7 py-4 text-base font-extrabold text-black transition hover:brightness-110"
+      className="inline-flex rounded-full bg-[var(--brand-gold)] px-7 py-4 text-base font-extrabold text-black transition hover:brightness-110"
       download="vegan-masala-7-day-dinner-plan.pdf"
     >
       Download the dinner plan
+    </a>
+  );
+}
+
+export function BreadGuideDownloadLink({ href }: { href: string }) {
+  return (
+    <a
+      href={href}
+      onClick={() => recordEngagement("bread_guide_download")}
+      className="inline-flex rounded-full border border-[var(--brand-gold)] px-7 py-4 text-base font-extrabold text-[var(--brand-gold)] transition hover:bg-[var(--brand-gold)] hover:text-black"
+      download="vegan-masala-authentic-indian-vegan-breads-guide.pdf"
+    >
+      Download the Indian breads guide
     </a>
   );
 }
