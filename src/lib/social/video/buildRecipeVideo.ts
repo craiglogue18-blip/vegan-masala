@@ -823,7 +823,7 @@ async function still(image: string, out: string, duration: number) {
     "-t",
     String(duration),
     "-vf",
-    `scale=1200:2134,zoompan=z='min(zoom+0.0008,1.06)':d=${duration * FPS}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS},setsar=1,fade=t=in:st=0:d=0.35,fade=t=out:st=${duration - 0.35}:d=0.35,format=yuv420p`,
+    `scale=1200:2134,zoompan=z='min(zoom+0.0008,1.06)':d=${duration * FPS}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=${FPS},setsar=1,fade=t=out:st=${duration - 0.35}:d=0.35,format=yuv420p`,
     "-r",
     String(FPS),
     "-c:v",

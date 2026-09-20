@@ -131,6 +131,7 @@ function trackedUrl(slug: string, type: ContentType, platform: QueuePlatform) {
 export async function planWeeklySocialPosts(options?: {
   now?: Date;
   dryRun?: boolean;
+  requiresApproval?: boolean;
   pinterestBoardId?: string;
   pinterestRecipeBoardId?: string;
   pinterestGuideBoardId?: string;
@@ -261,6 +262,7 @@ export async function planWeeklySocialPosts(options?: {
         imageUrl: platform === "pinterest" ? pinterestUrl : "",
         publishImageUrl: platform === "pinterest" ? pinterestUrl : "",
         videoUrl: isVideo ? videoUrl : "",
+        requiresApproval: options?.requiresApproval ?? true,
       });
       created++;
     }

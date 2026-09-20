@@ -9,6 +9,7 @@ type PublishInstagramInput = {
   assetType: "image" | "video";
   imageUrl?: string;
   videoUrl?: string;
+  carouselImageUrls?: string[];
 };
 
 function cleanMediaUrl(url?: string) {
@@ -137,6 +138,44 @@ export async function publishInstagram(input: PublishInstagramInput) {
   }
 
   const { accessToken, igUserId } = resolveInstagramMetaAuth();
+
+  const carouselImageUrls = (input.carouselImageUrls || [])
+    .map((url) => absolutizeMediaUrl(url))
+    .filter(Boolean);
+
+  if (carouselImageUrls.length > 1) {
+    const children: string[] = [];
+    for (const imageUrl of carouselImageUrls) {
+      const child = await graphPost(`/${igUserId}/media`, {
+        image_url: imageUrl,
+        is_carousel_item: "true",
+        access_token: accessToken,
+      });
+      if (!child?.id) throw new Error("Instagram carousel child creation failed");
+      await waitForInstagramContainer(child.id, accessToken, "image");
+      children.push(child.id);
+    }
+    const container = await graphPost(`/${igUserId}/media`, {
+      media_type: "CAROUSEL",
+      children: children.join(","),
+      caption: input.caption || "",
+      access_token: accessToken,
+    });
+    if (!container?.id) throw new Error("Instagram carousel container creation failed");
+    await waitForInstagramContainer(container.id, accessToken, "image");
+    const published = await graphPost(`/${igUserId}/media_publish`, {
+      creation_id: container.id,
+      access_token: accessToken,
+    });
+    return {
+      ok: true,
+      assetType: "image" as const,
+      carouselImageUrls,
+      containerId: container.id,
+      published,
+      publishedUrl: await resolvePublishedUrl(published?.id, accessToken),
+    };
+  }
 
   const preflight = assertSocialPublishPreflight({
     platform: "instagram",

@@ -9,6 +9,7 @@ type PublishFacebookInput = {
   assetType: "image" | "video";
   imageUrl?: string;
   videoUrl?: string;
+  carouselImageUrls?: string[];
 };
 
 type MetaPostResponse = {
@@ -109,6 +110,33 @@ export async function publishFacebook(input: PublishFacebookInput) {
   // A System User token carries the granted scopes, but Page publishing
   // endpoints require the Page token derived from that identity.
   const pageAccessToken = await resolvePageAccessToken(pageId, accessToken);
+
+  const carouselImageUrls = (input.carouselImageUrls || []).filter(Boolean);
+  if (carouselImageUrls.length > 1) {
+    const mediaIds: string[] = [];
+    for (const imageUrl of carouselImageUrls) {
+      const uploaded = await metaPostForm(`/${pageId}/photos`, {
+        url: imageUrl,
+        published: "false",
+      }, pageAccessToken);
+      if (!uploaded?.id) throw new Error("Facebook carousel image upload failed");
+      mediaIds.push(uploaded.id);
+    }
+    const body: Record<string, string> = { message: input.caption || "" };
+    mediaIds.forEach((id, index) => {
+      body[`attached_media[${index}]`] = JSON.stringify({ media_fbid: id });
+    });
+    const published = await metaPostForm(`/${pageId}/feed`, body, pageAccessToken);
+    return {
+      ok: true,
+      assetType: "image" as const,
+      pageId,
+      carouselImageUrls,
+      postId: published?.id || null,
+      published,
+      publishedUrl: await resolvePublishedUrl(published?.id, pageAccessToken),
+    };
+  }
 
   if (input.assetType === "video") {
     const safeVideoUrl = preflight.normalized.videoUrl || input.videoUrl || "";

@@ -173,6 +173,8 @@ export async function POST(req: Request) {
     const explicitUrl =
       typeof body.url === "string" && body.url.trim() ? body.url.trim() : "";
 
+    const requiresApproval = body.requiresApproval !== false;
+
     const explicitImageUrl =
       typeof body.imageUrl === "string" && body.imageUrl.trim() ? body.imageUrl.trim() : "";
 
@@ -183,6 +185,14 @@ export async function POST(req: Request) {
 
     const explicitVideoUrl =
       typeof body.videoUrl === "string" && body.videoUrl.trim() ? body.videoUrl.trim() : "";
+
+    const carouselImageUrls = Array.isArray(body.carouselImageUrls)
+      ? body.carouselImageUrls
+          .filter((value: unknown): value is string => typeof value === "string")
+          .map((value: string) => absolutizeUrl(value.trim()))
+          .filter(Boolean)
+          .slice(0, 10)
+      : [];
 
     const requestedContentType =
       typeof body.contentType === "string" ? body.contentType.trim().toLowerCase() : "";
@@ -377,7 +387,8 @@ export async function POST(req: Request) {
       imageUrl: normalizedImageUrl,
       publishImageUrl: normalizedPublishImageUrl,
       videoUrl: normalizedVideoUrl,
-      requiresApproval: platform === "tiktok",
+      carouselImageUrls: carouselImageUrls.length > 1 ? carouselImageUrls : undefined,
+      requiresApproval: platform === "tiktok" || requiresApproval,
       campaignKind,
     });
 
@@ -420,6 +431,16 @@ export async function PATCH(req: Request) {
     if (action === "delete") {
       await deleteQueueItem(id);
       return NextResponse.json({ ok: true, message: "Queue item removed" });
+    }
+
+    if (action === "approve") {
+      await updateQueueItem(id, { requiresApproval: false });
+      return NextResponse.json({ ok: true, message: "Post approved for its scheduled time" });
+    }
+
+    if (action === "hold") {
+      await updateQueueItem(id, { requiresApproval: true });
+      return NextResponse.json({ ok: true, message: "Post returned to review" });
     }
 
     if (action === "retry") {

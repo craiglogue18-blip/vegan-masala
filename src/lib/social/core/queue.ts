@@ -44,6 +44,7 @@ export type QueueItem = {
   imageUrl?: string;
   publishImageUrl?: string;
   videoUrl?: string;
+  carouselImageUrls?: string[];
   attemptCount?: number;
   requiresApproval?: boolean;
   campaignKind?: string;

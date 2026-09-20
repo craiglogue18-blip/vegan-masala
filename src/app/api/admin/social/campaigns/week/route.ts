@@ -85,7 +85,7 @@ export async function POST() {
           imageUrl: asset.image,
           publishImageUrl: asset.publishImage,
           videoUrl: asset.video,
-          requiresApproval: false,
+          requiresApproval: true,
           campaignKind: entry.kind,
         });
         results.push({ kind: entry.kind, ok: true, scheduledFor });

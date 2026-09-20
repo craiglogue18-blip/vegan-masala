@@ -287,6 +287,7 @@ export async function POST(req: Request) {
             assetType: item.assetType || "image",
             imageUrl: preflight.normalized.publishImageUrl || preflight.normalized.imageUrl,
             videoUrl: preflight.normalized.videoUrl || item.videoUrl,
+            carouselImageUrls: item.carouselImageUrls,
           });
 
           console.log("QUEUE INSTAGRAM RESULT:", result);
@@ -332,6 +333,7 @@ export async function POST(req: Request) {
             assetType: item.assetType || "image",
             imageUrl: preflight.normalized.publishImageUrl || preflight.normalized.imageUrl,
             videoUrl: preflight.normalized.videoUrl || item.videoUrl,
+            carouselImageUrls: item.carouselImageUrls,
           });
 
           console.log("QUEUE FACEBOOK RESULT:", result);

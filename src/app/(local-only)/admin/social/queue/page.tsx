@@ -28,6 +28,7 @@ type QueueItem = {
   imageUrl?: string;
   publishImageUrl?: string;
   videoUrl?: string;
+  carouselImageUrls?: string[];
   requiresApproval?: boolean;
   attemptCount?: number;
   retryable?: boolean;
@@ -794,12 +795,30 @@ export default function SocialQueuePage() {
 
   async function itemAction(
     id: string,
-    action: "post-now" | "retry" | "delete"
+    action: "post-now" | "retry" | "delete" | "approve" | "hold"
   ) {
     setItemActionLoadingId(id);
     setDebugResponse("");
 
     try {
+      if (action === "approve" || action === "hold") {
+        const res = await fetch("/api/admin/social/queue", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, action }),
+        });
+        const data = await res.json().catch(() => ({}));
+        setDebugResponse(JSON.stringify(data, null, 2));
+        if (!res.ok) {
+          setLog(data?.error || "Failed to update approval");
+          setShowDebug(true);
+        } else {
+          setLog(data?.message || (action === "approve" ? "Post approved" : "Post held for review"));
+        }
+        await loadQueue();
+        return;
+      }
+
       if (action === "delete") {
         const res = await fetch("/api/admin/social/queue", {
           method: "PATCH",
@@ -920,6 +939,18 @@ export default function SocialQueuePage() {
   }
 
   function renderAssetPreview(item: QueueItem) {
+    if (item.carouselImageUrls && item.carouselImageUrls.length > 1) {
+      return (
+        <div className="grid grid-cols-2 gap-1 overflow-hidden rounded-xl border border-[var(--border)] bg-black/20 p-1">
+          {item.carouselImageUrls.slice(0, 4).map((url, index) => (
+            <a key={url} href={withCacheBust(url)} target="_blank" rel="noreferrer">
+              <img src={withCacheBust(url)} alt={`${item.title} slide ${index + 1}`} className="aspect-square w-full rounded-md object-cover" />
+            </a>
+          ))}
+        </div>
+      );
+    }
+
     if (item.assetType === "video") {
       return (
         <div className="space-y-2">
@@ -1035,6 +1066,12 @@ export default function SocialQueuePage() {
                   {item.assetType}
                 </span>
               ) : null}
+
+              {item.status === "queued" && item.requiresApproval ? (
+                <span className="rounded-full border border-orange-400/50 bg-orange-500/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-orange-200">
+                  review required
+                </span>
+              ) : null}
             </div>
 
             <div className="mt-3 text-lg font-bold text-[var(--brand-gold)]">
@@ -1132,6 +1169,28 @@ export default function SocialQueuePage() {
             ) : null}
 
             <div className="mt-4 flex flex-wrap gap-2">
+              {item.status === "queued" && item.requiresApproval ? (
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => itemAction(item.id, "approve")}
+                  className="rounded-lg bg-[var(--brand-gold)] px-3 py-2 text-xs font-bold text-black disabled:opacity-50"
+                >
+                  {busy ? "Working..." : "Approve scheduled post"}
+                </button>
+              ) : null}
+
+              {item.status === "queued" && !item.requiresApproval ? (
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => itemAction(item.id, "hold")}
+                  className="rounded-lg border border-orange-400/50 px-3 py-2 text-xs font-semibold text-orange-200 disabled:opacity-50"
+                >
+                  {busy ? "Working..." : "Return to review"}
+                </button>
+              ) : null}
+
               {item.status === "posted" && publishedPostHref ? (
                 <a
                   href={publishedPostHref}
@@ -1143,7 +1202,7 @@ export default function SocialQueuePage() {
                 </a>
               ) : null}
 
-              {(item.status === "queued" || item.status === "failed") && (
+              {(item.status === "queued" || item.status === "failed") && !item.requiresApproval && (
                 <button
                   type="button"
                   disabled={busy}

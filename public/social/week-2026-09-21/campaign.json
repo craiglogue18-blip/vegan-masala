@@ -1,0 +1,231 @@
+{
+  "name": "Growth week · 21–27 September 2026",
+  "status": "review",
+  "publishAllowed": false,
+  "schedule": [
+    {
+      "id": "monday-roti",
+      "photo": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/source/roti-puff-action.png",
+      "kicker": "Bread technique",
+      "title": "The moment a roti puffs",
+      "body": "Steam separates the layers. Even heat and an even roll help it inflate.",
+      "cta": "Get the free bread guide",
+      "url": "https://www.vegan-masala.com/bread-guide?utm_source=social&utm_medium=organic_video&utm_campaign=weekly_content",
+      "schedule": "2026-09-21T18:30:00+01:00",
+      "platforms": [
+        "instagram",
+        "facebook",
+        "tiktok"
+      ],
+      "type": "video",
+      "asset": "monday-roti.mp4",
+      "cover": "monday-roti-cover.png",
+      "caption": "That puff is not luck. As a roti hits even heat, trapped steam separates its layers and inflates the bread. Roll evenly, preheat the tawa and turn at the right moment. Get our free illustrated guide to authentic Indian vegan breads at the link in bio. #roti #chapati #indianbread #vegancooking #veganmasala",
+      "requiresApproval": true
+    },
+    {
+      "id": "tuesday-balti",
+      "photo": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/source/balti-onion-action.png",
+      "kicker": "Build the base",
+      "title": "Do not rush the onions",
+      "body": "Cook until softened and golden: this is where a balti begins to build sweetness and body.",
+      "cta": "Cook vegetable balti",
+      "url": "https://www.vegan-masala.com/recipes/vegetable-balti?utm_source=social&utm_medium=organic_video&utm_campaign=weekly_content",
+      "schedule": "2026-09-22T18:30:00+01:00",
+      "platforms": [
+        "facebook",
+        "instagram"
+      ],
+      "type": "video",
+      "asset": "tuesday-balti.mp4",
+      "cover": "tuesday-balti-cover.png",
+      "caption": "A good Vegetable Balti starts before the vegetables go in. Give the onions time to soften and turn golden: that sweetness becomes part of the body of the sauce. Full method on Vegan Masala. #vegetablebalti #indiancooking #veganrecipes #currytips",
+      "requiresApproval": true
+    },
+    {
+      "id": "wednesday-herbs",
+      "schedule": "2026-09-23T12:15:00+01:00",
+      "platforms": [
+        "instagram",
+        "facebook",
+        "pinterest"
+      ],
+      "url": "https://www.vegan-masala.com/guides/herbs?utm_source=social&utm_medium=organic_social&utm_campaign=weekly_content",
+      "slides": [
+        [
+          "Fresh or dried?",
+          "Fresh coriander finishes a dish. Dried fenugreek transforms the sauce.",
+          "Swipe to compare"
+        ],
+        [
+          "Fresh herbs",
+          "Add tender leaves near the end so their colour and aroma stay bright.",
+          "Save this tip"
+        ],
+        [
+          "Dried herbs",
+          "Crush kasuri methi between your palms, then add sparingly near the end.",
+          "Read the herb guide"
+        ]
+      ],
+      "photos": [
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/images/guides/herbs.jpg",
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/images/guides/how-to-temper-spices/curry-leaves.png",
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/images/guides/indian-spices-explained-for-beginners/fenugreek.png"
+      ],
+      "type": "carousel",
+      "assets": [
+        "wednesday-herbs-1.png",
+        "wednesday-herbs-2.png",
+        "wednesday-herbs-3.png"
+      ],
+      "caption": "Fresh and dried herbs do different jobs in Indian cooking. Fresh coriander brings a bright finish; dried fenugreek adds a deep savoury aroma. Swipe for the practical rule, then save this for your next curry. #indianherbs #kasurimethi #cookingtips #veganindianfood",
+      "requiresApproval": true
+    },
+    {
+      "id": "thursday-aloo-matar",
+      "photo": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/source/aloo-matar-action.png",
+      "kicker": "Aloo matar method",
+      "title": "Potatoes first. Peas later.",
+      "body": "Let the potatoes take on the masala before adding peas, so both finish with the right texture.",
+      "cta": "See the full recipe",
+      "url": "https://www.vegan-masala.com/recipes/aloo-muttar?utm_source=social&utm_medium=organic_video&utm_campaign=weekly_content",
+      "schedule": "2026-09-24T18:30:00+01:00",
+      "platforms": [
+        "facebook",
+        "instagram",
+        "tiktok"
+      ],
+      "type": "video",
+      "asset": "thursday-aloo-matar.mp4",
+      "cover": "thursday-aloo-matar-cover.png",
+      "caption": "For Aloo Matar with distinct potatoes and sweet green peas, timing matters. Let the potatoes take on the masala first; add peas later so they stay green and tender. Find the full tested recipe on Vegan Masala. #aloomatar #indianfood #veganrecipes #cookingprocess",
+      "requiresApproval": true
+    },
+    {
+      "id": "friday-bread-tools",
+      "schedule": "2026-09-25T12:15:00+01:00",
+      "platforms": [
+        "instagram",
+        "facebook",
+        "pinterest"
+      ],
+      "url": "https://www.vegan-masala.com/bread-guide?utm_source=social&utm_medium=organic_social&utm_campaign=weekly_content",
+      "slides": [
+        [
+          "Three useful bread tools",
+          "A heavy tawa, simple rolling pin and sturdy bowl cover most home breads.",
+          "Swipe for the shortlist"
+        ],
+        [
+          "Start with a tawa",
+          "Even heat helps roti colour and puff without drying out.",
+          "Get the free guide"
+        ],
+        [
+          "Buy only what earns its place",
+          "Our guide includes practical equipment links with a clear affiliate disclosure.",
+          "Explore the bread guide"
+        ]
+      ],
+      "photos": [
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/source/roti-puff-action.png",
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/images/recipes/vegan-garlic-naan.png",
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/images/recipes/poori.png"
+      ],
+      "type": "carousel",
+      "assets": [
+        "friday-bread-tools-1.png",
+        "friday-bread-tools-2.png",
+        "friday-bread-tools-3.png"
+      ],
+      "caption": "You do not need a cupboard of specialist kit to make Indian bread at home. A reliable tawa, a simple rolling pin and a sturdy bowl will take you a long way. Our free illustrated bread guide explains the tools, techniques and traditions. Some links are affiliate links; we may earn a commission at no extra cost to you. #indianbread #roti #naan #kitchentools",
+      "requiresApproval": true
+    },
+    {
+      "id": "saturday-jackfruit",
+      "photo": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/source/jackfruit-action.png",
+      "kicker": "Saturday curry",
+      "title": "Make jackfruit hold the masala",
+      "body": "Break up the fibres as you stir, then cook until the sauce clings instead of pooling.",
+      "cta": "Cook jackfruit curry",
+      "url": "https://www.vegan-masala.com/recipes/the-best-jackfruit-curry?utm_source=social&utm_medium=organic_video&utm_campaign=weekly_content",
+      "schedule": "2026-09-26T11:00:00+01:00",
+      "platforms": [
+        "instagram",
+        "facebook"
+      ],
+      "type": "video",
+      "asset": "saturday-jackfruit.mp4",
+      "cover": "saturday-jackfruit-cover.png",
+      "caption": "The key to jackfruit curry is getting the masala to cling to the fibres. Break up the pieces as you stir, then keep cooking until the sauce looks glossy rather than loose. Full recipe on Vegan Masala. #jackfruitcurry #vegancurry #indiancooking #plantbased",
+      "requiresApproval": true
+    },
+    {
+      "id": "sunday-dinner",
+      "schedule": "2026-09-27T10:30:00+01:00",
+      "platforms": [
+        "instagram",
+        "facebook",
+        "pinterest"
+      ],
+      "url": "https://www.vegan-masala.com/dinner-plan?utm_source=social&utm_medium=organic_social&utm_campaign=weekly_content",
+      "slides": [
+        [
+          "Dinner sorted for the week",
+          "Seven vegan Indian dinners, one combined shopping list and practical preparation notes.",
+          "Swipe for the plan"
+        ],
+        [
+          "Cook once. Build momentum.",
+          "Choose a curry, a dal and a vegetable dish that share useful prep.",
+          "Save for Sunday"
+        ],
+        [
+          "Get the free 7-day plan",
+          "Join the newsletter and make the next seven dinners easier.",
+          "Get the free plan"
+        ]
+      ],
+      "photos": [
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/images/recipes/chana-masala.png",
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/images/recipes/vegetable-balti.png",
+        "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/images/recipes/the-best-jackfruit-curry.png"
+      ],
+      "type": "carousel",
+      "assets": [
+        "sunday-dinner-1.png",
+        "sunday-dinner-2.png",
+        "sunday-dinner-3.png"
+      ],
+      "caption": "Make Sunday the moment dinner gets easier. Our free seven-day vegan Indian dinner plan includes seven meals, one combined shopping list and useful preparation notes. Get it through the link in bio. #mealplanning #veganmealplan #indianrecipes #weeknightdinner",
+      "requiresApproval": true
+    }
+  ],
+  "videoChecks": [
+    {
+      "id": "monday-roti",
+      "output": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/monday-roti.mp4",
+      "check": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/monday-roti-first-frame.jpg",
+      "mean": 35.7
+    },
+    {
+      "id": "tuesday-balti",
+      "output": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/tuesday-balti.mp4",
+      "check": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/tuesday-balti-first-frame.jpg",
+      "mean": 38.7
+    },
+    {
+      "id": "thursday-aloo-matar",
+      "output": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/thursday-aloo-matar.mp4",
+      "check": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/thursday-aloo-matar-first-frame.jpg",
+      "mean": 34.5
+    },
+    {
+      "id": "saturday-jackfruit",
+      "output": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/saturday-jackfruit.mp4",
+      "check": "/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masala/public/social/week-2026-09-21/saturday-jackfruit-first-frame.jpg",
+      "mean": 32.3
+    }
+  ]
+}

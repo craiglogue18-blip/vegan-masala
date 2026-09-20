@@ -260,7 +260,7 @@ async function renderAnimatedStory(storyBuffer: Buffer, slug: string) {
   try {
     await execFileAsync(ffmpegPath, [
       "-y", "-loop", "1", "-i", source,
-      "-vf", "zoompan=z='min(zoom+0.00045,1.055)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=360:s=1080x1920:fps=30,fade=t=in:st=0:d=0.35,fade=t=out:st=11.35:d=0.65,format=yuv420p",
+      "-vf", "zoompan=z='min(zoom+0.00045,1.055)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=360:s=1080x1920:fps=30,fade=t=out:st=11.35:d=0.65,format=yuv420p",
       "-t", "12", "-r", "30", "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-movflags", "+faststart", output,
     ]);
     const saved = await saveGeneratedVideo(slug, fs.readFileSync(output));
