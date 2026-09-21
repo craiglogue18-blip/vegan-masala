@@ -1,0 +1,46 @@
+{
+  "name": "Vegan Masala brand film · September 2026",
+  "status": "review",
+  "publishAllowed": false,
+  "title": "Authentic vegan Indian food, made practical",
+  "url": "https://www.vegan-masala.com/?utm_source=social&utm_medium=organic_video&utm_campaign=brand_promo_sep_2026",
+  "video": "vegan-masala-promo-v6-review.mp4",
+  "cover": "cover.jpg",
+  "schedule": [
+    {
+      "platform": "instagram",
+      "scheduledFor": "2026-09-27T18:30:00+01:00",
+      "requiresApproval": true
+    },
+    {
+      "platform": "facebook",
+      "scheduledFor": "2026-09-27T18:30:00+01:00",
+      "requiresApproval": true
+    },
+    {
+      "platform": "tiktok",
+      "scheduledFor": "2026-09-27T18:35:00+01:00",
+      "requiresApproval": true
+    },
+    {
+      "platform": "youtube",
+      "scheduledFor": "2026-09-27T18:40:00+01:00",
+      "requiresApproval": true
+    },
+    {
+      "platform": "pinterest",
+      "scheduledFor": "2026-09-28T12:15:00+01:00",
+      "requiresApproval": true,
+      "assetType": "image"
+    }
+  ],
+  "caption": "Big flavours. Practical cooking. 100% plant based. 🌿\n\nVegan Masala brings authentic vegan Indian recipes, step-by-step technique guides and useful meal planning into one place. From tempering spices to building a proper curry base, we explain why each step matters so you can cook with confidence.\n\nExplore the recipes and guides at vegan-masala.com, follow for more practical Indian cooking, and share this with someone who loves bold food.\n\nSome pages contain clearly disclosed affiliate links. If you choose to buy through one, Vegan Masala may earn a small commission at no extra cost to you.\n\n#veganindianfood #indianrecipes #vegancooking #plantbasedrecipes #currytips #veganmasala",
+  "pinterestCaption": "Authentic vegan Indian recipes, practical cooking guides and meal-planning help in one place. Learn spice techniques, build better curries and discover flavour-packed plant-based meals at Vegan Masala. Some pages include clearly disclosed affiliate links.",
+  "checks": {
+    "format": "1080 × 1920 · 9:16",
+    "durationSeconds": 112.03,
+    "firstFrame": "branded cover; no black frame",
+    "audio": "-14.2 LUFS integrated · -1.5 dBTP",
+    "published": false
+  }
+}
