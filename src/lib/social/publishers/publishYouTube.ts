@@ -27,7 +27,7 @@ export async function publishYouTube(input: PublishYouTubeInput) {
   const oauth = youtubeOauthClient();
   oauth.setCredentials({ refresh_token: refreshToken });
   const youtube = google.youtube({ version: "v3", auth: oauth });
-  const privacyStatus = process.env.YOUTUBE_PRIVACY_STATUS?.trim() || "private";
+  const privacyStatus = process.env.YOUTUBE_PRIVACY_STATUS?.trim() || "public";
 
   const result = await youtube.videos.insert({
     part: ["snippet", "status"],

@@ -38,6 +38,31 @@ async function tiktokPost(path: string, token: string, body?: unknown) {
   return data;
 }
 
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function waitForTikTokPost(token: string, publishId: string) {
+  let latest: any = null;
+
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    if (attempt > 0) await wait(5_000);
+    const result = await tiktokPost("/v2/post/publish/status/fetch/", token, {
+      publish_id: publishId,
+    });
+    latest = result?.data || null;
+    const status = String(latest?.status || "");
+
+    if (status === "FAILED") {
+      throw new Error(`TikTok publish failed: ${latest?.fail_reason || "unknown reason"}`);
+    }
+
+    if (status === "PUBLISH_COMPLETE") return latest;
+  }
+
+  return latest;
+}
+
 export async function publishTikTok(input: PublishTikTokInput) {
   if (!(await tikTokPublishingConfigured())) {
     throw new Error(
@@ -50,7 +75,7 @@ export async function publishTikTok(input: PublishTikTokInput) {
 
   const creator = await tiktokPost("/v2/post/publish/creator_info/query/", token);
   const privacyOptions: string[] = creator?.data?.privacy_level_options || [];
-  const requestedPrivacy = process.env.TIKTOK_PRIVACY_LEVEL?.trim() || "SELF_ONLY";
+  const requestedPrivacy = process.env.TIKTOK_PRIVACY_LEVEL?.trim() || "PUBLIC_TO_EVERYONE";
   const privacyLevel = privacyOptions.includes(requestedPrivacy)
     ? requestedPrivacy
     : privacyOptions.includes("SELF_ONLY")
@@ -87,9 +112,23 @@ export async function publishTikTok(input: PublishTikTokInput) {
     },
   });
 
+  const publishId = String(result?.data?.publish_id || "");
+  const status = publishId ? await waitForTikTokPost(token, publishId) : null;
+  const postId = Array.isArray(status?.publicaly_available_post_id)
+    ? String(status.publicaly_available_post_id[0] || "")
+    : "";
+  const creatorUsername = String(creator?.data?.creator_username || "").replace(/^@/, "");
+
   return {
-    id: result?.data?.publish_id || null,
+    id: postId || publishId || null,
+    publishId: publishId || null,
+    postId: postId || null,
+    processingStatus: status?.status || "PROCESSING",
     privacyLevel,
     videoUrl: verifiedVideoUrl,
+    publishedUrl:
+      postId && creatorUsername
+        ? `https://www.tiktok.com/@${encodeURIComponent(creatorUsername)}/video/${encodeURIComponent(postId)}`
+        : null,
   };
 }
