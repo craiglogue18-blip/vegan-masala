@@ -5,10 +5,13 @@ import { tiktokClientKey, tiktokRedirectUri } from "@/lib/social/core/tiktokAuth
 export async function GET() {
   try {
     const state = createOauthState("tiktok");
+    const scope =
+      process.env.TIKTOK_OAUTH_SCOPES?.trim() ||
+      "user.info.basic,video.publish";
     const url = `https://www.tiktok.com/v2/auth/authorize/?${new URLSearchParams({
       client_key: tiktokClientKey(),
       response_type: "code",
-      scope: "user.info.basic,user.info.stats,video.publish",
+      scope,
       redirect_uri: tiktokRedirectUri(),
       state,
     })}`;

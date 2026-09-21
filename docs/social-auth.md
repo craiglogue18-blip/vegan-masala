@@ -109,7 +109,7 @@ Configure:
 - `YOUTUBE_CLIENT_ID`
 - `YOUTUBE_CLIENT_SECRET`
 - `YOUTUBE_REDIRECT_URI` (optional when using the production URL above)
-- `YOUTUBE_PRIVACY_STATUS` (`private`, `unlisted`, or `public`; defaults to `private`)
+- `YOUTUBE_PRIVACY_STATUS` (`private`, `unlisted`, or `public`; defaults to `public`)
 
 Open `/api/youtube/connect` once to authorise the Vegan Masala channel. The returned refresh token is stored in the existing Upstash/KV store and renewed by Google's client library during uploads.
 
@@ -124,12 +124,13 @@ Configure:
 - `TIKTOK_CLIENT_KEY`
 - `TIKTOK_CLIENT_SECRET`
 - `TIKTOK_REDIRECT_URI` (optional when using the production URL above)
+- `TIKTOK_OAUTH_SCOPES` (optional; defaults to the minimum publishing permissions `user.info.basic,video.publish`)
 - `TIKTOK_DIRECT_POST_ENABLED=true` only after the app can use Direct Post
-- `TIKTOK_PRIVACY_LEVEL=SELF_ONLY` while the client is unaudited
+- `TIKTOK_PRIVACY_LEVEL=PUBLIC_TO_EVERYONE` for public publishing (the default)
 - `TIKTOK_MARK_AIGC=true` only when a generated video should carry TikTok's AI label
 
 Open `/api/tiktok/connect` once to authorise the account. TikTok access tokens last about 24 hours; the stored refresh token is automatically exchanged and rotated before publishing. Videos are uploaded directly to TikTok rather than relying on a public media-domain verification.
 
-TikTok restricts posts from unaudited Direct Post clients to private visibility. Do not change the privacy level to `PUBLIC_TO_EVERYONE` until TikTok has approved the app and exposes that option for the connected account.
+TikTok restricts posts from unaudited Direct Post clients to private visibility. The publisher deliberately stops instead of silently posting privately when `PUBLIC_TO_EVERYONE` is unavailable. Complete TikTok's Direct Post audit and ensure the connected creator account is public before publishing.
 
 Both renewable connections require the existing `KV_REST_API_URL` and `KV_REST_API_TOKEN` settings. Safe connection status is available at `GET /api/admin/social/platform-health`.

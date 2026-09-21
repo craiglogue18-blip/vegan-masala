@@ -11,7 +11,7 @@ export async function GET() {
     ok: true,
     youtube: {
       configured: youtubeConfigured,
-      privacyStatus: process.env.YOUTUBE_PRIVACY_STATUS?.trim() || "private",
+      privacyStatus: process.env.YOUTUBE_PRIVACY_STATUS?.trim() || "public",
       missing: ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET"].filter(
         (name) => !process.env[name]?.trim()
       ),
@@ -20,7 +20,7 @@ export async function GET() {
       configured: tiktokConfigured,
       directPostEnabled:
         process.env.TIKTOK_DIRECT_POST_ENABLED?.trim().toLowerCase() === "true",
-      privacyLevel: process.env.TIKTOK_PRIVACY_LEVEL?.trim() || "SELF_ONLY",
+      privacyLevel: process.env.TIKTOK_PRIVACY_LEVEL?.trim() || "PUBLIC_TO_EVERYONE",
       missing: ["TIKTOK_CLIENT_KEY", "TIKTOK_CLIENT_SECRET"].filter(
         (name) => !process.env[name]?.trim()
       ),
