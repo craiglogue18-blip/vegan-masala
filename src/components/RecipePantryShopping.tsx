@@ -135,9 +135,9 @@ export default function RecipePantryShopping({
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#087cac]">
-            Optional affiliate links
+            Shop this recipe · Paid affiliate links
           </p>
-          <h2 className="mt-1 text-xl font-extrabold">Shop the pantry for this recipe</h2>
+          <h2 className="mt-1 text-xl font-extrabold">Recommended pantry ingredients</h2>
         </div>
         <Image
           src="/images/affiliates/ethical-superstore-logo.png"
@@ -149,8 +149,8 @@ export default function RecipePantryShopping({
       </div>
 
       <p className="mt-3 text-sm leading-6 text-slate-700">
-        Relevant Ethical Superstore ranges for the ingredients above. We may earn a
-        commission from a qualifying purchase, at no extra cost to you.
+        Pick up useful pantry staples for this recipe through Ethical Superstore. Buying
+        through these links supports Vegan Masala at no extra cost to you.
       </p>
 
       <div className={`mt-5 grid gap-4 ${picks.length > 1 ? "md:grid-cols-2" : ""}`}>

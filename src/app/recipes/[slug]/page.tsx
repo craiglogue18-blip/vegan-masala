@@ -19,6 +19,7 @@ import RecipeEngagement from "@/components/RecipeEngagement";
 import RecipeEquipment, { getRecipeEquipment } from "@/components/RecipeEquipment";
 import DinnerPlanPromo from "@/components/DinnerPlanPromo";
 import RecipePantryShopping, { getRecipePantryPicks } from "@/components/RecipePantryShopping";
+import RecipeIngredientList from "@/components/RecipeIngredientList";
 
 function extractSections(raw: string) {
   const sections: Record<string, string> = {};
@@ -880,17 +881,7 @@ export default async function RecipePage({
             </h2>
 
             {ingredients.length ? (
-              <ul className="mt-6 space-y-3 text-[var(--text-soft)]">
-                {ingredients.map((item: string, i: number) => (
-                  <li
-                    key={i}
-                    className="rounded-xl border border-white/5 bg-black/10 px-4 py-3 leading-7"
-                  >
-                    <span className="mr-2 font-bold text-[var(--brand-gold)]">•</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <RecipeIngredientList ingredients={ingredients} recipeSlug={recipe.slug} />
             ) : (
               <p className="mt-4 text-sm text-[var(--text-soft)]/80">
                 No ingredients found yet for this recipe.
