@@ -1,6 +1,6 @@
 {
   "name": "Vegan Masala brand film · September 2026",
-  "status": "review",
+  "status": "queued-for-review",
   "publishAllowed": false,
   "title": "Authentic vegan Indian food, made practical",
   "url": "https://www.vegan-masala.com/?utm_source=social&utm_medium=organic_video&utm_campaign=brand_promo_sep_2026",
@@ -42,5 +42,34 @@
     "firstFrame": "branded cover; no black frame",
     "audio": "-14.2 LUFS integrated · -1.5 dBTP",
     "published": false
-  }
+  },
+  "videoUrl": "https://www.vegan-masala.com/social/brand-promo-v6/vegan-masala-promo-v6-review.mp4",
+  "coverUrl": "https://www.vegan-masala.com/social/brand-promo-v6/cover.jpg",
+  "queueResults": [
+    {
+      "id": "1789993138182-hullwd",
+      "platform": "instagram",
+      "status": "queued-for-review"
+    },
+    {
+      "id": "1789993138346-hlqu7g",
+      "platform": "facebook",
+      "status": "queued-for-review"
+    },
+    {
+      "id": "1789993138573-hv7dos",
+      "platform": "tiktok",
+      "status": "queued-for-review"
+    },
+    {
+      "id": "1789993138733-7dwniy",
+      "platform": "youtube",
+      "status": "queued-for-review"
+    },
+    {
+      "id": "1789993138904-3s0xwa",
+      "platform": "pinterest",
+      "status": "queued-for-review"
+    }
+  ]
 }

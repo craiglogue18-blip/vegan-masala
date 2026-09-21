@@ -43,7 +43,7 @@ const results = [];
 
 for (const entry of campaign.schedule) {
   const duplicate = existing.find((item) =>
-    item.slug === "vegan-masala-brand-promo-v6" &&
+    item.title === campaign.title &&
     item.platform === entry.platform &&
     item.status === "queued"
   );
@@ -56,14 +56,13 @@ for (const entry of campaign.schedule) {
   if (isPinterest && !pinterestBoard) throw new Error("No Pinterest board was found");
 
   const body = {
-    slug: "vegan-masala-brand-promo-v6",
+    slug: "herbs",
     title: campaign.title,
     platform: entry.platform,
     caption: isPinterest ? campaign.pinterestCaption : campaign.caption,
     url: campaign.url,
     scheduledFor: entry.scheduledFor,
     board: isPinterest ? pinterestBoard : null,
-    contentType: "store",
     assetType: isPinterest ? "image" : "video",
     imageUrl: coverUrl,
     publishImageUrl: coverUrl,
