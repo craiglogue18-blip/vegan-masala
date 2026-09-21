@@ -78,12 +78,12 @@ export async function publishTikTok(input: PublishTikTokInput) {
   const requestedPrivacy = process.env.TIKTOK_PRIVACY_LEVEL?.trim() || "PUBLIC_TO_EVERYONE";
   const privacyLevel = privacyOptions.includes(requestedPrivacy)
     ? requestedPrivacy
-    : privacyOptions.includes("SELF_ONLY")
-      ? "SELF_ONLY"
-      : privacyOptions[0];
+    : "";
 
   if (!privacyLevel) {
-    throw new Error("TikTok creator information returned no allowed privacy level");
+    throw new Error(
+      `TikTok cannot publish with ${requestedPrivacy}. Available visibility options: ${privacyOptions.join(", ") || "none"}`
+    );
   }
 
   const verifiedMediaBase = (

@@ -7,7 +7,7 @@ export async function GET() {
     const state = createOauthState("youtube");
     const url = youtubeOauthClient().generateAuthUrl({
       access_type: "offline",
-      prompt: "consent",
+      prompt: "consent select_account",
       include_granted_scopes: true,
       scope: [
         "https://www.googleapis.com/auth/youtube.upload",
