@@ -2,6 +2,7 @@ export const DINNER_PLAN_PENDING_KEY = "vegan-masala:dinner-plan:pending:v2";
 export const DINNER_PLAN_COMPLETED_KEY = "vegan-masala:dinner-plan:completed:v2";
 export const DINNER_PLAN_CONFIRMATION_RECORDED_KEY =
   "vegan-masala:dinner-plan:confirmation-recorded:v2";
+export const SIGNUP_OFFER_KEY = "vegan-masala:signup-offer:v1";
 const SESSION_KEY = "vegan-masala:analytics-session:v1";
 const ATTRIBUTION_KEY = "vegan-masala:analytics-attribution:v1";
 

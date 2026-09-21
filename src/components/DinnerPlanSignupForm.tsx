@@ -6,6 +6,7 @@ import {
   DINNER_PLAN_COMPLETED_KEY,
   DINNER_PLAN_CONFIRMATION_RECORDED_KEY,
   DINNER_PLAN_PENDING_KEY,
+  SIGNUP_OFFER_KEY,
   recordEngagement,
 } from "@/lib/dinner-plan-tracking";
 
@@ -53,15 +54,16 @@ export function DinnerPlanSignupForm({
   const markStarted = () => {
     if (started.current) return;
     started.current = true;
-    recordEngagement("dinner_plan_form_start", { placement });
+    recordEngagement(offer === "bread-guide" ? "bread_guide_form_start" : "dinner_plan_form_start", { placement });
   };
 
   const prepareSignup = () => {
     const signupId = createDinnerPlanSignupId();
     window.localStorage.setItem(DINNER_PLAN_PENDING_KEY, signupId);
+    window.localStorage.setItem(SIGNUP_OFFER_KEY, offer);
     window.localStorage.removeItem(DINNER_PLAN_COMPLETED_KEY);
     window.sessionStorage.removeItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY);
-    recordEngagement("dinner_plan_form_submit", { placement });
+    recordEngagement(offer === "bread-guide" ? "bread_guide_form_submit" : "dinner_plan_form_submit", { placement });
     setSubmitting(true);
   };
 
@@ -109,15 +111,17 @@ export function DinnerPlanConfirmationTracker() {
     const pendingSignupId = window.localStorage.getItem(DINNER_PLAN_PENDING_KEY);
     if (!pendingSignupId) return;
     const signupId = pendingSignupId;
+    const signupOffer = window.localStorage.getItem(SIGNUP_OFFER_KEY);
 
     if (window.sessionStorage.getItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY) !== signupId) {
       window.__vmDinnerPlanRegistrationRequested = true;
       window.__vmDinnerPlanRegistrationEventId = signupId;
       window.dispatchEvent(new Event("vegan-masala:complete-registration"));
-      recordEngagement("dinner_plan_confirmed");
+      recordEngagement(signupOffer === "bread-guide" ? "bread_guide_confirmed" : "dinner_plan_confirmed");
       window.sessionStorage.setItem(DINNER_PLAN_CONFIRMATION_RECORDED_KEY, signupId);
       window.localStorage.setItem(DINNER_PLAN_COMPLETED_KEY, signupId);
       window.localStorage.removeItem(DINNER_PLAN_PENDING_KEY);
+      window.localStorage.removeItem(SIGNUP_OFFER_KEY);
     }
   }, []);
 

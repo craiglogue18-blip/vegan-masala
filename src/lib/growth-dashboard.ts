@@ -633,6 +633,11 @@ export async function getGrowthDashboard() {
     planSubmits: total(current, "dinner_plan_form_submit"),
     planConfirmed: total(current, "dinner_plan_confirmed"),
     planDownloads: total(current, "dinner_plan_download"),
+    breadViews: total(current, "bread_guide_view"),
+    breadStarts: total(current, "bread_guide_form_start"),
+    breadSubmits: total(current, "bread_guide_form_submit"),
+    breadConfirmed: total(current, "bread_guide_confirmed"),
+    breadDownloads: total(current, "bread_guide_download"),
   };
   const previousEvents = {
     sessions: total(previous, "session_start"),
@@ -646,6 +651,11 @@ export async function getGrowthDashboard() {
     planSubmits: total(previous, "dinner_plan_form_submit"),
     planConfirmed: total(previous, "dinner_plan_confirmed"),
     planDownloads: total(previous, "dinner_plan_download"),
+    breadViews: total(previous, "bread_guide_view"),
+    breadStarts: total(previous, "bread_guide_form_start"),
+    breadSubmits: total(previous, "bread_guide_form_submit"),
+    breadConfirmed: total(previous, "bread_guide_confirmed"),
+    breadDownloads: total(previous, "bread_guide_download"),
   };
 
   const social = {

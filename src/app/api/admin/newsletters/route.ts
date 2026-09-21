@@ -8,6 +8,7 @@ import {
   validateNewsletterDraft,
 } from "@/lib/newsletters";
 import { createKitNewsletter, getKitOverview } from "@/lib/kit-newsletters";
+import { WELCOME_SEQUENCE, WELCOME_SEQUENCE_NAME } from "@/lib/welcome-sequence";
 
 export const maxDuration = 120;
 
@@ -17,7 +18,7 @@ function errorMessage(error: unknown, fallback: string) {
 
 export async function GET() {
   const kit = await getKitOverview();
-  return NextResponse.json({ ok: true, recipes: newsletterRecipeChoices(), guides: newsletterGuideChoices(), kit });
+  return NextResponse.json({ ok: true, recipes: newsletterRecipeChoices(), guides: newsletterGuideChoices(), kit, welcomeSequence: { name: WELCOME_SEQUENCE_NAME, emails: WELCOME_SEQUENCE } });
 }
 
 export async function POST(request: Request) {

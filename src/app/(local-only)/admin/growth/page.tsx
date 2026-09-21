@@ -80,6 +80,17 @@ export default async function GrowthDashboardPage() {
   const affiliateCtr = data.current.affiliateImpressions
     ? affiliateClicks / data.current.affiliateImpressions
     : 0;
+  const leadMagnetViews = data.current.planViews + data.current.breadViews;
+  const confirmedSubscribers = data.current.planConfirmed + data.current.breadConfirmed;
+  const leadMagnetConversion = leadMagnetViews ? confirmedSubscribers / leadMagnetViews : 0;
+  const netProductRevenue = data.services.payhip.revenue - data.services.payhip.refundedValue;
+  const revenuePerThousandSessions = data.current.sessions ? (netProductRevenue / data.current.sessions) * 1000 : 0;
+  const subscriberToBuyerRate = data.services.kit.newSubscribers
+    ? data.services.payhip.purchases / data.services.kit.newSubscribers
+    : 0;
+  const affiliateEpc = affiliateClicks
+    ? data.services.awin.current.commission / affiliateClicks
+    : 0;
 
   const priorities: string[] = [];
   if (!search) priorities.push("Connect or repair Search Console credentials to unlock search reporting.");
@@ -137,6 +148,24 @@ export default async function GrowthDashboardPage() {
           <Metric label="Affiliate clicks" value={number(affiliateClicks)} note={data.current.affiliateImpressions ? `${percent(affiliateCtr)} of ${number(data.current.affiliateImpressions)} viewable placements` : data.engagementConnected ? delta(affiliateClicks, previousAffiliateClicks) : "Engagement storage not connected"} />
           <Metric label="Confirmed dinner plans" value={number(data.current.planConfirmed)} note={`${percent(signupRate)} of dinner-plan visits`} />
         </div>
+      </section>
+
+      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/30 bg-gradient-to-br from-[#19170f] to-[var(--surface)] p-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/65">Commercial scorecard</p>
+            <h2 className="mt-2 text-xl font-extrabold text-[var(--brand-gold)]">Audience to revenue</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">The four conversion figures that show whether growing attention is becoming an owned audience and sustainable income.</p>
+          </div>
+          <Link href="/admin/newsletters" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)] hover:bg-white/5">Open newsletter funnel</Link>
+        </div>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <Metric label="Visitor to subscriber" value={percent(leadMagnetConversion)} note={`${number(confirmedSubscribers)} confirmed from ${number(leadMagnetViews)} dinner-plan and bread-guide visits`} />
+          <Metric label="Subscriber to buyer" value={percent(subscriberToBuyerRate)} note={`${number(data.services.payhip.purchases)} Payhip purchases ÷ ${number(data.services.kit.newSubscribers ?? 0)} new Kit subscribers`} />
+          <Metric label="Affiliate earnings per click" value={money(affiliateEpc, data.services.awin.current.currency)} note={`${money(data.services.awin.current.commission, data.services.awin.current.currency)} Awin commission from ${number(affiliateClicks)} tracked clicks`} />
+          <Metric label="Revenue per 1,000 sessions" value={money(revenuePerThousandSessions, "GBP")} note={`${money(netProductRevenue, "GBP")} net Payhip revenue from ${number(data.current.sessions)} measured sessions`} />
+        </div>
+        <p className="mt-4 text-xs leading-5 text-[var(--text-soft)]/75">Rates use the latest 28-day window. Payhip purchases cannot yet be matched to individual Kit subscribers, so subscriber-to-buyer is a directional cohort measure rather than person-level attribution.</p>
       </section>
 
       <section className="mt-8 grid gap-6 xl:grid-cols-3">

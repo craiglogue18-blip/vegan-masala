@@ -15,7 +15,9 @@ type Newsletter = {
 type KitOverview = {
   configured: boolean; subscribers: number | null; error?: string | null;
   broadcasts: Array<{ id: number; subject?: string; created_at?: string; send_at?: string | null; public?: boolean }>;
+  sequences?: Array<{ id: number; name?: string }>;
 };
+type WelcomeEmail = { day: number; subject: string; preview: string; purpose: string; body: string };
 type AutomationConfig = {
   enabled: boolean; startAt: string; cadenceWeeks: 1 | 2; weekday: number; hour: number; minute: number;
   recipeCount: number; theme: string; publishToWeb: boolean; updatedAt: string;
@@ -77,6 +79,8 @@ export default function NewsletterStudioPage() {
   const [automationConfirmed, setAutomationConfirmed] = useState(false);
   const [automationStatus, setAutomationStatus] = useState("Loading newsletter schedule…");
   const [savingAutomation, setSavingAutomation] = useState(false);
+  const [welcomeSequence, setWelcomeSequence] = useState<{ name: string; emails: WelcomeEmail[] }>({ name: "Vegan Masala · New subscriber welcome", emails: [] });
+  const [copiedWelcome, setCopiedWelcome] = useState<number | null>(null);
 
   async function load() {
     setLoading(true);
@@ -92,6 +96,7 @@ export default function NewsletterStudioPage() {
       const nextGuides = Array.isArray(data.guides) ? data.guides : [];
       setGuides(nextGuides);
       setKit(data.kit || { configured: false, subscribers: null, broadcasts: [] });
+      if (data.welcomeSequence?.emails) setWelcomeSequence(data.welcomeSequence);
       setSelectedSlugs((current) => current.length ? current : nextRecipes.slice(0, 3).map((recipe: RecipeChoice) => recipe.slug));
       setStatus(data.kit?.error || "Choose up to five recipes, then generate a newsletter preview.");
       if (automationResponse.ok && automationData.ok) {
@@ -104,6 +109,14 @@ export default function NewsletterStudioPage() {
       }
     } catch (error: unknown) { setStatus(errorMessage(error, "Could not load newsletter data")); }
     finally { setLoading(false); }
+  }
+
+  async function copyWelcomeEmail(index: number) {
+    const email = welcomeSequence.emails[index];
+    if (!email) return;
+    await navigator.clipboard.writeText(`Subject: ${email.subject}\nPreview: ${email.preview}\n\n${email.body}`);
+    setCopiedWelcome(index);
+    window.setTimeout(() => setCopiedWelcome((current) => current === index ? null : current), 1800);
   }
 
   useEffect(() => { void load(); }, []);
@@ -220,6 +233,17 @@ export default function NewsletterStudioPage() {
         <div className="rounded-2xl bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Active audience</div><div className="mt-2 text-3xl font-extrabold text-white">{kit.subscribers ?? "—"}</div></div>
         <div className="rounded-2xl bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Recent broadcasts</div><div className="mt-2 text-3xl font-extrabold text-white">{kit.broadcasts?.length || 0}</div></div>
       </div>
+    </section>
+
+    <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/35 bg-gradient-to-br from-[#19170f] to-[var(--surface)] p-8">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div><div className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-gold)]/70">Subscriber conversion</div><h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">Five-email welcome sequence</h2><p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">Delivers both free guides, teaches a concrete bread skill, introduces useful affiliate equipment and presents the £9 masterclass only after four value-led messages.</p></div>
+        <div className={`rounded-full px-4 py-2 text-sm font-extrabold ${(kit.sequences || []).some((item) => item.name === welcomeSequence.name) ? "bg-emerald-500/15 text-emerald-300" : "bg-sky-500/15 text-sky-200"}`}>{(kit.sequences || []).some((item) => item.name === welcomeSequence.name) ? "Found in Kit" : "Reusable broadcast library"}</div>
+      </div>
+      <div className="mt-6 grid gap-4 lg:grid-cols-5">
+        {welcomeSequence.emails.map((email, index) => <article key={email.day} className="flex flex-col rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">{email.day === 0 ? "Immediately" : `Day ${email.day}`}</div><h3 className="mt-2 font-extrabold leading-6 text-white">{email.subject}</h3><p className="mt-3 flex-1 text-xs leading-5 text-[var(--text-soft)]">{email.purpose}</p><button type="button" onClick={() => void copyWelcomeEmail(index)} className="mt-4 rounded-xl border border-[var(--border)] px-3 py-2 text-xs font-bold text-[var(--brand-gold)] hover:bg-white/5">{copiedWelcome === index ? "Copied" : "Copy email"}</button></article>)}
+      </div>
+      <div className="mt-5 rounded-2xl border border-sky-500/25 bg-sky-500/5 p-5 text-sm leading-6 text-sky-100"><strong>Free-plan approach:</strong> no upgrade is required. Reuse these five emails as source material for the existing fortnightly broadcasts, rotating the lesson, guide and product offer so subscribers do not receive repetitive content. The automatic day-by-day sequence remains an optional future upgrade only after newsletter revenue comfortably covers Kit&apos;s monthly cost. Nothing has been activated or sent.</div>
     </section>
 
     <div className="mt-8 grid gap-7 lg:grid-cols-[420px_1fr]">

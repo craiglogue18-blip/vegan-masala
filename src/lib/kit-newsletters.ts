@@ -36,13 +36,14 @@ export async function kitRequest(path: string, init?: RequestInit) {
 
 export async function getKitOverview() {
   if (!process.env.KIT_API_KEY?.trim()) {
-    return { configured: false, subscribers: null, templates: [], broadcasts: [], error: null };
+    return { configured: false, subscribers: null, templates: [], broadcasts: [], sequences: [], error: null };
   }
   try {
-    const [subscriberData, templateData, broadcastData] = await Promise.all([
+    const [subscriberData, templateData, broadcastData, sequenceData] = await Promise.all([
       kitRequest("/subscribers?include_total_count=true&per_page=1&slim=true&status=active"),
       kitRequest("/email_templates?per_page=100"),
       kitRequest("/broadcasts?per_page=12"),
+      kitRequest("/sequences?per_page=100"),
     ]);
     return {
       configured: true,
@@ -51,6 +52,7 @@ export async function getKitOverview() {
         ? (templateData.email_templates as KitTemplate[]).filter((template) => template?.category !== "Starting point")
         : [],
       broadcasts: Array.isArray(broadcastData?.broadcasts) ? broadcastData.broadcasts : [],
+      sequences: Array.isArray(sequenceData?.sequences) ? sequenceData.sequences : [],
       error: null,
     };
   } catch (error: unknown) {
@@ -59,6 +61,7 @@ export async function getKitOverview() {
       subscribers: null,
       templates: [],
       broadcasts: [],
+      sequences: [],
       error: error instanceof Error && error.message ? error.message : "Kit is temporarily unavailable",
     };
   }
