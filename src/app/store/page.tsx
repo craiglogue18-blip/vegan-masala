@@ -1,12 +1,13 @@
 import Image from "next/image";
+import Link from "next/link";
 import CommerceLink from "@/components/CommerceLink";
 
 const PAYHIP_PRODUCT_URL = "https://payhip.com/b/Qna1A";
 
 export const metadata = {
-  title: "Vegan Indian Sweets Ebook | Vegan Masala Shop",
+  title: "Vegan Masala Shop | Indian Cooking Guides & Masterclasses",
   description:
-    "The original 23-page Vegan Indian Sweets ebook with six comforting recipes, pantry guidance, troubleshooting help and festive serving ideas.",
+    "Shop practical Vegan Masala cooking guides, including the Indian Bread Masterclass Pack and the original Vegan Indian Sweets ebook.",
   alternates: { canonical: "/store" },
 };
 
@@ -14,6 +15,33 @@ export default function EbookPage() {
   return (
     <main className="min-h-screen text-white">
       <div className="mx-auto max-w-6xl px-6 py-12 md:px-8 lg:px-10">
+        <section className="mb-10 overflow-hidden rounded-[2.25rem] border border-[var(--brand-gold)]/55 bg-black/75 shadow-2xl">
+          <div className="grid lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+            <div className="relative min-h-[330px] lg:min-h-[430px]">
+              <Image
+                src="/social/1000-followers-bread-guide/source/indian-bread-feast.png"
+                alt="A generous table of authentic Indian breads featured in the Vegan Masala masterclass"
+                fill
+                priority
+                unoptimized
+                sizes="(min-width: 1024px) 42vw, 100vw"
+                className="object-cover"
+              />
+              <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/10" />
+            </div>
+            <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
+              <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[var(--brand-gold)]">New · expanded 18-page edition</p>
+              <h1 className="mt-4 text-4xl font-extrabold leading-tight text-white sm:text-5xl">Indian Bread Masterclass Pack</h1>
+              <p className="mt-5 text-lg leading-8 text-zinc-200">Learn the repeatable techniques behind softer chapati, blistered naan, filled paratha and puffed poori—with dough ratios, batch planning, pairings and a printable practice log.</p>
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                <Link href="/store/indian-bread-masterclass" className="inline-flex rounded-full bg-[var(--brand-red)] px-7 py-4 font-extrabold text-white transition hover:-translate-y-0.5 hover:brightness-110">Explore the £9 masterclass</Link>
+                <Link href="/bread-guide" className="inline-flex rounded-full border border-[var(--brand-gold)] px-7 py-4 font-extrabold text-[var(--brand-gold)] transition hover:bg-[var(--brand-gold)] hover:text-black">Try the free bread guide</Link>
+              </div>
+              <p className="mt-5 text-sm text-zinc-400">One payment · Instant PDF delivery through Payhip</p>
+            </div>
+          </div>
+        </section>
+
         <section className="relative grid gap-10 overflow-hidden rounded-[2.25rem] border border-[var(--brand-gold)]/45 bg-black/70 p-6 shadow-2xl sm:p-9 lg:grid-cols-2 lg:items-center lg:p-12">
           <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-[var(--brand-red)]/15 blur-3xl" />
           <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 right-0 h-80 w-80 rounded-full bg-[var(--brand-gold)]/10 blur-3xl" />
