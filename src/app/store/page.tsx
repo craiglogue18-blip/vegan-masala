@@ -7,7 +7,7 @@ const PAYHIP_PRODUCT_URL = "https://payhip.com/b/Qna1A";
 export const metadata = {
   title: "Vegan Masala Shop | Indian Cooking Guides & Masterclasses",
   description:
-    "Shop practical Vegan Masala cooking guides, including the Indian Bread Masterclass Pack and the original Vegan Indian Sweets ebook.",
+    "Shop practical Vegan Masala cooking guides, including Indian bread and curry-base masterclasses and the original Vegan Indian Sweets ebook.",
   alternates: { canonical: "/store" },
 };
 
@@ -15,6 +15,51 @@ export default function EbookPage() {
   return (
     <main className="min-h-screen text-white">
       <div className="mx-auto max-w-6xl px-6 py-12 md:px-8 lg:px-10">
+        <section className="mb-12">
+          <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--brand-gold)]">Vegan Masala shop</p>
+          <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-3xl">
+              <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-6xl">Practical guides for better Indian cooking</h1>
+              <p className="mt-4 text-lg leading-8 text-[var(--text-soft)]">Start free, choose one focused masterclass, or build a small reference library you will actually cook from.</p>
+            </div>
+            <p className="max-w-xs text-sm leading-6 text-zinc-400">Secure checkout and instant delivery for released products through Payhip.</p>
+          </div>
+
+          <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <Link href="/store/indian-bread-masterclass" className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
+              <div className="relative aspect-[4/3]">
+                <Image src="/social/1000-followers-bread-guide/source/indian-bread-feast.png" alt="Indian Bread Masterclass" fill unoptimized sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
+                <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">AVAILABLE NOW</span>
+              </div>
+              <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Indian Bread Masterclass</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Dough ratios, breads, fillings, batch planning and a practice log.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">£9 · Explore the pack →</p></div>
+            </Link>
+
+            <Link href="/store/curry-base-masterclass" className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
+              <div className="relative aspect-[4/3]">
+                <Image src="/images/guides/how-to-build-a-curry-base.png" alt="Curry Base Masterclass" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
+                <span className="absolute left-3 top-3 rounded-full bg-amber-400 px-3 py-1 text-xs font-extrabold text-black">READY FOR REVIEW</span>
+              </div>
+              <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Curry Base Masterclass</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Read every cooking stage, adapt one base and fix common problems.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">Planned £11 · Preview →</p></div>
+            </Link>
+
+            <div className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
+              <div className="relative aspect-[4/3]">
+                <Image src="/images/ebook/cover.jpg" alt="Vegan Indian Sweets ebook" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover object-top transition duration-500 group-hover:scale-105" />
+                <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">AVAILABLE NOW</span>
+              </div>
+              <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Vegan Indian Sweets</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Six celebration recipes in the original illustrated Vegan Masala edition.</p><CommerceLink href={PAYHIP_PRODUCT_URL} product="Vegan Indian Sweets Ebook" placement="store-catalog" value={5} className="mt-4 inline-flex font-extrabold text-[var(--brand-gold)]">£5 · Buy the ebook →</CommerceLink></div>
+            </div>
+
+            <Link href="/bread-guide" className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
+              <div className="relative aspect-[4/3]">
+                <Image src="/images/guides/vegan-indian-pantry-staples/flatbreads.png" alt="Free guide to authentic Indian vegan bread" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
+                <span className="absolute left-3 top-3 rounded-full bg-emerald-400 px-3 py-1 text-xs font-extrabold text-black">FREE</span>
+              </div>
+              <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Indian Bread Starter Guide</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Culture, ovens, core techniques and bread traditions for curious cooks.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">Join the newsletter →</p></div>
+            </Link>
+          </div>
+        </section>
+
         <section className="mb-10 overflow-hidden rounded-[2.25rem] border border-[var(--brand-gold)]/55 bg-black/75 shadow-2xl">
           <div className="grid lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
             <div className="relative min-h-[330px] lg:min-h-[430px]">
