@@ -4,7 +4,7 @@ from __future__ import annotations
 from io import BytesIO
 from pathlib import Path
 
-from PIL import Image, ImageEnhance, ImageOps
+from PIL import Image, ImageDraw, ImageEnhance, ImageOps
 from reportlab.lib.colors import Color, HexColor, white
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
@@ -51,6 +51,33 @@ def draw_fitted(c: canvas.Canvas, path: Path, x: float, y: float, w: float, h: f
     c.drawImage(fitted_image(path, max(1, int(w * 2)), max(1, int(h * 2)), darken), x, y, w, h, mask="auto")
 
 
+def rounded_image(path: Path, width: int, height: int, radius: int, darken: float = 1.0) -> ImageReader:
+    im = Image.open(path).convert("RGB")
+    im = ImageOps.fit(im, (width, height), method=Image.Resampling.LANCZOS)
+    if darken != 1.0:
+        im = ImageEnhance.Brightness(im).enhance(darken)
+    rgba = im.convert("RGBA")
+    mask = Image.new("L", (width, height), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, width - 1, height - 1), radius=radius, fill=255)
+    rgba.putalpha(mask)
+    stream = BytesIO()
+    rgba.save(stream, format="PNG", optimize=True)
+    stream.seek(0)
+    return ImageReader(stream)
+
+
+def draw_fitted_rounded(c: canvas.Canvas, path: Path, x: float, y: float, w: float, h: float,
+                        darken: float = 1.0, radius: float = 14, border_width: float = 1.6) -> None:
+    scale = 2
+    c.drawImage(
+        rounded_image(path, max(1, int(w * scale)), max(1, int(h * scale)), int(radius * scale), darken),
+        x, y, w, h, mask="auto"
+    )
+    c.setStrokeColor(Color(GOLD.red, GOLD.green, GOLD.blue, alpha=0.82))
+    c.setLineWidth(border_width)
+    c.roundRect(x, y, w, h, radius, stroke=1, fill=0)
+
+
 def set_fill_alpha(c: canvas.Canvas, value: float) -> None:
     try:
         c.setFillAlpha(value)
@@ -88,6 +115,22 @@ def paragraph(c: canvas.Canvas, text: str, x: float, y: float, width: float, siz
     for line in lines:
         c.drawString(x, y, line)
         y -= leading
+    return y
+
+
+def bullet_list(c: canvas.Canvas, items: list[str], x: float, y: float, width: float,
+                size: float = 10.5, leading: float = 13.5, gap: float = 5.5) -> float:
+    for item in items:
+        lines = wrap(item, "RajdhaniMedium", size, width - 18)
+        c.setFillColor(GOLD)
+        c.circle(x + 4, y + 3, 2.5, stroke=0, fill=1)
+        c.setFillColor(CREAM)
+        c.setFont("RajdhaniMedium", size)
+        line_y = y
+        for line in lines:
+            c.drawString(x + 16, line_y, line)
+            line_y -= leading
+        y = line_y - gap
     return y
 
 
@@ -143,30 +186,30 @@ def info_card(c: canvas.Canvas, title: str, body: str, x: float, y: float, w: fl
     paragraph(c, body, x + 16, y + h - 49, w - 32, 9.5, 12.3, SOFT, "RajdhaniMedium")
 
 
-def photo_page(c: canvas.Canvas, number: int, eyebrow: str, title: str, body: str, image: Path,
+def photo_page(c: canvas.Canvas, number: int, eyebrow: str, title: str, body: str,
+               image: Path | tuple[Path, Path],
                bullets: list[str], note: str | None = None) -> None:
     page_base(c, number)
-    draw_fitted(c, image, 38, 395, W - 76, 355, 0.88)
-    set_fill_alpha(c, 0.55)
-    c.setFillColor(INK)
-    c.rect(38, 395, W - 76, 94, stroke=0, fill=1)
-    set_fill_alpha(c, 1)
-    pill(c, eyebrow.upper(), 55, 718, fill=GOLD, text_color=INK)
-    y = heading(c, title, 55, 468, W - 110, 28, white)
-    y = paragraph(c, body, 55, 360, W - 110, 11.5, 15.3, SOFT, "RajdhaniMedium")
-    y -= 10
-    for item in bullets:
-        c.setFillColor(GOLD)
-        c.circle(61, y + 4, 2.5, stroke=0, fill=1)
-        y = paragraph(c, item, 72, y + 8, W - 127, 10.5, 13.5, CREAM, "RajdhaniMedium") - 5
+    photo_x, photo_y, photo_w, photo_h = 48, 490, W - 96, 235
+    if isinstance(image, tuple):
+        gap = 12
+        panel_w = (photo_w - gap) / 2
+        draw_fitted_rounded(c, image[0], photo_x, photo_y, panel_w, photo_h, 0.92, 16)
+        draw_fitted_rounded(c, image[1], photo_x + panel_w + gap, photo_y, panel_w, photo_h, 0.92, 16)
+    else:
+        draw_fitted_rounded(c, image, photo_x, photo_y, photo_w, photo_h, 0.92, 16)
+    pill(c, eyebrow.upper(), 64, 697, fill=GOLD, text_color=INK)
+    y = heading(c, title, 48, 454, W - 96, 28, white)
+    y = paragraph(c, body, 48, y - 12, W - 96, 11.5, 15.3, SOFT, "RajdhaniMedium")
+    y = bullet_list(c, bullets, 54, y - 8, W - 108)
     if note:
         c.setFillColor(Color(184 / 255, 50 / 255, 50 / 255, alpha=0.16))
         c.setStrokeColor(Color(232 / 255, 182 / 255, 41 / 255, alpha=0.38))
-        c.roundRect(55, 62, W - 110, 62, 13, stroke=1, fill=1)
+        c.roundRect(48, 62, W - 96, 66, 13, stroke=1, fill=1)
         c.setFillColor(GOLD)
         c.setFont("RajdhaniBold", 9)
-        c.drawString(71, 102, "THE USEFUL TEST")
-        paragraph(c, note, 71, 84, W - 142, 9.5, 12, SOFT, "RajdhaniMedium")
+        c.drawString(64, 105, "THE USEFUL TEST")
+        paragraph(c, note, 64, 86, W - 128, 9.5, 12, SOFT, "RajdhaniMedium")
     c.showPage()
 
 
@@ -248,34 +291,35 @@ def build() -> None:
     pill(c, "MISE EN PLACE", 48, 752, fill=RED)
     heading(c, "Know what each ingredient is doing", 48, 708, W - 96, 30)
     ingredient_dir = ROOT / "public" / "images" / "guides" / "how-to-build-a-curry-base"
+    generated_dir = ingredient_dir / "generated"
     ingredients = [
         ("Oil", "Transfers heat and dissolves aromatic compounds.", "oil.png"),
-        ("Onion", "Body, savouriness and sweetness when patiently cooked.", "onions.png"),
-        ("Garlic", "Deep savoury character; burns quickly once minced.", "garlic.png"),
-        ("Ginger", "Fresh heat and brightness that keeps a rich base lively.", "ginger.png"),
+        ("Onion", "Body, savouriness and sweetness when patiently cooked.", "generated/onion-action-v2.png"),
+        ("Garlic", "Deep savoury character; burns quickly once minced.", "generated/garlic-action-v2.png"),
+        ("Ginger", "Fresh heat and brightness that keeps a rich base lively.", "generated/ginger-action-v2.png"),
         ("Tomato", "Acidity, colour and sauce body after water cooks away.", "tomatoes.png"),
         ("Ground spices", "Define direction; they need fat, heat and moisture.", "ground-spices.png"),
     ]
-    card_w, card_h = 238, 195
+    card_w, card_h = 238, 166
     for i, (name, body, filename) in enumerate(ingredients):
         col, row = i % 2, i // 2
         x = 48 + col * 259
-        y = 447 - row * 212
+        y = 461 - row * 181
         c.setFillColor(SURFACE)
         c.setStrokeColor(Color(232 / 255, 182 / 255, 41 / 255, alpha=0.32))
         c.roundRect(x, y, card_w, card_h, 14, stroke=1, fill=1)
-        draw_fitted(c, ingredient_dir / filename, x, y + 78, card_w, 117, 0.96)
+        draw_fitted_rounded(c, ingredient_dir / filename, x + 7, y + 70, card_w - 14, 88, 0.96, 11, 1.1)
         c.setFillColor(GOLD)
         c.setFont("RajdhaniBold", 14)
-        c.drawString(x + 14, y + 57, name)
-        paragraph(c, body, x + 14, y + 38, card_w - 28, 9.2, 11.2, SOFT, "RajdhaniMedium")
+        c.drawString(x + 14, y + 51, name)
+        paragraph(c, body, x + 14, y + 31, card_w - 28, 9.2, 11.2, SOFT, "RajdhaniMedium")
     c.showPage()
 
     # 5 - Equipment
     page_base(c, 5)
     pill(c, "TOOLS", 48, 752, fill=GOLD, text_color=INK)
     heading(c, "Useful equipment, without filling the cupboard", 48, 708, W - 96, 29)
-    draw_fitted(c, ROOT / "public" / "images" / "equipment" / "spice_grinder.jpg", 48, 382, 214, 245, 0.88)
+    draw_fitted_rounded(c, ROOT / "public" / "images" / "equipment" / "spice_grinder.jpg", 48, 382, 214, 245, 0.88, 16)
     tool_cards = [
         ("Wide saute pan", "A wider base evaporates tomato moisture faster and makes visual cues easier to read."),
         ("Heavy kadai or casserole", "Stable heat helps onions colour evenly and reduces scorching during a long bhunao."),
@@ -296,8 +340,8 @@ def build() -> None:
 
     # 6-10 - technique pages
     photo_page(c, 6, "STAGE 1", "Start with controlled heat", "Oil should be fluid and shimmering, not smoking. Whole spices need enough heat to release aroma but only seconds can separate fragrant from bitter.", ROOT / "public" / "images" / "guides" / "how-to-temper-spices.png", ["Add larger, tougher whole spices before delicate leaves or minced garlic.", "Cumin should darken slightly and smell nutty; mustard seeds should begin to pop.", "If spices blacken instantly, remove the pan from the heat and begin again."], "Fragrance should rise clearly from the pan before the next ingredient goes in.")
-    photo_page(c, 7, "STAGE 2", "Onions decide the depth", "For this master base, finely chop 250 g onion and cook it patiently. Pale softened onions give a lighter sauce; deeper golden onions bring sweetness, body and roasted notes.", ingredient_dir / "onions.png", ["Use medium heat and stir more often as the onion loses water.", "A pinch of salt helps draw moisture, but too much early salt can slow browning.", "Add one tablespoon of water if the pan catches before the onion is evenly coloured."], "Press a piece with the spoon: it should be soft throughout, not crisp-edged with a raw centre.")
-    photo_page(c, 8, "STAGE 3", "Cook out raw ginger and garlic", "Add 15 g grated ginger and 15 g grated garlic after the onions are ready. The mixture will smell sharp at first, then become rounded and savoury.", ingredient_dir / "ginger.png", ["Keep the mixture moving because finely grated garlic catches quickly.", "Cook for 60-90 seconds rather than relying only on the clock.", "If the pan is very dry, loosen it with a teaspoon of water before the garlic burns."], "The eye-watering raw smell should soften; the paste should no longer look wet and chalky.")
+    photo_page(c, 7, "STAGE 2", "Onions decide the depth", "For this master base, finely chop 250 g onion and cook it patiently. Pale softened onions give a lighter sauce; deeper golden onions bring sweetness, body and roasted notes.", generated_dir / "onion-action-v2.png", ["Use medium heat and stir more often as the onion loses water.", "A pinch of salt helps draw moisture, but too much early salt can slow browning.", "Add one tablespoon of water if the pan catches before the onion is evenly coloured."], "Press a piece with the spoon: it should be soft throughout, not crisp-edged with a raw centre.")
+    photo_page(c, 8, "STAGE 3", "Add garlic and ginger with intent", "Add 15 g grated ginger and 15 g finely minced garlic after the onions are ready. The two aromatics bring different qualities, so the paired photographs show each action clearly.", (generated_dir / "garlic-action-v2.png", generated_dir / "ginger-action-v2.png"), ["Keep the mixture moving because finely minced garlic catches quickly.", "Cook for 60-90 seconds rather than relying only on the clock.", "If the pan is very dry, loosen it with a teaspoon of water before the garlic burns."], "The eye-watering raw smell should soften; the aromatics should no longer look wet and chalky.")
     photo_page(c, 9, "STAGE 4", "Bhunao: reduce, concentrate, observe", "Add 300 g finely chopped or crushed tomatoes. Bhunao describes cooking and working a mixture down so moisture evaporates and flavours concentrate; terminology and technique vary across homes and regions.", ingredient_dir / "tomatoes.png", ["At first the mixture looks loose and separate. Keep cooking uncovered.", "Scrape the pan regularly so the concentrated edges return to the sauce.", "The colour deepens, sizzling becomes sharper and small beads of oil may appear."], "Drag the spoon across the pan. The path should remain visible for a moment before the masala closes over it.")
     photo_page(c, 10, "STAGE 5", "Ground spices need protection", "Stir in turmeric, ground cumin, ground coriander and chilli only when the tomato mixture has reduced. Fry briefly, then add a splash of water if the masala tightens too fast.", ingredient_dir / "ground-spices.png", ["Ground spices release flavour quickly and can become bitter when scorched.", "Keep garam masala for the later stages if you want its perfume to remain distinct.", "Blooming in a moist, oily masala gives a deeper result than tipping spices into thin liquid."], "The spices should smell integrated with the onion and tomato, not dusty or raw.")
 
