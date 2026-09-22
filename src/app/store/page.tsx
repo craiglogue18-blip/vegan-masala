@@ -37,9 +37,9 @@ export default function EbookPage() {
             <Link href="/store/curry-base-masterclass" className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
               <div className="relative aspect-[4/3]">
                 <Image src="/images/guides/how-to-build-a-curry-base.png" alt="Curry Base Masterclass" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
-                <span className="absolute left-3 top-3 rounded-full bg-amber-400 px-3 py-1 text-xs font-extrabold text-black">READY FOR REVIEW</span>
+                <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">AVAILABLE NOW</span>
               </div>
-              <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Curry Base Masterclass</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Read every cooking stage, adapt one base and fix common problems.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">Planned £11 · Preview →</p></div>
+              <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Curry Base Masterclass</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Read every cooking stage, adapt one base and fix common problems.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">£11 · Explore the masterclass →</p></div>
             </Link>
 
             <div className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">

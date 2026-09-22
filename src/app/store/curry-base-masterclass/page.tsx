@@ -4,7 +4,9 @@ import Link from "next/link";
 
 import CommerceLink from "@/components/CommerceLink";
 
-const PAYHIP_URL = process.env.NEXT_PUBLIC_CURRY_MASTERCLASS_PAYHIP_URL?.trim();
+const PAYHIP_URL =
+  process.env.NEXT_PUBLIC_CURRY_MASTERCLASS_PAYHIP_URL?.trim() ||
+  "https://payhip.com/b/rQ3ap";
 
 export const metadata: Metadata = {
   title: "Curry Base Masterclass | Vegan Masala",
@@ -60,7 +62,7 @@ export default function CurryBaseMasterclassPage() {
             </Link>
           </div>
           <p className="mt-5 text-sm leading-6 text-[var(--text-soft)]/75">
-            One payment. Instant PDF delivery once released. The free guide remains available for cooks who do not need the full workbook.
+            One payment. Instant PDF delivery through Payhip. The free guide remains available for cooks who do not need the full workbook.
           </p>
         </div>
 
