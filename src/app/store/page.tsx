@@ -3,11 +3,12 @@ import Link from "next/link";
 import CommerceLink from "@/components/CommerceLink";
 
 const PAYHIP_PRODUCT_URL = "https://payhip.com/b/Qna1A";
+const APRON_PRODUCT_URL = "https://payhip.com/b/R10eg";
 
 export const metadata = {
-  title: "Vegan Masala Shop | Indian Cooking Guides & Masterclasses",
+  title: "Vegan Masala Shop | Indian Cooking Guides, Books & Kitchenware",
   description:
-    "Shop practical Vegan Masala cooking guides, including Indian bread and curry-base masterclasses and the original Vegan Indian Sweets ebook.",
+    "Shop practical Vegan Masala cooking guides, Indian bread and curry-base masterclasses, ebooks and branded kitchenware.",
   alternates: { canonical: "/store" },
 };
 
@@ -22,10 +23,24 @@ export default function EbookPage() {
               <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-6xl">Practical guides for better Indian cooking</h1>
               <p className="mt-4 text-lg leading-8 text-[var(--text-soft)]">Start free, choose one focused masterclass, or build a small reference library you will actually cook from.</p>
             </div>
-            <p className="max-w-xs text-sm leading-6 text-zinc-400">Secure checkout and instant delivery for released products through Payhip.</p>
+            <p className="max-w-xs text-sm leading-6 text-zinc-400">Secure checkout through Payhip, with instant digital delivery and made-to-order physical products.</p>
           </div>
 
-          <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            <CommerceLink
+              href={APRON_PRODUCT_URL}
+              product="Vegan Masala Gold Embroidered Organic Cotton Apron"
+              placement="store-catalog"
+              value={29}
+              className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]"
+            >
+              <div className="relative aspect-[4/3]">
+                <Image src="/images/store/vegan-masala-gold-apron-flat.jpg" alt="Black organic cotton apron with the Vegan Masala logo embroidered in single-colour gold thread" fill sizes="(min-width: 1280px) 20vw, (min-width: 1024px) 33vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
+                <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">NEW · MADE TO ORDER</span>
+              </div>
+              <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Gold Embroidered Apron</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Organic cotton, adjustable fit and a practical two-compartment pocket.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">£29 · Shop the apron →</p></div>
+            </CommerceLink>
+
             <Link href="/store/indian-bread-masterclass" className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
               <div className="relative aspect-[4/3]">
                 <Image src="/social/1000-followers-bread-guide/source/indian-bread-feast.png" alt="Indian Bread Masterclass" fill unoptimized sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
