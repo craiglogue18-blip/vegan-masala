@@ -51,8 +51,8 @@ export default function EbookPage() {
             </Link>
 
             <div className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
-              <div className="relative aspect-[4/5]">
-                <Image src="/images/ebook/cover.jpg" alt="Vegan Indian Sweets ebook" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover object-top transition duration-500 group-hover:scale-105" />
+              <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,#254044_0%,#071719_62%,#020607_100%)] p-4">
+                <Image src="/images/ebook/cover.jpg" alt="Cover of the Vegan Indian Sweets ebook" width={1600} height={2560} sizes="(min-width: 1280px) 16vw, (min-width: 1024px) 25vw, 42vw" className="h-full w-auto rounded-md border border-[var(--brand-gold)]/70 object-contain shadow-[0_18px_35px_rgba(0,0,0,0.75)] transition duration-500 group-hover:scale-[1.035]" />
                 <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">AVAILABLE NOW</span>
               </div>
               <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Vegan Indian Sweets</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Six celebration recipes in the original illustrated Vegan Masala edition.</p><CommerceLink href={PAYHIP_PRODUCT_URL} product="Vegan Indian Sweets Ebook" placement="store-catalog" value={5} className="mt-4 inline-flex font-extrabold text-[var(--brand-gold)]">£5 · Buy the ebook →</CommerceLink></div>
