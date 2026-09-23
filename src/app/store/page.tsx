@@ -27,7 +27,7 @@ export default function EbookPage() {
               value={29}
               className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]"
             >
-              <div className="relative aspect-[4/3]">
+              <div className="relative aspect-[4/5]">
                 <Image src="/images/store/vegan-masala-gold-apron-flat.jpg" alt="Black organic cotton apron with the Vegan Masala logo embroidered in single-colour gold thread" fill sizes="(min-width: 1280px) 20vw, (min-width: 1024px) 33vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
                 <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">NEW · MADE TO ORDER</span>
               </div>
@@ -35,23 +35,23 @@ export default function EbookPage() {
             </CommerceLink>
 
             <Link href="/store/indian-bread-masterclass" className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
-              <div className="relative aspect-[4/3]">
-                <Image src="/social/1000-followers-bread-guide/source/indian-bread-feast.png" alt="Indian Bread Masterclass" fill unoptimized sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
+              <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,#254044_0%,#071719_62%,#020607_100%)] p-4">
+                <Image src="/images/store/indian-bread-masterclass-cover.jpg" alt="Cover of the Indian Bread Masterclass ebook" width={900} height={1272} sizes="(min-width: 1280px) 16vw, (min-width: 1024px) 25vw, 42vw" className="h-full w-auto rounded-md border border-[var(--brand-gold)]/70 object-contain shadow-[0_18px_35px_rgba(0,0,0,0.75)] transition duration-500 group-hover:scale-[1.035]" />
                 <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">AVAILABLE NOW</span>
               </div>
               <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Indian Bread Masterclass</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Dough ratios, breads, fillings, batch planning and a practice log.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">£9 · Explore the pack →</p></div>
             </Link>
 
             <Link href="/store/curry-base-masterclass" className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
-              <div className="relative aspect-[4/3]">
-                <Image src="/images/guides/how-to-build-a-curry-base.png" alt="Curry Base Masterclass" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
+              <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,#254044_0%,#071719_62%,#020607_100%)] p-4">
+                <Image src="/images/store/curry-base-masterclass-cover.jpg" alt="Cover of the Curry Base Masterclass ebook" width={900} height={1272} sizes="(min-width: 1280px) 16vw, (min-width: 1024px) 25vw, 42vw" className="h-full w-auto rounded-md border border-[var(--brand-gold)]/70 object-contain shadow-[0_18px_35px_rgba(0,0,0,0.75)] transition duration-500 group-hover:scale-[1.035]" />
                 <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">AVAILABLE NOW</span>
               </div>
               <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Curry Base Masterclass</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Read every cooking stage, adapt one base and fix common problems.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">£11 · Explore the masterclass →</p></div>
             </Link>
 
             <div className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
-              <div className="relative aspect-[4/3]">
+              <div className="relative aspect-[4/5]">
                 <Image src="/images/ebook/cover.jpg" alt="Vegan Indian Sweets ebook" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover object-top transition duration-500 group-hover:scale-105" />
                 <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white">AVAILABLE NOW</span>
               </div>
@@ -59,8 +59,8 @@ export default function EbookPage() {
             </div>
 
             <Link href="/bread-guide" className="group overflow-hidden rounded-[1.5rem] border border-[var(--brand-gold)]/35 bg-black/65 transition hover:-translate-y-1 hover:border-[var(--brand-gold)]">
-              <div className="relative aspect-[4/3]">
-                <Image src="/images/guides/vegan-indian-pantry-staples/flatbreads.png" alt="Free guide to authentic Indian vegan bread" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition duration-500 group-hover:scale-105" />
+              <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,#254044_0%,#071719_62%,#020607_100%)] p-4">
+                <Image src="/images/store/indian-bread-starter-guide-cover.jpg" alt="Cover of the free Authentic Indian Vegan Breads starter guide" width={900} height={1273} sizes="(min-width: 1280px) 16vw, (min-width: 1024px) 25vw, 42vw" className="h-full w-auto rounded-md border border-[var(--brand-gold)]/70 object-contain shadow-[0_18px_35px_rgba(0,0,0,0.75)] transition duration-500 group-hover:scale-[1.035]" />
                 <span className="absolute left-3 top-3 rounded-full bg-emerald-400 px-3 py-1 text-xs font-extrabold text-black">FREE</span>
               </div>
               <div className="p-5"><h2 className="text-2xl font-extrabold text-white">Indian Bread Starter Guide</h2><p className="mt-2 min-h-16 text-sm leading-6 text-zinc-300">Culture, ovens, core techniques and bread traditions for curious cooks.</p><p className="mt-4 font-extrabold text-[var(--brand-gold)]">Join the newsletter →</p></div>
