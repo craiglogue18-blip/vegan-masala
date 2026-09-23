@@ -20,8 +20,7 @@ export default function EbookPage() {
           <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--brand-gold)]">Vegan Masala shop</p>
           <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-3xl">
-              <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-6xl">Practical guides for better Indian cooking</h1>
-              <p className="mt-4 text-lg leading-8 text-[var(--text-soft)]">Start free, choose one focused masterclass, or build a small reference library you will actually cook from.</p>
+              <p className="text-lg leading-8 text-[var(--text-soft)]">Start free, choose one focused masterclass, or build a small reference library you will actually cook from.</p>
             </div>
             <p className="max-w-xs text-sm leading-6 text-zinc-400">Secure checkout through Payhip, with instant digital delivery and made-to-order physical products.</p>
           </div>
