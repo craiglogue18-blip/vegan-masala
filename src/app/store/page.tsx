@@ -17,13 +17,7 @@ export default function EbookPage() {
     <main className="min-h-screen text-white">
       <div className="mx-auto max-w-6xl px-6 py-12 md:px-8 lg:px-10">
         <section className="mb-12">
-          <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--brand-gold)]">Vegan Masala shop</p>
-          <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-3xl">
-              <p className="text-lg leading-8 text-[var(--text-soft)]">Start free, choose one focused masterclass, or build a small reference library you will actually cook from.</p>
-            </div>
-            <p className="max-w-xs text-sm leading-6 text-zinc-400">Secure checkout through Payhip, with instant digital delivery and made-to-order physical products.</p>
-          </div>
+          <p className="text-center text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--brand-gold)]">Vegan Masala shop</p>
 
           <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             <CommerceLink
