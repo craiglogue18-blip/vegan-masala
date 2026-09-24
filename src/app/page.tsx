@@ -6,19 +6,14 @@ import Image from "next/image";
 import { getPublicRecipes } from "@/lib/recipes";
 import { getAllGuides } from "@/lib/guides";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
-import CurrySlider from "@/components/CurrySlider";
 import DinnerPlanPromo from "@/components/DinnerPlanPromo";
-import DinnerFinder from "@/components/DinnerFinder";
 import TrendingRecipes from "@/components/TrendingRecipes";
 import RecipeVideoShowcase from "@/components/RecipeVideoShowcase";
 import EthicalShoppingSpotlight from "@/components/EthicalShoppingSpotlight";
-import CommerceLink from "@/components/CommerceLink";
-import homeSeasonal from "@/data/homeSeasonal.json";
+import HomepageApronFeature from "@/components/HomepageApronFeature";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
-
-const apronProductUrl = "https://payhip.com/b/R10eg";
 
 export const metadata: Metadata = {
   title: "Vegan Indian Recipes & Cooking Guides",
@@ -48,11 +43,6 @@ function minutes(prep?: number, cook?: number) {
   return total > 0 ? `${total} min` : null;
 }
 
-function cleanLabel(label?: string) {
-  if (!label) return "";
-  return label.replace(/\s*\((recipe|guide)\)\s*$/i, "").trim();
-}
-
 function getGuideImage(slug: string, image?: string) {
   if (image) return image;
   return `/images/guides/${slug}.png`;
@@ -62,26 +52,8 @@ export default function Home() {
   const recipes = getPublicRecipes();
   const guides = getAllGuides();
 
-  const latestRecipes = recipes.slice(0, 6);
   const featuredRecipes = recipes.slice(0, 3);
   const featuredGuides = guides.slice(0, 3);
-  const finderRecipes = recipes.slice(0, 40).map((recipe) => ({
-    slug: recipe.slug,
-    title: recipe.title,
-    description: recipe.description || "",
-    image: getRecipeImage(recipe.slug),
-    totalMinutes: (recipe.prepMinutes || 0) + (recipe.cookMinutes || 0),
-    spice: recipe.spiceLevel || recipe.spice || "",
-    searchText: [
-      recipe.title,
-      recipe.description,
-      ...(recipe.tags || []),
-      ...(recipe.ingredients || []),
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase(),
-  }));
   const trendingRecipes = recipes.slice(0, 40).map((recipe) => ({
     slug: recipe.slug,
     title: recipe.title,
@@ -117,66 +89,6 @@ export default function Home() {
     },
   };
 
-  const currySliderImages = [
-    {
-      src: "/images/curries/curry_1.jpg",
-      alt: "Vegan Indian curry in rich masala sauce",
-    },
-    {
-      src: "/images/curries/curry_2.jpg",
-      alt: "Bowl of vegan Indian curry",
-    },
-    {
-      src: "/images/curries/curry_3.jpg",
-      alt: "Homemade vegan Indian curry with deep red gravy",
-    },
-    {
-      src: "/images/curries/curry_4.jpg",
-      alt: "Vegan Indian curry served for dinner",
-    },
-    {
-      src: "/images/curries/curry_5.jpg",
-      alt: "Close-up of vegan Indian curry",
-    },
-    {
-      src: "/images/curries/curry_6.jpg",
-      alt: "Vegan Indian curry with rich tomato masala",
-    },
-  ];
-
-  const collections = [
-    {
-      label: "30-minute meals",
-      href: "/recipes?collection=30-min",
-      desc: "Fast, bold, weeknight-friendly recipes.",
-      image: "/images/home/collections/quick-meals.webp",
-    },
-    {
-      label: "One-pot favourites",
-      href: "/recipes?collection=one-pot",
-      desc: "Less washing up, plenty of flavour.",
-      image: "/images/home/collections/one-pot.webp",
-    },
-    {
-      label: "Dal & lentils",
-      href: "/recipes?collection=dal",
-      desc: "Comforting staples for everyday cooking.",
-      image: "/images/home/collections/dal-lentils.webp",
-    },
-    {
-      label: "Curries",
-      href: "/recipes?tag=curry",
-      desc: "Rich masalas and deeply warming sauces.",
-      image: "/images/home/collections/curries.webp",
-    },
-    {
-      label: "Snacks & street food",
-      href: "/recipes?tag=snacks",
-      desc: "Crisp, savoury favourites made for sharing.",
-      image: "/images/home/collections/snacks.webp",
-    },
-  ];
-
   const exploreTags = [
     { label: "Tofu", key: "tofu" },
     { label: "Potato", key: "potatoes" },
@@ -186,56 +98,6 @@ export default function Home() {
     { label: "Eggplant", key: "eggplant" },
     { label: "Spinach", key: "spinach" },
     { label: "Instant Pot", key: "instant-pot" },
-  ];
-
-  const editorialStories = [
-    {
-      eyebrow: "At the market",
-      title: "Cook with the seasons",
-      description: "Start with what looks fresh, then build flavour with the right spices and technique.",
-      href: "/guides/seasonal-vegetables-for-indian-cooking",
-      image: "/images/editorial/market-produce.jpg",
-      alt: "A shopper choosing aubergines and greens at an Indian produce market",
-    },
-    {
-      eyebrow: "Street-side craft",
-      title: "Watch everyday skill at work",
-      description: "Explore the techniques and flavours behind crisp, savoury Indian favourites.",
-      href: "/recipes?tag=snacks",
-      image: "/images/editorial/street-food-dosa.jpg",
-      alt: "A street-food cook preparing masala dosa on a wide griddle",
-    },
-    {
-      eyebrow: "Passed down",
-      title: "Learn by cooking together",
-      description: "Straightforward guides that bring traditional kitchen knowledge into everyday cooking.",
-      href: "/guides/beginner-friendly-vegan-indian-recipes",
-      image: "/images/editorial/home-kitchen-chapati.jpg",
-      alt: "Two generations learning to roll chapati together in a home kitchen",
-    },
-  ];
-
-  const browseSections = [
-    {
-      title: "Curries",
-      href: "/recipes",
-      desc: "Rich, warming classics and cosy everyday favourites.",
-    },
-    {
-      title: "Flatbreads",
-      href: "/recipes?tag=flatbread",
-      desc: "Chapati, naan and Indian side staples.",
-    },
-    {
-      title: "Snacks",
-      href: "/recipes?tag=snacks",
-      desc: "Crispy pakoras, bhajis and comfort-food bites.",
-    },
-    {
-      title: "Guides",
-      href: "/guides",
-      desc: "Learn spices, pantry basics and Indian cooking techniques.",
-    },
   ];
 
   return (
@@ -271,10 +133,10 @@ export default function Home() {
 
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
-                href="#dinner-finder"
+                href="/recipes"
                 className="rounded-xl bg-[var(--brand-red)] px-6 py-3 font-bold text-white shadow transition hover:opacity-90"
               >
-                Find tonight’s recipe
+                Explore the recipes
               </Link>
 
               <a
@@ -334,216 +196,26 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="mt-10">
-        <DinnerFinder recipes={finderRecipes} />
-      </div>
-
-      <div className="mt-10">
-        <DinnerPlanPromo placement="homepage" />
-      </div>
-
-      <section className="vm-rise mt-12 overflow-hidden rounded-3xl border border-[var(--brand-gold)]/55 bg-[var(--surface)] shadow-lg">
-        <div className="grid items-stretch lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative min-h-[390px] overflow-hidden bg-[#f1ede3] sm:min-h-[500px] lg:min-h-full">
-            <Image
-              src="/images/store/vegan-masala-gold-apron-model.jpg"
-              alt="Model wearing the black Vegan Masala apron with its single-colour gold embroidered logo"
-              fill
-              sizes="(max-width: 1024px) 100vw, 45vw"
-              className="object-cover object-top"
-            />
-          </div>
-
-          <div className="relative flex flex-col justify-center overflow-hidden p-7 sm:p-10 lg:p-12">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-[url('/mandala-pattern.png')] bg-repeat opacity-[0.035]"
-            />
-            <div className="relative">
-              <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[var(--brand-gold)]">
-                New · Vegan Masala kitchenware
-              </p>
-              <h2 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-                Cook in the Vegan Masala apron
-              </h2>
-              <p className="mt-5 max-w-xl text-lg leading-8 text-[var(--text-soft)]">
-                A black organic-cotton apron finished with the Vegan Masala logo
-                in single-colour gold embroidery. Adjustable, practical and made
-                to order for cooks who take their masala seriously.
-              </p>
-
-              <ul className="mt-6 grid gap-3 text-sm text-[var(--text-soft)] sm:grid-cols-2">
-                <li className="rounded-xl border border-[var(--border)] bg-black/15 px-4 py-3">
-                  Gold embroidered branding
-                </li>
-                <li className="rounded-xl border border-[var(--border)] bg-black/15 px-4 py-3">
-                  Organic cotton fabric
-                </li>
-                <li className="rounded-xl border border-[var(--border)] bg-black/15 px-4 py-3">
-                  Adjustable fit
-                </li>
-                <li className="rounded-xl border border-[var(--border)] bg-black/15 px-4 py-3">
-                  Made to order
-                </li>
-              </ul>
-
-              <div className="mt-7 flex flex-wrap items-center gap-4">
-                <CommerceLink
-                  href={apronProductUrl}
-                  product="Vegan Masala Gold Embroidered Organic Cotton Apron"
-                  placement="homepage-apron-feature"
-                  value={29}
-                  className="inline-flex rounded-xl bg-[var(--brand-red)] px-6 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:brightness-110"
-                >
-                  Shop the apron · £29
-                </CommerceLink>
-                <Link
-                  href="/store"
-                  className="inline-flex rounded-xl border border-[var(--brand-gold)] px-6 py-3 font-extrabold text-[var(--brand-gold)] transition hover:bg-white/5"
-                >
-                  Explore the shop
-                </Link>
-              </div>
-              <p className="mt-4 text-xs leading-5 text-[var(--text-soft)]/80">
-                Produced to order by our fulfilment partner. Delivery is calculated at checkout.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="vm-rise mt-12 overflow-hidden rounded-3xl border border-[var(--brand-gold)]/45 bg-[var(--surface)] shadow-lg">
-        <div className="grid items-stretch lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="p-7 sm:p-10">
-            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--brand-gold)]/70">
-              {homeSeasonal.eyebrow}
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold leading-tight text-[var(--brand-gold)] sm:text-4xl">
-              {homeSeasonal.title}
-            </h2>
-            <p className="mt-4 max-w-2xl leading-7 text-[var(--text-soft)]">
-              {homeSeasonal.description}
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2 text-xs font-extrabold text-[var(--brand-gold)]">
-              {['Aubergine', 'Spinach', 'Tomato', 'Chickpeas', 'Warming spices'].map((ingredient) => (
-                <span key={ingredient} className="rounded-full border border-[var(--border)] bg-black/15 px-3 py-2">
-                  {ingredient}
-                </span>
-              ))}
-            </div>
-            <Link href="/recipes?search=aubergine" className="mt-7 inline-flex rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:opacity-95">
-              {homeSeasonal.cta}
-            </Link>
-          </div>
-          <div className="relative min-h-[280px] overflow-hidden bg-black/20 lg:min-h-full">
-            <Image src="/images/home/collections/curries.webp" alt="A warming vegan Indian curry for the changing season" fill className="object-cover transition duration-700 hover:scale-[1.02]" sizes="(max-width: 1024px) 100vw, 48vw" />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent" />
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-12 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-lg">
-        <div className="relative min-h-[360px] overflow-hidden sm:min-h-[440px]">
-          <Image
-            src="/images/editorial/shared-table.jpg"
-            alt="Family and friends sharing a plant-based Indian meal around a courtyard table"
-            fill
-            sizes="(min-width: 1200px) 1152px, 100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-black/10" />
-          <div className="relative flex min-h-[360px] max-w-xl flex-col justify-end p-7 sm:min-h-[440px] sm:p-10">
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">
-              Food, people &amp; places
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
-              Indian food is more than what lands on the plate
-            </h2>
-            <p className="mt-4 max-w-lg leading-7 text-zinc-200">
-              Discover the markets, shared tables and everyday kitchen knowledge that give plant-based Indian cooking its character.
-            </p>
-            <Link
-              href="/guides"
-              className="mt-6 inline-flex w-fit rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:opacity-95"
-            >
-              Explore the stories and guides →
-            </Link>
-          </div>
-        </div>
-
-        <div className="grid gap-px bg-[var(--border)] md:grid-cols-3">
-          {editorialStories.map((story) => (
-            <Link
-              key={story.title}
-              href={story.href}
-              className="group grid bg-[var(--surface)] sm:grid-cols-[180px_1fr] md:block"
-            >
-              <div className="relative min-h-44 overflow-hidden">
-                <Image
-                  src={story.image}
-                  alt={story.alt}
-                  fill
-                  sizes="(max-width: 768px) 180px, 384px"
-                  className="object-cover transition duration-700 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-5">
-                <p className="text-xs font-extrabold uppercase tracking-[0.15em] text-[var(--brand-gold)]/75">
-                  {story.eyebrow}
-                </p>
-                <h3 className="mt-2 text-lg font-extrabold text-[var(--brand-gold)] group-hover:underline">
-                  {story.title}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">
-                  {story.description}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* FEATURED COLLECTIONS */}
-      <section className="mt-12">
-        <div className="flex items-end justify-between gap-4">
+      <section className="vm-rise mt-10 overflow-hidden rounded-3xl border border-[var(--brand-gold)]/40 bg-[var(--surface)] shadow-sm">
+        <div className="grid items-center gap-6 p-7 sm:p-9 md:grid-cols-[1fr_auto]">
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
-              Cook by mood
+            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--brand-gold)]/75">
+              Need help choosing dinner?
             </p>
-            <h2 className="mt-1 text-2xl font-extrabold text-[var(--brand-gold)]">
-              Cook by collection
+            <h2 className="mt-2 text-2xl font-extrabold text-white sm:text-3xl">
+              Plan meals without cluttering the kitchen table
             </h2>
+            <p className="mt-3 max-w-2xl leading-7 text-[var(--text-soft)]">
+              Use the dedicated Meal Planner to choose recipes, organise the week
+              and build a practical shopping list in one place.
+            </p>
           </div>
-
           <Link
-            href="/recipes"
-            className="text-sm font-bold text-[var(--text-soft)] hover:underline"
+            href="/meal-planner"
+            className="inline-flex w-fit rounded-xl bg-[var(--brand-red)] px-6 py-3 font-extrabold text-white transition hover:-translate-y-0.5 hover:brightness-110"
           >
-            View all recipes →
+            Open the Meal Planner
           </Link>
-        </div>
-
-        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {collections.map((c) => (
-            <Link
-              key={c.href}
-              href={c.href}
-              className="group overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="relative h-32 overflow-hidden bg-black/20">
-                <Image src={c.image} alt="" fill className="object-cover transition duration-700 group-hover:scale-105" sizes="(max-width: 640px) 100vw, 240px" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              </div>
-              <div className="p-5">
-                <div className="text-base font-extrabold text-[var(--brand-gold)]">
-                  {c.label}
-                </div>
-                <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">
-                  {c.desc}
-                </p>
-              </div>
-            </Link>
-          ))}
         </div>
       </section>
 
@@ -570,7 +242,7 @@ export default function Home() {
         </div>
 
         <div className="mt-5 grid gap-5 lg:grid-cols-3">
-          {featuredRecipes.map((recipe: any) => {
+          {featuredRecipes.map((recipe) => {
             const img = getRecipeImage(recipe.slug);
             const placeholder = isPlaceholderImage(img);
             const time = minutes(recipe.prepMinutes, recipe.cookMinutes);
@@ -618,6 +290,10 @@ export default function Home() {
       </section>
 
       <RecipeVideoShowcase />
+
+      <div className="mt-12">
+        <DinnerPlanPromo placement="homepage" />
+      </div>
 
       {/* FEATURED GUIDES */}
       <section className="mt-12">
@@ -673,6 +349,8 @@ export default function Home() {
         </div>
       </section>
 
+      <HomepageApronFeature />
+
       <EthicalShoppingSpotlight />
 
       {/* EXPLORE BY INGREDIENT */}
@@ -697,183 +375,44 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BROWSE THE SITE */}
-      <section className="mt-12">
-        <h2 className="text-2xl font-extrabold text-[var(--brand-gold)]">
-          Explore Vegan Masala
-        </h2>
-
-        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {browseSections.map((section) => (
-            <Link
-              key={section.href}
-              href={section.href}
-              className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm transition hover:bg-black/20"
-            >
-              <h3 className="text-base font-extrabold text-[var(--brand-gold)]">
-                {section.title}
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">
-                {section.desc}
-              </p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* LATEST RECIPES */}
-      <section className="mt-12">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="text-2xl font-extrabold text-[var(--brand-gold)]">
-            Recently added recipes
-          </h2>
-
-          <Link
-            href="/recipes"
-            className="text-sm font-bold text-[var(--text-soft)] hover:underline"
-          >
-            View all →
-          </Link>
-        </div>
-
-        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {latestRecipes.map((r: any) => {
-            const img = getRecipeImage(r.slug);
-            const placeholder = isPlaceholderImage(img);
-            const time = minutes(r.prepMinutes, r.cookMinutes);
-
-            return (
-              <Link
-                key={r.slug}
-                href={`/recipes/${r.slug}`}
-                className="group overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm transition hover:bg-black/20"
-              >
-                <div className="relative h-48 w-full bg-black/25">
-                  <Image
-                    src={img}
-                    alt={r.title}
-                    fill
-                    className={
-                      placeholder ? "object-contain p-10 opacity-90" : "object-cover"
-                    }
-                    sizes="(max-width: 1024px) 100vw, 33vw"
-                  />
-
-                  {time ? (
-                    <div className="absolute right-3 top-3 rounded-xl bg-[var(--brand-red)] px-3 py-1 text-xs font-extrabold text-white shadow">
-                      {time}
-                    </div>
-                  ) : null}
-                </div>
-
-                <div className="p-5">
-                  <h3 className="text-base font-extrabold text-[var(--brand-gold)] group-hover:underline">
-                    {r.title}
-                  </h3>
-
-                  {r.description ? (
-                    <p className="mt-2 line-clamp-2 text-sm text-[var(--text-soft)]">
-                      {r.description}
-                    </p>
-                  ) : null}
-
-                  {!!r.tags?.length && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {r.tags.slice(0, 3).map((t: string) => (
-                        <span
-                          key={t}
-                          className="rounded-xl border border-[var(--border)] bg-black/10 px-3 py-1 text-xs font-extrabold text-[var(--brand-gold)]"
-                        >
-                          {cleanLabel(t)}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
       {/* ABOUT / BRAND */}
-      <section className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
+      <section className="relative mt-12 overflow-hidden rounded-3xl border border-[var(--brand-gold)]/45 bg-[var(--surface)] p-8 shadow-sm sm:p-10">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[url('/mandala-pattern.png')] bg-repeat opacity-[0.035]"
+        />
+        <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
           <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
-            About Vegan Masala
+              Meet the person behind Vegan Masala
           </p>
-
-          <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">
-            Vegan Indian food written with warmth, care and real kitchen knowledge
+            <h2 className="mt-2 text-3xl font-extrabold text-white">
+              Hello, I&apos;m Craig
           </h2>
-
-          <p className="mt-4 text-sm leading-7 text-[var(--text-soft)]">
-            Vegan Masala is built around the belief that vegan Indian cooking
-            should never feel like a compromise. The best dishes rely on a
-            properly cooked masala, balanced spices, confidence with technique
-            and an understanding of how flavour is built layer by layer.
-          </p>
-
-          <p className="mt-4 text-sm leading-7 text-[var(--text-soft)]">
-            This is food with the spirit of family meals in it: curries, dals,
-            flatbreads and everyday favourites made to be shared, remembered and
-            cooked again. The aim is to offer recipes and guides that feel warm
-            and welcoming, while still speaking to people who care deeply about
-            Indian food and want to cook it well.
-          </p>
-        </div>
-
-        <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
-          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
-            Follow the journey
-          </p>
-
-          <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">
-            A growing vegan Indian kitchen
-          </h2>
-
-          <p className="mt-4 text-sm leading-7 text-[var(--text-soft)]">
-            Vegan Masala is growing into a fuller recipe and guide library with
-            more curries, more regional inspiration, stronger kitchen guidance
-            and more of the dishes that make Indian home cooking so memorable.
-            Explore what is live now and follow along as the site continues to
-            grow.
-          </p>
-
-          <div className="mt-6 flex flex-wrap gap-3">
+            <p className="mt-4 max-w-3xl leading-8 text-[var(--text-soft)]">
+              I&apos;m a Bristol-based home cook, originally from Wales, with a
+              lifelong love of curry. I created Vegan Masala to share generous
+              plant-based Indian food without compromising on the warmth, spice
+              or satisfaction that made me love these dishes in the first place.
+            </p>
+            <p className="mt-3 max-w-3xl leading-7 text-[var(--text-soft)]">
+              More original cooking videos, practical methods and stories from my
+              kitchen are coming next. Vegan food, cooked with love.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3 lg:justify-end">
             <Link
-              href="/recipes"
+              href="/about"
               className="rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-bold text-white transition hover:opacity-90"
             >
-              Explore recipes
+              Read my story
             </Link>
-
             <Link
-              href="/guides"
+              href="/contact"
               className="rounded-xl border border-[var(--border)] bg-black/10 px-5 py-3 text-sm font-bold text-[var(--brand-gold)] transition hover:bg-black/20"
             >
-              Read guides
+              Get in touch
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* SLIDER */}
-      <section className="mt-12 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm">
-        <div className="mb-4 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
-              From the Vegan Masala kitchen
-            </p>
-            <h2 className="mt-1 text-2xl font-extrabold text-[var(--brand-gold)]">
-              Curries, colour and everyday favourites
-            </h2>
-          </div>
-        </div>
-
-        <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-black/20">
-          <div className="relative h-[260px] sm:h-[340px] lg:h-[420px]">
-            <CurrySlider images={currySliderImages} />
           </div>
         </div>
       </section>
