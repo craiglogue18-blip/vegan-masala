@@ -63,29 +63,30 @@ export default function RecipeVideoShowcase() {
       <div className="mt-7 grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
         <Link
           href={featured.href}
-          className="group relative overflow-hidden rounded-3xl border border-[var(--brand-gold)]/45 bg-black shadow-xl"
+          className="group overflow-hidden rounded-3xl border border-[var(--brand-gold)]/45 bg-black/30 shadow-xl"
         >
-          <div className="relative aspect-[4/5] max-h-[650px] bg-black">
-            <video
-              src={featured.video}
-              poster={featured.poster}
-              muted
-              loop
-              playsInline
-              autoPlay
-              preload="metadata"
-              className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.01]"
-              aria-label={`${featured.title} cooking video`}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/5 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+          <div className="grid sm:grid-cols-[minmax(220px,0.78fr)_1fr] sm:items-stretch">
+            <div className="relative mx-auto aspect-[9/16] w-full max-w-[360px] overflow-hidden bg-black sm:max-w-none">
+              <video
+                src={featured.video}
+                poster={featured.poster}
+                muted
+                loop
+                playsInline
+                autoPlay
+                preload="metadata"
+                className="h-full w-full object-contain"
+                aria-label={`${featured.title} cooking video`}
+              />
+            </div>
+            <div className="flex flex-col justify-center border-t border-[var(--brand-gold)]/30 p-6 sm:border-l sm:border-t-0 sm:p-7">
               <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-white/75">
                 Featured technique
               </p>
-              <h3 className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">
+              <h3 className="mt-3 text-2xl font-extrabold leading-tight text-[var(--brand-gold)]">
                 {featured.title}
               </h3>
-              <p className="mt-2 max-w-lg leading-7 text-white/85">{featured.caption}</p>
+              <p className="mt-3 leading-7 text-white/85">{featured.caption}</p>
               <span className="mt-4 inline-block text-sm font-extrabold text-white">
                 Open the complete guide →
               </span>
