@@ -4,6 +4,7 @@ import PlannerPage from "../PlannerPage";
 
 export const metadata: Metadata = {
   title: "Build a Vegan Meal Plan",
+  robots: { index: false, follow: true },
 };
 
 export default function BuildMealPlanPage() {

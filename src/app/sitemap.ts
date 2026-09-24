@@ -83,7 +83,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     ...recipes.map((recipe) => ({
       url: `${siteUrl}/recipes/${recipe.slug}`,
-      lastModified: recipe.publishedAt ? new Date(recipe.publishedAt) : undefined,
+      lastModified: recipe.updatedAt
+        ? new Date(recipe.updatedAt)
+        : recipe.publishedAt
+          ? new Date(recipe.publishedAt)
+          : undefined,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),

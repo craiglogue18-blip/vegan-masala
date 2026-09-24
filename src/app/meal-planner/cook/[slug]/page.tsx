@@ -14,7 +14,10 @@ function extractList(block: string | undefined, numbered: boolean) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const recipe = getRecipeBySlug(slug);
-  return { title: recipe ? `Cook ${recipe.title} | Vegan Masala` : "Cooking mode | Vegan Masala" };
+  return {
+    title: recipe ? `Cook ${recipe.title} | Vegan Masala` : "Cooking mode | Vegan Masala",
+    robots: { index: false, follow: true },
+  };
 }
 
 export default async function CookingPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ batch?: string }> }) {

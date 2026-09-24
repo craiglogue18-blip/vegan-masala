@@ -402,6 +402,7 @@ export async function generateMetadata({
       siteName: "Vegan Masala",
       type: "article",
       publishedTime: recipe.publishedAt || undefined,
+      modifiedTime: recipe.updatedAt || undefined,
       images: heroAbs ? [{ url: heroAbs }] : undefined,
     },
     twitter: {
@@ -595,6 +596,7 @@ export default async function RecipePage({
     url: canonicalUrl,
     image: heroAbs || undefined,
     datePublished: recipe.publishedAt || undefined,
+    dateModified: recipe.updatedAt || recipe.publishedAt || undefined,
     author: {
       "@type": "Person",
       name: "Craig Logue",
@@ -700,6 +702,17 @@ export default async function RecipePage({
               <span aria-hidden="true"> · </span>
               <Link href="/editorial-standards" className="underline decoration-current/40 underline-offset-4">How our recipes are created</Link>
             </p>
+
+            {recipe.updatedAt ? (
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.1em] text-[var(--text-soft)]/75">
+                Substantially updated {new Intl.DateTimeFormat("en-GB", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  timeZone: "UTC",
+                }).format(new Date(`${recipe.updatedAt}T00:00:00Z`))}
+              </p>
+            ) : null}
 
             <div className="mt-6 flex flex-wrap gap-2">
               {totalLabel && (

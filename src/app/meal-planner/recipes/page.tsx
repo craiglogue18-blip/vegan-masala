@@ -4,6 +4,7 @@ import PlannerPage from "../PlannerPage";
 
 export const metadata: Metadata = {
   title: "Vegan Recipes",
+  robots: { index: false, follow: true },
 };
 
 export default function PlannerRecipesPage() {

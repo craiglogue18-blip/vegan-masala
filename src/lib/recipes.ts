@@ -22,6 +22,7 @@ export type Recipe = {
   mealTypes?: string[];
   plannerTags?: string[];
   publishedAt?: string;
+  updatedAt?: string;
   indexable?: boolean;
 
   // optional extra frontmatter
@@ -172,6 +173,9 @@ function buildRecipeFromFile(file: string): Recipe | null {
 
     publishedAt:
       typeof data.publishedAt === "string" ? data.publishedAt : undefined,
+
+    updatedAt:
+      typeof data.updatedAt === "string" ? data.updatedAt : undefined,
 
     indexable: data.indexable !== false,
 

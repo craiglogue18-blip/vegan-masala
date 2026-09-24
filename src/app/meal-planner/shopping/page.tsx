@@ -4,6 +4,7 @@ import PlannerPage from "../PlannerPage";
 
 export const metadata: Metadata = {
   title: "Weekly Vegan Shopping List",
+  robots: { index: false, follow: true },
 };
 
 export default function ShoppingListPage() {
