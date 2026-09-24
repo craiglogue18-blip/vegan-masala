@@ -1,0 +1,96 @@
+{
+  "name": "Meet Craig · The person behind Vegan Masala",
+  "status": "awaiting_photo",
+  "publishAllowed": false,
+  "created": "2026-09-24",
+  "primaryDestination": "https://www.vegan-masala.com/about?utm_source=social&utm_medium=organic_social&utm_campaign=meet_craig",
+  "objective": "Introduce Craig as the founder of Vegan Masala, strengthen trust and encourage people to follow the brand and explore the website.",
+  "audience": "Existing followers and new visitors interested in vegan food, Indian home cooking and practical recipes.",
+  "formats": {
+    "instagram": "Five-slide portrait carousel, 1080 × 1350 px",
+    "facebook": "Five-image post using the same carousel artwork",
+    "pinterest": "Single portrait introduction Pin, 1000 × 1500 px",
+    "tiktok": "20–30 second vertical introduction video, 1080 × 1920 px",
+    "stories": "Three branded Story frames, 1080 × 1920 px"
+  },
+  "carousel": [
+    {
+      "slide": 1,
+      "kicker": "THE PERSON BEHIND VEGAN MASALA",
+      "title": "Hello, I’m Craig",
+      "body": "Founder, home cook and lifelong curry enthusiast.",
+      "visual": "Warm waist-up portrait in the Vegan Masala apron, looking directly at the camera.",
+      "altText": "Craig Logue, founder of Vegan Masala, standing in his kitchen wearing a Vegan Masala apron."
+    },
+    {
+      "slide": 2,
+      "kicker": "WHERE IT BEGAN",
+      "title": "A love of Indian cooking",
+      "body": "Family recipes, treasured takeaways and a Madhur Jaffrey cookbook inspired me to start cooking my favourite dishes at home.",
+      "visual": "Craig with a spice tin, cookbook or ingredients in a real kitchen environment.",
+      "altText": "Craig preparing spices in his home kitchen."
+    },
+    {
+      "slide": 3,
+      "kicker": "WHY VEGAN MASALA EXISTS",
+      "title": "Plant-based, without compromise",
+      "body": "I adapt the curries I love so vegans, vegetarians and curious cooks can enjoy generous Indian food without meat or dairy.",
+      "visual": "Craig holding a finished curry or standing beside a freshly cooked dish.",
+      "altText": "Craig presenting a homemade vegan Indian curry."
+    },
+    {
+      "slide": 4,
+      "kicker": "THE NEXT CHAPTER",
+      "title": "More time in the kitchen",
+      "body": "Original cooking videos, practical techniques, ingredient guides and more of the stories behind the food are coming next.",
+      "visual": "Natural cooking-action photograph: stirring, tempering spices or rolling bread.",
+      "altText": "Craig cooking vegan Indian food at the hob."
+    },
+    {
+      "slide": 5,
+      "kicker": "COOK WITH ME",
+      "title": "Vegan food, cooked with love",
+      "body": "Follow Vegan Masala and explore the recipes at vegan-masala.com",
+      "cta": "Follow · Save · Cook",
+      "visual": "Logo-led closing frame with a smaller relaxed portrait and clear website address.",
+      "altText": "Vegan Masala logo, Craig and an invitation to follow and explore the recipes."
+    }
+  ],
+  "stories": [
+    {
+      "frame": 1,
+      "title": "Hello, I’m Craig",
+      "body": "The home cook behind Vegan Masala.",
+      "visual": "Full-height portrait with a restrained gold frame."
+    },
+    {
+      "frame": 2,
+      "title": "Why I created Vegan Masala",
+      "body": "To share generous plant-based Indian food without compromising on flavour.",
+      "visual": "Cooking-action image or portrait beside a finished dish."
+    },
+    {
+      "frame": 3,
+      "title": "Read my story",
+      "body": "Recipes, techniques and more original cooking are on the way.",
+      "cta": "Add link sticker: Meet Craig",
+      "url": "https://www.vegan-masala.com/about?utm_source=instagram&utm_medium=organic_story&utm_campaign=meet_craig"
+    }
+  ],
+  "requiredAssets": [
+    "One uncropped high-resolution waist-up portrait in the Vegan Masala apron",
+    "One landscape version of the portrait with negative space for text",
+    "One vertical cooking-action photograph",
+    "Optional portrait holding a finished curry or spice tin"
+  ],
+  "brandRules": {
+    "font": "Rajdhani Bold",
+    "colours": ["#D4AF37", "#8B2C2C", "#000000", "#FFFFFF"],
+    "logo": "Use the official Vegan Masala logo without redrawing it",
+    "imageTreatment": "Warm, natural, lightly edited photography with rounded gold borders",
+    "background": "Use the familiar visible mandala texture; avoid flat black empty space",
+    "text": "Keep copy concise, specific and written in Craig’s first-person voice",
+    "safety": "Keep text and faces away from platform interface areas and crop boundaries"
+  },
+  "approvalNotes": "Do not render, schedule or publish until Craig supplies and approves the photographs and the completed artwork."
+}
