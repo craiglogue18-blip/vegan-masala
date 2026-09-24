@@ -16,10 +16,8 @@ import RelatedGuides from "@/components/RelatedGuides";
 import RelatedRecipes from "@/components/RelatedRecipes";
 import StorePromo from "@/components/StorePromo";
 import RecipeEngagement from "@/components/RecipeEngagement";
-import RecipeEquipment, { getRecipeEquipment } from "@/components/RecipeEquipment";
 import DinnerPlanPromo from "@/components/DinnerPlanPromo";
 import RecipePantryShopping, { getRecipePantryPicks } from "@/components/RecipePantryShopping";
-import RecipeIngredientList from "@/components/RecipeIngredientList";
 
 function extractSections(raw: string) {
   const sections: Record<string, string> = {};
@@ -525,7 +523,6 @@ export default async function RecipePage({
   const showCurryHubCallout = isCurryHubRecipe(recipe.slug);
   const showDalHubCallout = isDalHubRecipe(recipe.slug);
   const recipeCollections = getCollectionsForRecipe(recipe);
-  const equipmentRecommendations = getRecipeEquipment(recipe);
   const pantryPicks = getRecipePantryPicks({
     slug: recipe.slug,
     title: recipe.title,
@@ -610,7 +607,6 @@ export default async function RecipePage({
     },
     recipeCuisine: recipe.cuisine || "Indian",
     recipeCategory: buildRecipeCategory(recipe),
-    keywords: Array.isArray(recipe.tags) ? recipe.tags.join(", ") : undefined,
     recipeYield:
       typeof recipe.servings === "number"
         ? `${recipe.servings} servings`
@@ -743,19 +739,6 @@ export default async function RecipePage({
               )}
             </div>
 
-            {recipe.tags?.length ? (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {recipe.tags.slice(0, 10).map((t: string) => (
-                  <span
-                    key={t}
-                    className="rounded-xl border border-[var(--border)] bg-black/10 px-3 py-1 text-xs font-bold text-[var(--text-soft)]"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="#ingredients" className="rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-extrabold text-white shadow transition hover:opacity-90">
                 Jump to recipe
@@ -773,10 +756,7 @@ export default async function RecipePage({
           <a href="#ingredients" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Ingredients ({ingredients.length})</a>
           <a href="#method" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Method ({displayInstructions.length})</a>
           <a href="#notes" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Notes</a>
-          {equipmentRecommendations.length > 0 && (
-            <a href="#equipment" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Equipment</a>
-          )}
-          <a href="#shop-ingredients" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Shop ingredients</a>
+          <a href="#shop-ingredients" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Optional pantry picks</a>
         </div>
       </nav>
 
@@ -803,8 +783,6 @@ export default async function RecipePage({
           <p className="mt-3 leading-7 text-[var(--text-soft)]">{servingIdeas}</p>
         </div>
       </section>
-
-      <RecipeEquipment items={equipmentRecommendations} recipeSlug={recipe.slug} />
 
       {depth && (
         <section className="mt-8 rounded-[2rem] border border-[var(--border)] bg-[var(--surface)]/95 p-6 shadow-sm lg:p-8">
@@ -881,7 +859,17 @@ export default async function RecipePage({
             </h2>
 
             {ingredients.length ? (
-              <RecipeIngredientList ingredients={ingredients} recipeSlug={recipe.slug} />
+              <ul className="mt-6 space-y-3 text-[var(--text-soft)]">
+                {ingredients.map((ingredient: string, i: number) => (
+                  <li
+                    key={`${ingredient}-${i}`}
+                    className="flex gap-3 rounded-xl border border-white/5 bg-black/10 px-4 py-3 leading-7"
+                  >
+                    <span aria-hidden="true" className="font-bold text-[var(--brand-gold)]">•</span>
+                    <span>{ingredient}</span>
+                  </li>
+                ))}
+              </ul>
             ) : (
               <p className="mt-4 text-sm text-[var(--text-soft)]/80">
                 No ingredients found yet for this recipe.
@@ -931,12 +919,6 @@ export default async function RecipePage({
       {storePromoSlugs.includes(recipe.slug) && <StorePromo />}
 
       <RecipeEngagement slug={recipe.slug} title={recipe.title} />
-
-      <RecipePantryShopping
-        recipe={{ slug: recipe.slug, title: recipe.title, ingredients, tags: recipe.tags }}
-        picks={pantryPicks}
-        section="spice-kitchen"
-      />
 
       {showCurryHubCallout && (
         <section className="mt-12 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">

@@ -537,18 +537,6 @@ export default function Home() {
                     </p>
                   ) : null}
 
-                  {!!recipe.tags?.length && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {recipe.tags.slice(0, 3).map((tag: string) => (
-                        <span
-                          key={tag}
-                          className="rounded-xl border border-[var(--border)] bg-black/10 px-3 py-1 text-xs font-extrabold text-[var(--brand-gold)]"
-                        >
-                          {cleanLabel(tag)}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </Link>
             );

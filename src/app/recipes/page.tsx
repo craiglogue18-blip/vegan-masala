@@ -360,7 +360,7 @@ export default async function RecipesPage({
       prepMinutes: r.prepMinutes,
       cookMinutes: r.cookMinutes,
       diet: r.diet,
-      tags: r.tags,
+      tags: recipeCanonicalTags(r).map((tag) => TAG_LABELS[tag] ?? tag),
       publishedAt: r.publishedAt,
       image,
       imageIsPlaceholder: isPlaceholderImage(baseImage),

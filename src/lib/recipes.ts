@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { recipeEditorialCopy } from "@/lib/recipeEditorial";
+import { isRecipeReadyForIndex } from "@/lib/recipeQuality";
 
 export const RECIPES_DIR = path.join(process.cwd(), "content", "recipes");
 
@@ -50,7 +51,7 @@ export type Recipe = {
 };
 
 export function getPublicRecipes() {
-  return getAllRecipes().filter((recipe) => recipe.indexable !== false);
+  return getAllRecipes().filter(isRecipeReadyForIndex);
 }
 
 function safeNumber(v: unknown): number | undefined {
