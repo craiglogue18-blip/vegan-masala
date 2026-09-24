@@ -1,3 +1,5 @@
+import { recipeDepthRecovery } from "@/lib/recipeDepthRecovery";
+
 export type RecipeDepth = {
   whyItWorks: string;
   cues: string[];
@@ -255,6 +257,7 @@ export const recipeDepth: Record<string, RecipeDepth> = {
       "Drain on kitchen paper, season lightly and serve immediately.",
     ],
   },
+  ...recipeDepthRecovery,
 };
 
 export function getRecipeDepth(slug: string) {
