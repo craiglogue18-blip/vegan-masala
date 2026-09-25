@@ -15,6 +15,7 @@ export type LocalSource = {
   path: string;
   originalName: string;
   mime: string;
+  caption: string;
 };
 
 export type LocalRenderResult = {
@@ -35,19 +36,6 @@ const OUTPUTS: Record<LocalOutputId, { width: number; height: number; label: str
   tiktok: { width: 1080, height: 1920, label: "TikTok" },
   pinterest: { width: 1000, height: 1500, label: "Pinterest video Pin" },
 };
-
-const SLOT_ORDER = [
-  "finished",
-  "ingredients",
-  "aromatics",
-  "garlic-ginger",
-  "spices",
-  "main",
-  "simmer",
-  "texture",
-  "serve",
-  "presenter",
-];
 
 const ROOT = path.join(process.cwd(), "generated", "raw-footage-studio");
 const FONT = path.join(process.cwd(), "public", "fonts", "Rajdhani-Bold.ttf");
@@ -107,17 +95,42 @@ function textPath(text: string, fontSize: number, centerX: number, baseline: num
   return font.getPath(text, centerX - width / 2, baseline, fontSize).toPathData(2);
 }
 
+function wrapForWidth(text: string, fontSize: number, maxWidth: number) {
+  const font = opentype.loadSync(FONT);
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (!current || font.getAdvanceWidth(candidate, fontSize) <= maxWidth) current = candidate;
+    else {
+      lines.push(current);
+      current = word;
+    }
+  }
+  if (current) lines.push(current);
+  if (lines.length <= 2) return lines;
+  const shortened = lines.slice(0, 2);
+  shortened[1] = `${shortened[1].replace(/[.,:;!?…-]+$/, "")}…`;
+  return shortened;
+}
+
 async function createBrandOverlay(outputPath: string, width: number, height: number, title: string) {
   const titleSize = Math.max(34, Math.round(width * 0.044));
   const labelSize = Math.max(20, Math.round(width * 0.021));
   const lowerPanel = Math.round(height * 0.17);
-  const titleBaseline = height - Math.round(lowerPanel * 0.58);
+  const titleLines = wrapForWidth(title.toUpperCase(), titleSize, width * 0.84);
+  const titleBaseline = height - Math.round(lowerPanel * (titleLines.length > 1 ? 0.66 : 0.58));
   const labelBaseline = height - Math.round(lowerPanel * 0.2);
+  const lineGap = Math.round(titleSize * 1.04);
+  const titlePaths = titleLines
+    .map((line, index) => `<path d="${textPath(line, titleSize, width / 2, titleBaseline + index * lineGap)}" fill="#E1B84B"/>`)
+    .join("");
   const svg = Buffer.from(`
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="${height - lowerPanel}" width="${width}" height="${lowerPanel}" fill="#000" fill-opacity="0.78"/>
       <rect x="0" y="${height - lowerPanel}" width="${width}" height="4" fill="#E1B84B"/>
-      <path d="${textPath(title.toUpperCase(), titleSize, width / 2, titleBaseline)}" fill="#E1B84B"/>
+      ${titlePaths}
       <path d="${textPath("VEGAN-MASALA.COM", labelSize, width / 2, labelBaseline)}" fill="#FFFFFF"/>
     </svg>
   `);
@@ -234,11 +247,27 @@ export async function renderLocalFootage(options: {
   ensureDirectory(workingDirectory);
   ensureDirectory(outputDirectory);
 
+  const slotRank = (slot: string) => {
+    if (slot === "finished") return 0;
+    if (slot === "presenter") return 10_000;
+    const match = slot.match(/^step-(\d+)$/);
+    return match ? Number(match[1]) : 9_000;
+  };
   const orderedSources = [...options.sources].sort((left, right) => {
-    const leftSlot = SLOT_ORDER.indexOf(left.slot);
-    const rightSlot = SLOT_ORDER.indexOf(right.slot);
-    return (leftSlot === rightSlot ? left.order - right.order : leftSlot - rightSlot);
+    const leftSlot = slotRank(left.slot);
+    const rightSlot = slotRank(right.slot);
+    return leftSlot === rightSlot ? left.order - right.order : leftSlot - rightSlot;
   });
+
+  const selectSources = (outputId: LocalOutputId) => {
+    const isShort = ["reel", "short", "tiktok", "pinterest"].includes(outputId);
+    if (!isShort || orderedSources.length <= 8) return orderedSources;
+    const selected = new Set<number>([0, orderedSources.length - 1]);
+    for (let index = 1; selected.size < 8; index += 1) {
+      selected.add(Math.round((index * (orderedSources.length - 1)) / 7));
+    }
+    return [...selected].sort((a, b) => a - b).map((index) => orderedSources[index]);
+  };
 
   const results: LocalRenderResult[] = [];
   for (const outputId of options.outputs) {
@@ -246,14 +275,15 @@ export async function renderLocalFootage(options: {
     if (!format) continue;
     const formatWork = path.join(workingDirectory, outputId);
     ensureDirectory(formatWork);
-    const overlayPath = path.join(formatWork, "brand-overlay.png");
-    await createBrandOverlay(overlayPath, format.width, format.height, options.title);
     const segments: string[] = [];
+    const outputSources = selectSources(outputId);
 
-    for (let index = 0; index < orderedSources.length; index += 1) {
+    for (let index = 0; index < outputSources.length; index += 1) {
       const segment = path.join(formatWork, `segment-${String(index).padStart(3, "0")}.mp4`);
+      const overlayPath = path.join(formatWork, `brand-overlay-${String(index).padStart(3, "0")}.png`);
+      await createBrandOverlay(overlayPath, format.width, format.height, outputSources[index].caption || options.title);
       await makeSegment({
-        source: orderedSources[index],
+        source: outputSources[index],
         outputPath: segment,
         width: format.width,
         height: format.height,

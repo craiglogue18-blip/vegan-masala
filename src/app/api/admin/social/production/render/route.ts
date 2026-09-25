@@ -18,7 +18,7 @@ type RenderMetadata = {
   title?: string;
   template?: string;
   outputs?: LocalOutputId[];
-  files?: Array<{ field: string; slot: string; order: number }>;
+  files?: Array<{ field: string; slot: string; order: number; caption?: string }>;
 };
 
 function safeFileName(value: string) {
@@ -65,6 +65,7 @@ export async function POST(request: Request) {
         path: localPath,
         originalName: file.name,
         mime: file.type || "application/octet-stream",
+        caption: String(descriptor.caption || title).trim(),
       });
     }
 
