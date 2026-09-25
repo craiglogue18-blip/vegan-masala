@@ -19,6 +19,15 @@ type FootageSlot = {
 type TemplateId = "complete" | "technique" | "mistake" | "ingredient" | "quick";
 type OutputId = "recipe" | "youtube" | "reel" | "short" | "tiktok" | "pinterest";
 
+type RenderResult = {
+  id: OutputId;
+  label: string;
+  fileName: string;
+  previewUrl: string;
+  width: number;
+  height: number;
+};
+
 const footageSlots: FootageSlot[] = [
   { id: "finished", number: "01", title: "Finished dish", guidance: "A bright opening reveal and a clean final plate.", required: true },
   { id: "ingredients", number: "02", title: "Ingredients", guidance: "An overhead view before cooking begins.", required: true },
@@ -53,7 +62,8 @@ const brandOptions = [
   "Rajdhani typography",
   "Gold, black and red treatment",
   "Vegan Masala logo",
-  "Burned-in subtitles",
+  "Branded recipe title",
+  "Subtitle-safe caption area",
   "Bright first frame",
   "Branded end card",
 ];
@@ -80,7 +90,13 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
   const [template, setTemplate] = useState<TemplateId>("complete");
   const [selectedOutputs, setSelectedOutputs] = useState<OutputId[]>(["recipe", "reel", "short"]);
   const [files, setFiles] = useState<Record<string, File[]>>({});
-  const [status, setStatus] = useState("Prototype ready. No files have been uploaded or published.");
+  const [status, setStatus] = useState("Local studio ready. No files have been uploaded or published.");
+  const [jobId, setJobId] = useState("");
+  const [renders, setRenders] = useState<RenderResult[]>([]);
+  const [isRendering, setIsRendering] = useState(false);
+  const [approved, setApproved] = useState<OutputId[]>([]);
+  const [uploading, setUploading] = useState<OutputId | null>(null);
+  const [productionUrls, setProductionUrls] = useState<Partial<Record<OutputId, string>>>({});
 
   const previewFile = useMemo(() => {
     for (const slot of footageSlots) {
@@ -135,12 +151,104 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
     setStatus("Production brief saved in this browser. Nothing has been rendered or published.");
   }
 
-  function resetDraft() {
+  async function renderDrafts() {
+    if (!selectedRecipe) {
+      setStatus("Choose a recipe before rendering.");
+      return;
+    }
+    const descriptors: Array<{ field: string; slot: string; order: number }> = [];
+    const form = new FormData();
+    footageSlots.forEach((slot) => {
+      (files[slot.id] || []).forEach((file, order) => {
+        const field = `source-${slot.id}-${order}`;
+        descriptors.push({ field, slot: slot.id, order });
+        form.append(field, file, file.name);
+      });
+    });
+    if (!descriptors.length) {
+      setStatus("Add at least one clip or photograph before rendering.");
+      return;
+    }
+    if (!selectedOutputs.length) {
+      setStatus("Choose at least one output format.");
+      return;
+    }
+
+    form.append("metadata", JSON.stringify({
+      slug: selectedRecipe.slug,
+      title: selectedRecipe.label,
+      template,
+      outputs: selectedOutputs,
+      files: descriptors,
+    }));
+
+    setIsRendering(true);
+    setRenders([]);
+    setApproved([]);
+    setProductionUrls({});
+    setStatus("Copying source files to the private local job and rendering with FFmpeg…");
+    try {
+      const response = await fetch("/api/admin/social/production/render", { method: "POST", body: form });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Local render failed.");
+      setJobId(data.jobId);
+      setRenders(data.results || []);
+      setStatus(data.message || "Draft videos rendered locally. Nothing has been uploaded.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Local render failed.");
+    } finally {
+      setIsRendering(false);
+    }
+  }
+
+  function toggleApproval(id: OutputId) {
+    setApproved((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  }
+
+  async function uploadApproved(result: RenderResult) {
+    if (!approved.includes(result.id)) return;
+    setUploading(result.id);
+    setStatus(`Uploading the approved ${result.label} render to production storage…`);
+    try {
+      const response = await fetch("/api/admin/social/production/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jobId,
+          fileName: result.fileName,
+          slug: selectedRecipe?.slug,
+          output: result.id,
+          approved: true,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.error || "Upload failed.");
+      setProductionUrls((current) => ({ ...current, [result.id]: data.url }));
+      setStatus(data.message || "Approved render uploaded. It has not been published.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Approved render upload failed.");
+    } finally {
+      setUploading(null);
+    }
+  }
+
+  async function resetDraft() {
+    if (jobId) {
+      await fetch("/api/admin/social/production/cleanup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobId }),
+      }).catch(() => null);
+    }
     setFiles({});
     setTemplate("complete");
     setSelectedOutputs(["recipe", "reel", "short"]);
+    setRenders([]);
+    setApproved([]);
+    setProductionUrls({});
+    setJobId("");
     localStorage.removeItem("vegan-masala-raw-footage-brief");
-    setStatus("Draft cleared. No source files were deleted from your Mac.");
+    setStatus("Local job cleared. Your original source files on the Mac were not changed.");
   }
 
   return (
@@ -331,13 +439,58 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
             <button type="button" onClick={saveBrief} className="mt-5 w-full rounded-xl bg-[var(--brand-red)] px-5 py-3 font-extrabold text-white">
               Save production brief
             </button>
-            <button type="button" disabled className="mt-3 w-full cursor-not-allowed rounded-xl border border-[var(--border)] px-5 py-3 font-extrabold text-[var(--text-soft)] opacity-60">
-              Generate draft videos · renderer not connected
+            <button
+              type="button"
+              onClick={renderDrafts}
+              disabled={isRendering || uploadedSlots === 0 || selectedOutputs.length === 0}
+              className="mt-3 w-full rounded-xl border border-[var(--brand-gold)] bg-[var(--brand-gold)]/10 px-5 py-3 font-extrabold text-[var(--brand-gold)] disabled:cursor-not-allowed disabled:opacity-45"
+            >
+              {isRendering ? "Rendering locally…" : "Generate local draft videos"}
             </button>
             <button type="button" onClick={resetDraft} className="mt-3 w-full px-5 py-2 text-sm font-bold text-red-300">
-              Clear prototype draft
+              Clear local job and selections
             </button>
           </section>
+
+          {renders.length ? (
+            <section className="rounded-3xl border border-emerald-400/40 bg-[var(--surface)] p-6">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-300">Local renders · review required</p>
+              <div className="mt-5 space-y-6">
+                {renders.map((result) => {
+                  const isApproved = approved.includes(result.id);
+                  const productionUrl = productionUrls[result.id];
+                  return (
+                    <article key={result.id} className="rounded-2xl border border-[var(--border)] bg-black/15 p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="font-extrabold text-[var(--brand-gold)]">{result.label}</h3>
+                          <p className="mt-1 text-xs text-[var(--text-soft)]">{result.width} × {result.height} · stored locally</p>
+                        </div>
+                        <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-[10px] font-extrabold uppercase text-emerald-300">Rendered</span>
+                      </div>
+                      <video className="mt-4 w-full rounded-xl border border-[var(--border)] bg-black" controls playsInline preload="metadata" src={result.previewUrl} />
+                      <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--border)] p-3 text-sm text-white">
+                        <input className="mt-1" type="checkbox" checked={isApproved} onChange={() => toggleApproval(result.id)} />
+                        <span><strong className="block">I have watched and approve this render</strong><span className="mt-1 block text-xs text-[var(--text-soft)]">Approval permits upload only. It does not post or queue the video.</span></span>
+                      </label>
+                      {productionUrl ? (
+                        <a className="mt-3 block break-all rounded-xl border border-emerald-400/40 p-3 text-xs font-bold text-emerald-300" href={productionUrl} target="_blank" rel="noreferrer">Production file: {productionUrl}</a>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={!isApproved || uploading !== null}
+                          onClick={() => uploadApproved(result)}
+                          className="mt-3 w-full rounded-xl bg-[var(--brand-red)] px-4 py-3 text-sm font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          {uploading === result.id ? "Uploading approved render…" : "Upload approved render to production"}
+                        </button>
+                      )}
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          ) : null}
         </aside>
       </div>
     </main>
