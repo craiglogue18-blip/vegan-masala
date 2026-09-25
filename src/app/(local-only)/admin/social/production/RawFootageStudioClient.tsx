@@ -14,6 +14,14 @@ type FootageSlot = {
   title: string;
   guidance: string;
   required: boolean;
+  instruction?: string;
+};
+
+type RecipeStep = {
+  id: string;
+  number: number;
+  instruction: string;
+  caption: string;
 };
 
 type TemplateId = "complete" | "technique" | "mistake" | "ingredient" | "quick";
@@ -27,19 +35,6 @@ type RenderResult = {
   width: number;
   height: number;
 };
-
-const footageSlots: FootageSlot[] = [
-  { id: "finished", number: "01", title: "Finished dish", guidance: "A bright opening reveal and a clean final plate.", required: true },
-  { id: "ingredients", number: "02", title: "Ingredients", guidance: "An overhead view before cooking begins.", required: true },
-  { id: "aromatics", number: "03", title: "Onions and aromatics", guidance: "Show colour and texture changing in the pan.", required: true },
-  { id: "garlic-ginger", number: "04", title: "Garlic and ginger", guidance: "Capture the moment they enter the pan and lose their raw edge.", required: false },
-  { id: "spices", number: "05", title: "Spices", guidance: "Close-up of tempering, blooming or stirring into the masala.", required: true },
-  { id: "main", number: "06", title: "Main ingredient", guidance: "Adding the vegetable, pulse, tofu or plant-based protein.", required: true },
-  { id: "simmer", number: "07", title: "Simmer or cook", guidance: "A steady shot showing the dish developing.", required: false },
-  { id: "texture", number: "08", title: "Final texture cue", guidance: "Show the visual sign that tells the viewer it is ready.", required: true },
-  { id: "serve", number: "09", title: "Plate and serve", guidance: "Garnish, spoon, tear or serve naturally.", required: true },
-  { id: "presenter", number: "10", title: "Craig on camera", guidance: "Optional introduction, explanation or tasting reaction.", required: false },
-];
 
 const templates: Array<{ id: TemplateId; title: string; description: string; length: string }> = [
   { id: "complete", title: "Complete recipe", description: "A clear beginning-to-end method with every important cooking cue.", length: "4–8 min" },
@@ -90,6 +85,9 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
   const [template, setTemplate] = useState<TemplateId>("complete");
   const [selectedOutputs, setSelectedOutputs] = useState<OutputId[]>(["recipe", "reel", "short"]);
   const [files, setFiles] = useState<Record<string, File[]>>({});
+  const [recipeSteps, setRecipeSteps] = useState<RecipeStep[]>([]);
+  const [stepCaptions, setStepCaptions] = useState<Record<string, string>>({});
+  const [isLoadingSteps, setIsLoadingSteps] = useState(true);
   const [status, setStatus] = useState("Local studio ready. No files have been uploaded or published.");
   const [jobId, setJobId] = useState("");
   const [renders, setRenders] = useState<RenderResult[]>([]);
@@ -98,13 +96,55 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
   const [uploading, setUploading] = useState<OutputId | null>(null);
   const [productionUrls, setProductionUrls] = useState<Partial<Record<OutputId, string>>>({});
 
+  useEffect(() => {
+    if (!recipeSlug) return;
+    let active = true;
+    fetch(`/api/admin/social/production/recipe/${encodeURIComponent(recipeSlug)}`, { cache: "no-store" })
+      .then((response) => response.json().then((data) => ({ response, data })))
+      .then(({ response, data }) => {
+        if (!active) return;
+        if (!response.ok || !data.ok) throw new Error(data.error || "Recipe steps could not be loaded.");
+        const nextSteps = (data.recipe?.steps || []) as RecipeStep[];
+        setRecipeSteps(nextSteps);
+        setStepCaptions(Object.fromEntries(nextSteps.map((step) => [step.id, step.caption])));
+        setFiles({});
+        setRenders([]);
+        setApproved([]);
+        setProductionUrls({});
+        setJobId("");
+        setStatus(`${nextSteps.length} recipe steps loaded. Add unique footage for each method step.`);
+      })
+      .catch((error) => {
+        if (active) setStatus(error instanceof Error ? error.message : "Recipe steps could not be loaded.");
+      })
+      .finally(() => {
+        if (active) setIsLoadingSteps(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [recipeSlug]);
+
+  const footageSlots = useMemo<FootageSlot[]>(() => [
+    { id: "finished", number: "00", title: "Opening finished dish", guidance: "A bright first frame showing the completed recipe.", required: true },
+    ...recipeSteps.map((step) => ({
+      id: step.id,
+      number: String(step.number).padStart(2, "0"),
+      title: `Method step ${step.number}`,
+      guidance: "Add footage or a photograph showing this exact action.",
+      required: true,
+      instruction: step.instruction,
+    })),
+    { id: "presenter", number: "+", title: "Craig on camera", guidance: "Optional introduction, explanation or tasting reaction.", required: false },
+  ], [recipeSteps]);
+
   const previewFile = useMemo(() => {
     for (const slot of footageSlots) {
       const video = (files[slot.id] || []).find((file) => file.type.startsWith("video/"));
       if (video) return video;
     }
     return null;
-  }, [files]);
+  }, [files, footageSlots]);
 
   const uploadedSlots = footageSlots.filter((slot) => (files[slot.id] || []).length > 0).length;
   const requiredSlots = footageSlots.filter((slot) => slot.required);
@@ -140,6 +180,8 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
       footage: footageSlots.map((slot) => ({
         slot: slot.id,
         title: slot.title,
+        instruction: slot.instruction,
+        caption: stepCaptions[slot.id] || (slot.id === "finished" ? selectedRecipe?.label : ""),
         required: slot.required,
         files: (files[slot.id] || []).map((file) => file.name),
       })),
@@ -156,12 +198,17 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
       setStatus("Choose a recipe before rendering.");
       return;
     }
-    const descriptors: Array<{ field: string; slot: string; order: number }> = [];
+    const descriptors: Array<{ field: string; slot: string; order: number; caption: string }> = [];
     const form = new FormData();
     footageSlots.forEach((slot) => {
       (files[slot.id] || []).forEach((file, order) => {
         const field = `source-${slot.id}-${order}`;
-        descriptors.push({ field, slot: slot.id, order });
+        descriptors.push({
+          field,
+          slot: slot.id,
+          order,
+          caption: stepCaptions[slot.id] || (slot.id === "finished" ? selectedRecipe.label : ""),
+        });
         form.append(field, file, file.name);
       });
     });
@@ -247,6 +294,7 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
     setApproved([]);
     setProductionUrls({});
     setJobId("");
+    setStepCaptions(Object.fromEntries(recipeSteps.map((step) => [step.id, step.caption])));
     localStorage.removeItem("vegan-masala-raw-footage-brief");
     setStatus("Local job cleared. Your original source files on the Mac were not changed.");
   }
@@ -304,7 +352,10 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
               id="recipe"
               value={recipeSlug}
               disabled={recipes.length === 0}
-              onChange={(event) => setRecipeSlug(event.target.value)}
+              onChange={(event) => {
+                setIsLoadingSteps(true);
+                setRecipeSlug(event.target.value);
+              }}
               className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/25 px-4 py-3 text-white"
             >
               {recipes.map((recipe) => <option key={recipe.slug} value={recipe.slug}>{recipe.label}</option>)}
@@ -320,7 +371,9 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-gold)]/70">Step 2</p>
                 <h2 className="mt-2 text-2xl font-extrabold text-white">Add footage to the shot list</h2>
               </div>
-              <div className="text-sm font-bold text-[var(--brand-gold)]">{uploadedSlots} of {footageSlots.length} slots filled</div>
+              <div className="text-sm font-bold text-[var(--brand-gold)]">
+                {isLoadingSteps ? "Loading method…" : `${uploadedSlots} of ${footageSlots.length} slots filled`}
+              </div>
             </div>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {footageSlots.map((slot) => {
@@ -337,6 +390,24 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
                         <p className="mt-1 text-sm leading-6 text-[var(--text-soft)]">{slot.guidance}</p>
                       </div>
                     </div>
+                    {slot.instruction ? (
+                      <div className="mt-4 space-y-3">
+                        <div className="rounded-xl border border-[var(--border)] bg-black/20 p-3">
+                          <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--text-soft)]">Website instruction</span>
+                          <p className="mt-1 text-sm leading-6 text-[var(--text-soft)]">{slot.instruction}</p>
+                        </div>
+                        <label className="block text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--brand-gold)]">
+                          On-screen step text
+                          <textarea
+                            value={stepCaptions[slot.id] || ""}
+                            onChange={(event) => setStepCaptions((current) => ({ ...current, [slot.id]: event.target.value.slice(0, 110) }))}
+                            rows={2}
+                            className="mt-2 w-full resize-none rounded-xl border border-[var(--border)] bg-black/25 px-3 py-2 text-sm normal-case tracking-normal text-white"
+                          />
+                          <span className="mt-1 block text-right text-[10px] text-[var(--text-soft)]">{(stepCaptions[slot.id] || "").length}/110</span>
+                        </label>
+                      </div>
+                    ) : null}
                     <label className="mt-4 flex cursor-pointer items-center justify-center rounded-xl border border-dashed border-[var(--brand-gold)]/55 bg-black/15 px-4 py-4 text-center text-sm font-bold text-[var(--brand-gold)] hover:bg-white/5">
                       Add clips or photographs
                       <input className="sr-only" type="file" accept="video/*,image/*" multiple onChange={(event) => addFiles(slot.id, event.target.files)} />
