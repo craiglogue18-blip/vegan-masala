@@ -140,6 +140,17 @@ cta:"Open video tools"
 },
 
 {
+title:"Raw Footage Studio",
+
+href:"/admin/social/production",
+
+description:
+"Organise genuine cooking footage into repeatable shot slots, choose a story format and prepare multi-platform video outputs for review.",
+
+cta:"Open footage studio"
+},
+
+{
 title:"Campaign Studio",
 
 href:"/admin/social/campaigns",
