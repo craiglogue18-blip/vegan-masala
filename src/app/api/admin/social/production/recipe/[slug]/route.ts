@@ -2,68 +2,40 @@ import { NextResponse } from "next/server";
 
 import { getRecipeBySlug } from "@/lib/recipes";
 
-function stripQuantities(text: string) {
-  return text
-    .replace(/\b\d+(?:\s*\/\s*\d+)?\s*(?:tbsp|tsp|teaspoons?|tablespoons?|cups?|g|kg|ml|litres?|cloves?|medium|large|small)\b/gi, "")
-    .replace(/\s+,/g, ",")
-    .replace(/\s{2,}/g, " ")
-    .trim();
+const PREPARATION_ACTIONS: Array<{ pattern: RegExp; instruction: (ingredient: string) => string }> = [
+  { pattern: /,\s*finely chopped\b/i, instruction: (ingredient) => `Finely chop ${ingredient}.` },
+  { pattern: /,\s*roughly chopped\b/i, instruction: (ingredient) => `Roughly chop ${ingredient}.` },
+  { pattern: /,\s*chopped\b/i, instruction: (ingredient) => `Chop ${ingredient}.` },
+  { pattern: /,\s*minced\b/i, instruction: (ingredient) => `Mince ${ingredient}.` },
+  { pattern: /,\s*finely grated\b/i, instruction: (ingredient) => `Finely grate ${ingredient}.` },
+  { pattern: /,\s*grated\b/i, instruction: (ingredient) => `Grate ${ingredient}.` },
+  { pattern: /,\s*cubed\b/i, instruction: (ingredient) => `Cut ${ingredient} into even cubes.` },
+  { pattern: /,\s*diced\b/i, instruction: (ingredient) => `Dice ${ingredient} evenly.` },
+  { pattern: /,\s*thinly sliced\b/i, instruction: (ingredient) => `Thinly slice ${ingredient}.` },
+  { pattern: /,\s*sliced lengthwise\b/i, instruction: (ingredient) => `Slice ${ingredient} lengthwise.` },
+  { pattern: /,\s*sliced\b/i, instruction: (ingredient) => `Slice ${ingredient}.` },
+  { pattern: /,\s*crushed\b/i, instruction: (ingredient) => `Crush ${ingredient}.` },
+  { pattern: /,\s*peeled\b/i, instruction: (ingredient) => `Peel ${ingredient}.` },
+  { pattern: /,\s*rinsed\b/i, instruction: (ingredient) => `Rinse ${ingredient}.` },
+  { pattern: /,\s*drained\b/i, instruction: (ingredient) => `Drain ${ingredient}.` },
+];
+
+function preparationInstruction(ingredient: string) {
+  for (const action of PREPARATION_ACTIONS) {
+    if (!action.pattern.test(ingredient)) continue;
+    const subject = ingredient.replace(action.pattern, "").trim();
+    return action.instruction(subject);
+  }
+  return null;
 }
 
-function shortenInstruction(instruction: string) {
-  const cleaned = stripQuantities(instruction.replace(/\([^)]*\)/g, "").replace(/\s+/g, " "));
-  const lower = cleaned.toLowerCase();
-
-  if (lower.includes("soak") && lower.includes("potato") && lower.includes("eggplant") && lower.includes("water")) {
-    return "Keep the potatoes in water; soak the eggplant with salt to slow browning.";
-  }
-  if (lower.includes("cumin seeds") && lower.includes("sizzle")) {
-    return "Heat the oil, then let the cumin seeds sizzle.";
-  }
-  if (lower.includes("onion") && lower.includes("golden")) {
-    return `Cook the onions${lower.includes("chilli") ? " and chilli" : ""} until soft and lightly golden.`;
-  }
-  if (lower.includes("garlic") && lower.includes("fragrant")) {
-    const timing = cleaned.match(/\b\d+\s*(?:to|–|-)\s*\d+\s*seconds?\b/i)?.[0];
-    return `Cook the garlic${timing ? ` for ${timing}` : " briefly"} until fragrant.`;
-  }
-  if (lower.includes("drain") && lower.includes("potato") && lower.includes("stir-fry")) {
-    const timing = cleaned.match(/\b\d+\s*minutes?\b/i)?.[0];
-    return `Add the drained potatoes and stir-fry${timing ? ` for ${timing}` : " briefly"}.`;
-  }
-  if (lower.includes("eggplant") && lower.includes("soften")) {
-    return "Cook the eggplant gently until it starts to soften.";
-  }
-  if ((lower.includes("turmeric") || lower.includes("garam masala")) && lower.includes("coat")) {
-    return `Add the spices${lower.includes("chilli") ? " and chilli" : ""}; coat the vegetables in the masala.`;
-  }
-  if (lower.includes("tomato") && lower.includes("break down")) {
-    return "Cook the tomatoes until they break down and lose their raw aroma.";
-  }
-  if (lower.includes("cover") && lower.includes("simmer") && lower.includes("tender")) {
-    return "Cover and simmer until the vegetables are tender.";
-  }
-  if (lower.includes("uncover") && (lower.includes("thicken") || lower.includes("thickened"))) {
-    return `Uncover until the sauce thickens${lower.includes("coriander") ? ", then finish with fresh coriander" : ""}.`;
-  }
-
-  const sentences = cleaned.split(/(?<=[.!?])\s+/).filter(Boolean);
-  let caption = sentences[0] || cleaned;
-
-  const until = cleaned.match(/\buntil\s+([^.!?]+)/i)?.[0];
-  if (until && !caption.toLowerCase().includes("until")) caption = `${caption.replace(/[.!?]+$/, "")} ${until}`;
-  caption = caption
-    .replace(/\bfinely chopped\b/gi, "chopped")
-    .replace(/\bsliced lengthwise\b/gi, "sliced")
-    .replace(/\bthe remaining\b/gi, "the")
+function conciseMethodCaption(instruction: string) {
+  return instruction
     .replace(/\s+/g, " ")
+    .replace(/\bjust until\b/gi, "until")
+    .replace(/\bso that\b/gi, "so")
+    .replace(/\ba little more\b/gi, "more")
     .trim();
-
-  if (caption.length > 92) {
-    const shortened = caption.slice(0, 89).replace(/\s+\S*$/, "").replace(/[,:;.-]+$/, "");
-    caption = `${shortened}…`;
-  }
-  return caption.replace(/^./, (letter) => letter.toUpperCase());
 }
 
 export async function GET(_request: Request, context: { params: Promise<{ slug: string }> }) {
@@ -71,17 +43,38 @@ export async function GET(_request: Request, context: { params: Promise<{ slug: 
   const recipe = getRecipeBySlug(slug);
   if (!recipe) return NextResponse.json({ ok: false, error: "Recipe not found." }, { status: 404 });
 
+  const preparation = (recipe.ingredients || [])
+    .map((ingredient, index) => ({ ingredient, originalIndex: index }))
+    .map(({ ingredient, originalIndex }) => ({ ingredient, originalIndex, caption: preparationInstruction(ingredient) }))
+    .filter((item): item is { ingredient: string; originalIndex: number; caption: string } => Boolean(item.caption))
+    .map((item, index) => ({
+      id: `prep-${index + 1}`,
+      number: index + 1,
+      phase: "prep" as const,
+      ingredient: item.ingredient,
+      instruction: item.caption,
+      caption: item.caption,
+      sourceNumber: item.originalIndex + 1,
+    }));
+
+  const method = (recipe.instructions || []).map((instruction, index) => ({
+    id: `step-${index + 1}`,
+    number: index + 1,
+    phase: "method" as const,
+    instruction,
+    caption: conciseMethodCaption(instruction),
+    sourceNumber: index + 1,
+  }));
+
   return NextResponse.json({
     ok: true,
     recipe: {
       slug: recipe.slug,
       title: recipe.title,
-      steps: (recipe.instructions || []).map((instruction, index) => ({
-        id: `step-${index + 1}`,
-        number: index + 1,
-        instruction,
-        caption: shortenInstruction(instruction),
-      })),
+      ingredients: recipe.ingredients || [],
+      preparation,
+      method,
+      steps: [...preparation, ...method],
     },
   });
 }

@@ -20,8 +20,11 @@ type FootageSlot = {
 type RecipeStep = {
   id: string;
   number: number;
+  phase: "prep" | "method";
   instruction: string;
   caption: string;
+  ingredient?: string;
+  sourceNumber: number;
 };
 
 type TemplateId = "complete" | "technique" | "mistake" | "ingredient" | "quick";
@@ -37,11 +40,11 @@ type RenderResult = {
 };
 
 const templates: Array<{ id: TemplateId; title: string; description: string; length: string }> = [
-  { id: "complete", title: "Complete recipe", description: "A clear beginning-to-end method with every important cooking cue.", length: "4–8 min" },
+  { id: "complete", title: "Complete recipe", description: "Every ingredient-preparation and cooking stage in the published recipe, in order.", length: "Length follows recipe" },
   { id: "technique", title: "Essential technique", description: "One useful step explained closely and linked to the full recipe.", length: "20–45 sec" },
   { id: "mistake", title: "Common mistake", description: "Show what goes wrong, how to recognise it and how to recover.", length: "20–40 sec" },
   { id: "ingredient", title: "Ingredient story", description: "Introduce one spice or ingredient and demonstrate its role.", length: "25–50 sec" },
-  { id: "quick", title: "Quick version", description: "A fast visual summary for Reels, TikTok and Shorts.", length: "30–60 sec" },
+  { id: "quick", title: "Concise complete method", description: "Shorter individual clips, while retaining every preparation and method stage.", length: "Length follows recipe" },
 ];
 
 const outputs: Array<{ id: OutputId; title: string; format: string }> = [
@@ -58,6 +61,7 @@ const brandOptions = [
   "Gold, black and red treatment",
   "Vegan Masala logo",
   "Branded recipe title",
+  "Numbered preparation and method captions",
   "Subtitle-safe caption area",
   "Bright first frame",
   "Branded end card",
@@ -112,7 +116,9 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
         setApproved([]);
         setProductionUrls({});
         setJobId("");
-        setStatus(`${nextSteps.length} recipe steps loaded. Add unique footage for each method step.`);
+        const prepCount = nextSteps.filter((step) => step.phase === "prep").length;
+        const methodCount = nextSteps.filter((step) => step.phase === "method").length;
+        setStatus(`${prepCount} preparation shots and ${methodCount} method steps loaded. Add matching footage for every stage.`);
       })
       .catch((error) => {
         if (active) setStatus(error instanceof Error ? error.message : "Recipe steps could not be loaded.");
@@ -129,9 +135,11 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
     { id: "finished", number: "00", title: "Opening finished dish", guidance: "A bright first frame showing the completed recipe.", required: true },
     ...recipeSteps.map((step) => ({
       id: step.id,
-      number: String(step.number).padStart(2, "0"),
-      title: `Method step ${step.number}`,
-      guidance: "Add footage or a photograph showing this exact action.",
+      number: step.phase === "prep" ? `P${step.number}` : String(step.number).padStart(2, "0"),
+      title: step.phase === "prep" ? `Ingredient preparation ${step.number}` : `Method step ${step.number}`,
+      guidance: step.phase === "prep"
+        ? `Film the preparation of ${step.ingredient || "this ingredient"}, including the stated cut or technique.`
+        : "Add footage or a photograph showing this exact cooking action, quantity and technique.",
       required: true,
       instruction: step.instruction,
     })),
@@ -196,6 +204,11 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
   async function renderDrafts() {
     if (!selectedRecipe) {
       setStatus("Choose a recipe before rendering.");
+      return;
+    }
+    const missingRequired = requiredSlots.filter((slot) => !(files[slot.id] || []).length);
+    if (missingRequired.length) {
+      setStatus(`Add matching footage or an image for all ${missingRequired.length} remaining required stages before rendering.`);
       return;
     }
     const descriptors: Array<{ field: string; slot: string; order: number; caption: string }> = [];
@@ -361,7 +374,7 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
               {recipes.map((recipe) => <option key={recipe.slug} value={recipe.slug}>{recipe.label}</option>)}
             </select>
             <p className="mt-3 text-sm leading-6 text-[var(--text-soft)]">
-              Ingredients, method steps, timings and the destination URL will come from this published recipe rather than being invented during editing.
+              Ingredient preparation, exact quantities, method steps, timings and the destination URL come from this published recipe rather than being invented during editing.
             </p>
           </section>
 
@@ -393,18 +406,20 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
                     {slot.instruction ? (
                       <div className="mt-4 space-y-3">
                         <div className="rounded-xl border border-[var(--border)] bg-black/20 p-3">
-                          <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--text-soft)]">Website instruction</span>
+                          <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--text-soft)]">
+                            {slot.id.startsWith("prep-") ? "Ingredient preparation" : "Website instruction"}
+                          </span>
                           <p className="mt-1 text-sm leading-6 text-[var(--text-soft)]">{slot.instruction}</p>
                         </div>
                         <label className="block text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--brand-gold)]">
-                          On-screen step text
+                          On-screen step text · keep quantities and technique
                           <textarea
                             value={stepCaptions[slot.id] || ""}
-                            onChange={(event) => setStepCaptions((current) => ({ ...current, [slot.id]: event.target.value.slice(0, 110) }))}
-                            rows={2}
+                            onChange={(event) => setStepCaptions((current) => ({ ...current, [slot.id]: event.target.value.slice(0, 240) }))}
+                            rows={3}
                             className="mt-2 w-full resize-none rounded-xl border border-[var(--border)] bg-black/25 px-3 py-2 text-sm normal-case tracking-normal text-white"
                           />
-                          <span className="mt-1 block text-right text-[10px] text-[var(--text-soft)]">{(stepCaptions[slot.id] || "").length}/110</span>
+                          <span className="mt-1 block text-right text-[10px] text-[var(--text-soft)]">{(stepCaptions[slot.id] || "").length}/240</span>
                         </label>
                       </div>
                     ) : null}
@@ -450,6 +465,9 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
           <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-7 shadow-sm">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-gold)]/70">Step 4</p>
             <h2 className="mt-2 text-2xl font-extrabold text-white">Select the outputs</h2>
+            <p className="mt-3 text-sm leading-6 text-[var(--text-soft)]">
+              Every output retains the complete preparation and method sequence. Vertical versions may be longer than one minute when the recipe requires it.
+            </p>
             <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {outputs.map((output) => (
                 <label key={output.id} className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 ${selectedOutputs.includes(output.id) ? "border-[var(--brand-gold)] bg-[var(--brand-gold)]/10" : "border-[var(--border)] bg-black/10"}`}>
