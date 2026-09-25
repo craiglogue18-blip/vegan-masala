@@ -82,11 +82,13 @@ async function hasAudio(filePath: string) {
   }
 }
 
-function clipDuration(template: string, isImage: boolean) {
-  if (isImage) return template === "complete" ? 4 : 2.5;
-  if (template === "complete") return 12;
-  if (template === "quick") return 3;
-  return 4.5;
+function clipDuration(template: string, isImage: boolean, caption: string) {
+  const wordCount = caption.trim().split(/\s+/).filter(Boolean).length;
+  const readingDuration = Math.min(15, 1.5 + wordCount / 2.4);
+  if (isImage) return Math.max(template === "complete" ? 4 : 2.5, readingDuration);
+  if (template === "complete") return Math.max(12, readingDuration);
+  if (template === "quick") return Math.max(3, readingDuration);
+  return Math.max(4.5, readingDuration);
 }
 
 function textPath(text: string, fontSize: number, centerX: number, baseline: number) {
@@ -109,27 +111,60 @@ function wrapForWidth(text: string, fontSize: number, maxWidth: number) {
     }
   }
   if (current) lines.push(current);
-  if (lines.length <= 2) return lines;
-  const shortened = lines.slice(0, 2);
-  shortened[1] = `${shortened[1].replace(/[.,:;!?…-]+$/, "")}…`;
-  return shortened;
+  return lines;
 }
 
-async function createBrandOverlay(outputPath: string, width: number, height: number, title: string) {
-  const titleSize = Math.max(34, Math.round(width * 0.044));
+function fitCaption(text: string, width: number) {
+  const initialSize = Math.max(34, Math.round(width * 0.044));
+  const minimumSize = Math.max(26, Math.round(width * 0.029));
+  let fontSize = initialSize;
+  let lines = wrapForWidth(text.toUpperCase(), fontSize, width * 0.84);
+  while (lines.length > 5 && fontSize > minimumSize) {
+    fontSize -= 2;
+    lines = wrapForWidth(text.toUpperCase(), fontSize, width * 0.84);
+  }
+  if (lines.length > 5) {
+    lines = lines.slice(0, 5);
+    lines[4] = `${lines[4].replace(/[.,:;!?…-]+$/, "")}…`;
+  }
+  return { fontSize, lines };
+}
+
+function stageLabel(slot: string) {
+  if (slot === "finished") return "FINISHED DISH";
+  if (slot === "presenter") return "FROM CRAIG'S KITCHEN";
+  const prep = slot.match(/^prep-(\d+)$/);
+  if (prep) return `PREPARATION ${prep[1]}`;
+  const method = slot.match(/^step-(\d+)$/);
+  if (method) return `METHOD ${method[1]}`;
+  return "RECIPE STEP";
+}
+
+async function createBrandOverlay(outputPath: string, width: number, height: number, title: string, slot: string) {
+  const fitted = fitCaption(title, width);
+  const titleSize = fitted.fontSize;
   const labelSize = Math.max(20, Math.round(width * 0.021));
-  const lowerPanel = Math.round(height * 0.17);
-  const titleLines = wrapForWidth(title.toUpperCase(), titleSize, width * 0.84);
-  const titleBaseline = height - Math.round(lowerPanel * (titleLines.length > 1 ? 0.66 : 0.58));
-  const labelBaseline = height - Math.round(lowerPanel * 0.2);
+  const stageSize = Math.max(21, Math.round(width * 0.023));
+  const titleLines = fitted.lines;
   const lineGap = Math.round(titleSize * 1.04);
+  const panelPadding = Math.round(height * 0.025);
+  const labelSpace = Math.round(labelSize * 2.1);
+  const lowerPanel = Math.max(
+    Math.round(height * 0.17),
+    panelPadding * 2 + Math.round(stageSize * 1.4) + titleLines.length * lineGap + labelSpace,
+  );
+  const panelTop = height - lowerPanel;
+  const stageBaseline = panelTop + panelPadding + stageSize;
+  const titleBaseline = stageBaseline + Math.round(titleSize * 1.3);
+  const labelBaseline = height - panelPadding;
   const titlePaths = titleLines
     .map((line, index) => `<path d="${textPath(line, titleSize, width / 2, titleBaseline + index * lineGap)}" fill="#E1B84B"/>`)
     .join("");
   const svg = Buffer.from(`
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-      <rect x="0" y="${height - lowerPanel}" width="${width}" height="${lowerPanel}" fill="#000" fill-opacity="0.78"/>
-      <rect x="0" y="${height - lowerPanel}" width="${width}" height="4" fill="#E1B84B"/>
+      <rect x="0" y="${panelTop}" width="${width}" height="${lowerPanel}" fill="#000" fill-opacity="0.82"/>
+      <rect x="0" y="${panelTop}" width="${width}" height="4" fill="#E1B84B"/>
+      <path d="${textPath(stageLabel(slot), stageSize, width / 2, stageBaseline)}" fill="#FFFFFF"/>
       ${titlePaths}
       <path d="${textPath("VEGAN-MASALA.COM", labelSize, width / 2, labelBaseline)}" fill="#FFFFFF"/>
     </svg>
@@ -156,7 +191,7 @@ async function makeSegment(options: {
 }) {
   const { source, outputPath, width, height, template, overlayPath } = options;
   const isImage = source.mime.startsWith("image/") || /\.(jpe?g|png|webp|heic)$/i.test(source.originalName);
-  const duration = clipDuration(template, isImage);
+  const duration = clipDuration(template, isImage, source.caption);
   const audio = !isImage && (await hasAudio(source.path));
   const args = ["-y"];
 
@@ -250,24 +285,16 @@ export async function renderLocalFootage(options: {
   const slotRank = (slot: string) => {
     if (slot === "finished") return 0;
     if (slot === "presenter") return 10_000;
+    const prepMatch = slot.match(/^prep-(\d+)$/);
+    if (prepMatch) return 100 + Number(prepMatch[1]);
     const match = slot.match(/^step-(\d+)$/);
-    return match ? Number(match[1]) : 9_000;
+    return match ? 1_000 + Number(match[1]) : 9_000;
   };
   const orderedSources = [...options.sources].sort((left, right) => {
     const leftSlot = slotRank(left.slot);
     const rightSlot = slotRank(right.slot);
     return leftSlot === rightSlot ? left.order - right.order : leftSlot - rightSlot;
   });
-
-  const selectSources = (outputId: LocalOutputId) => {
-    const isShort = ["reel", "short", "tiktok", "pinterest"].includes(outputId);
-    if (!isShort || orderedSources.length <= 8) return orderedSources;
-    const selected = new Set<number>([0, orderedSources.length - 1]);
-    for (let index = 1; selected.size < 8; index += 1) {
-      selected.add(Math.round((index * (orderedSources.length - 1)) / 7));
-    }
-    return [...selected].sort((a, b) => a - b).map((index) => orderedSources[index]);
-  };
 
   const results: LocalRenderResult[] = [];
   for (const outputId of options.outputs) {
@@ -276,12 +303,18 @@ export async function renderLocalFootage(options: {
     const formatWork = path.join(workingDirectory, outputId);
     ensureDirectory(formatWork);
     const segments: string[] = [];
-    const outputSources = selectSources(outputId);
+    const outputSources = orderedSources;
 
     for (let index = 0; index < outputSources.length; index += 1) {
       const segment = path.join(formatWork, `segment-${String(index).padStart(3, "0")}.mp4`);
       const overlayPath = path.join(formatWork, `brand-overlay-${String(index).padStart(3, "0")}.png`);
-      await createBrandOverlay(overlayPath, format.width, format.height, outputSources[index].caption || options.title);
+      await createBrandOverlay(
+        overlayPath,
+        format.width,
+        format.height,
+        outputSources[index].caption || options.title,
+        outputSources[index].slot,
+      );
       await makeSegment({
         source: outputSources[index],
         outputPath: segment,
