@@ -334,6 +334,9 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
             <Link href="/admin/social/video" className="rounded-xl border border-[var(--border)] px-5 py-3 text-sm font-bold text-[var(--brand-gold)]">
               Existing video tool
             </Link>
+            <Link href="/admin/social/production/filming-pack" className="rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-extrabold text-white">
+              Open first 10 filming pack
+            </Link>
           </div>
         </div>
 
@@ -415,11 +418,11 @@ export default function RawFootageStudioClient({ recipes }: { recipes: RecipeOpt
                           On-screen step text · keep quantities and technique
                           <textarea
                             value={stepCaptions[slot.id] || ""}
-                            onChange={(event) => setStepCaptions((current) => ({ ...current, [slot.id]: event.target.value.slice(0, 240) }))}
+                            onChange={(event) => setStepCaptions((current) => ({ ...current, [slot.id]: event.target.value.slice(0, 400) }))}
                             rows={3}
                             className="mt-2 w-full resize-none rounded-xl border border-[var(--border)] bg-black/25 px-3 py-2 text-sm normal-case tracking-normal text-white"
                           />
-                          <span className="mt-1 block text-right text-[10px] text-[var(--text-soft)]">{(stepCaptions[slot.id] || "").length}/240</span>
+                          <span className="mt-1 block text-right text-[10px] text-[var(--text-soft)]">{(stepCaptions[slot.id] || "").length}/400</span>
                         </label>
                       </div>
                     ) : null}
