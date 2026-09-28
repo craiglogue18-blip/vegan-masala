@@ -377,11 +377,8 @@ export default async function RecipesPage({
       <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
         <div className="flex flex-col items-center gap-4 text-center">
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
-              Vegan Masala
-            </p>
-            <h1 className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)] sm:text-4xl">
-              Vegan Indian Recipes
+            <h1 className="mx-auto w-fit rounded-full border border-[var(--brand-gold)]/60 bg-black/20 px-4 py-1 text-xs font-normal uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
+              Vegan Masala Recipes
             </h1>
             <p className="mx-auto mt-3 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
               Browse comforting curries, dals, rice dishes, flatbreads, snacks and sweet vegan

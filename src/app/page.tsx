@@ -122,7 +122,7 @@ export default function Home() {
         <div className="pointer-events-none absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-black/20" />
 
         <div className="relative text-center">
-          <p className="text-sm font-extrabold uppercase tracking-[0.18em] text-[var(--brand-gold)]/80">
+          <p className="mx-auto w-fit rounded-full border border-[var(--brand-gold)]/60 bg-black/20 px-4 py-1 text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
             Vegan Masala
           </p>
 
