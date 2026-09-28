@@ -116,22 +116,25 @@ export default function Home() {
         <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-black/20" />
         <div className="pointer-events-none absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-black/20" />
 
-        <div className="relative grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <p className="text-sm font-extrabold uppercase tracking-[0.18em] text-[var(--brand-gold)]/80">
-              Vegan Masala
-            </p>
+        <div className="relative text-center">
+          <p className="text-sm font-extrabold uppercase tracking-[0.18em] text-[var(--brand-gold)]/80">
+            Vegan Masala
+          </p>
 
-            <h1 className="mt-3 text-4xl font-extrabold leading-tight text-[var(--brand-gold)] sm:text-5xl">
-              Find your next unforgettable vegan Indian dinner
-            </h1>
+          <h1 className="mx-auto mt-3 max-w-3xl text-4xl font-extrabold leading-tight text-[var(--brand-gold)] sm:text-5xl">
+            Find your next unforgettable vegan Indian dinner
+          </h1>
+        </div>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">
+        <div className="relative mt-10 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="text-center">
+
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">
               Proper masalas, dependable methods and generous family-style food.
               Choose what you are craving and we’ll help make dinner the easy decision.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
                 href="/recipes"
                 className="rounded-xl bg-[var(--brand-red)] px-6 py-3 font-bold text-white shadow transition hover:opacity-90"

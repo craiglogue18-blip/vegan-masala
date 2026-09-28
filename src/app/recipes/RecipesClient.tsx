@@ -39,16 +39,9 @@ function norm(s: string) {
 
 export default function RecipesClient({ recipes }: { recipes: RecipeSummary[] }) {
   const [query, setQuery] = useState("");
-  const [cuisine, setCuisine] = useState<string>("all");
   const [tag, setTag] = useState<string>("all");
   const [sort, setSort] = useState<"newest" | "quickest" | "az">("newest");
   const deferredQuery = useDeferredValue(query);
-
-  const cuisines = useMemo(() => {
-    const set = new Set<string>();
-    for (const r of recipes) if (r.cuisine) set.add(r.cuisine);
-    return ["all", ...Array.from(set).sort((a, b) => a.localeCompare(b))];
-  }, [recipes]);
 
   const tags = useMemo(() => {
     const set = new Set<string>();
@@ -60,7 +53,6 @@ export default function RecipesClient({ recipes }: { recipes: RecipeSummary[] })
     const q = norm(deferredQuery);
 
     let list = recipes.filter((r) => {
-      if (cuisine !== "all" && (r.cuisine ?? "") !== cuisine) return false;
       if (tag !== "all" && !(r.tags ?? []).includes(tag)) return false;
 
       if (!q) return true;
@@ -93,23 +85,22 @@ export default function RecipesClient({ recipes }: { recipes: RecipeSummary[] })
     }
 
     return list;
-  }, [recipes, deferredQuery, cuisine, tag, sort]);
+  }, [recipes, deferredQuery, tag, sort]);
 
-  const hasFilters = Boolean(query.trim() || cuisine !== "all" || tag !== "all");
+  const hasFilters = Boolean(query.trim() || tag !== "all");
 
   useEffect(() => {
-    if (!deferredQuery.trim() && cuisine === "all" && tag === "all") return;
+    if (!deferredQuery.trim() && tag === "all") return;
     const timer = window.setTimeout(() => recordEngagement("site_search", {
       product: deferredQuery.trim() || "filters-only",
       category: filtered.length ? "results" : "zero-results",
-      placement: `${cuisine}:${tag}`,
+      placement: tag,
     }), 800);
     return () => window.clearTimeout(timer);
-  }, [deferredQuery, cuisine, tag, filtered.length]);
+  }, [deferredQuery, tag, filtered.length]);
 
   function clearFilters() {
     setQuery("");
-    setCuisine("all");
     setTag("all");
     setSort("newest");
   }
@@ -131,7 +122,7 @@ export default function RecipesClient({ recipes }: { recipes: RecipeSummary[] })
             {filtered.length} recipe{filtered.length === 1 ? "" : "s"}
           </p>
         </div>
-        <div className="grid gap-4 lg:grid-cols-[1fr_200px_240px_180px] lg:items-end">
+        <div className="grid gap-4 lg:grid-cols-[1fr_180px] lg:items-end">
           {/* Search */}
           <div>
             <label htmlFor="recipe-search" className="text-xs font-extrabold tracking-wide text-[var(--brand-gold)]">
@@ -152,42 +143,6 @@ export default function RecipesClient({ recipes }: { recipes: RecipeSummary[] })
               <button type="button" onClick={() => setQuery("")} aria-label="Clear recipe search" className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full px-2 py-1 text-lg text-[var(--text-soft)] hover:bg-white/10">×</button>
             ) : null}
             </div>
-          </div>
-
-          {/* Cuisine */}
-          <div>
-            <label className="text-xs font-extrabold tracking-wide text-[var(--brand-gold)]">
-              Cuisine
-            </label>
-            <select
-              value={cuisine}
-              onChange={(e) => setCuisine(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-[var(--border)] bg-black/15 px-4 py-3 text-sm font-bold text-[var(--text-soft)] outline-none focus:border-[var(--brand-gold)]"
-            >
-              {cuisines.map((c) => (
-                <option key={c} value={c}>
-                  {c === "all" ? "All" : c}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Tag */}
-          <div>
-            <label className="text-xs font-extrabold tracking-wide text-[var(--brand-gold)]">
-              Tag
-            </label>
-            <select
-              value={tag}
-              onChange={(e) => setTag(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-[var(--border)] bg-black/15 px-4 py-3 text-sm font-bold text-[var(--text-soft)] outline-none focus:border-[var(--brand-gold)]"
-            >
-              {tags.map((t) => (
-                <option key={t} value={t}>
-                  {t === "all" ? "All" : t}
-                </option>
-              ))}
-            </select>
           </div>
 
           {/* Sort */}

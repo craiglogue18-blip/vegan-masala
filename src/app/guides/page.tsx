@@ -172,22 +172,22 @@ export default function GuidesIndexPage() {
       <section className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-sm">
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
-          <div className="relative p-8 sm:p-10">
-            <div className="inline-flex rounded-full border border-[var(--border)] bg-black/20 px-4 py-1 text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
+          <div className="relative p-8 text-center sm:p-10">
+            <div className="mx-auto inline-flex rounded-full border border-[var(--border)] bg-black/20 px-4 py-1 text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
               Vegan Masala Guides
             </div>
 
-            <h1 className="mt-5 text-3xl font-extrabold tracking-wide text-[var(--brand-gold)] sm:text-4xl">
+            <h1 className="mx-auto mt-5 max-w-4xl text-3xl font-extrabold tracking-wide text-[var(--brand-gold)] sm:text-4xl">
               Learn the foundations of vegan Indian cooking
             </h1>
 
-            <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
+            <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
               Explore practical guides on Indian spices, pantry staples, vegan swaps,
               kitchen setup, and essential techniques to help you cook with more
               confidence at home.
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold text-[var(--text-soft)]">
+            <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm font-bold text-[var(--text-soft)]">
               <span className="rounded-xl border border-[var(--border)] bg-black/20 px-4 py-2">
                 {guides.length} guides
               </span>
