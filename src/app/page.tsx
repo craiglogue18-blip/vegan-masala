@@ -11,6 +11,11 @@ import TrendingRecipes from "@/components/TrendingRecipes";
 import RecipeVideoShowcase from "@/components/RecipeVideoShowcase";
 import EthicalShoppingSpotlight from "@/components/EthicalShoppingSpotlight";
 import HomepageApronFeature from "@/components/HomepageApronFeature";
+import AffiliateLink from "@/components/AffiliateLink";
+import {
+  SPICE_KITCHEN_INDIAN_TIN_URL,
+  spiceKitchenAffiliateUrl,
+} from "@/lib/affiliate";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
@@ -161,6 +166,48 @@ export default function Home() {
               </div>
               <div className="rounded-2xl border border-[var(--border)] bg-black/10 px-4 py-3">
                 ✓ Written for serious curry lovers
+              </div>
+            </div>
+
+            <div className="mt-8 overflow-hidden rounded-2xl border border-[var(--brand-gold)]/45 bg-gradient-to-br from-black/30 to-[var(--surface)] shadow-sm">
+              <div className="grid grid-cols-[110px_1fr] items-stretch sm:grid-cols-[140px_1fr]">
+                <div className="flex items-center justify-center bg-[#fff8df] p-3">
+                  <Image
+                    src="/images/affiliates/spice-kitchen-indian-spice-tin.png"
+                    alt="Spice Kitchen Indian Spice Tin with nine spices and blends"
+                    width={2000}
+                    height={2000}
+                    className="h-auto w-full object-contain"
+                  />
+                </div>
+                <div className="p-4 sm:p-5">
+                  <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/75">
+                    Affiliate partner · Awin
+                  </p>
+                  <h2 className="mt-1 text-lg font-extrabold text-[var(--brand-gold)] sm:text-xl">
+                    Build a proper Indian spice shelf
+                  </h2>
+                  <p className="mt-2 text-sm leading-5 text-[var(--text-soft)]">
+                    Nine foundational spices and blends, with a spice spoon and mini recipe book.
+                  </p>
+                  <AffiliateLink
+                    href={spiceKitchenAffiliateUrl(
+                      "homepage-hero-indian-spice-tin",
+                      SPICE_KITCHEN_INDIAN_TIN_URL,
+                    )}
+                    title="Spice Kitchen Indian Spice Tin"
+                    category="Homepage"
+                    network="Awin"
+                    destinationLabel="Spice Kitchen"
+                    placement="homepage-hero"
+                    className="mt-3 inline-flex min-h-10 items-center justify-center rounded-xl bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white transition hover:brightness-110"
+                  >
+                    View the spice tin →
+                  </AffiliateLink>
+                  <p className="mt-2 text-[0.65rem] text-[var(--text-soft)]/75">
+                    Paid affiliate link · No extra cost to you
+                  </p>
+                </div>
               </div>
             </div>
           </div>
