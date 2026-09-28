@@ -126,10 +126,9 @@ export default function Home() {
           </h1>
         </div>
 
-        <div className="relative mt-10 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="relative mt-8 grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">
+            <p className="max-w-2xl text-lg leading-8 text-[var(--text-soft)]">
               Proper masalas, dependable methods and generous family-style food.
               Choose what you are craving and we’ll help make dinner the easy decision.
             </p>

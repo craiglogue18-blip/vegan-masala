@@ -40,10 +40,22 @@ export default function ContactPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      <h1 className="text-center text-4xl font-bold text-[var(--brand-gold)]">Contact</h1>
-      <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
-        Partnerships, questions, recipe requests or brand collaborations — I&apos;d love to hear from you.
-      </p>
+      <section className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-sm">
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
+          <div className="relative p-8 text-center sm:p-10">
+            <div className="mx-auto inline-flex rounded-full border border-[var(--border)] bg-black/20 px-4 py-1 text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
+              Vegan Masala
+            </div>
+            <h1 className="mx-auto mt-5 max-w-4xl text-3xl font-extrabold tracking-wide text-[var(--brand-gold)] sm:text-4xl">
+              Contact Vegan-Masala
+            </h1>
+            <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
+              Partnerships, questions, recipe requests or brand collaborations — I&apos;d love to hear from you.
+            </p>
+          </div>
+        </div>
+      </section>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-2">
         {/* CONTACT FORM */}

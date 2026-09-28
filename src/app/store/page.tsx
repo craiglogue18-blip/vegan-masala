@@ -16,10 +16,25 @@ export default function EbookPage() {
   return (
     <main className="min-h-screen text-white">
       <div className="mx-auto max-w-6xl px-6 py-12 md:px-8 lg:px-10">
-        <section className="mb-12">
-          <p className="text-center text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--brand-gold)]">Vegan Masala shop</p>
+        <section className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-sm">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
+            <div className="relative p-8 text-center sm:p-10">
+              <div className="mx-auto inline-flex rounded-full border border-[var(--border)] bg-black/20 px-4 py-1 text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
+                Vegan Masala
+              </div>
+              <h1 className="mx-auto mt-5 max-w-4xl text-3xl font-extrabold tracking-wide text-[var(--brand-gold)] sm:text-4xl">
+                Vegan Masala Store
+              </h1>
+              <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
+                Explore practical cooking guides, masterclasses and kitchenware made for people who take their masala seriously.
+              </p>
+            </div>
+          </div>
+        </section>
 
-          <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <section className="mb-12 mt-9">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             <CommerceLink
               href={APRON_PRODUCT_URL}
               product="Vegan Masala Gold Embroidered Organic Cotton Apron"
