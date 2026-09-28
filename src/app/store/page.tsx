@@ -103,9 +103,9 @@ export default function EbookPage() {
               Original illustrated edition
             </p>
 
-            <h1 className="mb-6 text-4xl font-bold leading-tight text-yellow-400 md:text-5xl">
+            <h2 className="mb-6 text-4xl font-bold leading-tight text-yellow-400 md:text-5xl">
               Vegan Indian Sweets
-            </h1>
+            </h2>
 
             <p className="mb-6 text-lg leading-8 text-zinc-200">
               Six celebration-worthy recipes in the original Vegan Masala design.

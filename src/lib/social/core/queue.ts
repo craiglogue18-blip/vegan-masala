@@ -138,31 +138,19 @@ function resetAttemptMetadata(item: QueueItem): QueueItem {
   };
 }
 
-function applyAttemptMetadata(
-  item: QueueItem,
-  metadata: QueueAttemptMetadata,
-  nextStatus: QueueStatus,
-  error?: string
-): QueueItem {
-  return {
-    ...item,
-    status: nextStatus,
-    attemptedAt: metadata.attemptedAt || item.attemptedAt,
-    completedAt: metadata.completedAt || new Date().toISOString(),
-    postedAt: nextStatus === "posted" ? metadata.completedAt || new Date().toISOString() : undefined,
-    error,
-    errorCategory: metadata.errorCategory,
-    retryable: metadata.retryable,
-    platformResponseId: metadata.platformResponseId ?? undefined,
-    publishedUrl: metadata.publishedUrl ?? item.publishedUrl,
-  };
-}
-
 export function classifyQueueFailure(error: unknown): {
   errorCategory: QueueErrorCategory;
   retryable: boolean;
 } {
   const message = String(error || "").toLowerCase();
+
+  if (
+    message.includes("integration guidelines") ||
+    message.includes("direct post is not enabled") ||
+    message.includes("approved video.publish app")
+  ) {
+    return { errorCategory: "validation", retryable: false };
+  }
 
   if (
     message.includes("auth") ||
