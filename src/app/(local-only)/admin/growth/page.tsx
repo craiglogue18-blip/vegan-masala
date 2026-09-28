@@ -126,7 +126,7 @@ export default async function GrowthDashboardPage() {
           <div>
             <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/65">Follower growth sprint</p>
             <h2 className="mt-2 text-xl font-extrabold text-[var(--brand-gold)]">Facebook and Pinterest · 90-day targets</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">The weekly planner now prioritises five native Facebook Reels and 21 searchable Pinterest Pins each week. Review this panel weekly rather than reacting to daily fluctuations.</p>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-soft)]">The weekly planner now prioritises five native Facebook Reels and 14 focused Pinterest Pins each week. Review this panel weekly rather than reacting to daily fluctuations.</p>
           </div>
           <Link href="/admin/social/queue" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)] hover:bg-white/5">Review growth queue</Link>
         </div>

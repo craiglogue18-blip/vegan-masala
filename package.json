@@ -11,6 +11,7 @@
     "content:check:strict": "node scripts/validate-content.mjs --strict",
     "content:improve": "node scripts/ai-improve-recipe-content.mjs",
     "content:improve:dry-run": "node scripts/ai-improve-recipe-content.mjs --dry-run",
+    "images:optimize:recipes": "node scripts/optimize-recipe-heroes.mjs",
     "native:sync": "cap sync ios",
     "native:assets": "node scripts/generate-native-assets.mjs",
     "native:open:ios": "cap open ios",

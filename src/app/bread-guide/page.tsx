@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   BreadGuidePageTracker,
@@ -137,6 +138,25 @@ export default function BreadGuidePage() {
             offer="bread-guide"
           />
         </div>
+      </section>
+
+      <section className="mb-14 rounded-3xl border border-[var(--brand-gold)]/35 bg-black/55 p-7 text-center sm:p-10">
+        <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">
+          Ready to go deeper?
+        </p>
+        <h2 className="mt-3 text-3xl font-extrabold text-white">
+          Continue with the Indian Bread Masterclass
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl leading-7 text-[var(--text-soft)]">
+          Build on the free guide with dough ratios, shaping practice, batch planning,
+          troubleshooting and a printable cooking log.
+        </p>
+        <Link
+          href="/store/indian-bread-masterclass"
+          className="mt-6 inline-flex rounded-full bg-[var(--brand-gold)] px-6 py-3 font-extrabold text-black transition hover:-translate-y-0.5 hover:brightness-110"
+        >
+          Explore the £9 masterclass
+        </Link>
       </section>
     </main>
   );
