@@ -16,25 +16,25 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
 
 export const metadata: Metadata = {
-  title: "Vegan Indian Recipes & Cooking Guides",
+  title: "Vegan Indian Recipes: Curries, Dals & Easy Dinners",
   description:
-    "Authentic vegan Indian recipes, curries, dals, flatbreads and practical cooking guides. Learn vegan Indian cooking with clear methods, proper masalas and weeknight-friendly ideas.",
+    "Cook flavour-packed vegan Indian curries, dals, rice dishes and breads with clear methods, practical tips and dependable recipes for home kitchens.",
   alternates: {
     canonical: `${siteUrl}/`,
   },
   openGraph: {
-    title: "Vegan Indian Recipes & Cooking Guides | Vegan Masala",
+    title: "Vegan Indian Recipes: Curries, Dals & Easy Dinners | Vegan Masala",
     description:
-      "Authentic vegan Indian recipes, curries, dals, flatbreads and practical cooking guides.",
+      "Cook flavour-packed vegan Indian curries, dals, rice dishes and breads with clear methods and practical tips.",
     url: `${siteUrl}/`,
     siteName: "Vegan Masala",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vegan Indian Recipes & Cooking Guides | Vegan Masala",
+    title: "Vegan Indian Recipes: Curries, Dals & Easy Dinners | Vegan Masala",
     description:
-      "Authentic vegan Indian recipes, curries, dals, flatbreads and practical cooking guides.",
+      "Cook flavour-packed vegan Indian curries, dals, rice dishes and breads with clear methods and practical tips.",
   },
 };
 

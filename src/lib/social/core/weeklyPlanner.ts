@@ -19,8 +19,7 @@ const PLATFORM_TIMES: Record<QueuePlatform, { hour: number; minute: number }> = 
 const PLANNING_DAYS = [1, 2, 3, 4, 5, 6, 7] as const;
 const PINTEREST_TIMES = [
   { hour: 8, minute: 15 },
-  { hour: 13, minute: 15 },
-  { hour: 20, minute: 15 },
+  { hour: 18, minute: 45 },
 ] as const;
 const FACEBOOK_REEL_DAYS = new Set([1, 2, 3, 4, 5]);
 const CROSS_POST_DAYS = new Set([2, 5]);
@@ -161,7 +160,8 @@ export async function planWeeklySocialPosts(options?: {
     const existing = itemsForDate(items, dateString);
     for (let pinterestTimeIndex = 0; pinterestTimeIndex < PINTEREST_TIMES.length; pinterestTimeIndex++) {
       const existingPinterest = existing.filter((item) => item.platform === "pinterest")[pinterestTimeIndex];
-      // Morning educational Pins broaden the mix; lunchtime stays recipe-led so it can become a Reel.
+      // Morning educational Pins broaden the mix; the evening slot stays recipe-led
+      // so every Pin has a distinct purpose rather than repeating generic content.
       const preferredType: ContentType = pinterestTimeIndex === 0 && day % 2 === 1 ? "guide" : "recipe";
       const chosen = existingPinterest
         ? candidates.find((item) => item.slug === existingPinterest.slug)
@@ -171,7 +171,7 @@ export async function planWeeklySocialPosts(options?: {
       excluded.add(chosen.slug);
 
       const platforms: QueuePlatform[] = defaultBoard ? ["pinterest"] : [];
-      // The lunchtime item is the day's strongest cross-platform candidate.
+      // The recipe-led item is the day's strongest cross-platform candidate.
       if (pinterestTimeIndex === 1 && FACEBOOK_REEL_DAYS.has(day)) platforms.push("facebook");
       if (pinterestTimeIndex === 1 && CROSS_POST_DAYS.has(day)) {
         platforms.push("instagram");
