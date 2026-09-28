@@ -40,7 +40,7 @@ export default function ContactPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      <h1 className="text-4xl font-bold text-[var(--brand-gold)]">Contact</h1>
+      <h1 className="text-center text-4xl font-bold text-[var(--brand-gold)]">Contact</h1>
       <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
         Partnerships, questions, recipe requests or brand collaborations — I&apos;d love to hear from you.
       </p>

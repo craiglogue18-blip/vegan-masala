@@ -127,14 +127,14 @@ export default function Home() {
         </div>
 
         <div className="relative mt-10 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="text-center">
+          <div>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--text-soft)]">
               Proper masalas, dependable methods and generous family-style food.
               Choose what you are craving and we’ll help make dinner the easy decision.
             </p>
 
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href="/recipes"
                 className="rounded-xl bg-[var(--brand-red)] px-6 py-3 font-bold text-white shadow transition hover:opacity-90"
