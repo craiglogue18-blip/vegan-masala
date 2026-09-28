@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CommerceLink from "@/components/CommerceLink";
+import PageIdentityLabel from "@/components/PageIdentityLabel";
 
 const PAYHIP_PRODUCT_URL = "https://payhip.com/b/Qna1A";
 const APRON_PRODUCT_URL = "https://payhip.com/b/R10eg";
@@ -20,9 +21,8 @@ export default function EbookPage() {
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
             <div className="relative p-8 text-center sm:p-10">
-              <h1 className="mx-auto w-fit rounded-full border border-[var(--brand-gold)]/60 bg-black/20 px-4 py-1 text-xs font-normal uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
-                Vegan Masala Store
-              </h1>
+              <h1 className="sr-only">Vegan Masala Store</h1>
+              <PageIdentityLabel>Vegan Masala Store</PageIdentityLabel>
               <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
                 Explore practical cooking guides, masterclasses and kitchenware made for people who take their masala seriously.
               </p>

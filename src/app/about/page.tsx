@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageIdentityLabel from "@/components/PageIdentityLabel";
 
 export const metadata: Metadata = {
   title: "Meet Craig | Founder of Vegan Masala",
@@ -21,9 +22,7 @@ export default function AboutPage() {
 
       <div className="relative mx-auto max-w-5xl px-6 py-12 sm:py-16">
         <header className="rounded-3xl border border-[var(--brand-gold)]/50 bg-[var(--surface)] px-7 py-12 text-center shadow-sm sm:px-12 sm:py-16">
-          <p className="mx-auto w-fit rounded-full border border-[var(--brand-gold)]/60 bg-black/20 px-4 py-1 text-xs font-normal uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
-            The story behind Vegan Masala
-          </p>
+          <PageIdentityLabel>The story behind Vegan Masala</PageIdentityLabel>
           <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-bold leading-tight text-white sm:text-6xl">
             Meet Craig, the person behind Vegan Masala
           </h1>

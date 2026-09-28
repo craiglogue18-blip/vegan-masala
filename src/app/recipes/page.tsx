@@ -5,6 +5,7 @@ import { getPublicRecipes } from "@/lib/recipes";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import { RECIPE_COLLECTIONS } from "@/lib/seo/collections";
 import RecipesClient from "./RecipesClient";
+import PageIdentityLabel from "@/components/PageIdentityLabel";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.vegan-masala.com";
@@ -377,9 +378,8 @@ export default async function RecipesPage({
       <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
         <div className="flex flex-col items-center gap-4 text-center">
           <div>
-            <h1 className="mx-auto w-fit rounded-full border border-[var(--brand-gold)]/60 bg-black/20 px-4 py-1 text-xs font-normal uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
-              Vegan Masala Recipes
-            </h1>
+            <h1 className="sr-only">Vegan Masala Recipes</h1>
+            <PageIdentityLabel>Vegan Masala Recipes</PageIdentityLabel>
             <p className="mx-auto mt-3 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
               Browse comforting curries, dals, rice dishes, flatbreads, snacks and sweet vegan
               Indian recipes written for real home cooking.

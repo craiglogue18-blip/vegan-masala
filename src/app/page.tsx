@@ -12,6 +12,7 @@ import RecipeVideoShowcase from "@/components/RecipeVideoShowcase";
 import EthicalShoppingSpotlight from "@/components/EthicalShoppingSpotlight";
 import HomepageApronFeature from "@/components/HomepageApronFeature";
 import AffiliateLink from "@/components/AffiliateLink";
+import PageIdentityLabel from "@/components/PageIdentityLabel";
 import {
   SPICE_KITCHEN_INDIAN_TIN_URL,
   spiceKitchenAffiliateUrl,
@@ -122,9 +123,7 @@ export default function Home() {
         <div className="pointer-events-none absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-black/20" />
 
         <div className="relative text-center">
-          <p className="mx-auto w-fit rounded-full border border-[var(--brand-gold)]/60 bg-black/20 px-4 py-1 text-xs font-normal uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
-            Vegan Masala
-          </p>
+          <PageIdentityLabel>Vegan Masala</PageIdentityLabel>
 
           <h1 className="mx-auto mt-3 max-w-3xl text-4xl font-extrabold leading-tight text-[var(--brand-gold)] sm:text-5xl">
             Find your next unforgettable vegan Indian dinner

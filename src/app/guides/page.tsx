@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import PageIdentityLabel from "@/components/PageIdentityLabel";
 import Image from "next/image";
 import { getAllGuides } from "@/lib/guides";
 
@@ -173,9 +174,7 @@ export default function GuidesIndexPage() {
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
           <div className="relative p-8 text-center sm:p-10">
-            <div className="mx-auto w-fit rounded-full border border-[var(--brand-gold)]/60 bg-black/20 px-4 py-1 text-xs font-normal uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
-              Vegan Masala Guides
-            </div>
+            <PageIdentityLabel>Vegan Masala Guides</PageIdentityLabel>
 
             <h1 className="mx-auto mt-5 max-w-4xl text-3xl font-extrabold tracking-wide text-[var(--brand-gold)] sm:text-4xl">
               Learn the foundations of vegan Indian cooking

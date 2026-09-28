@@ -9,6 +9,7 @@ import {
   Music2,
 } from "lucide-react";
 import { recordEngagement } from "@/lib/dinner-plan-tracking";
+import PageIdentityLabel from "@/components/PageIdentityLabel";
 
 export default function ContactPage() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -44,12 +45,8 @@ export default function ContactPage() {
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
           <div className="relative p-8 text-center sm:p-10">
-            <div className="mx-auto w-fit rounded-full border border-[var(--brand-gold)]/60 bg-black/20 px-4 py-1 text-xs font-normal uppercase tracking-[0.2em] text-[var(--brand-gold)]/80">
-              Vegan Masala
-            </div>
-            <h1 className="mx-auto mt-5 max-w-4xl text-3xl font-extrabold tracking-wide text-[var(--brand-gold)] sm:text-4xl">
-              Contact Vegan-Masala
-            </h1>
+            <h1 className="sr-only">Contact Vegan-Masala</h1>
+            <PageIdentityLabel>Contact Vegan-Masala</PageIdentityLabel>
             <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[var(--text-soft)]">
               Partnerships, questions, recipe requests or brand collaborations — I&apos;d love to hear from you.
             </p>
