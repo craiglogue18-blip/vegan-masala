@@ -41,6 +41,17 @@ type ToolCard = {
 const tools:ToolCard[]=[
 
 {
+title:"Unified Social Inbox",
+
+href:"/admin/social/inbox",
+
+description:
+"Review Facebook, Instagram and YouTube comments, check connection permissions and send manual replies from one place.",
+
+cta:"Open social inbox"
+},
+
+{
 title:"Recipe Importer",
 
 href:"http://127.0.0.1:3010/admin/import",

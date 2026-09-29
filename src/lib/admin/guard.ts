@@ -13,7 +13,7 @@ export function guardAdmin(req: Request) {
   if (!isVercel) return null;
 
   // On Vercel: require token
-  const token = process.env.ADMIN_TOKEN;
+  const token = process.env.ADMIN_PASSWORD?.trim() || process.env.ADMIN_TOKEN?.trim();
   const header = req.headers.get("x-admin-token") || "";
 
   if (!token || header !== token) {
