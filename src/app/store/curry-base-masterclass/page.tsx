@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import CommerceLink from "@/components/CommerceLink";
+import StoreProductNavigation, { StoreBreadcrumb } from "@/components/StoreProductNavigation";
 
 const PAYHIP_URL =
   process.env.NEXT_PUBLIC_CURRY_MASTERCLASS_PAYHIP_URL?.trim() ||
@@ -27,6 +28,7 @@ const lessons = [
 export default function CurryBaseMasterclassPage() {
   return (
     <main className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-16">
+      <StoreBreadcrumb current="Curry Base Masterclass" />
       <section className="grid overflow-hidden rounded-[2rem] border border-[var(--brand-gold)]/45 bg-black/70 shadow-2xl lg:grid-cols-[1.02fr_0.98fr]">
         <div className="p-7 sm:p-10 lg:p-12">
           <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">
@@ -66,22 +68,16 @@ export default function CurryBaseMasterclassPage() {
           </p>
         </div>
 
-        <div className="relative min-h-[500px] border-t border-[var(--border)] lg:border-l lg:border-t-0">
+        <div className="relative flex min-h-[500px] items-center justify-center border-t border-[var(--border)] bg-[radial-gradient(circle_at_top,#254044_0%,#071719_62%,#020607_100%)] p-10 lg:border-l lg:border-t-0">
           <Image
-            src="/images/guides/how-to-build-a-curry-base.png"
-            alt="A cook building an Indian curry base in a pan"
-            fill
+            src="/images/store/curry-base-masterclass-cover.jpg"
+            alt="Cover of the Curry Base Masterclass"
+            width={900}
+            height={1272}
             priority
-            sizes="(min-width: 1024px) 45vw, 100vw"
-            className="object-cover"
+            sizes="(min-width: 1024px) 38vw, 75vw"
+            className="max-h-[560px] w-auto rounded-lg border border-[var(--brand-gold)]/60 object-contain shadow-2xl"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/10" />
-          <div className="absolute inset-x-6 bottom-6 rounded-2xl border border-[var(--brand-gold)]/45 bg-black/85 p-5">
-            <p className="text-sm font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]">
-              Cook · notice · adjust
-            </p>
-            <p className="mt-2 text-white">A visual learning system designed to turn recipes into judgement you can reuse.</p>
-          </div>
         </div>
       </section>
 
@@ -125,6 +121,17 @@ export default function CurryBaseMasterclassPage() {
           </div>
         </div>
       </section>
+
+      <section className="mt-10 rounded-[2rem] border border-[var(--brand-gold)]/30 bg-black/50 p-7 sm:p-10">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">Inside the PDF</p><h2 className="mt-3 text-3xl font-extrabold text-white">A visual 20-page masterclass</h2><p className="mt-4 leading-8 text-[var(--text-soft)]">Follow one measured masala through seven cooking stages, then use the same judgement to build four distinct dinners and diagnose common problems.</p></div>
+          <ul className="grid gap-3 text-zinc-200 sm:grid-cols-2"><li className="rounded-xl border border-white/10 p-4">Seven-stage visual flow</li><li className="rounded-xl border border-white/10 p-4">Four adaptation paths</li><li className="rounded-xl border border-white/10 p-4">Troubleshooting guide</li><li className="rounded-xl border border-white/10 p-4">Printable practice log</li></ul>
+        </div>
+      </section>
+
+      <section className="mt-10"><h2 className="text-3xl font-extrabold text-white">Questions before you buy</h2><div className="mt-6 grid gap-4 md:grid-cols-2"><article className="rounded-2xl border border-[var(--border)] bg-black/45 p-6"><h3 className="text-xl font-extrabold text-[var(--brand-gold)]">Does one base make every curry identical?</h3><p className="mt-3 leading-7 text-zinc-300">No. The guide explains how proteins, vegetables, spice timing and finishing choices create four genuinely different dinners.</p></article><article className="rounded-2xl border border-[var(--border)] bg-black/45 p-6"><h3 className="text-xl font-extrabold text-[var(--brand-gold)]">How is it delivered?</h3><p className="mt-3 leading-7 text-zinc-300">You receive an instant PDF download through Payhip after your one-time purchase.</p></article></div></section>
+
+      <StoreProductNavigation currentSlug="curry-base-masterclass" />
     </main>
   );
 }

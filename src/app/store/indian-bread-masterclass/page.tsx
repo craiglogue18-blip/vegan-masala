@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import CommerceLink from "@/components/CommerceLink";
+import StoreProductNavigation, { StoreBreadcrumb } from "@/components/StoreProductNavigation";
 
 const PAYHIP_URL = process.env.NEXT_PUBLIC_BREAD_MASTERCLASS_PAYHIP_URL?.trim() || "https://payhip.com/b/AzHZq";
 
@@ -24,6 +25,7 @@ const additions = [
 export default function IndianBreadMasterclassPage() {
   return (
     <main className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-16">
+      <StoreBreadcrumb current="Indian Bread Masterclass" />
       <section className="grid overflow-hidden rounded-[2rem] border border-[var(--brand-gold)]/45 bg-black/70 shadow-2xl lg:grid-cols-[1.02fr_0.98fr]">
         <div className="p-7 sm:p-10 lg:p-12">
           <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">Expanded 18-page edition</p>
@@ -39,10 +41,8 @@ export default function IndianBreadMasterclassPage() {
           </div>
           <p className="mt-5 text-sm leading-6 text-[var(--text-soft)]/75">One payment. Instant PDF delivery through Payhip. The free guide remains available for anyone who does not need the expanded workbook.</p>
         </div>
-        <div className="relative min-h-[500px] border-t border-[var(--border)] lg:border-l lg:border-t-0">
-          <Image src="/social/1000-followers-bread-guide/source/indian-bread-feast.png" alt="A table of authentic Indian breads prepared for the Vegan Masala masterclass" fill priority unoptimized sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10" />
-          <div className="absolute inset-x-6 bottom-6 rounded-2xl border border-[var(--brand-gold)]/45 bg-black/80 p-5"><p className="text-sm font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]">Culture · technique · practice</p><p className="mt-2 text-white">A structured learning pack, not a loose bundle of recipes.</p></div>
+        <div className="relative flex min-h-[500px] items-center justify-center border-t border-[var(--border)] bg-[radial-gradient(circle_at_top,#254044_0%,#071719_62%,#020607_100%)] p-10 lg:border-l lg:border-t-0">
+          <Image src="/images/store/indian-bread-masterclass-cover.jpg" alt="Cover of the Indian Bread Masterclass Pack" width={900} height={1272} priority sizes="(min-width: 1024px) 38vw, 75vw" className="max-h-[560px] w-auto rounded-lg border border-[var(--brand-gold)]/60 object-contain shadow-2xl" />
         </div>
       </section>
 
@@ -57,6 +57,17 @@ export default function IndianBreadMasterclassPage() {
           <div><h2 className="text-3xl font-extrabold text-[var(--brand-gold)]">Transparent recommendations</h2><p className="mt-4 leading-8 text-[var(--text-soft)]">The equipment section explains what a tawa, slim rolling pin and metal tongs contribute before linking to optional products. Those links are clearly disclosed affiliates and never change the price you pay.</p></div>
         </div>
       </section>
+
+      <section className="mt-10 rounded-[2rem] border border-[var(--brand-gold)]/30 bg-black/50 p-7 sm:p-10">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div><p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]">Inside the PDF</p><h2 className="mt-3 text-3xl font-extrabold text-white">A practical 18-page workbook</h2><p className="mt-4 leading-8 text-[var(--text-soft)]">The pack combines concise technique explanations with ratios, filling formulas, batch planning and space to record what changed from one bake to the next.</p></div>
+          <ul className="grid gap-3 text-zinc-200 sm:grid-cols-2"><li className="rounded-xl border border-white/10 p-4">Chapati ratio card</li><li className="rounded-xl border border-white/10 p-4">Naan and oven guidance</li><li className="rounded-xl border border-white/10 p-4">Filled paratha formulas</li><li className="rounded-xl border border-white/10 p-4">Printable practice log</li></ul>
+        </div>
+      </section>
+
+      <section className="mt-10"><h2 className="text-3xl font-extrabold text-white">Questions before you buy</h2><div className="mt-6 grid gap-4 md:grid-cols-2"><article className="rounded-2xl border border-[var(--border)] bg-black/45 p-6"><h3 className="text-xl font-extrabold text-[var(--brand-gold)]">Is this suitable for beginners?</h3><p className="mt-3 leading-7 text-zinc-300">Yes. It starts with reliable ratios and explains the visual and tactile cues that recipes often leave out.</p></article><article className="rounded-2xl border border-[var(--border)] bg-black/45 p-6"><h3 className="text-xl font-extrabold text-[var(--brand-gold)]">How is it delivered?</h3><p className="mt-3 leading-7 text-zinc-300">You receive an instant PDF download through Payhip after your one-time purchase.</p></article></div></section>
+
+      <StoreProductNavigation currentSlug="indian-bread-masterclass" />
     </main>
   );
 }

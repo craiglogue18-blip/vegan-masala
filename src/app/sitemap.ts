@@ -71,6 +71,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.65,
     },
     {
+      url: `${siteUrl}/store/curry-base-masterclass`,
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
+      url: `${siteUrl}/store/vegan-indian-sweets`,
+      changeFrequency: "monthly",
+      priority: 0.65,
+    },
+    {
       url: `${siteUrl}/recipes/vegan-indian-curry-recipes`,
       changeFrequency: "monthly",
       priority: 0.85,
