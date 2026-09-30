@@ -10,9 +10,28 @@ project_dir="/Users/craiglogue/Documents/ChatGPT/Vegan Masala website/vegan-masa
 bundled_plist="$project_dir/mac/$service_label.plist"
 installed_plist="$HOME/Library/LaunchAgents/$service_label.plist"
 
+admin_service_responding() {
+  # A 401 login challenge still proves that Next.js is alive. Do not use
+  # curl --fail here: it made every authenticated admin route look offline.
+  /usr/bin/curl -sS --max-time 3 -o /dev/null "$local_url" >/dev/null 2>&1
+}
+
+stop_unresponsive_listener() {
+  local pids
+  pids="$(/usr/sbin/lsof -tiTCP:3010 -sTCP:LISTEN 2>/dev/null || true)"
+  [[ -z "$pids" ]] && return
+
+  for pid in ${(f)pids}; do
+    /bin/kill "$pid" >/dev/null 2>&1 || true
+  done
+
+  for attempt in {1..5}; do
+    /usr/sbin/lsof -tiTCP:3010 -sTCP:LISTEN >/dev/null 2>&1 || return
+    /bin/sleep 1
+  done
+}
+
 start_admin_service() {
-  # The service may disappear after a macOS cleanup, migration or logout.
-  # Restore it from the copy kept with the project before trying to start it.
   if ! /bin/launchctl print "$service_domain/$service_label" >/dev/null 2>&1; then
     /bin/mkdir -p "$HOME/Library/LaunchAgents"
     if [[ -f "$bundled_plist" ]]; then
@@ -24,24 +43,18 @@ start_admin_service() {
   /bin/launchctl kickstart -k "$service_domain/$service_label" >>"$log_file" 2>&1 || true
 }
 
-if ! /usr/bin/curl -fsS --max-time 2 "$local_url" >/dev/null 2>&1; then
+if ! admin_service_responding; then
+  stop_unresponsive_listener
   start_admin_service
 
   for attempt in {1..45}; do
-    if /usr/bin/curl -fsS --max-time 2 "$local_url" >/dev/null 2>&1; then
-      break
-    fi
+    admin_service_responding && break
     /bin/sleep 1
   done
 fi
 
-if /usr/bin/curl -fsS --max-time 2 "$local_url" >/dev/null 2>&1; then
-  /usr/bin/open "$hub_url"
-  exit 0
-fi
-
-# The live hub remains useful even if the local development service cannot start.
-# Open it instead of making the desktop application appear to crash.
 /usr/bin/open "$hub_url"
-[[ -f "$log_file" ]] && /usr/bin/open -a TextEdit "$log_file"
-exit 0
+
+if ! admin_service_responding && [[ -f "$log_file" ]]; then
+  /usr/bin/open -a TextEdit "$log_file"
+fi
