@@ -25,9 +25,11 @@ const DESSERT = /\b(kheer|pudding|sweet|dessert|jalebi|gulab jamun|rasgulla|barf
 const SIDE = /\b(chutney|naan|chapati|roti|rice|salad|raita)\b/i;
 const SNACK = /\b(pakora|bhaji|samosa|tikki|vada pav|gobi 65|cauliflower 65)\b/i;
 const SIDE_OR_SWEET = /\b(chutney|naan|chapati|roti|pakora|bhaji|poori|salad|raita|kheer|pudding|sweet|dessert|jalebi|gulab jamun|rasgulla|barfi|katli)\b/i;
+const MAIN_DISH = /\b(curry|kadhi|masala|fried rice|biryani|pulao|stew|dal|dahl|dhansak|main meal|family feast)\b/i;
 const UNLIKELY_BREAKFAST = /\b(madras|vindaloo|tikka masala|korma|curry|stew|balti|dhansak|makhani|makhanwala|pasanda)\b/i;
 const FLEXIBLE_QUANTITY = /\b(to taste|as needed|for serving|for garnish|for frying|a pinch|pinch of|a handful|handful of)\b/i;
-const STARTS_WITH_QUANTITY = /^(?:\d|[¼½¾⅓⅔⅛]|a\s+(?:small|medium|large|thumb)|one\b|juice\s+of|zest\s+of)/i;
+const STARTS_WITH_QUANTITY = /^(?:\d|[¼½¾⅓⅔⅛]|an?\s+(?:few|small|medium|large|thumb|handful)|few\b|pinch\b|handful\b|one\b|juice\s+of|zest\s+of)/i;
+const SHORT_SERVING_STEP = /^(?:serve|garnish|enjoy)(?:\s+\w+){0,3}[.!]?$/i;
 
 function markdownList(value: string | undefined, numbered: boolean) {
   if (!value) return [];
@@ -57,7 +59,7 @@ export function analyseRecipeAppHealth(recipe: Recipe): RecipeAppHealth {
     if (mealTypes.includes("breakfast") && UNLIKELY_BREAKFAST.test(titleAndTags)) {
       issues.push(issue("warning", "Planning", "Breakfast classification looks unusual and should be checked."));
     }
-    if (mealTypes.some((value) => value === "lunch" || value === "dinner") && SIDE_OR_SWEET.test(titleAndTags)) {
+    if (mealTypes.some((value) => value === "lunch" || value === "dinner") && SIDE_OR_SWEET.test(titleAndTags) && !MAIN_DISH.test(titleAndTags)) {
       issues.push(issue("warning", "Planning", "This looks like a side, snack or sweet but is classified as a main meal."));
     }
   }
@@ -75,13 +77,13 @@ export function analyseRecipeAppHealth(recipe: Recipe): RecipeAppHealth {
   if (!steps.length) {
     issues.push(issue("blocker", "Cooking", "No structured cooking steps are available."));
   } else {
-    const shortSteps = steps.filter((step) => step.trim().length < 18).length;
+    const shortSteps = steps.filter((step) => step.trim().length < 18 && !SHORT_SERVING_STEP.test(step.trim())).length;
     if (shortSteps) issues.push(issue("warning", "Cooking", `${shortSteps} cooking step${shortSteps === 1 ? " is" : "s are"} too short to guide someone confidently.`));
   }
 
   if (recipe.prepMinutes === undefined || recipe.cookMinutes === undefined) {
     issues.push(issue("warning", "Recipe", "Add both preparation and cooking times."));
-  } else if (totalMinutes <= 0 || totalMinutes > 240) {
+  } else if (totalMinutes <= 0 || (recipe.cookMinutes ?? 0) > 240) {
     issues.push(issue("warning", "Recipe", `The total time of ${totalMinutes} minutes looks unusual.`));
   }
   if (!recipe.image) issues.push(issue("warning", "Recipe", "Add a recipe image for planner and cooking screens."));
