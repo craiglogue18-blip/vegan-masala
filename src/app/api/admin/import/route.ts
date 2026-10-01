@@ -51,16 +51,6 @@ function guessSlugFromFrontmatter(mdx: string) {
     .slice(0, 60);
 }
 
-function readFrontmatterValue(mdx: string, key: string) {
-  const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const match = mdx.match(new RegExp(`^\\s*${escapedKey}:\\s*(.+)\\s*$`, "im"));
-  if (!match?.[1]) return "";
-
-  return String(match[1])
-    .trim()
-    .replace(/^['"]|['"]$/g, "");
-}
-
 function detectRecraftMode(log: string) {
   const text = String(log || "").toLowerCase();
 
@@ -91,15 +81,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: any;
+  let body: Record<string, unknown>;
   try {
-    body = await req.json();
+    const parsed: unknown = await req.json();
+    body = parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : {};
   } catch {
     return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
   }
 
-  const url = String(body?.url ?? "").trim();
-  const rewrite = !!body?.rewrite;
+  const url = String(body.url ?? "").trim();
+  const rewrite = Boolean(body.rewrite);
 
   if (!url) {
     return NextResponse.json({ ok: false, error: "Missing url" }, { status: 400 });
@@ -194,6 +185,21 @@ export async function POST(req: Request) {
     );
   }
 
+  const metadataCleanupRes = await run("node", [
+    "scripts/strip-recipe-source-metadata.mjs",
+    "--file",
+    createdPath,
+  ]);
+
+  log += metadataCleanupRes.out + "\n";
+
+  if (metadataCleanupRes.code !== 0) {
+    return NextResponse.json(
+      { ok: false, error: "Recipe source-metadata cleanup failed", log, mdxBefore },
+      { status: 500 }
+    );
+  }
+
   const mdxAfter = fs.readFileSync(createdPath, "utf8");
 
   const fileName = path.basename(createdPath);
@@ -201,7 +207,6 @@ export async function POST(req: Request) {
   const slug = guessSlugFromFrontmatter(mdxAfter);
   const absPath = process.env.NODE_ENV === "development" ? createdPath : undefined;
 
-  const sourceImage = readFrontmatterValue(mdxAfter, "sourceImage");
   const recraftMode = detectRecraftMode(log);
 
   log += `\n✅ Done.\nSaved: ${relPath}\n`;
@@ -215,7 +220,6 @@ export async function POST(req: Request) {
     mdxBefore,
     mdxAfter,
     log,
-    sourceImage,
     recraftMode,
   });
 }

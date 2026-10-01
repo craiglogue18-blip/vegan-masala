@@ -195,6 +195,7 @@ async function main() {
   if (!skipQuantities) requireScript("fix-ingredient-quantities.mjs");
   if (!skipStructure) requireScript("fix-recipe-structure.mjs");
   if (!skipImages) requireScript("fix-recipe-images.mjs");
+  requireScript("strip-recipe-source-metadata.mjs");
   if (!skipPrompts) requireScript("mj-prompts-batch.mjs");
 
   if (importUrl) {
@@ -294,6 +295,14 @@ async function main() {
     ok("Midjourney prompts stage complete.");
   } else {
     warn("Skipping Midjourney prompts stage.");
+  }
+
+  if (!dryRun) {
+    info("Removing imported source metadata");
+    for (const file of targets) {
+      await runNodeScript(scriptPath("strip-recipe-source-metadata.mjs"), ["--file", file]);
+    }
+    ok("Source metadata cleanup complete.");
   }
 
   console.log("\n🎉 Pipeline complete.\n");
