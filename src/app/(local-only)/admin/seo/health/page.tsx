@@ -4,7 +4,8 @@ import sitemap from "@/app/sitemap";
 import SeoHealthRefreshButton from "@/components/admin/SeoHealthRefreshButton";
 import { getAllGuides } from "@/lib/guides";
 import { getRecipeImage } from "@/lib/recipeimages";
-import { getAllRecipes } from "@/lib/recipes";
+import { getAllRecipes, type Recipe } from "@/lib/recipes";
+import { isRecipeReadyForIndex } from "@/lib/recipeQuality";
 import { CURRY_HUB_RECIPE_SLUGS } from "@/lib/seo/curryHub";
 import { DAL_HUB_RECIPE_SLUGS } from "@/lib/seo/dalHub";
 
@@ -32,7 +33,7 @@ function fmtDate(iso: string) {
   }).format(d);
 }
 
-function recipeRelatedGuideTags(recipe: any) {
+function recipeRelatedGuideTags(recipe: Recipe) {
   const text = [
     recipe.title ?? "",
     recipe.slug ?? "",
@@ -129,6 +130,8 @@ function guideRelatedRecipeTags(slug: string) {
 
 export default function AdminSeoHealthPage() {
   const recipes = getAllRecipes();
+  const indexableRecipes = recipes.filter(isRecipeReadyForIndex);
+  const excludedRecipes = recipes.filter((recipe) => !isRecipeReadyForIndex(recipe));
   const guides = getAllGuides();
   const sitemapEntries = sitemap();
 
@@ -137,7 +140,7 @@ export default function AdminSeoHealthPage() {
   const sitemapCount = sitemapEntries.length;
 
   const sitemapUrls = new Set(sitemapEntries.map((entry) => entry.url));
-  const recipeUrls = recipes.map((r) => `${siteUrl}/recipes/${r.slug}`);
+  const recipeUrls = indexableRecipes.map((r) => `${siteUrl}/recipes/${r.slug}`);
   const guideUrls = guides.map((g) => `${siteUrl}/guides/${g.slug}`);
   const hubUrls = expectedHubPaths.map((path) => `${siteUrl}${path}`);
   const seoHubCount = hubUrls.filter((url) => sitemapUrls.has(url)).length;
@@ -336,8 +339,9 @@ export default function AdminSeoHealthPage() {
         <div className="mt-5 grid gap-4 md:grid-cols-3 text-sm text-[var(--text-soft)]">
           <div className="rounded-2xl bg-black/20 p-4">
             <p className="font-extrabold text-[var(--brand-gold)]">Recipes present</p>
-            <p className="mt-2">{recipeCount - missingRecipeUrls.length}/{recipeCount}</p>
+            <p className="mt-2">{indexableRecipes.length - missingRecipeUrls.length}/{indexableRecipes.length}</p>
             <p className="mt-1">Missing: {missingRecipeUrls.length}</p>
+            <p className="mt-1">Intentionally excluded: {excludedRecipes.length}</p>
           </div>
 
           <div className="rounded-2xl bg-black/20 p-4">
@@ -355,7 +359,29 @@ export default function AdminSeoHealthPage() {
 
         {(missingRecipeUrls.length > 0 || missingGuideUrls.length > 0 || missingHubUrls.length > 0) && (
           <div className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-200">
-            Sitemap gaps detected. Review missing URL groups before deployment.
+            <p className="font-bold">Sitemap gaps detected.</p>
+            <ul className="mt-2 space-y-1">
+              {[...missingRecipeUrls, ...missingGuideUrls, ...missingHubUrls].map((url) => (
+                <li key={url}>{url}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {missingRecipeUrls.length === 0 && missingGuideUrls.length === 0 && missingHubUrls.length === 0 && (
+          <div className="mt-6 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-200">
+            Sitemap is complete for every indexable recipe, guide and SEO hub.
+          </div>
+        )}
+
+        {excludedRecipes.length > 0 && (
+          <div className="mt-6 rounded-2xl bg-black/20 p-4 text-sm text-[var(--text-soft)]">
+            <p className="font-bold text-[var(--brand-gold)]">Intentionally excluded from search engines</p>
+            <ul className="mt-2 space-y-1">
+              {excludedRecipes.map((recipe) => (
+                <li key={recipe.slug}>{recipe.title} ({recipe.slug})</li>
+              ))}
+            </ul>
           </div>
         )}
       </section>
