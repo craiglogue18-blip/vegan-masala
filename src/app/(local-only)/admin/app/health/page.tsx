@@ -6,6 +6,7 @@ import { getAllRecipes } from "@/lib/recipes";
 import MealTypeEditor from "./MealTypeEditor";
 import ServingEditor from "./ServingEditor";
 import HealthSearch from "./HealthSearch";
+import HealthActions from "./HealthActions";
 import RecipeDataEditor from "./RecipeDataEditor";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +38,9 @@ export default function AppRecipeHealthPage() {
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/admin/social" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)]">Admin home</Link>
           <Link href="/meal-planner" className="rounded-xl bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white">Open the app</Link>
+        </div>
+        <div className="mt-4">
+          <HealthActions />
         </div>
       </section>
 

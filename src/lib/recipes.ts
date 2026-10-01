@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { recipeEditorialCopy } from "@/lib/recipeEditorial";
+import { applySafeRecipeDefaults } from "@/lib/recipeAppDefaults";
 import { isRecipeReadyForIndex } from "@/lib/recipeQuality";
 
 export const RECIPES_DIR = path.join(process.cwd(), "content", "recipes");
@@ -232,7 +233,7 @@ function buildRecipeFromFile(file: string): Recipe | null {
     "tips",
   ]);
 
-  return recipe;
+  return applySafeRecipeDefaults(recipe);
 }
 
 export function getAllRecipeSlugs() {

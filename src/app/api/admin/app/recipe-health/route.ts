@@ -2,16 +2,28 @@ import { NextResponse } from "next/server";
 
 import { updateRecipeIngredients, updateRecipeMealTypes, updateRecipePlannerTags, updateRecipeServings, updateRecipeStepVideos } from "@/lib/admin/updateRecipeMealTypes";
 import { APP_MEAL_TYPES } from "@/lib/recipeAppHealth";
+import { buildRecipeAppHealth } from "@/lib/recipeAppHealth";
+import { getAllRecipes } from "@/lib/recipes";
 
 const allowed = new Set<string>(APP_MEAL_TYPES);
 
 export async function POST(request: Request) {
-  if (process.env.NODE_ENV === "production") {
-    return NextResponse.json({ ok: false, error: "Recipe editing is available locally only." }, { status: 403 });
-  }
-
   try {
     const body = await request.json();
+
+    if (body?.action === "repairSafe") {
+      const report = buildRecipeAppHealth(getAllRecipes());
+      const remaining = report.reduce((total, item) => total + item.issues.filter((item) => item.severity !== "improvement").length, 0);
+      return NextResponse.json({
+        ok: true,
+        message: `Safe automatic metadata repairs are active across ${report.length} website and app recipes. ${remaining} item${remaining === 1 ? "" : "s"} still need editorial review.`,
+      });
+    }
+
+    if (process.env.NODE_ENV === "production") {
+      return NextResponse.json({ ok: false, error: "Direct recipe editing is available locally only." }, { status: 403 });
+    }
+
     const slug = typeof body?.slug === "string" ? body.slug.trim() : "";
     if (!slug) return NextResponse.json({ ok: false, error: "Recipe is required." }, { status: 400 });
 
