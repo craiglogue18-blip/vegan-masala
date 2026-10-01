@@ -53,7 +53,16 @@ function getBaseUrl() {
 }
 
 function getFfmpeg() {
-  if (typeof ffmpegPath === "string") return ffmpegPath;
+  const candidates = [
+    process.env.FFMPEG_PATH,
+    typeof ffmpegPath === "string" ? ffmpegPath : "",
+    "/opt/homebrew/bin/ffmpeg",
+    "/usr/local/bin/ffmpeg",
+    "/usr/bin/ffmpeg",
+  ].filter(Boolean) as string[];
+
+  const available = candidates.find((candidate) => fs.existsSync(candidate));
+  if (available) return available;
   throw new Error("ffmpeg missing");
 }
 
@@ -179,30 +188,19 @@ function shortenLine(text: string) {
   return cleanPromoText(text);
 }
 
-function shortenForReel(text: string, max = 110) {
-  const cleaned = cleanPromoText(text);
-  if (!cleaned) return "";
-  if (cleaned.length <= max) return cleaned;
-
-  const sliced = cleaned.slice(0, max);
-  const lastSpace = sliced.lastIndexOf(" ");
-  return `${sliced.slice(0, lastSpace > 50 ? lastSpace : max).trim()}…`;
-}
-
-function sentenceForVideo(text: string, max: number) {
+function completeVideoSentence(text: string) {
   const cleaned = cleanPromoText(text)
     .replace(/\.{3,}|…/g, "")
     .replace(/\s+/g, " ")
     .trim();
-  if (cleaned.length <= max) return cleaned;
-  const words = cleaned.split(" ");
-  let result = "";
-  for (const word of words) {
-    const next = result ? `${result} ${word}` : word;
-    if (next.length > max) break;
-    result = next;
-  }
-  return result.replace(/[,:;\-–—.!?]+$/, "").trim();
+  if (!cleaned) return "";
+
+  // On-screen copy must always finish a thought. Previously this helper cut
+  // text at a character limit, which left captions ending in fragments such
+  // as "make a" or "lentils and". Keep the first complete sentence instead,
+  // then let the layout shrink and wrap it without deleting any words.
+  const sentence = cleaned.match(/^.*?[.!?](?=\s|$)/)?.[0]?.trim() || cleaned;
+  return /[.!?]$/.test(sentence) ? sentence : `${sentence}.`;
 }
 
 function naturalVideoTitle(title: string) {
@@ -219,7 +217,7 @@ function naturalVideoTitle(title: string) {
     .replace(/^Vegan Indian Butter Chickpeas$/i, "Creamy Butter Chickpeas")
     .replace(/^Tandoori Gobi$/i, "Tandoori Cauliflower");
 
-  return sentenceForVideo(first || title, 38);
+  return first || title;
 }
 
 function getEditorialContent(slug: string, type: "recipe" | "guide") {
@@ -332,35 +330,6 @@ function buildNaturalOutroTitle(type: "recipe" | "guide", slug: string) {
     "Follow For Your Next Curry Night",
     "Save This And Follow For More",
     "Follow For Practical Vegan Dinners",
-  ]);
-}
-
-function buildNaturalOutroSubtitle(
-  content: {
-    servingSuggestion?: string;
-    description?: string;
-  },
-  type: "recipe" | "guide",
-  slug: string
-) {
-  if (type === "guide") {
-    return pickFromSeed(slug, [
-      "More practical guides on Vegan Masala",
-      "Simple cooking help on Vegan Masala",
-      "Learn more on Vegan Masala",
-      "More useful guides for home cooks",
-    ]);
-  }
-
-  if (content.servingSuggestion) {
-    return shortenLine(content.servingSuggestion);
-  }
-
-  return pickFromSeed(slug, [
-    "Find the full recipe on Vegan Masala",
-    "More vegan Indian cooking on Vegan Masala",
-    "More flavour-led recipes on Vegan Masala",
-    "Discover more on Vegan Masala",
   ]);
 }
 
@@ -608,12 +577,12 @@ async function renderCard(
 
   const subtitleBlock = fitVideoTextBlock({
     text: subtitle,
-    baseChars: 24,
-    baseFontSize: 48,
-    baseLineHeight: 62,
-    maxHeight: 150,
-    minFontSize: 34,
-    maxLines: 2,
+    baseChars: 27,
+    baseFontSize: 46,
+    baseLineHeight: 58,
+    maxHeight: 216,
+    minFontSize: 28,
+    maxLines: 3,
   });
   if (titleBlock.truncated || subtitleBlock.truncated) {
     throw new Error("Video intro copy does not fit without truncation");
@@ -700,12 +669,12 @@ async function renderMainOverlay(
 
   const subtitleBlock = fitVideoTextBlock({
     text: subtitle,
-    baseChars: 34,
-    baseFontSize: 36,
-    baseLineHeight: 46,
-    maxHeight: 100,
-    minFontSize: 28,
-    maxLines: 2,
+    baseChars: 38,
+    baseFontSize: 34,
+    baseLineHeight: 43,
+    maxHeight: 144,
+    minFontSize: 25,
+    maxLines: 3,
   });
   if (titleBlock.truncated || subtitleBlock.truncated) {
     throw new Error("Video main-screen copy does not fit without truncation");
@@ -1017,28 +986,21 @@ async function buildRecipeVideoInternal(slug: string) {
 
   const title = naturalVideoTitle(socialCopy.videoTitle?.trim() || sourceTitle);
 
-  const introSubtitle = sentenceForVideo(
+  const introSubtitle = completeVideoSentence(
     socialCopy.videoHook?.trim() ||
-      buildNaturalIntroSubtitle(editorial, type, slug),
-    56
+      buildNaturalIntroSubtitle(editorial, type, slug)
   );
 
-  const mainSubtitle = sentenceForVideo(
+  const mainSubtitle = completeVideoSentence(
     socialCopy.videoMainLine?.trim() ||
-      buildNaturalMainSubtitle(editorial, type, slug),
-    64
+      buildNaturalMainSubtitle(editorial, type, slug)
   );
 
-  const outroTitle = sentenceForVideo(
-    socialCopy.videoOutroLine?.trim() || buildNaturalOutroTitle(type, slug),
-    42
-  );
+  const outroTitle =
+    socialCopy.videoOutroLine?.trim() || buildNaturalOutroTitle(type, slug);
 
-  const outroSubtitle = shortenForReel(
-    type === "guide"
-      ? "Read more on Vegan Masala"
-      : "Full recipe on Vegan Masala",
-    48
+  const outroSubtitle = completeVideoSentence(
+    type === "guide" ? "Read more on Vegan Masala" : "Full recipe on Vegan Masala"
   );
 
   await renderCard(title, introSubtitle, introPng, logoPath);
