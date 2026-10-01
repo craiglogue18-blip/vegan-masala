@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import sitemap from "@/app/sitemap";
+import SeoHealthRefreshButton from "@/components/admin/SeoHealthRefreshButton";
 import { getAllGuides } from "@/lib/guides";
 import { getRecipeImage } from "@/lib/recipeimages";
 import { getAllRecipes } from "@/lib/recipes";
@@ -226,6 +227,7 @@ export default function AdminSeoHealthPage() {
           <span className="rounded-xl border border-[var(--border)] bg-black/20 px-4 py-2">
             Last updated: {fmtDate(new Date().toISOString())}
           </span>
+          <SeoHealthRefreshButton />
           <Link
             href="/admin/social/health"
             className="rounded-xl border border-[var(--border)] bg-black/20 px-4 py-2 font-bold text-[var(--brand-gold)] hover:bg-black/30"
