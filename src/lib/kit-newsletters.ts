@@ -92,7 +92,6 @@ export async function createKitNewsletter(
       thumbnail_url: null,
       preview_text: newsletter.previewText,
       subject: newsletter.subject,
-      subscriber_filter: [{ all: [{ type: "all_subscribers" }] }],
     }),
   });
   return { overview, broadcast: payload?.broadcast || null };
