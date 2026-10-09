@@ -321,7 +321,7 @@ export const recipeEditorialCopy: Record<string, RecipeEditorialCopy> = {
     description: "Vegetable pulao cooks basmati, colourful vegetables and whole spices together in one fragrant pot. The grains stay fluffy, the vegetables tender and the flavour gently aromatic.",
   },
   "vegetable-bhuna-north-indian-vegetable-curry": {
-    description: "Vegetable bhuna cooks cauliflower and mixed vegetables in a concentrated North Indian tomato masala, finished with a cumin-scented tadka. It is rich, textured and unapologetically full of spice.",
+    description: "Vegetable bhuna cooks Romanesco, edamame and mixed vegetables in a concentrated North Indian tomato masala, finished with a cumin-scented tadka. It is rich, textured and unapologetically full of spice.",
   },
   "vegetable-pilau-rice": {
     description: "Vegetable pilau folds sweet vegetables and aromatic whole spices through fluffy basmati. It is colourful enough to take centre stage yet balanced enough to sit beside a rich curry.",
