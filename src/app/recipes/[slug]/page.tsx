@@ -520,6 +520,12 @@ export default async function RecipePage({
 
   const canonicalUrl = `${siteUrl}/recipes/${recipe.slug}`;
   const heroAbs = absUrl(siteUrl, hero);
+  const recipeVideo =
+    typeof recipe.video === "string" && recipe.video.trim() ? recipe.video.trim() : "";
+  const recipeVideoPoster =
+    typeof recipe.videoPoster === "string" && recipe.videoPoster.trim()
+      ? absUrl(siteUrl, recipe.videoPoster.trim())
+      : heroAbs;
   const relatedGuideTags = getRelatedGuideTags(recipe);
   const showCurryHubCallout = isCurryHubRecipe(recipe.slug);
   const showDalHubCallout = isDalHubRecipe(recipe.slug);
@@ -627,6 +633,17 @@ export default async function RecipePage({
         }))
       : undefined,
     suitableForDiet: "https://schema.org/VeganDiet",
+    video: recipeVideo
+      ? {
+          "@type": "VideoObject",
+          name: `${recipe.title} — full cooking video`,
+          description: `Watch the complete step-by-step method for ${recipe.title}.`,
+          thumbnailUrl: recipeVideoPoster ? [recipeVideoPoster] : undefined,
+          contentUrl: recipeVideo,
+          uploadDate: recipe.updatedAt || recipe.publishedAt || undefined,
+          duration: recipe.videoDuration || undefined,
+        }
+      : undefined,
   };
 
   return (
@@ -762,9 +779,41 @@ export default async function RecipePage({
         </div>
       </section>
 
+      {recipeVideo ? (
+        <section
+          id="recipe-video"
+          className={`mt-6 overflow-hidden rounded-[2rem] border border-[var(--brand-gold)]/35 bg-black shadow-2xl ${anchorOffsetClass}`}
+        >
+          <div className="border-b border-[var(--brand-gold)]/25 bg-[var(--surface)] px-6 py-5 sm:px-8">
+            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--brand-gold)]/70">
+              Cook along with Craig
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">
+              Watch the full recipe
+            </h2>
+            <p className="mt-2 max-w-3xl leading-7 text-[var(--text-soft)]">
+              Follow the complete Vegetable Bhuna method from prepared ingredients to the finished dish.
+            </p>
+          </div>
+          <video
+            controls
+            playsInline
+            preload="metadata"
+            poster={recipeVideoPoster || undefined}
+            className="aspect-video w-full bg-black object-contain"
+            aria-label={`Full cooking video for ${recipe.title}`}
+          >
+            <source src={recipeVideo} type="video/mp4" />
+            Your browser does not support embedded video. You can{" "}
+            <a href={recipeVideo}>open the full recipe video directly</a>.
+          </video>
+        </section>
+      ) : null}
+
       <nav aria-label="On this recipe page" className="sticky top-20 z-20 mt-4 overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)]/95 p-2 shadow-xl backdrop-blur-xl">
         <div className="flex min-w-max items-center gap-1">
           <span className="hidden px-3 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65 sm:inline">On this page</span>
+          {recipeVideo ? <a href="#recipe-video" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Watch video</a> : null}
           <a href="#overview" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Overview</a>
           <a href="#ingredients" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Ingredients ({ingredients.length})</a>
           <a href="#method" className="rounded-xl px-4 py-2 text-sm font-extrabold text-[var(--brand-gold)] hover:bg-black/20">Method ({displayInstructions.length})</a>
