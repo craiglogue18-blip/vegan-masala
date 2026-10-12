@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAutosavedAdminDraft } from "@/lib/admin/useAutosavedAdminDraft";
 
 type QueuePlatform = "instagram" | "pinterest" | "facebook" | "tiktok" | "youtube";
 type QueueStatus = "queued" | "posted" | "failed";
@@ -214,6 +215,22 @@ export default function SocialQueuePage() {
   const [showDebug, setShowDebug] = useState(false);
   const [failedRegenerationIds, setFailedRegenerationIds] = useState<string[]>([]);
 
+  const draftHydrated = useAutosavedAdminDraft(
+    "publishing-composer",
+    { queueGroup, queueRecipeSlug, queueGuideSlug, queueStoreSlug, queuePlatform, queueAssetType, scheduledFor, board, queueCaption },
+    (draft) => {
+      if (draft.queueGroup) setQueueGroup(draft.queueGroup);
+      if (draft.queueRecipeSlug) setQueueRecipeSlug(draft.queueRecipeSlug);
+      if (draft.queueGuideSlug) setQueueGuideSlug(draft.queueGuideSlug);
+      if (draft.queueStoreSlug) setQueueStoreSlug(draft.queueStoreSlug);
+      if (draft.queuePlatform) setQueuePlatform(draft.queuePlatform);
+      if (draft.queueAssetType) setQueueAssetType(draft.queueAssetType);
+      if (draft.scheduledFor) setScheduledFor(draft.scheduledFor);
+      if (draft.board) setBoard(draft.board);
+      if (typeof draft.queueCaption === "string") setQueueCaption(draft.queueCaption);
+    }
+  );
+
   const recipeSlugs = useMemo(
     () => availableSlugs.filter((item) => item.type === "recipe"),
     [availableSlugs]
@@ -227,13 +244,13 @@ export default function SocialQueuePage() {
   const storeSlugs = STORE_OPTIONS;
 
   useEffect(() => {
-    if (!scheduledFor) {
+    if (draftHydrated && !scheduledFor) {
       const next = new Date();
       next.setMinutes(next.getMinutes() + 10);
       next.setSeconds(0, 0);
       setScheduledFor(formatDateTimeLocal(next));
     }
-  }, [scheduledFor]);
+  }, [draftHydrated, scheduledFor]);
 
   useEffect(() => {
     if (recipeSlugs.length > 0 && !recipeSlugs.some((item) => item.slug === queueRecipeSlug)) {
@@ -286,6 +303,29 @@ export default function SocialQueuePage() {
     () => queueItems.filter((item) => item.status === "posted"),
     [queueItems]
   );
+
+  const upcomingItems = useMemo(
+    () => queuedItems
+      .filter((item) => new Date(item.scheduledFor).getTime() >= Date.now())
+      .sort((left, right) => left.scheduledFor.localeCompare(right.scheduledFor))
+      .slice(0, 7),
+    [queuedItems]
+  );
+
+  const queueBlockers = useMemo(() => {
+    const blockers: string[] = [];
+    if (!selectedQueueSlug) blockers.push("Choose content");
+    const scheduleTime = new Date(scheduledFor).getTime();
+    if (!scheduledFor || Number.isNaN(scheduleTime)) blockers.push("Choose a valid publishing time");
+    else if (scheduleTime <= Date.now()) blockers.push("Publishing time must be in the future");
+    if (queuePlatform === "pinterest" && !board) blockers.push("Choose a Pinterest board");
+    if (queuePlatform === "tiktok" && !queueCaption.trim()) blockers.push("Review the TikTok caption");
+    if (queuePlatform === "youtube" && platformHealth.youtube?.configured === false) blockers.push("Reconnect YouTube");
+    if (queuePlatform === "tiktok" && platformHealth.tiktok?.configured === false) blockers.push("Reconnect TikTok");
+    if (queuePlatform === "instagram" && metaHealth.instagramConfigured === false) blockers.push("Reconnect Instagram");
+    if (queuePlatform === "facebook" && metaHealth.facebookConfigured === false) blockers.push("Reconnect Facebook");
+    return blockers;
+  }, [board, metaHealth, platformHealth, queueCaption, queuePlatform, scheduledFor, selectedQueueSlug]);
 
   const weekPlanReadiness = useMemo(() => {
     const platforms = new Set<QueuePlatform>(weekPlan.map((item) => item.platform));
@@ -1349,6 +1389,28 @@ export default function SocialQueuePage() {
         </div>
       </section>
 
+      <section className="mt-6 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-bold text-[var(--brand-gold)]">Upcoming publishing calendar</h2>
+            <p className="mt-1 text-sm text-[var(--text-soft)]">The next seven scheduled items across every connected platform.</p>
+          </div>
+          <a href="#publishing-queue" className="text-sm font-bold text-[var(--brand-gold)]">Review full queue ↓</a>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {upcomingItems.length ? upcomingItems.map((item) => (
+            <article key={item.id} className="min-w-0 rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div className="flex items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-wide">
+                <span className="text-[var(--brand-gold)]">{new Date(item.scheduledFor).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}</span>
+                <span className="capitalize text-white/40">{item.platform}</span>
+              </div>
+              <p className="mt-3 truncate font-bold text-white/80">{item.title || item.slug}</p>
+              <p className="mt-1 text-xs text-white/35">{new Date(item.scheduledFor).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })} · {item.requiresApproval ? "Awaiting approval" : "Approved"}</p>
+            </article>
+          )) : <p className="col-span-full rounded-2xl border border-dashed border-white/10 p-8 text-center text-sm text-white/40">Nothing is currently scheduled.</p>}
+        </div>
+      </section>
+
       <section className="mt-8 grid gap-8 xl:grid-cols-[420px_minmax(0,1fr)]">
         <div className="space-y-8">
           <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
@@ -1610,10 +1672,15 @@ export default function SocialQueuePage() {
                 </div>
               ) : null}
 
+              <div className={`rounded-2xl border p-4 text-sm ${queueBlockers.length ? "border-amber-500/30 bg-amber-500/5" : "border-emerald-500/30 bg-emerald-500/5"}`}>
+                <div className={`font-bold ${queueBlockers.length ? "text-amber-200" : "text-emerald-300"}`}>{queueBlockers.length ? "Preflight needs attention" : "Ready to create a reviewable draft"}</div>
+                <p className="mt-2 text-xs leading-5 text-[var(--text-soft)]">{queueBlockers.length ? queueBlockers.join(" · ") : "The server will generate the asset, verify its public URL and validate the platform requirements before adding it to the queue."}</p>
+              </div>
+
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => queuePost()}
-                  disabled={queueLoading}
+                  disabled={queueLoading || queueBlockers.length > 0}
                   className="rounded-xl bg-[var(--brand-red)] px-6 py-3 font-bold text-white disabled:opacity-50"
                 >
                   Queue post
@@ -1706,7 +1773,7 @@ export default function SocialQueuePage() {
         </div>
 
         <div className="space-y-8">
-          <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
+          <section id="publishing-queue" className="scroll-mt-32 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
             <div className="flex items-center justify-between gap-4">
               <h2 className="text-xl font-bold text-[var(--brand-gold)]">
                 Queued

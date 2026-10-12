@@ -5,10 +5,7 @@ import {
   ArrowRight,
   CalendarClock,
   CheckCircle2,
-  Clapperboard,
-  FilePlus2,
   HeartPulse,
-  Mail,
   RefreshCw,
   Send,
   Sparkles,
@@ -45,12 +42,12 @@ type SpiceKitchenSummary = {
   trackingConnected: boolean;
 };
 
-const quickActions = [
-  { href: "/admin/import", label: "Import a recipe", description: "Add source content and prepare a new recipe.", icon: FilePlus2 },
-  { href: "/admin/social/generate", label: "Create a post", description: "Generate a branded social asset from site content.", icon: Sparkles },
-  { href: "/admin/social/launch-pack", label: "Build a launch pack", description: "Prepare a finished recipe video for every platform.", icon: Clapperboard },
-  { href: "/admin/newsletters", label: "Prepare a newsletter", description: "Create, review and schedule the next Kit email.", icon: Mail },
-];
+type ResumeWork = {
+  href: string;
+  label: string;
+  workspace: string;
+  savedAt: string;
+};
 
 function formatDate(value: string) {
   return new Date(value).toLocaleString("en-GB", {
@@ -70,6 +67,7 @@ export default function AdminDashboardPage() {
   const [spiceKitchen, setSpiceKitchen] = useState<SpiceKitchenSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [resumeWork, setResumeWork] = useState<ResumeWork | null>(null);
 
   const loadStatus = useCallback(async () => {
     setLoading(true);
@@ -101,6 +99,12 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     void loadStatus();
+    try {
+      const saved = window.localStorage.getItem("vegan-masala-admin-last-work");
+      if (saved) setResumeWork(JSON.parse(saved) as ResumeWork);
+    } catch {
+      setResumeWork(null);
+    }
   }, [loadStatus]);
 
   const queued = useMemo(() => queueItems.filter((item) => item.status === "queued"), [queueItems]);
@@ -114,19 +118,31 @@ export default function AdminDashboardPage() {
 
   const connections = useMemo(
     () => [
-      { label: "Instagram", ready: metaHealth.instagramConfigured !== false },
-      { label: "Facebook", ready: metaHealth.facebookConfigured !== false },
-      { label: "Pinterest", ready: pinterestConnected !== false },
-      { label: "YouTube", ready: platformHealth.youtube?.configured !== false },
-      { label: "TikTok", ready: platformHealth.tiktok?.configured !== false },
+      { label: "Instagram", ready: typeof metaHealth.instagramConfigured === "boolean" ? metaHealth.instagramConfigured : null },
+      { label: "Facebook", ready: typeof metaHealth.facebookConfigured === "boolean" ? metaHealth.facebookConfigured : null },
+      { label: "Pinterest", ready: pinterestConnected },
+      { label: "YouTube", ready: typeof platformHealth.youtube?.configured === "boolean" ? platformHealth.youtube.configured : null },
+      { label: "TikTok", ready: typeof platformHealth.tiktok?.configured === "boolean" ? platformHealth.tiktok.configured : null },
       {
         label: "Queue scheduler",
-        ready: platformHealth.automation?.cronSecretConfigured !== false && platformHealth.automation?.persistentQueueConfigured !== false,
+        ready: platformHealth.automation
+          ? platformHealth.automation.cronSecretConfigured && platformHealth.automation.persistentQueueConfigured
+          : null,
       },
     ],
     [metaHealth, pinterestConnected, platformHealth]
   );
-  const connectionWarnings = connections.filter((item) => !item.ready);
+  const connectionWarnings = connections.filter((item) => item.ready === false);
+  const recommendedActions = useMemo(() => {
+    const actions = [];
+    if (resumeWork) actions.push({ href: resumeWork.href, label: `Resume ${resumeWork.label.toLowerCase()}`, description: `Continue in ${resumeWork.workspace} from your previous admin session.`, icon: ArrowRight, tone: "text-[var(--brand-gold)]" });
+    if (failed.length) actions.push({ href: "/admin/social/queue", label: `Resolve ${failed.length} publishing failure${failed.length === 1 ? "" : "s"}`, description: "Review the error, repair the connection and retry.", icon: AlertTriangle, tone: "text-red-300" });
+    if (awaitingApproval.length) actions.push({ href: "/admin/social/queue", label: `Approve ${awaitingApproval.length} held draft${awaitingApproval.length === 1 ? "" : "s"}`, description: "Nothing held for review will publish until it is approved.", icon: CalendarClock, tone: "text-amber-300" });
+    if (connectionWarnings.length) actions.push({ href: "/admin/health", label: `Repair ${connectionWarnings.length} connection${connectionWarnings.length === 1 ? "" : "s"}`, description: "Restore publishing or reporting access before the next scheduled run.", icon: HeartPulse, tone: "text-amber-300" });
+    if (!upcoming.length) actions.push({ href: "/admin/social/generate", label: "Prepare the next piece of content", description: "The approved queue has no upcoming posts.", icon: Sparkles, tone: "text-[var(--brand-gold)]" });
+    if (!actions.length) actions.push({ href: "/admin/growth", label: "Review the strongest growth opportunity", description: "Publishing is healthy; use current performance to choose the next topic.", icon: TrendingUp, tone: "text-emerald-300" });
+    return actions.slice(0, 4);
+  }, [awaitingApproval.length, connectionWarnings.length, failed.length, resumeWork, upcoming.length]);
 
   return (
     <div className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
@@ -210,15 +226,15 @@ export default function AdminDashboardPage() {
             {connections.map((connection) => (
               <div key={connection.label} className="flex items-center justify-between rounded-xl px-3 py-2.5 hover:bg-white/[0.035]">
                 <span className="text-sm font-bold text-white/65">{connection.label}</span>
-                <span className={`inline-flex items-center gap-1.5 text-xs font-bold ${connection.ready ? "text-emerald-300" : "text-amber-300"}`}>
-                  {connection.ready ? <CheckCircle2 size={15} /> : <AlertTriangle size={15} />}
-                  {connection.ready ? "Ready" : "Check"}
+                <span className={`inline-flex items-center gap-1.5 text-xs font-bold ${connection.ready === true ? "text-emerald-300" : connection.ready === false ? "text-amber-300" : "text-white/35"}`}>
+                  {connection.ready === true ? <CheckCircle2 size={15} /> : <AlertTriangle size={15} />}
+                  {connection.ready === true ? "Ready" : connection.ready === false ? "Check" : "Unknown"}
                 </span>
               </div>
             ))}
           </div>
           <div className="border-t border-white/10 p-4">
-            <Link href="/admin/social/health" className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-white/65 hover:bg-white/10 hover:text-white">
+            <Link href="/admin/health" className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-white/65 hover:bg-white/10 hover:text-white">
               <span className="inline-flex items-center gap-2"><HeartPulse size={17} className="text-[var(--brand-gold)]" /> Full health report</span>
               <ArrowRight size={15} />
             </Link>
@@ -229,13 +245,13 @@ export default function AdminDashboardPage() {
       <section className="mt-6 rounded-2xl border border-white/10 bg-white/[0.025] p-5 sm:p-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="text-lg font-extrabold text-white">Start something</h2>
-            <p className="mt-1 text-xs text-white/38">Common workflows without returning to a directory of tools.</p>
+            <h2 className="text-lg font-extrabold text-white">Recommended next actions</h2>
+            <p className="mt-1 text-xs text-white/38">Prioritised from the live queue and connection checks.</p>
           </div>
           {connectionWarnings.length > 0 && <span className="rounded-full bg-amber-400/10 px-3 py-1 text-xs font-bold text-amber-200">{connectionWarnings.length} connection warning{connectionWarnings.length === 1 ? "" : "s"}</span>}
         </div>
         <div className="mt-5 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
-          {quickActions.map((action) => {
+          {recommendedActions.map((action) => {
             const Icon = action.icon;
             return (
               <Link key={action.href} href={action.href} className="group flex min-w-0 items-center gap-3 rounded-xl border border-white/8 bg-black/15 p-4 transition hover:border-[var(--brand-gold)]/30 hover:bg-[var(--brand-gold)]/[0.06]">

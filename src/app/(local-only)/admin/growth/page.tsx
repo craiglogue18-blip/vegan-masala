@@ -103,7 +103,7 @@ export default async function GrowthDashboardPage() {
   if (!priorities.length) priorities.push("No urgent tracking problems detected. Keep publishing consistently and review the leading pages and products below.");
 
   return (
-    <main className="mx-auto max-w-7xl px-5 py-10 sm:px-6">
+    <main className="mx-auto w-full max-w-[1500px] min-w-0 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       <header className="rounded-3xl border border-[var(--brand-gold)]/25 bg-gradient-to-br from-[#172129] to-[#0b1217] p-7 sm:p-9">
         <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]/65">Private admin</p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-5">
@@ -111,15 +111,23 @@ export default async function GrowthDashboardPage() {
             <h1 className="text-3xl font-extrabold text-[var(--brand-gold)]">Growth dashboard</h1>
             <p className="mt-3 max-w-3xl leading-7 text-[var(--text-soft)]">One view of search discovery, visitor actions, affiliate interest and social publishing. Engagement figures cover the latest 28 days.</p>
           </div>
-          <nav className="flex flex-wrap gap-2 text-sm font-bold">
-            <Link href="/admin/social" className="rounded-xl border border-[var(--border)] px-4 py-2 text-[var(--brand-gold)] hover:bg-white/5">Social admin</Link>
-            <Link href="/admin/seo/health" className="rounded-xl border border-[var(--border)] px-4 py-2 text-[var(--brand-gold)] hover:bg-white/5">SEO health</Link>
-          </nav>
         </div>
         <p className="mt-5 text-xs text-[var(--text-soft)]/70">Updated {new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short" }).format(new Date(data.generatedAt))}</p>
       </header>
 
-      <GrowthPulseChart points={data.growthTrend} />
+      <nav className="sticky top-16 z-30 -mx-1 mt-5 flex min-w-0 gap-1 overflow-x-auto rounded-2xl border border-white/10 bg-[#0a151b]/95 p-1.5 shadow-xl shadow-black/15 backdrop-blur-xl" aria-label="Growth report sections">
+        {[
+          ["#growth-overview", "Overview"],
+          ["#growth-acquisition", "Acquisition"],
+          ["#growth-conversion", "Conversion"],
+          ["#growth-revenue", "Revenue"],
+          ["#growth-operations", "Operations"],
+        ].map(([href, label]) => <a key={href} href={href} className="shrink-0 rounded-xl px-4 py-2 text-xs font-extrabold text-white/55 transition hover:bg-white/5 hover:text-[var(--brand-gold)]">{label}</a>)}
+      </nav>
+
+      <div id="growth-overview" className="scroll-mt-32">
+        <GrowthPulseChart points={data.growthTrend} />
+      </div>
 
       <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/25 bg-gradient-to-br from-[#172129] to-[#0b1217] p-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -150,7 +158,7 @@ export default async function GrowthDashboardPage() {
         </div>
       </section>
 
-      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/30 bg-gradient-to-br from-[#19170f] to-[var(--surface)] p-6">
+      <section id="growth-conversion" className="mt-8 scroll-mt-32 rounded-3xl border border-[var(--brand-gold)]/30 bg-gradient-to-br from-[#19170f] to-[var(--surface)] p-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/65">Commercial scorecard</p>
@@ -168,7 +176,7 @@ export default async function GrowthDashboardPage() {
         <p className="mt-4 text-xs leading-5 text-[var(--text-soft)]/75">Rates use the latest 28-day window. Payhip purchases cannot yet be matched to individual Kit subscribers, so subscriber-to-buyer is a directional cohort measure rather than person-level attribution.</p>
       </section>
 
-      <section className="mt-8 grid gap-6 xl:grid-cols-3">
+      <section id="growth-acquisition" className="mt-8 grid scroll-mt-32 gap-6 xl:grid-cols-3">
         {[
           ["Traffic sources", data.topTrafficSources, "First source recorded for each anonymous browser session"],
           ["Landing pages", data.topLandingPages, "Pages where measured sessions began"],
@@ -303,7 +311,7 @@ export default async function GrowthDashboardPage() {
         </article>
       </section>
 
-      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
+      <section id="growth-revenue" className="mt-8 scroll-mt-32 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Awin performance</h2>
         <p className="mt-2 text-sm text-[var(--text-soft)]">Verified partner transactions from Awin during the latest 28 days.</p>
         {data.services.awin.error ? <div className="mt-5"><Empty>{data.services.awin.error}</Empty></div> : (
@@ -350,7 +358,7 @@ export default async function GrowthDashboardPage() {
         </div>
       </section>
 
-      <section className="mt-8 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
+      <section id="growth-operations" className="mt-8 scroll-mt-32 rounded-3xl border border-[var(--brand-gold)]/20 bg-[var(--surface)] p-6">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Social account reporting</h2>
         <p className="mt-2 text-sm text-[var(--text-soft)]">Live audience and analytics checks from the connected platform accounts.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 type RecipeChoice = { slug: string; title: string; description: string; image: string };
@@ -226,7 +225,6 @@ export default function NewsletterStudioPage() {
       <div className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]/70">Admin · Newsletter Studio</div>
       <div className="mt-3 flex flex-wrap items-end justify-between gap-5">
         <div><h1 className="text-3xl font-extrabold text-[var(--brand-gold)]">Generate and publish Kit newsletters</h1><p className="mt-3 max-w-3xl text-[var(--text-soft)]">Build a consistent, branded email from real recipe data. Nothing is sent until you review the preview and confirm the current audience.</p></div>
-        <Link href="/admin/social" className="rounded-xl border border-[var(--border)] px-5 py-3 font-bold text-[var(--brand-gold)]">Back to admin hub</Link>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <div className="rounded-2xl bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Kit connection</div><div className={`mt-2 text-xl font-extrabold ${kit.configured && !kit.error ? "text-emerald-300" : "text-amber-300"}`}>{kit.configured ? kit.error ? "Needs attention" : "Connected" : "Not configured"}</div></div>

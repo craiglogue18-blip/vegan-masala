@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAutosavedAdminDraft } from "@/lib/admin/useAutosavedAdminDraft";
 
 type SlugItem =
   | string
@@ -153,6 +154,17 @@ export default function AdminSocialVideoPage() {
   const [queueStatus, setQueueStatus] = useState("");
   const [queueDebug, setQueueDebug] = useState("");
 
+  useAutosavedAdminDraft(
+    "content-studio-generated-video",
+    { selected, filter, queuePlatform, queueScheduledFor },
+    (draft) => {
+      if (draft.selected) setSelected(draft.selected);
+      if (draft.filter) setFilter(draft.filter);
+      if (draft.queuePlatform) setQueuePlatform(draft.queuePlatform);
+      if (draft.queueScheduledFor) setQueueScheduledFor(draft.queueScheduledFor);
+    }
+  );
+
   useEffect(() => {
     let mounted = true;
 
@@ -181,9 +193,7 @@ export default function AdminSocialVideoPage() {
 
         setSlugs(normalized);
 
-        if (normalized[0]) {
-          setSelected(normalized[0].slug);
-        }
+        if (normalized[0]) setSelected((current) => current || normalized[0].slug);
       } catch (err: any) {
         if (!mounted) return;
         setStatus(err?.message || "Failed to load slugs");

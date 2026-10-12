@@ -36,7 +36,6 @@ export default function AppRecipeHealthPage() {
         <h1 className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">Recipe app health</h1>
         <p className="mt-4 max-w-3xl leading-7 text-[var(--text-soft)]">A read-only check of the recipe information used by meal planning, weekly shopping and step-by-step cooking. Fix blockers first; video coverage is deliberately treated as an optional improvement.</p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href="/admin/social" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)]">Admin home</Link>
           <Link href="/meal-planner" className="rounded-xl bg-[var(--brand-red)] px-4 py-2 text-sm font-extrabold text-white">Open the app</Link>
         </div>
         <div className="mt-4">

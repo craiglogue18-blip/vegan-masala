@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAutosavedAdminDraft } from "@/lib/admin/useAutosavedAdminDraft";
 
 type Platform = "instagram" | "pinterest" | "facebook";
 type QueuePlatform = "instagram" | "pinterest" | "facebook";
@@ -261,6 +262,22 @@ export default function AdminSocialGeneratePage() {
   const [runQueueLoading, setRunQueueLoading] = useState(false);
   const [queueDebug, setQueueDebug] = useState("");
 
+  useAutosavedAdminDraft(
+    "content-studio-image",
+    { platform, selectedGroup, selectedRecipeSlug, selectedGuideSlug, selectedStoreSlug, queueBoard, queueScheduledFor, activeCaption, selectedCaptionVariant },
+    (draft) => {
+      if (draft.platform) setPlatform(draft.platform);
+      if (draft.selectedGroup) setSelectedGroup(draft.selectedGroup);
+      if (draft.selectedRecipeSlug) setSelectedRecipeSlug(draft.selectedRecipeSlug);
+      if (draft.selectedGuideSlug) setSelectedGuideSlug(draft.selectedGuideSlug);
+      if (draft.selectedStoreSlug) setSelectedStoreSlug(draft.selectedStoreSlug);
+      if (draft.queueBoard) setQueueBoard(draft.queueBoard);
+      if (draft.queueScheduledFor) setQueueScheduledFor(draft.queueScheduledFor);
+      if (typeof draft.activeCaption === "string") setActiveCaption(draft.activeCaption);
+      if (typeof draft.selectedCaptionVariant === "number") setSelectedCaptionVariant(draft.selectedCaptionVariant);
+    }
+  );
+
   useEffect(() => {
     let mounted = true;
 
@@ -294,8 +311,8 @@ export default function AdminSocialGeneratePage() {
         const firstRecipe = nextSlugs.find((item) => item.type === "recipe");
         const firstGuide = nextSlugs.find((item) => item.type === "guide");
 
-        if (firstRecipe) setSelectedRecipeSlug(firstRecipe.slug);
-        if (firstGuide) setSelectedGuideSlug(firstGuide.slug);
+        if (firstRecipe) setSelectedRecipeSlug((current) => current || firstRecipe.slug);
+        if (firstGuide) setSelectedGuideSlug((current) => current || firstGuide.slug);
       } catch (err: any) {
         if (!mounted) return;
         setStatus(err?.message || "Failed to load content");

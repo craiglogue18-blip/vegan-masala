@@ -472,12 +472,11 @@ export default function AdminImportPage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-12">
       <h1 className="text-4xl font-extrabold text-[var(--brand-gold)]">
-        Admin • Import Recipe
+        Recipe Studio
       </h1>
       <p className="mt-3 max-w-2xl text-[var(--text-soft)]">
-        Paste a recipe URL to import it into <code>content/recipes</code>, optionally rewrite it in
-        Vegan Masala style, then automatically generate a Recraft hero image and attach it to the
-        recipe.
+        Import or select a recipe, improve its writing and photography, then run the complete
+        validation and publishing pipeline without moving between utilities.
       </p>
 
       <form
@@ -688,7 +687,7 @@ export default function AdminImportPage() {
         )}
       </form>
 
-      <section className="mt-10 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm">
+      <section id="recipe-pipeline" className="mt-10 scroll-mt-28 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm">
         <h2 className="text-2xl font-extrabold text-[var(--brand-gold)]">
           Recraft Remix Existing Recipe
         </h2>

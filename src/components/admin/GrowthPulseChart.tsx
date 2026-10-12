@@ -79,8 +79,8 @@ export function GrowthPulseChart({ points }: { points: Point[] }) {
         </div>
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-white/5 bg-black/20 p-2 sm:p-4">
-        <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="h-[390px] min-w-[980px] w-full" role="img" aria-label="Daily Google discovery, Google visits, website actions, social reach and published posts over 28 days">
+      <div className="mt-6 min-w-0 overflow-hidden rounded-2xl border border-white/5 bg-black/20 p-2 sm:p-4">
+        <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="block h-auto w-full min-w-0" role="img" aria-label="Daily Google discovery, Google visits, website actions, social reach and published posts over 28 days">
           {[0, 25, 50, 75, 100].map((value) => {
             const y = TOP + PLOT_HEIGHT - (value / 100) * PLOT_HEIGHT;
             return <g key={value}><line x1={LEFT} x2={LEFT + PLOT_WIDTH} y1={y} y2={y} stroke="rgba(255,255,255,.09)" strokeWidth="1" /><text x={LEFT - 16} y={y + 5} textAnchor="end" fill="rgba(255,255,255,.58)" fontSize="13">{value}%</text></g>;
@@ -99,7 +99,7 @@ export function GrowthPulseChart({ points }: { points: Point[] }) {
         </svg>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {totals.map((series) => (
           <button
             key={series.key}

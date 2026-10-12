@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useAutosavedAdminDraft } from "@/lib/admin/useAutosavedAdminDraft";
 
 type Campaign = { id: string; label: string; description: string; source: "none" | "recipe" | "recipe-or-guide" };
 type Source = { slug: string; title?: string; label?: string; type?: string };
@@ -32,6 +32,20 @@ export default function CampaignStudioPage() {
   const [result, setResult] = useState<Result | null>(null);
   const [captionIndex, setCaptionIndex] = useState(0);
 
+  useAutosavedAdminDraft(
+    "content-studio-campaign",
+    { kind, format, style, queuePlatform, scheduledFor, slug, captionIndex },
+    (draft) => {
+      if (draft.kind) setKind(draft.kind);
+      if (draft.format) setFormat(draft.format);
+      if (draft.style) setStyle(draft.style);
+      if (draft.queuePlatform) setQueuePlatform(draft.queuePlatform);
+      if (draft.scheduledFor) setScheduledFor(draft.scheduledFor);
+      if (draft.slug) setSlug(draft.slug);
+      if (typeof draft.captionIndex === "number") setCaptionIndex(draft.captionIndex);
+    }
+  );
+
   useEffect(() => {
     Promise.all([
       fetch("/api/admin/social/campaigns", { cache: "no-store" }).then(json),
@@ -44,7 +58,7 @@ export default function CampaignStudioPage() {
       setCampaigns(nextCampaigns);
       setSources(nextSources);
       const firstRecipe = nextSources.find((item: Source) => item.type !== "guide");
-      if (firstRecipe) setSlug(firstRecipe.slug);
+      if (firstRecipe) setSlug((current) => current || firstRecipe.slug);
     }).catch(() => setStatus("Could not load campaign choices."));
   }, []);
 
@@ -124,7 +138,6 @@ export default function CampaignStudioPage() {
             <h1 className="text-3xl font-extrabold text-[var(--brand-gold)]">Stories, campaigns and affiliate video</h1>
             <p className="mt-3 max-w-3xl text-[var(--text-soft)]">Create useful, varied social content grounded in Vegan Masala recipes, guides and site tools. This studio only generates previews—it never adds anything to the queue automatically.</p>
           </div>
-          <Link href="/admin/social" className="rounded-xl border border-[var(--border)] px-5 py-3 font-bold text-[var(--brand-gold)]">Back to admin hub</Link>
         </div>
       </section>
 

@@ -135,7 +135,6 @@ export default function RecipeLaunchPackClient({ recipes }: { recipes: RecipeOpt
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href="/admin/social" className="rounded-xl border border-[var(--border)] px-5 py-3 text-sm font-bold text-[var(--brand-gold)]">Back to admin hub</Link>
             <Link href="/admin/social/production" className="rounded-xl border border-[var(--border)] px-5 py-3 text-sm font-bold text-[var(--brand-gold)]">Raw Footage Studio</Link>
           </div>
         </div>
