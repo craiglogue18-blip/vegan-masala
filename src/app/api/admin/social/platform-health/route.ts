@@ -9,6 +9,12 @@ export async function GET() {
   ]);
   return NextResponse.json({
     ok: true,
+    automation: {
+      cronSecretConfigured: Boolean(process.env.CRON_SECRET?.trim()),
+      persistentQueueConfigured: Boolean(
+        process.env.KV_REST_API_URL?.trim() && process.env.KV_REST_API_TOKEN?.trim()
+      ),
+    },
     youtube: {
       configured: youtubeConfigured,
       privacyStatus: process.env.YOUTUBE_PRIVACY_STATUS?.trim() || "public",
