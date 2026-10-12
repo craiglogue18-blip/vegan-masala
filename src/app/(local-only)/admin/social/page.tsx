@@ -162,6 +162,17 @@ cta:"Open footage studio"
 },
 
 {
+title:"Recipe Video Launch Pack",
+
+href:"/admin/social/launch-pack",
+
+description:
+"Turn a completed RecipeWorks recipe video into full-length and short social edits, each finished with the branded recipe end card, then review before upload.",
+
+cta:"Build a launch pack"
+},
+
+{
 title:"Campaign Studio",
 
 href:"/admin/social/campaigns",

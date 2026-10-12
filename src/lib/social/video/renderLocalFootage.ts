@@ -40,6 +40,7 @@ const OUTPUTS: Record<LocalOutputId, { width: number; height: number; label: str
 const ROOT = path.join(process.cwd(), "generated", "raw-footage-studio");
 const FONT = path.join(process.cwd(), "public", "fonts", "Rajdhani-Bold.ttf");
 const LOGO = path.join(process.cwd(), "public", "brand", "logo-mark.png");
+const PAGE_BACKGROUND = path.join(process.cwd(), "public", "images", "page-background.jpg");
 
 function ensureDirectory(directory: string) {
   fs.mkdirSync(directory, { recursive: true });
@@ -220,24 +221,30 @@ async function makeSegment(options: {
   await run(args);
 }
 
-async function makeEndCard(outputPath: string, width: number, height: number, title: string) {
-  const titleSize = Math.max(42, Math.round(width * 0.06));
-  const bodySize = Math.max(25, Math.round(width * 0.03));
+async function makeEndCard(outputPath: string, width: number, height: number) {
+  const titleSize = Math.max(42, Math.round(width * 0.052));
+  const bodySize = Math.max(30, Math.round(width * 0.038));
   const cardPath = outputPath.replace(/\.mp4$/i, ".png");
-  const titleBaseline = height / 2 - Math.round(height * 0.02);
-  const bodyBaseline = height / 2 + Math.round(height * 0.08);
+  const titleBaseline = height / 2 + Math.round(height * 0.08);
+  const bodyBaseline = height / 2 + Math.round(height * 0.17);
   const svg = Buffer.from(`
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-      <rect width="${width}" height="${height}" fill="#07131B"/>
-      <rect x="${Math.round(width * 0.08)}" y="${Math.round(height * 0.08)}" width="${Math.round(width * 0.84)}" height="${Math.round(height * 0.84)}" rx="${Math.round(width * 0.04)}" fill="none" stroke="#E1B84B" stroke-width="4"/>
-      <path d="${textPath(title.toUpperCase(), titleSize, width / 2, titleBaseline)}" fill="#E1B84B"/>
-      <path d="${textPath("FULL RECIPE AT VEGAN-MASALA.COM", bodySize, width / 2, bodyBaseline)}" fill="#FFFFFF"/>
+      <rect width="${width}" height="${height}" fill="#07131B" fill-opacity="0.35"/>
+      <rect x="${Math.round(width * 0.055)}" y="${Math.round(height * 0.045)}" width="${Math.round(width * 0.89)}" height="${Math.round(height * 0.91)}" rx="${Math.round(width * 0.035)}" fill="none" stroke="#E1B84B" stroke-width="5"/>
+      <path d="${textPath("SEE COMPLETE RECIPE AT", titleSize, width / 2, titleBaseline)}" fill="#FFFFFF"/>
+      <path d="${textPath("WWW.VEGAN-MASALA.COM", bodySize, width / 2, bodyBaseline)}" fill="#E1B84B"/>
     </svg>
   `);
-  const logoWidth = Math.max(130, Math.round(width * 0.2));
+  const logoWidth = Math.max(150, Math.round(width * 0.24));
   const logo = await sharp(LOGO).resize({ width: logoWidth }).png().toBuffer();
-  await sharp(svg)
-    .composite([{ input: logo, left: Math.round((width - logoWidth) / 2), top: Math.round(height * 0.15) }])
+  const background = fs.existsSync(PAGE_BACKGROUND)
+    ? sharp(PAGE_BACKGROUND).resize(width, height, { fit: "cover" })
+    : sharp({ create: { width, height, channels: 3, background: "#07131B" } });
+  await background
+    .composite([
+      { input: svg, left: 0, top: 0 },
+      { input: logo, left: Math.round((width - logoWidth) / 2), top: Math.round(height * 0.19) },
+    ])
     .png()
     .toFile(cardPath);
 
@@ -328,7 +335,7 @@ export async function renderLocalFootage(options: {
     }
 
     const endCard = path.join(formatWork, "segment-end.mp4");
-    await makeEndCard(endCard, format.width, format.height, options.title);
+    await makeEndCard(endCard, format.width, format.height);
     segments.push(endCard);
 
     const concatFile = path.join(formatWork, "concat.txt");
