@@ -1,7 +1,21 @@
 "use client";
 
+import {
+  AlertTriangle,
+  ArrowRight,
+  CalendarClock,
+  CheckCircle2,
+  Clapperboard,
+  FilePlus2,
+  HeartPulse,
+  Mail,
+  RefreshCw,
+  Send,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type QueueItem = {
   id: string;
@@ -10,13 +24,13 @@ type QueueItem = {
   platform: string;
   scheduledFor: string;
   status: "queued" | "posted" | "failed";
-  retryable?: boolean;
-  error?: string;
+  requiresApproval?: boolean;
 };
 
 type PlatformHealth = {
   youtube?: { configured: boolean; privacyStatus: string };
   tiktok?: { configured: boolean; directPostEnabled: boolean; privacyLevel: string };
+  automation?: { cronSecretConfigured: boolean; persistentQueueConfigured: boolean };
 };
 
 type MetaHealth = {
@@ -31,541 +45,211 @@ type SpiceKitchenSummary = {
   trackingConnected: boolean;
 };
 
-type ToolCard = {
-  title:string;
-  href:string;
-  description:string;
-  cta:string;
-};
-
-const tools:ToolCard[]=[
-
-{
-title:"Unified Social Inbox",
-
-href:"/admin/social/inbox",
-
-description:
-"Review Facebook, Instagram and YouTube comments, check connection permissions and send manual replies from one place.",
-
-cta:"Open social inbox"
-},
-
-{
-title:"Recipe Importer",
-
-href:"http://127.0.0.1:3010/admin/import",
-
-description:
-"Open the local Mac tool to import and prepare new recipes, including source content and recipe details.",
-
-cta:"Open recipe importer"
-},
-
-{
-title:"Recipe Pipeline",
-
-href:"http://127.0.0.1:3010/admin/pipeline",
-
-description:
-"Open the local Mac tool to run the recipe production workflow and process new content safely.",
-
-cta:"Open recipe pipeline"
-},
-
-{
-title:"Growth Dashboard",
-
-href:"/admin/growth",
-
-description:
-"Track audience, search, email, affiliate and social growth from one combined dashboard.",
-
-cta:"Open growth dashboard"
-},
-
-{
-title:"Newsletter Studio",
-
-href:"/admin/newsletters",
-
-description:
-"Generate branded newsletters from real recipe data, review every section, then create a Kit draft or confirm delivery to your subscribers.",
-
-cta:"Open newsletter studio"
-},
-
-{
-title:"Health Dashboard",
-
-href:"/admin/social/health",
-
-description:
-"Inspect queue status, platform readiness, recent failures and publishing activity without exposing tokens or secrets.",
-
-cta:"Open health dashboard"
-},
-
-{
-title:"Content Generator",
-
-href:"/admin/social/generate",
-
-description:
-"Generate Instagram posts and Pinterest pins for single slugs, latest content, or your full recipe library.",
-
-cta:"Open generator"
-},
-
-{
-title:"Queue Manager",
-
-href:"/admin/social/queue",
-
-description:
-"Schedule posts, build your 30 day publishing queue, run due posts and manage failures.",
-
-cta:"Open queue"
-},
-
-{
-title:"Social Automation",
-
-href:"/admin/social/automation",
-
-description:
-"Generate assets and prepare coordinated Pinterest, Instagram and Facebook posts in one workflow.",
-
-cta:"Open automation"
-},
-
-{
-title:"Video Generator",
-
-href:"/admin/social/video",
-
-description:
-"Generate branded short-form recipe videos with intro, outro, music and animation.",
-
-cta:"Open video tools"
-},
-
-{
-title:"Raw Footage Studio",
-
-href:"/admin/social/production",
-
-description:
-"Organise genuine cooking footage into repeatable shot slots, choose a story format and prepare multi-platform video outputs for review.",
-
-cta:"Open footage studio"
-},
-
-{
-title:"Recipe Video Launch Pack",
-
-href:"/admin/social/launch-pack",
-
-description:
-"Turn a completed RecipeWorks recipe video into full-length and short social edits, each finished with the branded recipe end card, then review before upload.",
-
-cta:"Build a launch pack"
-},
-
-{
-title:"Campaign Studio",
-
-href:"/admin/social/campaigns",
-
-description:
-"Create 9:16 stories and short videos for affiliate features, cooking lessons, ingredients, site tools and behind-the-recipe content.",
-
-cta:"Open campaign studio"
-},
-
-{
-title:"SEO Health",
-
-href:"/admin/seo/health",
-
-description:
-"Monitor recipe, guide, hub and sitemap SEO structure health using local repository data.",
-
-cta:"Open SEO health"
-},
-
-{
-title:"App Recipe Health",
-
-href:"/admin/app/health",
-
-description:
-"Find recipe data that could weaken meal planning, shopping quantities, cooking mode or future step videos.",
-
-cta:"Open app health"
-}
-
+const quickActions = [
+  { href: "/admin/import", label: "Import a recipe", description: "Add source content and prepare a new recipe.", icon: FilePlus2 },
+  { href: "/admin/social/generate", label: "Create a post", description: "Generate a branded social asset from site content.", icon: Sparkles },
+  { href: "/admin/social/launch-pack", label: "Build a launch pack", description: "Prepare a finished recipe video for every platform.", icon: Clapperboard },
+  { href: "/admin/newsletters", label: "Prepare a newsletter", description: "Create, review and schedule the next Kit email.", icon: Mail },
 ];
 
-export default function AdminSocialHubPage(){
+function formatDate(value: string) {
+  return new Date(value).toLocaleString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
-const [queueItems,setQueueItems]=useState<QueueItem[]>([]);
-const [platformHealth,setPlatformHealth]=useState<PlatformHealth>({});
-const [metaHealth,setMetaHealth]=useState<MetaHealth>({});
-const [pinterestConnected,setPinterestConnected]=useState<boolean|null>(null);
-const [statusLoading,setStatusLoading]=useState(true);
-const [spiceKitchen,setSpiceKitchen]=useState<SpiceKitchenSummary|null>(null);
+export default function AdminDashboardPage() {
+  const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
+  const [platformHealth, setPlatformHealth] = useState<PlatformHealth>({});
+  const [metaHealth, setMetaHealth] = useState<MetaHealth>({});
+  const [pinterestConnected, setPinterestConnected] = useState<boolean | null>(null);
+  const [spiceKitchen, setSpiceKitchen] = useState<SpiceKitchenSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-useEffect(()=>{
-  let active=true;
-  async function loadStatus(){
-    try{
-      const [queueRes,platformRes,metaRes,pinterestRes,spiceKitchenRes]=await Promise.all([
-        fetch("/api/admin/social/queue",{cache:"no-store"}),
-        fetch("/api/admin/social/platform-health",{cache:"no-store"}),
-        fetch("/api/admin/social/meta-health",{cache:"no-store"}),
-        fetch("/api/pinterest/boards",{cache:"no-store"}),
-        fetch("/api/admin/growth/spice-kitchen",{cache:"no-store"}),
+  const loadStatus = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [queueRes, platformRes, metaRes, pinterestRes, spiceKitchenRes] = await Promise.all([
+        fetch("/api/admin/social/queue", { cache: "no-store" }),
+        fetch("/api/admin/social/platform-health", { cache: "no-store" }),
+        fetch("/api/admin/social/meta-health", { cache: "no-store" }),
+        fetch("/api/pinterest/boards", { cache: "no-store" }),
+        fetch("/api/admin/growth/spice-kitchen", { cache: "no-store" }),
       ]);
-      const [queueData,platformData,metaData,pinterestData,spiceKitchenData]=await Promise.all([
-        queueRes.json().catch(()=>({})),
-        platformRes.json().catch(()=>({})),
-        metaRes.json().catch(()=>({})),
-        pinterestRes.json().catch(()=>({})),
-        spiceKitchenRes.json().catch(()=>({})),
+      const [queueData, platformData, metaData, pinterestData, spiceKitchenData] = await Promise.all([
+        queueRes.json().catch(() => ({})),
+        platformRes.json().catch(() => ({})),
+        metaRes.json().catch(() => ({})),
+        pinterestRes.json().catch(() => ({})),
+        spiceKitchenRes.json().catch(() => ({})),
       ]);
-      if(!active)return;
-      setQueueItems(Array.isArray(queueData?.items)?queueData.items:[]);
-      setPlatformHealth(platformData?.ok?platformData:{});
-      setMetaHealth(metaData||{});
+      setQueueItems(Array.isArray(queueData?.items) ? queueData.items : []);
+      setPlatformHealth(platformData?.ok ? platformData : {});
+      setMetaHealth(metaData || {});
       setPinterestConnected(Boolean(pinterestData?.ok));
-      setSpiceKitchen(spiceKitchenData?.ok?spiceKitchenData:null);
-    }finally{
-      if(active)setStatusLoading(false);
+      setSpiceKitchen(spiceKitchenData?.ok ? spiceKitchenData : null);
+      setLastUpdated(new Date());
+    } finally {
+      setLoading(false);
     }
-  }
-  void loadStatus();
-  return()=>{active=false;};
-},[]);
-
-const queuedItems=useMemo(()=>queueItems.filter(item=>item.status==="queued"),[queueItems]);
-const retryingItems=useMemo(()=>queuedItems.filter(item=>item.retryable&&item.error),[queuedItems]);
-const failedItems=useMemo(()=>queueItems.filter(item=>item.status==="failed"),[queueItems]);
-const nextPost=useMemo(()=>[...queuedItems].sort((a,b)=>new Date(a.scheduledFor).getTime()-new Date(b.scheduledFor).getTime())[0]||null,[queuedItems]);
-const warnings=useMemo(()=>{
-  const items:string[]=[];
-  if(metaHealth.instagramConfigured===false)items.push("Instagram is not configured");
-  if(metaHealth.facebookConfigured===false)items.push("Facebook is not configured");
-  if(pinterestConnected===false)items.push("Pinterest is not connected");
-  if(platformHealth.youtube?.configured===false)items.push("YouTube is not connected");
-  if(platformHealth.youtube?.privacyStatus==="private")items.push("YouTube uploads are set to private");
-  if(platformHealth.tiktok?.configured===false)items.push("TikTok publishing is not fully configured");
-  else if(platformHealth.tiktok?.privacyLevel==="SELF_ONLY")items.push("TikTok posts are private-only while approval is pending");
-  return items;
-},[metaHealth,pinterestConnected,platformHealth]);
-
-return(
-
-<main className="mx-auto max-w-7xl px-6 py-10">
-
-<section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
-
-<div className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--brand-gold)]/70">
-Admin
-</div>
-
-<h1 className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">
- Vegan Masala Admin Hub
-</h1>
-
-<p className="mt-4 max-w-3xl text-sm text-[var(--text-soft)]">
-
-Open every Vegan Masala administration tool from one place.
-Import recipes, generate content, build videos, schedule posts, and monitor growth and site health.
-
-</p>
-
-
-<div className="mt-6 flex flex-wrap gap-3">
-
-<Link
-
-href="/admin/growth"
-
-className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
-
->
-
-Growth dashboard
-
-</Link>
-
-<Link
-
-href="/admin/social/generate"
-
-className="rounded-xl bg-[var(--brand-red)] px-6 py-3 text-sm font-bold text-white"
-
->
-
-Generate content
-
-</Link>
-
-
-<Link
-
-href="/admin/social/queue"
-
-className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
-
->
-
-Open queue
-
-</Link>
-
-
-<Link
-
-href="/admin/social/video"
-
-className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
-
->
-
-Generate videos
-
-</Link>
-
-<Link
-
-href="/admin/social/automation"
-
-className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
-
->
-
-Social automation
-
-</Link>
-
-<Link
-
-href="/admin/social/campaigns"
-
-className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
-
->
-
-Campaign studio
-
-</Link>
-
-
-<Link
-
-href="/admin/seo/health"
-
-className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
-
->
-
-SEO health
-
-</Link>
-
-<Link
-
-href="/admin/app/health"
-
-className="rounded-xl border border-[var(--border)] px-6 py-3 text-sm font-bold text-[var(--brand-gold)]"
-
->
-
-App recipe health
-
-</Link>
-
-</div>
-
-</section>
-
-<section className="mt-8 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-[#19170f] to-[var(--surface)] p-8">
-  <div className="flex flex-wrap items-start justify-between gap-4">
-    <div>
-      <div className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300/70">Affiliate status</div>
-      <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">Spice Kitchen</h2>
-      <p className="mt-2 text-sm text-[var(--text-soft)]">Awin partner traffic from recipe, guide and meal-planner placements.</p>
-    </div>
-    <Link href="/admin/growth" className="rounded-xl border border-amber-500/40 px-5 py-3 text-sm font-bold text-amber-200">Open affiliate reporting</Link>
-  </div>
-  <div className="mt-6 grid gap-4 sm:grid-cols-3">
-    <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Clicks · 28 days</div><div className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">{spiceKitchen?.clicks??"—"}</div></div>
-    <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Clickable pages</div><div className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">{spiceKitchen?.livePlacements??109}</div></div>
-    <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Tracking</div><div className={`mt-2 text-xl font-extrabold ${spiceKitchen?.trackingConnected?"text-emerald-300":"text-amber-300"}`}>{spiceKitchen?.trackingConnected?"Active":"Checking"}</div></div>
-  </div>
-</section>
-
-<section className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
-  <div className="flex flex-wrap items-start justify-between gap-4">
-    <div>
-      <div className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--brand-gold)]/70">Live publishing status</div>
-      <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">Queue at a glance</h2>
-    </div>
-    <Link href="/admin/social/queue" className="rounded-xl bg-[var(--brand-red)] px-5 py-3 text-sm font-bold text-white">Open Social Queue</Link>
-  </div>
-
-  {statusLoading?(
-    <div className="mt-6 rounded-2xl bg-black/20 p-5 text-sm text-[var(--text-soft)]">Loading live status…</div>
-  ):(
-    <>
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Queued</div><div className="mt-2 text-3xl font-extrabold text-[var(--brand-gold)]">{queuedItems.length}</div></div>
-        <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Auto-retrying</div><div className="mt-2 text-3xl font-extrabold text-yellow-300">{retryingItems.length}</div></div>
-        <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5"><div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Needs attention</div><div className={`mt-2 text-3xl font-extrabold ${failedItems.length?"text-red-300":"text-emerald-300"}`}>{failedItems.length}</div></div>
-        <div className="rounded-2xl border border-[var(--border)] bg-black/20 p-5">
-          <div className="text-xs uppercase tracking-[0.14em] text-[var(--text-soft)]">Next scheduled</div>
-          {nextPost?<><div className="mt-2 truncate font-bold text-white">{nextPost.title||nextPost.slug}</div><div className="mt-1 text-xs capitalize text-[var(--text-soft)]">{nextPost.platform} · {new Date(nextPost.scheduledFor).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}</div></>:<div className="mt-2 text-sm text-[var(--text-soft)]">Nothing scheduled</div>}
+  }, []);
+
+  useEffect(() => {
+    void loadStatus();
+  }, [loadStatus]);
+
+  const queued = useMemo(() => queueItems.filter((item) => item.status === "queued"), [queueItems]);
+  const awaitingApproval = useMemo(() => queued.filter((item) => item.requiresApproval), [queued]);
+  const approved = useMemo(() => queued.filter((item) => !item.requiresApproval), [queued]);
+  const failed = useMemo(() => queueItems.filter((item) => item.status === "failed"), [queueItems]);
+  const upcoming = useMemo(
+    () => [...approved].filter((item) => new Date(item.scheduledFor).getTime() > Date.now()).sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor)).slice(0, 5),
+    [approved]
+  );
+
+  const connections = useMemo(
+    () => [
+      { label: "Instagram", ready: metaHealth.instagramConfigured !== false },
+      { label: "Facebook", ready: metaHealth.facebookConfigured !== false },
+      { label: "Pinterest", ready: pinterestConnected !== false },
+      { label: "YouTube", ready: platformHealth.youtube?.configured !== false },
+      { label: "TikTok", ready: platformHealth.tiktok?.configured !== false },
+      {
+        label: "Queue scheduler",
+        ready: platformHealth.automation?.cronSecretConfigured !== false && platformHealth.automation?.persistentQueueConfigured !== false,
+      },
+    ],
+    [metaHealth, pinterestConnected, platformHealth]
+  );
+  const connectionWarnings = connections.filter((item) => !item.ready);
+
+  return (
+    <div className="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <section className="flex flex-col gap-5 border-b border-white/10 pb-7 xl:flex-row xl:items-end xl:justify-between">
+        <div>
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--brand-gold)]/65">Control centre</p>
+          <h1 className="mt-2 text-3xl font-extrabold text-white sm:text-4xl">Welcome back, Craig</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-white/50">
+            Your publishing, growth and content tools now live in one persistent workspace. Use the navigation on the left to move between utilities.
+          </p>
         </div>
+        <div className="flex items-center gap-3">
+          {lastUpdated && <span className="hidden text-xs text-white/35 sm:block">Updated {lastUpdated.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</span>}
+          <button type="button" onClick={() => void loadStatus()} disabled={loading} className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-bold text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-50">
+            <RefreshCw size={16} className={loading ? "animate-spin" : ""} /> Refresh
+          </button>
+        </div>
+      </section>
+
+      <section className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {[
+          { label: "Approved and queued", value: approved.length, note: "Ready for scheduled publishing", icon: Send, tone: "text-emerald-300" },
+          { label: "Waiting for review", value: awaitingApproval.length, note: "Held until you approve", icon: CalendarClock, tone: "text-amber-300" },
+          { label: "Publishing failures", value: failed.length, note: failed.length ? "Needs attention" : "Nothing needs attention", icon: AlertTriangle, tone: failed.length ? "text-red-300" : "text-emerald-300" },
+          { label: "Affiliate clicks", value: spiceKitchen?.clicks ?? "—", note: "Latest 28 days", icon: TrendingUp, tone: "text-[var(--brand-gold)]" },
+        ].map((metric) => {
+          const Icon = metric.icon;
+          return (
+            <div key={metric.label} className="rounded-2xl border border-white/10 bg-white/[0.035] p-5 shadow-lg shadow-black/10">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs font-bold uppercase tracking-[0.14em] text-white/42">{metric.label}</span>
+                <Icon size={18} className={metric.tone} />
+              </div>
+              <div className={`mt-4 text-4xl font-extrabold ${metric.tone}`}>{loading ? "·" : metric.value}</div>
+              <div className="mt-1 text-xs text-white/38">{metric.note}</div>
+            </div>
+          );
+        })}
+      </section>
+
+      <div className="mt-6 grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(340px,.6fr)]">
+        <section className="min-w-0 rounded-2xl border border-white/10 bg-white/[0.025]">
+          <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-6">
+            <div>
+              <h2 className="text-lg font-extrabold text-white">Next scheduled posts</h2>
+              <p className="mt-0.5 text-xs text-white/38">The next approved items in the live publishing queue.</p>
+            </div>
+            <Link href="/admin/social/queue" className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-[var(--brand-gold)] hover:text-[#f1d67e]">
+              Open queue <ArrowRight size={15} />
+            </Link>
+          </div>
+          <div className="divide-y divide-white/8">
+            {loading ? (
+              <div className="px-6 py-12 text-center text-sm text-white/35">Loading the queue…</div>
+            ) : upcoming.length ? (
+              upcoming.map((item) => (
+                <div key={item.id} className="grid gap-2 px-5 py-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:px-6">
+                  <div className="min-w-0">
+                    <div className="truncate font-bold text-white/85">{item.title || item.slug}</div>
+                    <div className="mt-1 text-xs capitalize text-white/38">{item.platform}</div>
+                  </div>
+                  <div className="text-sm font-bold text-[var(--brand-gold)]/80">{formatDate(item.scheduledFor)}</div>
+                </div>
+              ))
+            ) : (
+              <div className="px-6 py-12 text-center">
+                <CalendarClock className="mx-auto text-white/20" />
+                <div className="mt-3 font-bold text-white/60">Nothing scheduled</div>
+                <Link href="/admin/social/generate" className="mt-2 inline-flex text-sm font-bold text-[var(--brand-gold)]">Create the next post</Link>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-white/10 bg-white/[0.025]">
+          <div className="border-b border-white/10 px-5 py-4">
+            <h2 className="text-lg font-extrabold text-white">System readiness</h2>
+            <p className="mt-0.5 text-xs text-white/38">Publishing connections and automation.</p>
+          </div>
+          <div className="space-y-1 p-4">
+            {connections.map((connection) => (
+              <div key={connection.label} className="flex items-center justify-between rounded-xl px-3 py-2.5 hover:bg-white/[0.035]">
+                <span className="text-sm font-bold text-white/65">{connection.label}</span>
+                <span className={`inline-flex items-center gap-1.5 text-xs font-bold ${connection.ready ? "text-emerald-300" : "text-amber-300"}`}>
+                  {connection.ready ? <CheckCircle2 size={15} /> : <AlertTriangle size={15} />}
+                  {connection.ready ? "Ready" : "Check"}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-white/10 p-4">
+            <Link href="/admin/social/health" className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-white/65 hover:bg-white/10 hover:text-white">
+              <span className="inline-flex items-center gap-2"><HeartPulse size={17} className="text-[var(--brand-gold)]" /> Full health report</span>
+              <ArrowRight size={15} />
+            </Link>
+          </div>
+        </section>
       </div>
 
-      <div className={`mt-5 rounded-2xl border p-5 ${warnings.length?"border-amber-500/30 bg-amber-500/10":"border-emerald-500/30 bg-emerald-500/10"}`}>
-        <div className={`font-bold ${warnings.length?"text-amber-200":"text-emerald-200"}`}>{warnings.length?`${warnings.length} platform warning${warnings.length===1?"":"s"}`:"All connected platforms look ready"}</div>
-        {warnings.length?<ul className="mt-3 space-y-1 text-sm text-amber-100/90">{warnings.map(warning=><li key={warning}>• {warning}</li>)}</ul>:null}
-      </div>
-    </>
-  )}
-</section>
-
-
-
-<section className="mt-8 grid gap-6 lg:grid-cols-3">
-
-{tools.map(tool=>(
-
-<Link
-
-key={tool.href}
-
-href={tool.href}
-
-className="group rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 hover:bg-black/20 transition"
-
->
-
-<div className="text-xs uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
-Tool
-</div>
-
-
-<h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">
-{tool.title}
-</h2>
-
-
-<p className="mt-4 text-sm text-[var(--text-soft)] min-h-[80px]">
-
-{tool.description}
-
-</p>
-
-
-<div className="mt-6 inline-flex rounded-xl bg-black/30 px-4 py-2 text-sm font-bold text-white group-hover:bg-[var(--brand-red)] transition">
-
-{tool.cta}
-
-</div>
-
-</Link>
-
-))}
-
-</section>
-
-
-
-<section className="mt-8 grid gap-6 lg:grid-cols-2">
-
-<div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
-
-<h2 className="text-xl font-extrabold text-[var(--brand-gold)]">
-
-Recommended workflow
-
-</h2>
-
-
-<div className="mt-5 space-y-4 text-sm text-[var(--text-soft)]">
-
-<div className="rounded-2xl bg-black/20 p-4">
-
-<b className="text-[var(--brand-gold)]">1.</b>
- Import or prepare recipes in the Recipe Pipeline
-
-</div>
-
-
-<div className="rounded-2xl bg-black/20 p-4">
-
-<b className="text-[var(--brand-gold)]">2.</b>
- Generate social images and recipe videos
-
-</div>
-
-
-<div className="rounded-2xl bg-black/20 p-4">
-
-<b className="text-[var(--brand-gold)]">3.</b>
- Preview and schedule social content or prepare a Kit newsletter
-
-</div>
-
-<div className="rounded-2xl bg-black/20 p-4">
-
-<b className="text-[var(--brand-gold)]">4.</b>
- Confirm publishing, then review growth, SEO and app health
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
-
-<h2 className="text-xl font-extrabold text-[var(--brand-gold)]">
-
-Why this structure works
-
-</h2>
-
-
-<div className="mt-5 space-y-4 text-sm text-[var(--text-soft)]">
-
-<div className="rounded-2xl bg-black/20 p-4">
-Pages load faster
-</div>
-
-<div className="rounded-2xl bg-black/20 p-4">
-Easier debugging
-</div>
-
-<div className="rounded-2xl bg-black/20 p-4">
-Ready for Meta / TikTok / YouTube expansion
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-</main>
-
-);
-
+      <section className="mt-6 rounded-2xl border border-white/10 bg-white/[0.025] p-5 sm:p-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-extrabold text-white">Start something</h2>
+            <p className="mt-1 text-xs text-white/38">Common workflows without returning to a directory of tools.</p>
+          </div>
+          {connectionWarnings.length > 0 && <span className="rounded-full bg-amber-400/10 px-3 py-1 text-xs font-bold text-amber-200">{connectionWarnings.length} connection warning{connectionWarnings.length === 1 ? "" : "s"}</span>}
+        </div>
+        <div className="mt-5 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+          {quickActions.map((action) => {
+            const Icon = action.icon;
+            return (
+              <Link key={action.href} href={action.href} className="group flex min-w-0 items-center gap-3 rounded-xl border border-white/8 bg-black/15 p-4 transition hover:border-[var(--brand-gold)]/30 hover:bg-[var(--brand-gold)]/[0.06]">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--brand-gold)]/10 text-[var(--brand-gold)]"><Icon size={19} /></span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-bold text-white/80 group-hover:text-white">{action.label}</span>
+                  <span className="mt-0.5 block truncate text-xs text-white/35">{action.description}</span>
+                </span>
+                <ArrowRight size={15} className="shrink-0 text-white/20 transition group-hover:translate-x-0.5 group-hover:text-[var(--brand-gold)]" />
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
 }

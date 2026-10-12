@@ -13,8 +13,13 @@ import SiteHeader from "@/components/SiteHeader";
 export default function SiteShell({ children, footer }: { children: React.ReactNode; footer: React.ReactNode }) {
   const pathname = usePathname();
   const inPlanner = pathname.startsWith("/meal-planner");
+  const inAdmin = pathname.startsWith("/admin");
   const focusedCooking = pathname.startsWith("/meal-planner/cook/");
   const welcome = pathname === "/meal-planner/welcome";
+
+  if (inAdmin) {
+    return <div className="relative z-10">{children}</div>;
+  }
 
   if (!inPlanner) {
     return <div className="relative z-10"><SiteHeader />{children}{footer}</div>;
