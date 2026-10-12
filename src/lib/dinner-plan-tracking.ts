@@ -3,8 +3,9 @@ export const DINNER_PLAN_COMPLETED_KEY = "vegan-masala:dinner-plan:completed:v2"
 export const DINNER_PLAN_CONFIRMATION_RECORDED_KEY =
   "vegan-masala:dinner-plan:confirmation-recorded:v2";
 export const SIGNUP_OFFER_KEY = "vegan-masala:signup-offer:v1";
-const SESSION_KEY = "vegan-masala:analytics-session:v1";
-const ATTRIBUTION_KEY = "vegan-masala:analytics-attribution:v1";
+const SESSION_KEY = "vegan-masala:analytics-session:v2";
+const ATTRIBUTION_KEY = "vegan-masala:analytics-attribution:v2";
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 
 type Attribution = {
   source: string;
@@ -18,16 +19,57 @@ function safeStorage(storage: Storage, key: string) {
   try { return storage.getItem(key); } catch { return null; }
 }
 
-export function analyticsSessionId() {
-  const existing = safeStorage(window.sessionStorage, SESSION_KEY);
-  if (existing) return existing;
-  const created = createDinnerPlanSignupId();
-  try { window.sessionStorage.setItem(SESSION_KEY, created); } catch {}
-  return created;
+type AnalyticsSession = {
+  id: string;
+  lastActive: number;
+  started?: boolean;
+  engaged?: boolean;
+};
+
+function readAnalyticsSession(): AnalyticsSession | null {
+  const existing = safeStorage(window.localStorage, SESSION_KEY);
+  if (!existing) return null;
+  try {
+    const parsed = JSON.parse(existing) as Partial<AnalyticsSession>;
+    if (typeof parsed.id === "string" && typeof parsed.lastActive === "number") {
+      return {
+        id: parsed.id,
+        lastActive: parsed.lastActive,
+        started: parsed.started === true,
+        engaged: parsed.engaged === true,
+      };
+    }
+  } catch {}
+  return null;
 }
 
-export function sessionAttribution(): Attribution {
-  const existing = safeStorage(window.sessionStorage, ATTRIBUTION_KEY);
+export function analyticsSessionId() {
+  const now = Date.now();
+  const existing = readAnalyticsSession();
+  const session = existing && now - existing.lastActive < SESSION_TIMEOUT_MS
+    ? { ...existing, lastActive: now }
+    : { id: createDinnerPlanSignupId(), lastActive: now };
+  try { window.localStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch {}
+  return session.id;
+}
+
+export function claimAnalyticsSessionStart(sessionId: string) {
+  const session = readAnalyticsSession();
+  if (!session || session.id !== sessionId || session.started) return false;
+  try { window.localStorage.setItem(SESSION_KEY, JSON.stringify({ ...session, started: true })); } catch {}
+  return true;
+}
+
+export function claimAnalyticsSessionEngaged(sessionId: string) {
+  const session = readAnalyticsSession();
+  if (!session || session.id !== sessionId || session.engaged) return false;
+  try { window.localStorage.setItem(SESSION_KEY, JSON.stringify({ ...session, engaged: true })); } catch {}
+  return true;
+}
+
+export function sessionAttribution(sessionId = analyticsSessionId()): Attribution {
+  const attributionKey = `${ATTRIBUTION_KEY}:${sessionId}`;
+  const existing = safeStorage(window.localStorage, attributionKey);
   if (existing) {
     try { return JSON.parse(existing) as Attribution; } catch {}
   }
@@ -46,7 +88,7 @@ export function sessionAttribution(): Attribution {
     placement: params.get("utm_content") || "none",
     landingPage: window.location.pathname,
   };
-  try { window.sessionStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(value)); } catch {}
+  try { window.localStorage.setItem(attributionKey, JSON.stringify(value)); } catch {}
   return value;
 }
 
@@ -60,11 +102,12 @@ export function recordEngagement(
   event: string,
   details: Record<string, string | undefined> = {},
 ) {
-  const attribution = sessionAttribution();
+  const sessionId = analyticsSessionId();
+  const attribution = sessionAttribution(sessionId);
   const body = JSON.stringify({
     event,
     eventId: createDinnerPlanSignupId(),
-    sessionId: analyticsSessionId(),
+    sessionId,
     pagePath: window.location.pathname,
     source: attribution.source,
     medium: attribution.medium,

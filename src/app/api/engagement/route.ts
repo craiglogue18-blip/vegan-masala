@@ -19,6 +19,7 @@ const ALLOWED_EVENTS = new Set([
   "session_start",
   "page_view",
   "engaged_visit",
+  "session_engaged",
   "scroll_depth",
   "recipe_save",
   "recipe_unsave",

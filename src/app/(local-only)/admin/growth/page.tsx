@@ -69,13 +69,14 @@ function Empty({ children }: { children: React.ReactNode }) {
 export default async function GrowthDashboardPage() {
   const data = await getGrowthDashboard();
   const search = data.search.ok ? data.search.data : null;
-  const affiliateClicks = data.current.affiliateClicks + data.current.commerceClicks;
-  const previousAffiliateClicks = data.previous.affiliateClicks + data.previous.commerceClicks;
+  const affiliateClicks = data.current.affiliateClicks;
+  const previousAffiliateClicks = data.previous.affiliateClicks;
+  const storeClicks = data.current.commerceClicks;
   const signupRate = data.current.planViews
     ? data.current.planConfirmed / data.current.planViews
     : 0;
-  const engagementRate = data.current.sessions
-    ? data.current.engagedVisits / data.current.sessions
+  const engagementRate = data.current.standardSessions
+    ? data.current.engagedSessions / data.current.standardSessions
     : 0;
   const affiliateCtr = data.current.affiliateImpressions
     ? affiliateClicks / data.current.affiliateImpressions
@@ -84,12 +85,13 @@ export default async function GrowthDashboardPage() {
   const confirmedSubscribers = data.current.planConfirmed + data.current.breadConfirmed;
   const leadMagnetConversion = leadMagnetViews ? confirmedSubscribers / leadMagnetViews : 0;
   const netProductRevenue = data.services.payhip.revenue - data.services.payhip.refundedValue;
-  const revenuePerThousandSessions = data.current.sessions ? (netProductRevenue / data.current.sessions) * 1000 : 0;
+  const payhipRevenuePerThousandSessions = data.current.sessions ? (netProductRevenue / data.current.sessions) * 1000 : 0;
   const subscriberToBuyerRate = data.services.kit.newSubscribers
     ? data.services.payhip.purchases / data.services.kit.newSubscribers
     : 0;
-  const affiliateEpc = affiliateClicks
-    ? data.services.awin.current.commission / affiliateClicks
+  const awinClicks = data.affiliateClicksByNetwork.find((item) => item.label === "awin")?.count ?? 0;
+  const affiliateEpc = awinClicks
+    ? data.services.awin.current.commission / awinClicks
     : 0;
 
   const priorities: string[] = [];
@@ -148,12 +150,13 @@ export default async function GrowthDashboardPage() {
       <section className="mt-8">
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">At a glance</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <Metric label="Website sessions" value={number(data.current.sessions)} note={data.engagementConnected ? delta(data.current.sessions, data.previous.sessions) : "Engagement storage not connected"} />
-          <Metric label="Page views" value={number(data.current.pageViews)} note={data.current.sessions ? `${(data.current.pageViews / data.current.sessions).toFixed(1)} pages per session` : "New measurement begins after deployment"} />
-          <Metric label="Engaged visits" value={number(data.current.engagedVisits)} note={`${percent(engagementRate)} of sessions reached 30 seconds`} />
+          <Metric label="Recorded sessions" value={number(data.current.sessions)} note={data.engagementConnected ? `${delta(data.current.sessions, data.previous.sessions)} · 30-minute session model now active` : "Engagement storage not connected"} />
+          <Metric label="Page views" value={number(data.current.pageViews)} note={data.current.sessions ? `${(data.current.pageViews / data.current.sessions).toFixed(1)} pages per recorded session` : "New measurement begins after deployment"} />
+          <Metric label="Engaged sessions" value={number(data.current.engagedSessions)} note={data.current.standardSessions ? `${percent(engagementRate)} of ${number(data.current.standardSessions)} new 30-minute sessions reached 30 seconds` : "New deduplicated measurement begins with this deployment"} />
           <Metric label="Google clicks" value={search ? number(search.summary.current.clicks) : "—"} note={search ? delta(search.summary.current.clicks, search.summary.previous.clicks) : "Search Console data unavailable"} />
           <Metric label="Search impressions" value={search ? number(search.summary.current.impressions) : "—"} note={search ? `${percent(search.summary.current.ctr)} click-through rate` : "Search Console data unavailable"} />
           <Metric label="Affiliate clicks" value={number(affiliateClicks)} note={data.current.affiliateImpressions ? `${percent(affiliateCtr)} of ${number(data.current.affiliateImpressions)} viewable placements` : data.engagementConnected ? delta(affiliateClicks, previousAffiliateClicks) : "Engagement storage not connected"} />
+          <Metric label="Store product clicks" value={number(storeClicks)} note="Payhip product visits, reported separately from affiliate links" />
           <Metric label="Confirmed dinner plans" value={number(data.current.planConfirmed)} note={`${percent(signupRate)} of dinner-plan visits`} />
         </div>
       </section>
@@ -168,10 +171,10 @@ export default async function GrowthDashboardPage() {
           <Link href="/admin/newsletters" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-bold text-[var(--brand-gold)] hover:bg-white/5">Open newsletter funnel</Link>
         </div>
         <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <Metric label="Visitor to subscriber" value={percent(leadMagnetConversion)} note={`${number(confirmedSubscribers)} confirmed from ${number(leadMagnetViews)} dinner-plan and bread-guide visits`} />
+          <Metric label="Lead-magnet conversion" value={percent(leadMagnetConversion)} note={`${number(confirmedSubscribers)} confirmed from ${number(leadMagnetViews)} dinner-plan and bread-guide visits`} />
           <Metric label="Subscriber to buyer" value={percent(subscriberToBuyerRate)} note={`${number(data.services.payhip.purchases)} Payhip purchases ÷ ${number(data.services.kit.newSubscribers ?? 0)} new Kit subscribers`} />
-          <Metric label="Affiliate earnings per click" value={money(affiliateEpc, data.services.awin.current.currency)} note={`${money(data.services.awin.current.commission, data.services.awin.current.currency)} Awin commission from ${number(affiliateClicks)} tracked clicks`} />
-          <Metric label="Revenue per 1,000 sessions" value={money(revenuePerThousandSessions, "GBP")} note={`${money(netProductRevenue, "GBP")} net Payhip revenue from ${number(data.current.sessions)} measured sessions`} />
+          <Metric label="Awin earnings per Awin click" value={awinClicks ? money(affiliateEpc, data.services.awin.current.currency) : "—"} note={`${money(data.services.awin.current.commission, data.services.awin.current.currency)} Awin commission from ${number(awinClicks)} tracked Awin clicks`} />
+          <Metric label="Payhip revenue per 1,000 sessions" value={money(payhipRevenuePerThousandSessions, "GBP")} note={`${money(netProductRevenue, "GBP")} net Payhip revenue from ${number(data.current.sessions)} recorded sessions`} />
         </div>
         <p className="mt-4 text-xs leading-5 text-[var(--text-soft)]/75">Rates use the latest 28-day window. Payhip purchases cannot yet be matched to individual Kit subscribers, so subscriber-to-buyer is a directional cohort measure rather than person-level attribution.</p>
       </section>
@@ -345,7 +348,7 @@ export default async function GrowthDashboardPage() {
         </div>
         <div className="mt-5 grid gap-4 sm:grid-cols-3">
           <Metric label="Spice Kitchen clicks" value={number(data.spiceKitchen.clicks)} note={data.engagementConnected ? delta(data.spiceKitchen.clicks, data.spiceKitchen.previousClicks) : "Engagement storage not connected"} />
-          <Metric label="Clickable pages" value={number(data.spiceKitchen.livePlacements)} note="107 recipes · spice guide · meal planner" />
+          <Metric label="Clickable pages" value={number(data.spiceKitchen.livePlacements)} note={`${number(Math.max(0, data.spiceKitchen.livePlacements - 2))} current recipes · spice guide · meal planner`} />
           <Metric label="Tracking" value={data.engagementConnected ? "Active" : "Needs setup"} note="Placement and referring page recorded for every click" />
         </div>
         <div className="mt-5 space-y-3">
@@ -367,7 +370,7 @@ export default async function GrowthDashboardPage() {
               <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--brand-gold)]/65">{titleCase(platform)}</p>
               <p className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">{item.followers === null ? "—" : number(item.followers)}</p>
               <p className="text-xs text-[var(--text-soft)]">{item.followers === null ? "Followers unavailable" : "Followers"}</p>
-              {item.impressions !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.impressions)} impressions · {number(item.outboundClicks ?? 0)} outbound clicks</p>}
+              {item.impressions !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.impressions)} {platform === "facebook" || platform === "instagram" ? "daily reach" : "impressions"}{platform === "pinterest" ? ` · ${number(item.outboundClicks ?? 0)} outbound clicks` : ""}</p>}
               {item.saves !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.saves)} saves</p>}
               {item.views !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.views)} views in the latest 28 days</p>}
               {item.content !== null && <p className="mt-2 text-sm text-[var(--text-soft)]">{number(item.content)} published items</p>}
@@ -413,7 +416,7 @@ export default async function GrowthDashboardPage() {
         <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Social publishing</h2>
           <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-            <Metric label="Posted" value={data.social.posted} note="All time" />
+            <Metric label="Posted" value={data.social.posted} note="Retained queue history" />
             <Metric label="Queued" value={data.social.queued} note="Upcoming" />
             <Metric label="Failed" value={data.social.failed} note="Review" />
           </div>

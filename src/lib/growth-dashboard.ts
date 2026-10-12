@@ -2,6 +2,7 @@ import "server-only";
 
 import { Redis } from "@upstash/redis";
 import { getGscPerformanceSnapshot } from "@/lib/seo/gsc";
+import { getAllRecipes } from "@/lib/recipes";
 import { allQueueItems } from "@/lib/social/core/queue";
 import { getTrendingRecipesWithCounts } from "@/lib/trending";
 import { getPinterestAccessToken } from "@/lib/social/core/pinterestToken";
@@ -84,6 +85,12 @@ function total(rows: EngagementRow[], event: string) {
   return rows.filter((row) => row.event === event).reduce((sum, row) => sum + row.count, 0);
 }
 
+function totalWhere(rows: EngagementRow[], event: string, predicate: (row: EngagementRow) => boolean) {
+  return rows
+    .filter((row) => row.event === event && predicate(row))
+    .reduce((sum, row) => sum + row.count, 0);
+}
+
 function spiceKitchenRows(rows: EngagementRow[]) {
   return rows.filter(
     (row) =>
@@ -126,7 +133,7 @@ async function dailyEngagement(days: number) {
   );
   return hashes.map((hash, index) => {
     const rows = parseRows([hash]);
-    const passive = new Set(["page_view", "session_start", "scroll_depth"]);
+    const passive = new Set(["page_view", "session_start", "session_engaged", "scroll_depth"]);
     return {
       date: dates[index],
       actions: rows.filter((row) => !passive.has(row.event)).reduce((sum, row) => sum + row.count, 0),
@@ -300,7 +307,10 @@ async function getAwinTransactions(offsetDays = 0) {
   }
 
   const end = new Date(Date.now() - offsetDays * DAY_MS);
-  const start = new Date(end.getTime() - 28 * DAY_MS);
+  // Awin treats both timestamps as part of the requested range. Subtract 27
+  // days so this is exactly 28 calendar days and adjacent comparisons do not
+  // share a boundary day.
+  const start = new Date(end.getTime() - 27 * DAY_MS);
   const timestamp = (date: Date, endOfDay = false) =>
     `${date.toISOString().slice(0, 10)}T${endOfDay ? "23:59:59" : "00:00:00"}`;
   const url = new URL(`https://api.awin.com/publishers/${encodeURIComponent(publisherId)}/transactions/`);
@@ -345,13 +355,17 @@ function summariseAwin(transactions: AwinTransaction[]) {
   let currency = "GBP";
 
   for (const transaction of transactions) {
+    const transactionStatus = status(transaction.commissionStatus);
+    const payableCommission = transactionStatus === "declined" || transactionStatus === "deleted"
+      ? 0
+      : awinAmount(transaction.commissionAmount);
     saleValue += awinAmount(transaction.saleAmount);
-    commission += awinAmount(transaction.commissionAmount);
+    commission += payableCommission;
     currency = String(transaction.commissionAmount?.currency || transaction.saleAmount?.currency || currency);
     const name = String(transaction.advertiserName || "Unknown advertiser");
     const current = advertisers.get(name) ?? { transactions: 0, commission: 0 };
     current.transactions += 1;
-    current.commission += awinAmount(transaction.commissionAmount);
+    current.commission += payableCommission;
     advertisers.set(name, current);
   }
 
@@ -411,6 +425,8 @@ async function getMetaAudience() {
   const dailyInsights = async (id: string | undefined, metric: string) => {
     if (!token || !id) return [] as Array<{ date: string; reach: number; clicks: number }>;
     const end = new Date();
+    // Meta's `until` boundary is exclusive, so this requests the 28 complete
+    // days ending yesterday.
     const start = new Date(end.getTime() - 28 * DAY_MS);
     const url = new URL(`https://graph.facebook.com/v23.0/${encodeURIComponent(id)}/insights`);
     url.searchParams.set("metric", metric);
@@ -473,8 +489,8 @@ async function getPinterestPerformance(): Promise<SocialSnapshot> {
   try {
     const token = await getPinterestAccessToken();
     if (!token) return emptySocial(configured, "Pinterest reporting token unavailable");
-    const end = new Date();
-    const start = new Date(end.getTime() - 28 * DAY_MS);
+    const end = new Date(Date.now() - DAY_MS);
+    const start = new Date(end.getTime() - 27 * DAY_MS);
     const url = new URL("https://api.pinterest.com/v5/user_account/analytics");
     url.searchParams.set("start_date", start.toISOString().slice(0, 10));
     url.searchParams.set("end_date", end.toISOString().slice(0, 10));
@@ -552,8 +568,8 @@ async function getYouTubePerformance(): Promise<SocialSnapshot> {
     const token = access.token;
     if (!token) return emptySocial(true, "YouTube access token unavailable");
 
-    const end = new Date();
-    const start = new Date(end.getTime() - 28 * DAY_MS);
+    const end = new Date(Date.now() - DAY_MS);
+    const start = new Date(end.getTime() - 27 * DAY_MS);
     const headers = { Authorization: `Bearer ${token}` };
     const channelUrl = new URL("https://www.googleapis.com/youtube/v3/channels");
     channelUrl.searchParams.set("part", "statistics");
@@ -597,9 +613,12 @@ async function getYouTubePerformance(): Promise<SocialSnapshot> {
 
 export async function getGrowthDashboard() {
   const now = new Date();
-  const currentStart = new Date(now.getTime() - 28 * DAY_MS).toISOString().slice(0, 10);
-  const previousStart = new Date(now.getTime() - 56 * DAY_MS).toISOString().slice(0, 10);
-  const today = now.toISOString().slice(0, 10);
+  const atStartOfUtcDay = (date: Date) => `${date.toISOString().slice(0, 10)}T00:00:00.000Z`;
+  const atEndOfUtcDay = (date: Date) => `${date.toISOString().slice(0, 10)}T23:59:59.999Z`;
+  const currentStart = atStartOfUtcDay(new Date(now.getTime() - 27 * DAY_MS));
+  const currentEnd = atEndOfUtcDay(now);
+  const previousStart = atStartOfUtcDay(new Date(now.getTime() - 55 * DAY_MS));
+  const previousEnd = atEndOfUtcDay(new Date(now.getTime() - 28 * DAY_MS));
   const [search, current, previous, engagementDaily, queue, trending, recraft, kitTotal, kitCurrent, kitPrevious, awinCurrent, awinPrevious, metaAudience, pinterestPerformance, tiktokAudience, youtubePerformance, openAiCosts, amazonReport] = await Promise.all([
     getGscPerformanceSnapshot({ rowLimit: 8 }),
     engagementWindow(28),
@@ -609,8 +628,8 @@ export async function getGrowthDashboard() {
     getTrendingRecipesWithCounts(8).catch(() => []),
     getRecraftBalance(),
     getKitSubscriberCount(),
-    getKitSubscriberCount(currentStart, today),
-    getKitSubscriberCount(previousStart, currentStart),
+    getKitSubscriberCount(currentStart, currentEnd),
+    getKitSubscriberCount(previousStart, previousEnd),
     getAwinTransactions(),
     getAwinTransactions(28),
     getMetaAudience(),
@@ -623,8 +642,10 @@ export async function getGrowthDashboard() {
 
   const currentEvents = {
     sessions: total(current, "session_start"),
+    standardSessions: totalWhere(current, "session_start", (row) => row.category === "session-v2"),
     pageViews: total(current, "page_view"),
     engagedVisits: total(current, "engaged_visit"),
+    engagedSessions: total(current, "session_engaged"),
     affiliateClicks: total(current, "affiliate_click"),
     affiliateImpressions: total(current, "affiliate_impression"),
     commerceClicks: total(current, "commerce_click"),
@@ -641,8 +662,10 @@ export async function getGrowthDashboard() {
   };
   const previousEvents = {
     sessions: total(previous, "session_start"),
+    standardSessions: totalWhere(previous, "session_start", (row) => row.category === "session-v2"),
     pageViews: total(previous, "page_view"),
     engagedVisits: total(previous, "engaged_visit"),
+    engagedSessions: total(previous, "session_engaged"),
     affiliateClicks: total(previous, "affiliate_click"),
     affiliateImpressions: total(previous, "affiliate_impression"),
     commerceClicks: total(previous, "commerce_click"),
@@ -706,6 +729,7 @@ export async function getGrowthDashboard() {
     topAffiliateProducts: rank(current, "affiliate_click", "product"),
     topAffiliateSources: rank(current, "affiliate_click", "source"),
     topAffiliatePages: rank(current, "affiliate_click", "pagePath"),
+    affiliateClicksByNetwork: rank(current, "affiliate_click", "source", 20),
     topTrafficSources: rank(current, "session_start", "source", 10),
     topLandingPages: rank(current, "session_start", "landingPage", 10),
     topDevices: rank(current, "session_start", "device", 6),
@@ -722,7 +746,7 @@ export async function getGrowthDashboard() {
       clicks: spiceKitchenRows(current).reduce((sum, row) => sum + row.count, 0),
       previousClicks: spiceKitchenRows(previous).reduce((sum, row) => sum + row.count, 0),
       topPages: rank(spiceKitchenRows(current), "affiliate_click", "pagePath", 8),
-      livePlacements: 109,
+      livePlacements: getAllRecipes().length + 2,
     },
     trending,
     social,
@@ -772,7 +796,12 @@ export async function getGrowthDashboard() {
           process.env.META_IG_USER_ID?.trim()
         ),
       },
-      pinterest: { configured: Boolean(process.env.PINTEREST_ACCESS_TOKEN?.trim()) },
+      pinterest: {
+        configured: Boolean(
+          process.env.PINTEREST_ACCESS_TOKEN?.trim() ||
+          process.env.PINTEREST_CLIENT_ID?.trim()
+        ),
+      },
       youtube: { configured: dataSourceConfigured("YOUTUBE") },
       tiktok: { configured: dataSourceConfigured("TIKTOK") },
     },
@@ -790,7 +819,7 @@ export async function getSpiceKitchenAffiliateSummary() {
     clicks: currentRows.reduce((sum, row) => sum + row.count, 0),
     previousClicks: previousRows.reduce((sum, row) => sum + row.count, 0),
     topPages: rank(currentRows, "affiliate_click", "pagePath", 5),
-    livePlacements: 109,
+    livePlacements: getAllRecipes().length + 2,
     trackingConnected: Boolean(redisClient()),
   };
 }

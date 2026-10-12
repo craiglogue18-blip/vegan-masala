@@ -114,7 +114,7 @@ export function GrowthPulseChart({ points }: { points: Point[] }) {
           </button>
         ))}
       </div>
-      <p className="mt-4 text-xs leading-5 text-[var(--text-soft)]/70">Social reach currently combines connected Pinterest impressions and YouTube views. Facebook, Instagram and TikTok audience totals remain in their account cards until those APIs provide daily analytics permission.</p>
+      <p className="mt-4 text-xs leading-5 text-[var(--text-soft)]/70">Social reach combines the daily figures currently available from Facebook, Instagram, Pinterest and YouTube. A platform is omitted whenever its analytics permission or daily reporting is unavailable; TikTok currently contributes account totals only.</p>
     </section>
   );
 }

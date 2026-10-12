@@ -69,9 +69,10 @@ export default function CookiesPage() {
             <p className="mt-2">
               Vegan Masala measures anonymous page visits, broad referral and campaign
               source, device class, scroll milestones and selected actions. It uses a
-              random identifier held in session storage for the current browser tab,
-              rather than an analytics cookie. Full IP addresses, names, email addresses
-              and device fingerprints are not retained in this analytics store.
+              random identifier in first-party browser storage and renews the measured
+              session after 30 minutes of inactivity, rather than using an analytics
+              cookie. Full IP addresses, names, email addresses and device fingerprints
+              are not retained in this analytics store.
             </p>
           </div>
 

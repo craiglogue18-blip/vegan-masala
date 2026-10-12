@@ -105,10 +105,10 @@ export default function PrivacyPage() {
         <p className="mt-4 text-[var(--text-soft)] leading-7">
           We also collect privacy-conscious, first-party aggregate measurements such as
           page visits, broad traffic source, device class, scroll milestones and actions
-          such as saving or sharing a recipe. A random identifier lasts only for the
-          current browser tab. We do not place an analytics cookie, retain a full IP
-          address, collect an email address or create a device fingerprint for this
-          reporting.
+          such as saving or sharing a recipe. A random browser identifier groups activity
+          into a session that renews after 30 minutes of inactivity. We do not place an
+          analytics cookie, retain a full IP address, collect an email address or create a
+          device fingerprint for this reporting.
         </p>
       </section>
 

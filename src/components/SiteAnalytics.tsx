@@ -2,7 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { analyticsSessionId, recordEngagement } from "@/lib/dinner-plan-tracking";
+import {
+  analyticsSessionId,
+  claimAnalyticsSessionEngaged,
+  claimAnalyticsSessionStart,
+  recordEngagement,
+} from "@/lib/dinner-plan-tracking";
 
 export default function SiteAnalytics() {
   const pathname = usePathname();
@@ -10,18 +15,17 @@ export default function SiteAnalytics() {
   useEffect(() => {
     if (pathname.startsWith("/admin") || pathname.startsWith("/api")) return;
     const sessionId = analyticsSessionId();
-    const startedKey = `vegan-masala:session-started:${sessionId}`;
-    if (!sessionStorage.getItem(startedKey)) {
-      sessionStorage.setItem(startedKey, "1");
-      recordEngagement("session_start");
+    if (claimAnalyticsSessionStart(sessionId)) {
+      recordEngagement("session_start", { category: "session-v2" });
     }
     recordEngagement("page_view");
 
-    let engaged = false;
     const timer = window.setTimeout(() => {
-      if (document.visibilityState === "visible") {
-        engaged = true;
-        recordEngagement("engaged_visit");
+      if (document.visibilityState === "visible" && claimAnalyticsSessionEngaged(sessionId)) {
+        recordEngagement("session_engaged", {
+          category: "session-v2",
+          eventId: `session-engaged-${sessionId}`,
+        });
       }
     }, 30_000);
 
@@ -41,7 +45,6 @@ export default function SiteAnalytics() {
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener("scroll", onScroll);
-      void engaged;
     };
   }, [pathname]);
 
