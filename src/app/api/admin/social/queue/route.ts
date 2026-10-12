@@ -456,6 +456,40 @@ export async function PATCH(req: Request) {
       });
     }
 
+    if (action === "reschedule") {
+      if (existing.status !== "queued") {
+        return NextResponse.json(
+          { ok: false, error: "Only queued posts can be rescheduled" },
+          { status: 400 }
+        );
+      }
+
+      const scheduledFor =
+        typeof body.scheduledFor === "string" ? body.scheduledFor.trim() : "";
+      const scheduledTime = new Date(scheduledFor);
+
+      if (!scheduledFor || Number.isNaN(scheduledTime.getTime())) {
+        return NextResponse.json(
+          { ok: false, error: "A valid schedule time is required" },
+          { status: 400 }
+        );
+      }
+
+      const updated = await updateQueueItem(id, {
+        scheduledFor: scheduledTime.toISOString(),
+        requiresApproval:
+          typeof body.requiresApproval === "boolean"
+            ? body.requiresApproval
+            : existing.requiresApproval,
+      });
+
+      return NextResponse.json({
+        ok: true,
+        item: updated,
+        message: "Queue item rescheduled",
+      });
+    }
+
     if (action === "regenerate") {
       if (existing.status !== "queued") {
         return NextResponse.json(
