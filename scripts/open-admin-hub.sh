@@ -2,7 +2,7 @@
 set -u
 
 local_url="http://127.0.0.1:3010/admin/social"
-hub_url="$local_url"
+hub_url="https://www.vegan-masala.com/admin/social"
 log_file="/tmp/vegan-masala-admin.log"
 service_label="com.veganmasala.admin"
 service_domain="gui/$(/usr/bin/id -u)"

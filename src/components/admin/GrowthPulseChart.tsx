@@ -70,7 +70,7 @@ export function GrowthPulseChart({ points }: { points: Point[] }) {
   }
 
   return (
-    <section className="relative left-1/2 mt-8 w-[min(1600px,calc(100vw-2rem))] -translate-x-1/2 overflow-hidden rounded-3xl border border-[var(--brand-gold)]/25 bg-gradient-to-br from-[#172129] to-[#091015] p-5 sm:p-8">
+    <section className="mt-8 min-w-0 w-full overflow-hidden rounded-3xl border border-[var(--brand-gold)]/25 bg-gradient-to-br from-[#172129] to-[#091015] p-5 sm:p-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--brand-gold)]/65">Everything at a glance</p>
