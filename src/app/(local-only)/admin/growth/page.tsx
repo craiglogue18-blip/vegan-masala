@@ -151,6 +151,8 @@ export default async function GrowthDashboardPage() {
         <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">At a glance</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Metric label="Recorded sessions" value={number(data.current.sessions)} note={data.engagementConnected ? `${delta(data.current.sessions, data.previous.sessions)} · 30-minute session model now active` : "Engagement storage not connected"} />
+          <Metric label="Tracked campaign sessions" value={number(data.current.campaignSessions)} note="Sessions carrying an explicit campaign tag" />
+          <Metric label="Direct / unattributed" value={number(data.current.directSessions)} note="Typed, bookmarked or otherwise unattributed; excluded browsers are omitted going forward" />
           <Metric label="Page views" value={number(data.current.pageViews)} note={data.current.sessions ? `${(data.current.pageViews / data.current.sessions).toFixed(1)} pages per recorded session` : "New measurement begins after deployment"} />
           <Metric label="Engaged sessions" value={number(data.current.engagedSessions)} note={data.current.standardSessions ? `${percent(engagementRate)} of ${number(data.current.standardSessions)} new 30-minute sessions reached 30 seconds` : "New deduplicated measurement begins with this deployment"} />
           <Metric label="Google clicks" value={search ? number(search.summary.current.clicks) : "—"} note={search ? delta(search.summary.current.clicks, search.summary.previous.clicks) : "Search Console data unavailable"} />
@@ -406,6 +408,7 @@ export default async function GrowthDashboardPage() {
 
         <article className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6">
           <h2 className="text-xl font-extrabold text-[var(--brand-gold)]">Popular recipes this week</h2>
+          <p className="mt-2 text-sm leading-6 text-[var(--text-soft)]">One view per anonymous 30-minute session from this deployment onward.</p>
           <div className="mt-5 space-y-3">
             {data.trending.length ? data.trending.map((item) => (
               <Link key={item.slug} href={`/recipes/${item.slug}`} className="flex justify-between gap-4 text-sm hover:underline"><span className="text-[var(--text-soft)]">{titleCase(item.slug)}</span><strong className="text-[var(--brand-gold)]">{item.views}</strong></Link>

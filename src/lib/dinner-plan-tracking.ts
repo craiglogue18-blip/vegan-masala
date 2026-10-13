@@ -3,6 +3,7 @@ export const DINNER_PLAN_COMPLETED_KEY = "vegan-masala:dinner-plan:completed:v2"
 export const DINNER_PLAN_CONFIRMATION_RECORDED_KEY =
   "vegan-masala:dinner-plan:confirmation-recorded:v2";
 export const SIGNUP_OFFER_KEY = "vegan-masala:signup-offer:v1";
+export const ANALYTICS_EXCLUSION_KEY = "vegan-masala:analytics-excluded:v1";
 const SESSION_KEY = "vegan-masala:analytics-session:v2";
 const ATTRIBUTION_KEY = "vegan-masala:analytics-attribution:v2";
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
@@ -19,11 +20,23 @@ function safeStorage(storage: Storage, key: string) {
   try { return storage.getItem(key); } catch { return null; }
 }
 
+export function isAnalyticsExcluded() {
+  return safeStorage(window.localStorage, ANALYTICS_EXCLUSION_KEY) === "1";
+}
+
+export function setAnalyticsExcluded(excluded: boolean) {
+  try {
+    if (excluded) window.localStorage.setItem(ANALYTICS_EXCLUSION_KEY, "1");
+    else window.localStorage.removeItem(ANALYTICS_EXCLUSION_KEY);
+  } catch {}
+}
+
 type AnalyticsSession = {
   id: string;
   lastActive: number;
   started?: boolean;
   engaged?: boolean;
+  viewedRecipes?: string[];
 };
 
 function readAnalyticsSession(): AnalyticsSession | null {
@@ -37,6 +50,9 @@ function readAnalyticsSession(): AnalyticsSession | null {
         lastActive: parsed.lastActive,
         started: parsed.started === true,
         engaged: parsed.engaged === true,
+        viewedRecipes: Array.isArray(parsed.viewedRecipes)
+          ? parsed.viewedRecipes.filter((value): value is string => typeof value === "string")
+          : [],
       };
     }
   } catch {}
@@ -64,6 +80,21 @@ export function claimAnalyticsSessionEngaged(sessionId: string) {
   const session = readAnalyticsSession();
   if (!session || session.id !== sessionId || session.engaged) return false;
   try { window.localStorage.setItem(SESSION_KEY, JSON.stringify({ ...session, engaged: true })); } catch {}
+  return true;
+}
+
+export function claimRecipeView(sessionId: string, slug: string) {
+  if (isAnalyticsExcluded()) return false;
+  const session = readAnalyticsSession();
+  if (!session || session.id !== sessionId) return false;
+  const viewedRecipes = session.viewedRecipes ?? [];
+  if (viewedRecipes.includes(slug)) return false;
+  try {
+    window.localStorage.setItem(
+      SESSION_KEY,
+      JSON.stringify({ ...session, viewedRecipes: [...viewedRecipes, slug] }),
+    );
+  } catch {}
   return true;
 }
 
@@ -102,6 +133,7 @@ export function recordEngagement(
   event: string,
   details: Record<string, string | undefined> = {},
 ) {
+  if (isAnalyticsExcluded()) return;
   const sessionId = analyticsSessionId();
   const attribution = sessionAttribution(sessionId);
   const body = JSON.stringify({

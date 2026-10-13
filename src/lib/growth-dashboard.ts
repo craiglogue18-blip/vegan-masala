@@ -643,6 +643,12 @@ export async function getGrowthDashboard() {
   const currentEvents = {
     sessions: total(current, "session_start"),
     standardSessions: totalWhere(current, "session_start", (row) => row.category === "session-v2"),
+    directSessions: totalWhere(
+      current,
+      "session_start",
+      (row) => row.source === "direct" && row.campaign === "none",
+    ),
+    campaignSessions: totalWhere(current, "session_start", (row) => row.campaign !== "none"),
     pageViews: total(current, "page_view"),
     engagedVisits: total(current, "engaged_visit"),
     engagedSessions: total(current, "session_engaged"),
@@ -663,6 +669,12 @@ export async function getGrowthDashboard() {
   const previousEvents = {
     sessions: total(previous, "session_start"),
     standardSessions: totalWhere(previous, "session_start", (row) => row.category === "session-v2"),
+    directSessions: totalWhere(
+      previous,
+      "session_start",
+      (row) => row.source === "direct" && row.campaign === "none",
+    ),
+    campaignSessions: totalWhere(previous, "session_start", (row) => row.campaign !== "none"),
     pageViews: total(previous, "page_view"),
     engagedVisits: total(previous, "engaged_visit"),
     engagedSessions: total(previous, "session_engaged"),

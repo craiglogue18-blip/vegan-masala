@@ -5,6 +5,8 @@ import {
   BarChart3,
   ChevronRight,
   Clapperboard,
+  Eye,
+  EyeOff,
   Gauge,
   HeartPulse,
   Inbox,
@@ -20,6 +22,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import {
+  isAnalyticsExcluded,
+  setAnalyticsExcluded,
+} from "@/lib/dinner-plan-tracking";
 
 type NavItem = {
   href: string;
@@ -172,12 +178,16 @@ function SidebarContent({
   localHost,
   serviceState,
   badges,
+  analyticsExcluded,
+  onToggleAnalytics,
 }: {
   pathname: string;
   onNavigate: () => void;
   localHost: boolean;
   serviceState: "checking" | "ready" | "attention";
   badges: Record<string, number>;
+  analyticsExcluded: boolean;
+  onToggleAnalytics: () => void;
 }) {
   const dashboardHref = localHost
     ? "https://www.vegan-masala.com/admin/social"
@@ -236,6 +246,34 @@ function SidebarContent({
       </nav>
 
       <div className="border-t border-white/10 px-5 py-4">
+        <button
+          type="button"
+          onClick={onToggleAnalytics}
+          aria-pressed={analyticsExcluded}
+          className={`mb-3 flex w-full items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition ${
+            analyticsExcluded
+              ? "border-[#d6b25e]/30 bg-[#d6b25e]/10 text-[#f1d67e]"
+              : "border-white/10 bg-white/[0.025] text-white/60 hover:bg-white/5 hover:text-white"
+          }`}
+        >
+          {analyticsExcluded ? <EyeOff size={16} /> : <Eye size={16} />}
+          <span className="min-w-0">
+            <span className="block text-[11px] font-bold">
+              {localHost
+                ? "Set exclusion on live site"
+                : analyticsExcluded
+                  ? "This browser is excluded"
+                  : "Exclude this browser"}
+            </span>
+            <span className="block text-[9px] leading-4 opacity-55">
+              {localHost
+                ? "Opens the production admin securely"
+                : analyticsExcluded
+                  ? "Admin and test visits are ignored"
+                  : "Keep testing out of growth reports"}
+            </span>
+          </span>
+        </button>
         <div className={`flex items-center gap-2 text-xs font-bold ${serviceState === "ready" ? "text-emerald-300/80" : serviceState === "attention" ? "text-amber-300/80" : "text-white/45"}`}>
           <span className={`h-2 w-2 rounded-full ${serviceState === "ready" ? "bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,.75)]" : serviceState === "attention" ? "bg-amber-400" : "animate-pulse bg-white/35"}`} />
           {serviceState === "ready" ? `${localHost ? "Local" : "Live"} admin API responding` : serviceState === "attention" ? "Admin API needs attention" : "Checking admin API"}
@@ -252,11 +290,40 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const [localHost, setLocalHost] = useState(false);
   const [serviceState, setServiceState] = useState<"checking" | "ready" | "attention">("checking");
   const [badges, setBadges] = useState<Record<string, number>>({});
+  const [analyticsExcluded, setAnalyticsExcludedState] = useState(false);
 
-  useEffect(() => setMobileOpen(false), [pathname]);
   useEffect(() => {
-    setLocalHost(window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost");
+    const timer = window.setTimeout(() => setMobileOpen(false), 0);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
+  useEffect(() => {
+    const isLocal = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
+    const params = new URLSearchParams(window.location.search);
+    const requestedExclusion = params.get("analytics_exclude");
+    let excluded = isAnalyticsExcluded();
+    if (requestedExclusion === "1" || requestedExclusion === "0") {
+      excluded = requestedExclusion === "1";
+      setAnalyticsExcluded(excluded);
+      params.delete("analytics_exclude");
+      const query = params.toString();
+      window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`);
+    }
+    const timer = window.setTimeout(() => {
+      setLocalHost(isLocal);
+      setAnalyticsExcludedState(excluded);
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
+
+  const toggleAnalytics = () => {
+    if (localHost) {
+      window.location.assign("https://www.vegan-masala.com/admin/growth?analytics_exclude=1");
+      return;
+    }
+    const next = !analyticsExcluded;
+    setAnalyticsExcluded(next);
+    setAnalyticsExcludedState(next);
+  };
   useEffect(() => {
     let cancelled = false;
     Promise.all([
@@ -300,7 +367,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   return (
     <div className="admin-app min-h-screen bg-[#071116] text-[#f6f2e6]">
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-[286px] flex-col border-r border-white/10 bg-[#0a151b] shadow-2xl shadow-black/30 lg:flex">
-        <SidebarContent pathname={pathname} onNavigate={() => undefined} localHost={localHost} serviceState={serviceState} badges={badges} />
+        <SidebarContent pathname={pathname} onNavigate={() => undefined} localHost={localHost} serviceState={serviceState} badges={badges} analyticsExcluded={analyticsExcluded} onToggleAnalytics={toggleAnalytics} />
       </aside>
 
       {mobileOpen && (
@@ -310,7 +377,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
             <button type="button" onClick={() => setMobileOpen(false)} className="absolute right-3 top-3 z-10 rounded-xl border border-white/10 bg-black/30 p-2 text-white/65" aria-label="Close menu">
               <X size={19} />
             </button>
-            <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} localHost={localHost} serviceState={serviceState} badges={badges} />
+            <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} localHost={localHost} serviceState={serviceState} badges={badges} analyticsExcluded={analyticsExcluded} onToggleAnalytics={toggleAnalytics} />
           </aside>
         </div>
       )}

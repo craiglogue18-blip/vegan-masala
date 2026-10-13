@@ -72,7 +72,8 @@ export default function CookiesPage() {
               random identifier in first-party browser storage and renews the measured
               session after 30 minutes of inactivity, rather than using an analytics
               cookie. Full IP addresses, names, email addresses and device fingerprints
-              are not retained in this analytics store.
+              are not retained in this analytics store. Administrative browsers can be
+              excluded so testing activity is not counted.
             </p>
           </div>
 

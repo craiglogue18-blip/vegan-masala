@@ -108,7 +108,8 @@ export default function PrivacyPage() {
           such as saving or sharing a recipe. A random browser identifier groups activity
           into a session that renews after 30 minutes of inactivity. We do not place an
           analytics cookie, retain a full IP address, collect an email address or create a
-          device fingerprint for this reporting.
+          device fingerprint for this reporting. Site administrators can exclude their
+          browser so testing and editorial checks are not included in these reports.
         </p>
       </section>
 

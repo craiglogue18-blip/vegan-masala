@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
-import { recordEngagement } from "@/lib/dinner-plan-tracking";
+import {
+  analyticsSessionId,
+  claimRecipeView,
+  recordEngagement,
+} from "@/lib/dinner-plan-tracking";
 
 const storageEvent = "vegan-masala:saved-recipes-change";
-const recordedThisVisit = new Set<string>();
 
 function subscribe(onChange: () => void) {
   window.addEventListener("storage", onChange);
@@ -22,12 +25,12 @@ export default function RecipeEngagement({ slug, title }: { slug: string; title:
   }, () => false);
 
   useEffect(() => {
-    if (recordedThisVisit.has(slug)) return;
-    recordedThisVisit.add(slug);
+    const sessionId = analyticsSessionId();
+    if (!claimRecipeView(sessionId, slug)) return;
     fetch("/api/engagement/recipe-view", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug }),
+      body: JSON.stringify({ slug, sessionId }),
       keepalive: true,
     }).catch(() => undefined);
   }, [slug]);
