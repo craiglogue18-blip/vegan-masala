@@ -873,42 +873,74 @@ export default async function RecipePage({
       )}
 
       <section className="mt-10 grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
-        <div
-          id="method"
-          className={`relative order-2 overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm lg:order-1 lg:p-8 ${anchorOffsetClass}`}
-        >
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
+        <div className="order-2 space-y-8 lg:order-1">
+          <div
+            id="method"
+            className={`relative overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm lg:p-8 ${anchorOffsetClass}`}
+          >
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
 
-          <div className="relative">
+            <div className="relative">
+              <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
+                Cook the recipe
+              </p>
+              <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">
+                Method
+              </h2>
+
+              {displayInstructions.length ? (
+                <ol className="mt-8 space-y-6">
+                  {displayInstructions.map((step: string, i: number) => (
+                    <li id={`step-${i + 1}`} key={i} className="flex scroll-mt-32 gap-4">
+                      <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--brand-red)] text-sm font-extrabold text-white shadow">
+                        {i + 1}
+                      </div>
+                      <div className="rounded-2xl border border-white/5 bg-black/10 px-4 py-3">
+                        <p className="leading-7 text-[var(--text-soft)]">{step}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p className="mt-4 text-sm text-[var(--text-soft)]/80">
+                  No method found yet for this recipe.
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div
+            id="notes"
+            className={`rounded-[2rem] border border-[var(--border)] bg-black/15 p-6 shadow-sm lg:p-8 ${anchorOffsetClass}`}
+          >
             <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
-              Cook the recipe
+              A few useful notes
             </p>
             <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">
-              Method
+              Notes
             </h2>
 
-            {displayInstructions.length ? (
-              <ol className="mt-8 space-y-6">
-                {displayInstructions.map((step: string, i: number) => (
-                  <li id={`step-${i + 1}`} key={i} className="flex scroll-mt-32 gap-4">
-                    <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--brand-red)] text-sm font-extrabold text-white shadow">
-                      {i + 1}
-                    </div>
-                    <div className="rounded-2xl border border-white/5 bg-black/10 px-4 py-3">
-                      <p className="leading-7 text-[var(--text-soft)]">{step}</p>
-                    </div>
+            {notes.length ? (
+              <ul className="mt-6 space-y-3 text-[var(--text-soft)]">
+                {notes.map((n: string, i: number) => (
+                  <li
+                    key={i}
+                    className="flex gap-3 rounded-xl border border-white/5 bg-black/10 px-4 py-3 leading-7"
+                  >
+                    <span aria-hidden="true" className="font-bold text-[var(--brand-gold)]">•</span>
+                    <span>{n}</span>
                   </li>
                 ))}
-              </ol>
+              </ul>
             ) : (
               <p className="mt-4 text-sm text-[var(--text-soft)]/80">
-                No method found yet for this recipe.
+                No notes yet.
               </p>
             )}
           </div>
         </div>
 
-        <div className="order-1 space-y-8 lg:order-2">
+        <div className="order-1 lg:sticky lg:top-36 lg:order-2">
           <div
             id="ingredients"
             className={`rounded-[2rem] border border-[var(--border)] bg-[var(--surface)]/95 p-6 shadow-sm ${anchorOffsetClass}`}
@@ -938,37 +970,6 @@ export default async function RecipePage({
               </p>
             )}
           </div>
-
-          <div
-            id="notes"
-            className={`rounded-[2rem] border border-[var(--border)] bg-black/15 p-6 shadow-sm ${anchorOffsetClass}`}
-          >
-            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--brand-gold)]/70">
-              A few useful notes
-            </p>
-            <h2 className="mt-2 text-2xl font-extrabold text-[var(--brand-gold)]">
-              Notes
-            </h2>
-
-            {notes.length ? (
-              <ul className="mt-6 space-y-3 text-[var(--text-soft)]">
-                {notes.map((n: string, i: number) => (
-                  <li
-                    key={i}
-                    className="rounded-xl border border-white/5 bg-black/10 px-4 py-3 leading-7"
-                  >
-                    <span className="mr-2 font-bold text-[var(--brand-gold)]">•</span>
-                    {n}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="mt-4 text-sm text-[var(--text-soft)]/80">
-                No notes yet.
-              </p>
-            )}
-          </div>
-
         </div>
       </section>
 
