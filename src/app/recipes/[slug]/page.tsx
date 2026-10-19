@@ -792,7 +792,7 @@ export default async function RecipePage({
               Watch the full recipe
             </h2>
             <p className="mt-2 max-w-3xl leading-7 text-[var(--text-soft)]">
-              Follow the complete Vegetable Bhuna method from prepared ingredients to the finished dish.
+              Follow the complete {recipe.title} method from prepared ingredients to the finished dish.
             </p>
           </div>
           <video
