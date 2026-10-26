@@ -1,3 +1,4 @@
+import { publishedRecipe } from "@/lib/publisher/content";
 // src/app/recipes/[slug]/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -359,6 +360,8 @@ function buildIntroFallback(recipe: any) {
   return "A dish like this benefits from care in the early stages. Give the base enough time, season steadily, and the final result will taste fuller, rounder and much more convincing at the table.";
 }
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {
@@ -366,7 +369,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
-  const recipe: any = getRecipeBySlug(slug);
+  const recipe: any = await publishedRecipe(slug);
   if (!recipe) return {};
 
   const siteUrl =
@@ -421,7 +424,7 @@ export default async function RecipePage({
 }) {
   const { slug } = await params;
 
-  const recipe: any = getRecipeBySlug(slug);
+  const recipe: any = await publishedRecipe(slug);
   if (!recipe) return notFound();
 
   const orderedSlugs = [...getAllRecipeSlugs()].sort((a, b) => a.localeCompare(b));
@@ -506,7 +509,7 @@ export default async function RecipePage({
       : methodFromBody) || [];
 
   const depth = getRecipeDepth(recipe.slug);
-  const displayInstructions = depth?.instructions ?? instructions;
+  const displayInstructions = recipe.publisherRevision ? instructions : depth?.instructions ?? instructions;
 
   const notes =
     (Array.isArray(recipe.notes) && recipe.notes.length
@@ -647,7 +650,7 @@ export default async function RecipePage({
   };
 
   return (
-    <main className="relative mx-auto max-w-6xl px-6 py-10">
+    <main data-publisher-revision={recipe.publisherRevision || ""} className="relative mx-auto max-w-6xl px-6 py-10">
       <style>{`html { scroll-behavior: smooth; }`}</style>
 
       <div

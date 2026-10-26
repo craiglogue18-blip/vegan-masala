@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["ffmpeg-static", "sharp", "@vercel/blob"],
 
   images: {
+    remotePatterns: process.env.PUBLISHER_MEDIA_ORIGIN ? [{ protocol: "https", hostname: new URL(process.env.PUBLISHER_MEDIA_ORIGIN).hostname, pathname: "/publisher/**" }] : [],
     localPatterns: [
       {
         pathname: "/images/recipes/**",

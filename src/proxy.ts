@@ -45,6 +45,11 @@ function hasValidCronCredentials(request: NextRequest) {
 }
 
 export function proxy(request: NextRequest) {
+  // Publisher never inherits development or cron bypasses.
+  if (request.nextUrl.pathname === "/admin/publisher" || request.nextUrl.pathname.startsWith("/admin/publisher/") || request.nextUrl.pathname.startsWith("/api/admin/publisher")) {
+    if (hasValidAdminCredentials(request)) return NextResponse.next();
+    return new NextResponse("Administrator authentication required.", { status: 401, headers: { "Cache-Control": "no-store", "WWW-Authenticate": 'Basic realm="Recipe Publisher", charset="UTF-8"' } });
+  }
   if (process.env.NODE_ENV !== "production") return NextResponse.next();
 
   const { pathname } = request.nextUrl;

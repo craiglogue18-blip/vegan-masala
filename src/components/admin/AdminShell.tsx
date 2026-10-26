@@ -145,6 +145,7 @@ const navGroups: NavGroup[] = [
           { href: "/admin/health", label: "Overview", description: "Triage publishing, SEO and recipe issues", exact: true },
           { href: "/admin/social/health", label: "Publishing", description: "Connections and publishing failures", exact: true },
           { href: "/admin/seo/health", label: "SEO", description: "Search structure and coverage" },
+          { href: "/admin/publisher", label: "Recipe Publisher", description: "Upload videos and publish recipe changes" },
           { href: "/admin/app/health", label: "Recipes", description: "Planner, serving and video data" },
         ],
       },
