@@ -1,3 +1,4 @@
+import OpeningFrameVideo from "@/components/OpeningFrameVideo";
 import { formatRecipeUpdateDate } from "@/lib/publisher/dates";
 import { publishedRecipe } from "@/lib/publisher/content";
 // src/app/recipes/[slug]/page.tsx
@@ -796,18 +797,11 @@ export default async function RecipePage({
               Follow the complete {recipe.title} method from prepared ingredients to the finished dish.
             </p>
           </div>
-          <video
-            controls
-            playsInline
-            preload="metadata"
-            poster={recipeVideoPoster || undefined}
+          <OpeningFrameVideo
+            src={recipeVideo}
             className="aspect-video w-full bg-black object-contain"
-            aria-label={`Full cooking video for ${recipe.title}`}
-          >
-            <source src={recipeVideo} type="video/mp4" />
-            Your browser does not support embedded video. You can{" "}
-            <a href={recipeVideo}>open the full recipe video directly</a>.
-          </video>
+            label={`Full cooking video for ${recipe.title}`}
+          />
         </section>
       ) : null}
 

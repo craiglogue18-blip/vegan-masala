@@ -27,7 +27,7 @@ export async function publishedRecipe(slug: string) {
   if (!base || !configured()) return base;
   // Storage errors deliberately surface: never silently serve old content as current.
   const published = await kv.get<Revision>(key(slug, 'published'));
-  return published ? { ...base, ...published.content, videoPoster: published.content.image || base.videoPoster, publisherRevision: published.revision, updatedAt: published.updatedAt } : base;
+  return published ? { ...base, ...published.content, publisherRevision: published.revision, updatedAt: published.updatedAt } : base;
 }
 export function initialContent(slug: string): Content {
   const r = getRecipeBySlug(slug);
