@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.PUBLISHER_BUILD_DIR || ".next",
   serverExternalPackages: ["ffmpeg-static", "sharp", "@vercel/blob"],
 
   images: {

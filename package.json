@@ -15,7 +15,8 @@
     "native:sync": "cap sync ios",
     "native:assets": "node scripts/generate-native-assets.mjs",
     "native:open:ios": "cap open ios",
-    "native:run:ios": "cap run ios"
+    "native:run:ios": "cap run ios",
+    "publisher:local": "node scripts/start-recipe-publisher-local.mjs"
   },
   "dependencies": {
     "@capacitor/browser": "^8.0.4",

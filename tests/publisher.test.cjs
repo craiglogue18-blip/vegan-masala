@@ -64,3 +64,39 @@ test('production verification requires exact revision and successful response',a
  assert.match((await check()).message,/Verified live/);
  status=503;assert.match((await check()).message,/not yet verified/);
 });
+const uploads=load('src/lib/publisher/uploads.ts');
+const recovery=load('src/lib/publisher/recovery.ts');
+test('large MP4 exports are accepted up to 10 GB; oversize or invalid files fail before upload',()=>{
+ assert.equal(uploads.checkUpload({name:'export.mp4',type:'video/mp4',size:2*1024**3},'video').ext,'mp4');
+ assert.equal(uploads.checkUpload({name:'export.MP4',type:'',size:uploads.VIDEO_MAX_BYTES},'video').contentType,'video/mp4');
+ assert.throws(()=>uploads.checkUpload({name:'export.mp4',type:'video/mp4',size:uploads.VIDEO_MAX_BYTES+1},'video'),/10 GB/);
+ assert.throws(()=>uploads.checkUpload({name:'export.mov',type:'video/quicktime',size:100},'video'),/MP4/);
+ assert.throws(()=>uploads.checkUpload({name:'export.mp4',type:'video/mp4',size:0},'video'),/empty/);
+ assert.throws(()=>uploads.checkUpload({name:'hero.png',type:'image/png',size:uploads.IMAGE_MAX_BYTES+1},'image'),/10 MB/);
+});
+test('recovery preserves selected recipe, unsaved edits and interrupted-upload state without accepting corrupt storage',()=>{
+ const state={slug:'vegan-roti-chapati',revision:'saved',dirty:true,uploading:true,content:{ingredients:['1.5 cups water'],instructions:['Add water'],image:'',video:''}};
+ assert.equal(recovery.readRecovery(JSON.stringify(state)).content.ingredients[0],'1.5 cups water');
+ assert.equal(recovery.readRecovery(JSON.stringify(state)).uploading,true);
+ for(const raw of [null,'{broken','{}',JSON.stringify({...state,slug:'../invalid'}),JSON.stringify({...state,content:{}})])assert.equal(recovery.readRecovery(raw),null);
+});
+test('upload authorization uses the same large-file limit as browser validation and preserves image constraints',async()=>{
+ process.env.ADMIN_PASSWORD='test-password';process.env.BLOB_READ_WRITE_TOKEN='test-token';
+ const route=load('src/app/api/publisher/upload/route.ts',{
+ '@/lib/publisher/auth':{authorize:()=>null},'@/lib/recipes':{getRecipeBySlug:s=>s==='vegan-roti-chapati'?{}:null},'@/lib/publisher/uploads':uploads,
+ '@vercel/blob/client':{handleUpload:async options=>options.onBeforeGenerateToken(options.body.payload.pathname)}
+ });
+ const request=pathname=>new Request('https://test/api/publisher/upload',{method:'POST',body:JSON.stringify({type:'blob.generate-client-token',payload:{pathname,multipart:true}})});
+ const video=await (await route.POST(request('publisher/vegan-roti-chapati/video.mp4'))).json();assert.equal(video.maximumSizeInBytes,uploads.VIDEO_MAX_BYTES);
+ const image=await(await route.POST(request('publisher/vegan-roti-chapati/hero.png'))).json();assert.equal(image.maximumSizeInBytes,uploads.IMAGE_MAX_BYTES);
+ assert.equal((await route.POST(request('publisher/missing/video.mp4'))).status,400);
+ delete process.env.ADMIN_PASSWORD;delete process.env.BLOB_READ_WRITE_TOKEN;
+});
+test('unauthenticated upload requests are rejected before parsing the request body',async()=>{
+ let parsed=false;
+ const route=load('src/app/api/publisher/upload/route.ts',{
+ '@/lib/publisher/auth':{authorize:()=>Response.json({error:'Unauthorized'},{status:401})},'@/lib/recipes':{},'@/lib/publisher/uploads':uploads,'@vercel/blob/client':{}
+ });
+ const response=await route.POST({json:async()=>{parsed=true;throw new Error('Untrusted body must not be parsed');}});
+ assert.equal(response.status,401);assert.equal(parsed,false);
+});
