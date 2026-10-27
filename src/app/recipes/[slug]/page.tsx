@@ -1,3 +1,5 @@
+import OpeningFrameVideo from "@/components/OpeningFrameVideo";
+import { formatRecipeUpdateDate } from "@/lib/publisher/dates";
 import { publishedRecipe } from "@/lib/publisher/content";
 // src/app/recipes/[slug]/page.tsx
 import type { Metadata } from "next";
@@ -427,6 +429,8 @@ export default async function RecipePage({
   const recipe: any = await publishedRecipe(slug);
   if (!recipe) return notFound();
 
+  const updateLabel = formatRecipeUpdateDate(recipe.updatedAt);
+
   const orderedSlugs = [...getAllRecipeSlugs()].sort((a, b) => a.localeCompare(b));
   const recipeIndex = orderedSlugs.indexOf(slug);
   const previousSlug = recipeIndex > 0 ? orderedSlugs[recipeIndex - 1] : null;
@@ -723,14 +727,9 @@ export default async function RecipePage({
               <Link href="/editorial-standards" className="underline decoration-current/40 underline-offset-4">How our recipes are created</Link>
             </p>
 
-            {recipe.updatedAt ? (
+            {updateLabel ? (
               <p className="mt-2 text-xs font-semibold uppercase tracking-[0.1em] text-[var(--text-soft)]/75">
-                Substantially updated {new Intl.DateTimeFormat("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                  timeZone: "UTC",
-                }).format(new Date(`${recipe.updatedAt}T00:00:00Z`))}
+                Substantially updated {updateLabel}
               </p>
             ) : null}
 
@@ -798,18 +797,11 @@ export default async function RecipePage({
               Follow the complete {recipe.title} method from prepared ingredients to the finished dish.
             </p>
           </div>
-          <video
-            controls
-            playsInline
-            preload="metadata"
-            poster={recipeVideoPoster || undefined}
+          <OpeningFrameVideo
+            src={recipeVideo}
             className="aspect-video w-full bg-black object-contain"
-            aria-label={`Full cooking video for ${recipe.title}`}
-          >
-            <source src={recipeVideo} type="video/mp4" />
-            Your browser does not support embedded video. You can{" "}
-            <a href={recipeVideo}>open the full recipe video directly</a>.
-          </video>
+            label={`Full cooking video for ${recipe.title}`}
+          />
         </section>
       ) : null}
 

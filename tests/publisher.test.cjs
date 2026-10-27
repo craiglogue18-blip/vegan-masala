@@ -100,3 +100,10 @@ test('unauthenticated upload requests are rejected before parsing the request bo
  const response=await route.POST({json:async()=>{parsed=true;throw new Error('Untrusted body must not be parsed');}});
  assert.equal(response.status,401);assert.equal(parsed,false);
 });
+const dates=load('src/lib/publisher/dates.ts');
+test('published recipe dates accept both file dates and full revision timestamps',()=>{
+ assert.equal(dates.formatRecipeUpdateDate('2026-10-27'),'27 October 2026');
+ assert.equal(dates.formatRecipeUpdateDate('2026-10-27T10:26:57.749Z'),'27 October 2026');
+ assert.equal(dates.formatRecipeUpdateDate('2026-10-27T23:30:00-02:00'),'28 October 2026');
+ for(const value of [undefined,null,'','not-a-date'])assert.equal(dates.formatRecipeUpdateDate(value),null);
+});
