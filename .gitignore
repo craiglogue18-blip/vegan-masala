@@ -72,3 +72,6 @@ public/generated/
 !public/videos/home-hero-desktop.mp4
 !public/videos/home-hero-mobile.mp4
 ebook 1/
+
+# Isolated production build for the local recipe publisher
+/.next-publisher/

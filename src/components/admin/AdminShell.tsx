@@ -67,6 +67,7 @@ const navGroups: NavGroup[] = [
   {
     label: "Create",
     items: [
+      { href: "/admin/publisher", label: "Recipe Publisher", description: "Edit recipes, upload media and publish", icon: Clapperboard },
       {
         href: "/admin/import",
         label: "Recipe studio",
