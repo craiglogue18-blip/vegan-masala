@@ -20,6 +20,7 @@ export default function Publisher() {
   const [busy,setBusy]=useState(false);
   const [message,setMessage]=useState('');
   const [deployment,setDeployment]=useState('');
+  const [publication,setPublication]=useState<{state:string;message:string;url?:string}|null>(null);
   async function api(url:string,body?:unknown) {
     const r=await fetch(url,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined,cache:'no-store',signal:AbortSignal.timeout(20000)});
     const text=await r.text(); let data; try { data=JSON.parse(text); } catch {throw new Error(`The server returned an unexpected response (${r.status}). Your edits are kept in this tab. Try again.`);}
@@ -45,13 +46,17 @@ export default function Publisher() {
   async function select(value:string) {
     if(dirty && !confirm('Discard unsaved changes?')) return;
     if(!value){setContent(undefined);setSlug('');setDirty(false);try{sessionStorage.removeItem(RECOVERY_KEY);}catch{}return;}
-    setBusy(true);setContent(undefined);setSlug(value);setMessage('');setPreview(false);setTransfer(null);
+    setBusy(true);setContent(undefined);setSlug(value);setMessage('');setPreview(false);setTransfer(null);setPublication(null);
     try {const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(value)}`);setContent(d.draft?.content || d.published?.content || d.initial);setRevision(d.draft?.revision || '');setDirty(false);}catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
   }
-  function change(next:Content) {setContent(next);setDirty(true);setPreview(false);}
+  function change(next:Content) {setContent(next);setDirty(true);setPreview(false);setPublication(null);}
   async function act(action:string) {
     setBusy(true);setMessage('');
-    try {const d=await api('/api/admin/publisher',{slug,action,content,revision});if(action==='draft'){setRevision((d as Revision).revision);setDirty(false);setMessage('Draft saved. Preview before publishing.');}else {setMessage('Published. Verify the production page below.');}}
+    try {const d=await api('/api/admin/publisher',{slug,action,content,revision});if(action==='draft'){setRevision((d as Revision).revision);setDirty(false);setMessage('Draft saved. Preview before publishing.');}else {
+      setPublication({state:'checking',message:'Your publication is saved. Checking the live website…'});
+      setMessage('Your publication is saved. Checking the live website…');
+      try{const verified=await api('/api/admin/publisher/deploy',{action:'verify',slug,revision});setPublication({state:verified.verified?'live':'pending',message:verified.message,url:verified.url});setMessage(verified.message);}catch{const message='Your publication is saved, but the live website could not be verified. Check the production page before assuming it is live.';setPublication({state:'pending',message});setMessage(message);}
+    }}
     catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
   }
   async function media(file:File,field:'image'|'video') {
@@ -80,10 +85,10 @@ export default function Publisher() {
   async function reloadSaved() {
     if(dirty&&!confirm('Discard local edits and load the saved draft?'))return;
     setBusy(true);
-    try{const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(slug)}`);setContent(d.draft?.content||d.published?.content||d.initial);setRevision(d.draft?.revision||'');setDirty(false);setPreview(false);setTransfer(null);setMessage('Loaded the latest saved draft.');}catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
+    try{const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(slug)}`);setContent(d.draft?.content||d.published?.content||d.initial);setRevision(d.draft?.revision||'');setDirty(false);setPreview(false);setTransfer(null);setPublication(null);setMessage('Loaded the latest saved draft.');}catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
   }
   async function deploy(action:string) {
-    setBusy(true);try {const d=await api('/api/admin/publisher/deploy', {action,slug,revision,deployment});if(d.deployment)setDeployment(d.deployment);setMessage(d.message);if(d.state==='READY'||d.state==='ERROR'||d.state==='CANCELED')setDeployment('');}catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
+    setBusy(true);try {const d=await api('/api/admin/publisher/deploy', {action,slug,revision,deployment});if(d.deployment)setDeployment(d.deployment);setMessage(d.message);if(action==='verify')setPublication({state:d.verified?'live':'pending',message:d.message,url:d.url});if(d.state==='READY'||d.state==='ERROR'||d.state==='CANCELED')setDeployment('');}catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
   }
   useEffect(()=>{if(!deployment)return;const timer=setInterval(()=>{api('/api/admin/publisher/deploy',{action:'status',slug,revision,deployment}).then(d=>{setMessage(d.message);if(['READY','ERROR','CANCELED'].includes(d.state))setDeployment('');}).catch(e=>{setMessage(e.message);setDeployment('');});},10000);return ()=>clearInterval(timer);},[deployment,slug,revision]);
   const title=recipes.find(r=>r.slug===slug)?.title || 'Your next recipe update';
@@ -120,7 +125,7 @@ export default function Publisher() {
         <footer className={styles.editorFooter}><span><ShieldCheck size={14}/>Changes stay private until you publish.</span>{!preview&&<button disabled={busy} onClick={()=>setPreview(true)}>Preview recipe <ChevronRight size={15}/></button>}</footer>
       </div>
       <aside className={styles.sidebar}>
-        <div className={styles.publishCard}><div className={styles.publishIcon}><Rocket size={22}/></div><p className={styles.eyebrow}>FROM YOUR KITCHEN TO THE WORLD</p><h3>Ready when you are.</h3><p className={styles.sidebarCopy}>Save your changes, take a final look, then share the update with your readers.</p><ol className={styles.checklist}><li><span className={revision&&!dirty?styles.done:''}>{revision&&!dirty?<Check size={12}/>:1}</span><div>Save your draft<small>{dirty?'You have unsaved changes':revision?'Your draft is saved':'Keep your changes private'}</small></div></li><li><span className={preview?styles.done:''}>{preview?<Check size={12}/>:2}</span><div>Take a final look<small>Check your recipe in Preview</small></div></li><li><span>3</span><div>Publish your update<small>Available on the recipe page</small></div></li></ol><button className={styles.saveButton} disabled={busy} onClick={()=>act('draft')}><Save size={16}/>{busy?'Working…':'Save draft'}</button><button className={styles.publishButton} disabled={busy||dirty||!revision||!preview} onClick={()=>act('publish')}><Rocket size={16}/>Publish update</button><p className={styles.publishHint}>{dirty?'Save your changes before publishing.':!revision?'Save a draft to get started.':!preview?'Preview your draft to enable publishing.':'Your saved draft is ready to publish.'}</p><button className={styles.reloadButton} disabled={busy} onClick={()=>void reloadSaved()}>Load saved draft</button></div>
+        <div className={styles.publishCard}><div className={styles.publishIcon}><Rocket size={22}/></div><p className={styles.eyebrow}>FROM YOUR KITCHEN TO THE WORLD</p><h3>Ready when you are.</h3><p className={styles.sidebarCopy}>Save your changes, take a final look, then share the update with your readers.</p><ol className={styles.checklist}><li><span className={revision&&!dirty?styles.done:''}>{revision&&!dirty?<Check size={12}/>:1}</span><div>Save your draft<small>{dirty?'You have unsaved changes':revision?'Your draft is saved':'Keep your changes private'}</small></div></li><li><span className={preview?styles.done:''}>{preview?<Check size={12}/>:2}</span><div>Take a final look<small>Check your recipe in Preview</small></div></li><li><span>3</span><div>Publish your update<small>Available on the recipe page</small></div></li></ol>{publication&&<div className={styles.publication} role="status" aria-live="polite"><strong>{publication.state==='live'?'Live on your website':publication.state==='checking'?'Checking your website…':'Saved · live update pending'}</strong><p>{publication.message}</p>{publication.url&&<a href={publication.url} target="_blank" rel="noreferrer">Open production recipe <ArrowUpRight size={13}/></a>}</div>}<button className={styles.saveButton} disabled={busy} onClick={()=>act('draft')}><Save size={16}/>{busy?'Working…':'Save draft'}</button><button className={styles.publishButton} disabled={busy||dirty||!revision||!preview} onClick={()=>act('publish')}><Rocket size={16}/>Publish update</button><p className={styles.publishHint}>{dirty?'Save your changes before publishing.':!revision?'Save a draft to get started.':!preview?'Preview your draft to enable publishing.':'Your saved draft is ready to publish.'}</p><button className={styles.reloadButton} disabled={busy} onClick={()=>void reloadSaved()}>Load saved draft</button></div>
         <div className={styles.productionCard}><h4><CheckCircle2 size={17}/>Check it’s live</h4><p>Confirm your published update appears on your website.</p><button disabled={busy} onClick={()=>deploy('verify')}>Verify production page <ArrowUpRight size={14}/></button><details><summary>Deployment options</summary><p>Content updates usually appear without rebuilding the website.</p><button disabled={busy} onClick={()=>deploy('trigger')}>Rebuild on Vercel</button>{deployment&&<button disabled={busy} onClick={()=>deploy('status')}>Check build status</button>}</details></div>
       </aside>
     </div>}

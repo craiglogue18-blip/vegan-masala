@@ -59,10 +59,10 @@ test('production verification requires exact revision and successful response',a
  '@/lib/recipes':{getRecipeBySlug:()=>({})}
  },{fetch:async()=>new Response(html,{status})});
  const check=async()=>{const r=await routes.POST(new Request('https://test/api/admin/publisher/deploy',{method:'POST',body:JSON.stringify({action:'verify',slug:'dal',revision:'saved-123'})}));return r.json();};
- assert.match((await check()).message,/not yet verified/);
+ assert.match((await check()).message,/not serving/);
  html='<main data-publisher-revision="saved-123"></main>';
- assert.match((await check()).message,/Verified live/);
- status=503;assert.match((await check()).message,/not yet verified/);
+ assert.match((await check()).message,/Your update is live/);
+ status=503;assert.match((await check()).message,/not serving/);
 });
 const uploads=load('src/lib/publisher/uploads.ts');
 const recovery=load('src/lib/publisher/recovery.ts');

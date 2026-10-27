@@ -27,8 +27,8 @@ export async function POST(req: Request) {
       url.searchParams.set('publisher-check',randomUUID());
       const r=await fetch(url,{cache:'no-store',redirect:'error',signal:AbortSignal.timeout(15000)});
       const html=await r.text();
-      if(!r.ok || !html.includes(`data-publisher-revision="${published.revision}"`))return Response.json({message:'Production has not yet verified this revision. Check deployment, domain and shared storage.'});
-      return Response.json({message:`Verified live at ${origin.origin}/recipes/${slug} — revision ${published.revision}.`});
+      if(!r.ok || !html.includes(`data-publisher-revision="${published.revision}"`))return Response.json({verified:false,url:`${origin.origin}/recipes/${slug}`,message:'Your update is saved, but the live website is not serving it yet. The website deployment or storage connection needs attention.'});
+      return Response.json({verified:true,url:`${origin.origin}/recipes/${slug}`,message:`Your update is live at ${origin.origin}/recipes/${slug}.`});
     }
     if(action==='trigger') {
       if(!process.env.VERCEL_DEPLOYMENT_ID || !process.env.VERCEL_PROJECT_ID)throw new Error('Vercel project and deployment identifiers are required');

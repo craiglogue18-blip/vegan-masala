@@ -46,3 +46,5 @@ npm run publisher:local -- --env-file /absolute/path/to/private.env --build
 ```
 
 Open `http://127.0.0.1:3141/admin/publisher`. This launcher uses an isolated `.next-publisher` production build and a loopback-only proxy. It does not use Next development live reload, which cannot pass through a plain HTTP proxy and previously caused repeated page refreshes. Stop the old test server before starting it. Subsequent launches can omit `--build` until code or build-time configuration changes. The local proxy keeps credentials server-side and forwards only same-origin writes; large media bypass it and go directly to Blob. The automatic draft save after a browser upload does not depend on a public callback URL or a localhost tunnel.
+
+After Publish update, the editor automatically checks the production recipe URL and shows a result beside the publishing controls. A saved publication is labelled pending until the exact revision is verified on the live website. The initial rollout requires merging and deploying this code; a preview deployment alone does not update the production site.
