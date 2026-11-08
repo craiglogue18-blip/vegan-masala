@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import PageIdentityLabel from "@/components/PageIdentityLabel";
 
@@ -21,16 +22,29 @@ export default function AboutPage() {
       />
 
       <div className="relative mx-auto max-w-5xl px-6 py-12 sm:py-16">
-        <header className="rounded-3xl border border-[var(--brand-gold)]/50 bg-[var(--surface)] px-7 py-12 text-center shadow-sm sm:px-12 sm:py-16">
-          <PageIdentityLabel>The story behind Vegan Masala</PageIdentityLabel>
-          <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-bold leading-tight text-white sm:text-6xl">
-            Meet Craig, the person behind Vegan Masala
-          </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[var(--text-soft)]">
-            I&apos;m Craig Logue, the founder and editor of Vegan Masala. I&apos;m
-            originally from Wales and now live in Bristol, where this growing
-            library of plant-based Indian food is researched, cooked and shared.
-          </p>
+        <header className="grid items-center gap-8 rounded-3xl border border-[var(--brand-gold)]/50 bg-[var(--surface)] p-6 shadow-sm sm:p-10 md:grid-cols-2">
+          <div>
+            <PageIdentityLabel>The story behind Vegan Masala</PageIdentityLabel>
+            <h1 className="mt-4 text-4xl font-bold leading-tight text-white lg:text-5xl">
+              Meet Craig, the person behind Vegan Masala
+            </h1>
+            <p className="mt-5 text-lg leading-8 text-[var(--text-soft)]">
+              I&apos;m Craig Logue, the founder and editor of Vegan Masala. I&apos;m
+              originally from Wales and now live in Bristol, where this growing
+              library of plant-based Indian food is researched, cooked and shared.
+            </p>
+          </div>
+          <figure>
+            <Image
+              src="/images/about/craig-logue-vegan-masala.webp"
+              alt="Craig Logue wearing his black and gold Vegan Masala apron in his kitchen"
+              width={1440}
+              height={960}
+              sizes="(min-width: 1024px) 426px, (min-width: 768px) calc(50vw - 82px), (min-width: 640px) calc(100vw - 130px), calc(100vw - 98px)"
+              preload
+              className="h-auto w-full rounded-2xl border border-[var(--border)]"
+            />
+          </figure>
         </header>
 
         <div className="mt-8 space-y-8">
