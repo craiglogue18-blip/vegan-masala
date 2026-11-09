@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { getPublicRecipes } from "@/lib/recipes";
 import type { Recipe } from "@/lib/recipes";
-import { getRecipeImage } from "@/lib/recipeimages";
+import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 
 type Props = {
   title?: string;
@@ -55,7 +55,10 @@ export default function RelatedRecipes({
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {related.map(({ recipe: r }) => {
-          const img = getRecipeImage(r.slug);
+          const baseImage = r.image?.trim() || getRecipeImage(r.slug);
+          const img = r.imageVersion == null || isPlaceholderImage(baseImage)
+            ? baseImage
+            : `${baseImage}${baseImage.includes("?") ? "&" : "?"}v=${r.imageVersion}`;
 
           return (
             <Link
@@ -69,6 +72,7 @@ export default function RelatedRecipes({
                   src={img}
                   alt={r.title}
                   fill
+                  sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
                   className="object-cover"
                 />
 
