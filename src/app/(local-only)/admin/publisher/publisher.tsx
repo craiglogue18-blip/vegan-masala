@@ -131,6 +131,20 @@ export default function Publisher() {
       setRecraftPreview(data.url);setMessage('Recraft API test completed. Review the result below. Your existing hero image is unchanged.');
     } catch(e) {setMessage((e as Error).message);} finally {setRecraftWorking(false);}
   }
+  async function downloadRecraft(part:'full'|'left'|'right') {
+    if(!recraftPreview)return;
+    try {
+      const img=await new Promise<HTMLImageElement>((resolve,reject)=>{const i=new window.Image();i.onload=()=>resolve(i);i.onerror=()=>reject(new Error('Could not load the generated image.'));i.src=recraftPreview;});
+      const canvas=document.createElement('canvas');
+      const half=Math.floor(img.naturalWidth/2);
+      canvas.width=part==='full'?img.naturalWidth:part==='left'?half:img.naturalWidth-half;
+      canvas.height=img.naturalHeight;
+      const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image processing is unavailable.');
+      ctx.drawImage(img,part==='right'?half:0,0,canvas.width,canvas.height,0,0,canvas.width,canvas.height);
+      const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Unable to prepare download.')),'image/png'));
+      const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`${slug||'recipe'}-recraft-${part}.png`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }catch(e){setMessage((e as Error).message);}
+  }
   async function reloadSaved() {
     if(dirty&&!confirm('Discard local edits and load the saved draft?'))return;
     setBusy(true);
@@ -197,7 +211,7 @@ export default function Publisher() {
                   {sheetPreview&&<div><p><strong>Combined reference preview — no API credits used</strong></p><img src={sheetPreview} alt="Combined reference: existing hero on the left and actual dish on the right" style={{width:'100%',maxWidth:680,height:'auto',borderRadius:12}}/><p><small>Left: current hero · Right: actual dish</small></p></div>}
                   <p><small>One request per click after confirmation. API billing applies; the precise cost is not known in advance. No automatic retries, publishing, or replacement.</small></p>
                   <button type="button" className={styles.uploadButton} disabled={!combinedReference||recraftWorking||busy} onClick={()=>void testRecraft()}>{recraftWorking?'Generating…':'Test Recraft API (paid)'}</button>
-                  {recraftPreview&&<div><p><strong>Generated preview — original unchanged</strong></p><img src={recraftPreview} alt="Experimental Recraft API result" style={{width:'100%',maxWidth:520,height:'auto',borderRadius:12}}/><p><a href={recraftPreview} target="_blank" rel="noopener noreferrer">Open generated image</a> · Download it and use Change photo above only if you approve it.</p></div>}
+                  {recraftPreview&&<div><p><strong>Generated preview — original unchanged</strong></p><img src={recraftPreview} alt="Experimental Recraft API result" style={{width:'100%',maxWidth:520,height:'auto',borderRadius:12}}/><p>Download the complete generated image, or extract the left or right half if Recraft produced two panels.</p><div style={{display:'flex',gap:10,flexWrap:'wrap'}}><button type="button" className={styles.uploadButton} onClick={()=>void downloadRecraft('full')}>Download single image</button><button type="button" className={styles.uploadButton} onClick={()=>void downloadRecraft('left')}>Download left half</button><button type="button" className={styles.uploadButton} onClick={()=>void downloadRecraft('right')}>Download right half</button></div><p><small>Left/right downloads crop the image into separate files; they do not regenerate the food or remove unwanted objects. Only use Change photo above if you approve the result.</small></p></div>}
                 </div>
                 <p><small>Studio Auto's two-image editing is not available through this standard API endpoint. This test uses one combined reference image.</small></p>
                 <a href="https://www.recraft.ai/" target="_blank" rel="noopener noreferrer">Open Recraft Studio ↗</a>
