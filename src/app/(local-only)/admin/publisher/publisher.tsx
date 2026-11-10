@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import OpeningFrameVideo from '@/components/OpeningFrameVideo';
 import { ArrowUpRight, Check, CheckCircle2, ChevronRight, CloudUpload, Eye, Film, ImagePlus, Leaf, ListChecks, Plus, Rocket, Save, ShieldCheck, Trash2, Utensils } from 'lucide-react';
 import { checkUpload, formatBytes, VIDEO_LIMIT_LABEL } from '@/lib/publisher/uploads';
@@ -43,6 +44,8 @@ export default function Publisher() {
       try {
         const list=await api('/api/admin/publisher'); if(cancelled)return;setRecipes(list.recipes);
         let saved:Recovery|null=null;try{saved=readRecovery(sessionStorage.getItem(RECOVERY_KEY));}catch{}
+        const requested=new URLSearchParams(window.location.search).get('slug');
+        if(requested && list.recipes.some((r:{slug:string})=>r.slug===requested)) { await selectFromLink(requested); return; }
         if(!saved || !list.recipes.some((r:{slug:string})=>r.slug===saved!.slug))return;
         setBusy(true);setSlug(saved.slug);
         const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(saved.slug)}`);if(cancelled)return;
@@ -54,6 +57,11 @@ export default function Publisher() {
   },[]);
   useEffect(()=>{if(content&&slug){try{sessionStorage.setItem(RECOVERY_KEY,JSON.stringify({slug,content,revision,dirty,uploading:!!transfer&&['uploading','saving'].includes(transfer.phase)}));}catch{}}},[slug,content,revision,dirty,transfer]);
   useEffect(()=>{const warn=(e:BeforeUnloadEvent)=>{if(dirty||uploadController.current){e.preventDefault();e.returnValue='';}};window.addEventListener('beforeunload',warn);return ()=>window.removeEventListener('beforeunload',warn);},[dirty]);
+  async function selectFromLink(value:string) {
+    setBusy(true);setSlug(value);setMessage('');setPreview(false);
+    try{const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(value)}`);setContent(d.draft?.content||d.published?.content||d.initial);setRevision(d.draft?.revision||'');setDirty(false);}
+    catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
+  }
   async function select(value:string) {
     if(dirty && !confirm('Discard unsaved changes?')) return;
     if(!value){setContent(undefined);setSlug('');setDirty(false);try{sessionStorage.removeItem(RECOVERY_KEY);}catch{}return;}
@@ -170,7 +178,7 @@ export default function Publisher() {
   return <section className={styles.publisher}>
     <header className={styles.header}>
       <div><p className={styles.eyebrow}><Leaf size={14}/> VEGAN MASALA · YOUR RECIPE DESK</p><h1>Recipe Publisher<span>.</span></h1><p className={styles.subtitle}>A little polish. A fresh video. Ready for your readers.</p></div>
-      <span className={styles.secure}><ShieldCheck size={15}/> Private workspace</span>
+      <div style={{display:"flex",alignItems:"center",gap:14,flexWrap:"wrap"}}><Link href="/admin/publisher/videos">Video coverage report</Link><span className={styles.secure}><ShieldCheck size={15}/> Private workspace</span></div>
     </header>
     <div className={styles.selectorCard}>
       <div className={styles.selectorIcon}><Utensils size={22}/></div>
