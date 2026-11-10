@@ -36,7 +36,7 @@ export default function Publisher() {
         if(!saved || !list.recipes.some((r:{slug:string})=>r.slug===saved!.slug))return;
         setBusy(true);setSlug(saved.slug);
         const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(saved.slug)}`);if(cancelled)return;
-        if(saved.dirty){setContent(saved.content);setRevision(saved.revision);setDirty(true);setMessage((d.draft?.revision||'')!==saved.revision?'Your local edits were recovered, but the saved draft changed elsewhere. Reload the saved draft before combining changes.':'Your unsaved edits were recovered. Save the draft when ready.');}
+        if(saved.dirty){setContent({...saved.content,title:saved.content.title || d.initial.title});setRevision(saved.revision);setDirty(true);setMessage((d.draft?.revision||'')!==saved.revision?'Your local edits were recovered, but the saved draft changed elsewhere. Reload the saved draft before combining changes.':'Your unsaved edits were recovered. Save the draft when ready.');}
         else{setContent(d.draft?.content||d.published?.content||d.initial);setRevision(d.draft?.revision||'');setDirty(false);if(d.published?.revision&&d.published.revision===d.draft?.revision)setPublication({state:'pending',message:'Published update found. Checking the live website automatically…'});}
         if(saved.uploading)setMessage('The previous upload was interrupted. Your recipe draft is safe. Choose the video again to retry.');
       }catch(e){if(!cancelled)setMessage((e as Error).message);}finally{if(!cancelled)setBusy(false);}
@@ -55,6 +55,7 @@ export default function Publisher() {
     setBusy(true);setMessage('');
     if(action==='publish')setPublication({state:'publishing',message:'Saving this revision as the published update…'});
     try {const d=await api('/api/admin/publisher',{slug,action,content,revision});if(action==='draft'){setPublication(null);setRevision((d as Revision).revision);setDirty(false);setMessage('Draft saved. Preview before publishing.');}else {
+      setRecipes(prev=>prev.map(item=>item.slug===slug?{...item,title:content?.title || item.title}:item));
       setPublication({state:'checking',message:'Your publication is saved. Checking the live website…'});
       setMessage('Your publication is saved. Checking the live website…');
       try{const verified=await api('/api/admin/publisher/deploy',{action:'verify',slug,revision});setPublication({state:verified.verified?'live':'pending',message:verified.message,url:verified.url});setMessage(verified.message);}catch{const message='Your publication is saved, but the live website could not be verified. Check the production page before assuming it is live.';setPublication({state:'pending',message});setMessage(message);}
