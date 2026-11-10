@@ -6,7 +6,7 @@ export function readRecovery(raw: string | null): Recovery | null {
     const v = JSON.parse(raw || 'null');
     if (!v || typeof v.slug !== 'string' || !/^[a-z0-9-]+$/.test(v.slug) || typeof v.revision !== 'string' || typeof v.dirty !== 'boolean' || typeof v.uploading !== 'boolean') return null;
     const c = v.content;
-    if (!c || typeof c.image !== 'string' || typeof c.video !== 'string' || !['ingredients', 'instructions'].every(k => Array.isArray(c[k]) && c[k].every((x: unknown) => typeof x === 'string'))) return null;
+    if (!c || (c.title !== undefined && typeof c.title !== 'string') || typeof c.image !== 'string' || typeof c.video !== 'string' || !['ingredients', 'instructions'].every(k => Array.isArray(c[k]) && c[k].every((x: unknown) => typeof x === 'string'))) return null;
     return v;
   } catch { return null; }
 }
