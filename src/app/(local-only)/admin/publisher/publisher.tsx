@@ -12,6 +12,9 @@ export default function Publisher() {
   const [activeTab,setActiveTab]=useState<'details'|'media'|'ingredients'|'instructions'>('details');
   const uploadController=useRef<AbortController|null>(null);
   const [dishReference,setDishReference]=useState<File|null>(null);
+  const [combinedReference,setCombinedReference]=useState<File|null>(null);
+  const [recraftPreview,setRecraftPreview]=useState('');
+  const [recraftWorking,setRecraftWorking]=useState(false);
   const [dishPreview,setDishPreview]=useState('');
   const photoPrompt='Use the existing website hero photograph as the setting. Replace only the food with the actual finished dish shown in the second reference photograph. Preserve the cookware, camera angle, background and lighting. Keep the dish faithful to the real cooked food; do not invent ingredients.';
   useEffect(()=>{if(!dishReference){setDishPreview('');return;}const url=URL.createObjectURL(dishReference);setDishPreview(url);return()=>URL.revokeObjectURL(url);},[dishReference]);
@@ -89,6 +92,18 @@ export default function Publisher() {
       setTransfer({name:file.name,size:file.size,loaded:file.size,percentage:100,phase:'done'});setMessage('Upload complete and draft saved. Preview it before publishing.');
     }catch(e){setTransfer(t=>t?{...t,phase:uploaded?'save-failed':controller.signal.aborted?'cancelled':'failed'}:null);setMessage(uploaded?`The file uploaded, but saving the draft failed: ${(e as Error).message} Use Save draft to retry without uploading again.`:controller.signal.aborted?'Upload cancelled. Your recipe draft is safe.':`${(e as Error).message} Your edits are kept. You can select the file again to retry.`);}finally{uploadController.current=null;setBusy(false);}
   }
+  async function testRecraft() {
+    if (!combinedReference || recraftWorking) return;
+    if (!confirm('Send ONE paid image-to-image request using your Recraft API balance? The result may differ from Studio Auto. No automatic retries or hero-image changes will occur.')) return;
+    setRecraftWorking(true);setRecraftPreview('');setMessage('Sending one paid Recraft API test. Please wait…');
+    try {
+      const body=new FormData();body.set('reference',combinedReference);body.set('confirmed','yes');
+      const res=await fetch('/api/admin/publisher/recraft-test',{method:'POST',body,cache:'no-store'});
+      const data=await res.json();
+      if(!res.ok)throw new Error(data.error || 'Recraft test failed. Check API usage before retrying.');
+      setRecraftPreview(data.url);setMessage('Recraft API test completed. Review the result below. Your existing hero image is unchanged.');
+    } catch(e) {setMessage((e as Error).message);} finally {setRecraftWorking(false);}
+  }
   async function reloadSaved() {
     if(dirty&&!confirm('Discard local edits and load the saved draft?'))return;
     setBusy(true);
@@ -146,7 +161,18 @@ export default function Publisher() {
                 <p><strong>Editing instruction</strong></p>
                 <p>{photoPrompt}</p>
                 <button type="button" className={styles.uploadButton} onClick={()=>navigator.clipboard.writeText(photoPrompt).then(()=>setMessage('Image-editing instruction copied.')).catch(()=>setMessage('Could not copy the instruction.'))}>Copy editing instruction</button>
-                <p><small>Automated two-image generation is not enabled: Recraft Studio Auto has no verified equivalent in the existing API token workflow. No credits will be spent here.</small></p>
+                <div style={{marginTop:16,padding:16,border:'1px solid currentColor',borderRadius:12}}>
+                  <h4>Experimental Recraft API test</h4>
+                  <p>Upload ONE combined reference sheet: styled hero on the left, actual dish on the right. This uses Recraft API credits, not Studio credits. Results are experimental and may not match Studio Auto.</p>
+                  <label className={styles.uploadButton}>Choose combined reference
+                    <input type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose combined reference image" onChange={e=>{const f=e.currentTarget.files?.[0];e.currentTarget.value='';if(f){try{checkUpload(f,'image');setCombinedReference(f);setRecraftPreview('');}catch(err){setMessage((err as Error).message);}}}}/>
+                  </label>
+                  {combinedReference&&<p><small>Selected: {combinedReference.name}</small></p>}
+                  <p><small>One request per click after confirmation. API billing applies; the precise cost is not known in advance. No automatic retries, publishing, or replacement.</small></p>
+                  <button type="button" className={styles.uploadButton} disabled={!combinedReference||recraftWorking||busy} onClick={()=>void testRecraft()}>{recraftWorking?'Generating…':'Test Recraft API (paid)'}</button>
+                  {recraftPreview&&<div><p><strong>Generated preview — original unchanged</strong></p><img src={recraftPreview} alt="Experimental Recraft API result" style={{width:'100%',maxWidth:520,height:'auto',borderRadius:12}}/><p><a href={recraftPreview} target="_blank" rel="noopener noreferrer">Open generated image</a> · Download it and use Change photo above only if you approve it.</p></div>}
+                </div>
+                <p><small>Studio Auto's two-image editing is not available through this standard API endpoint. This test uses one combined reference image.</small></p>
                 <a href="https://www.recraft.ai/" target="_blank" rel="noopener noreferrer">Open Recraft Studio ↗</a>
                 <p><small>When you have the result, use Change photo above. The publisher saves it privately as a draft for your approval.</small></p>
               </div>
