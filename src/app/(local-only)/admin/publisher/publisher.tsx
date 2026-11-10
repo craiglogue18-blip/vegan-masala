@@ -11,6 +11,10 @@ import type { Content, Revision } from '@/lib/publisher/content';
 export default function Publisher() {
   const [activeTab,setActiveTab]=useState<'details'|'media'|'ingredients'|'instructions'>('details');
   const uploadController=useRef<AbortController|null>(null);
+  const [dishReference,setDishReference]=useState<File|null>(null);
+  const [dishPreview,setDishPreview]=useState('');
+  const photoPrompt='Use the existing website hero photograph as the setting. Replace only the food with the actual finished dish shown in the second reference photograph. Preserve the cookware, camera angle, background and lighting. Keep the dish faithful to the real cooked food; do not invent ingredients.';
+  useEffect(()=>{if(!dishReference){setDishPreview('');return;}const url=URL.createObjectURL(dishReference);setDishPreview(url);return()=>URL.revokeObjectURL(url);},[dishReference]);
   const [transfer,setTransfer]=useState<{name:string;size:number;loaded:number;percentage:number;phase:string}|null>(null);
   const [recipes,setRecipes]=useState<{slug:string;title:string}[]>([]);
   const [slug,setSlug]=useState('');
@@ -47,7 +51,7 @@ export default function Publisher() {
   async function select(value:string) {
     if(dirty && !confirm('Discard unsaved changes?')) return;
     if(!value){setContent(undefined);setSlug('');setDirty(false);try{sessionStorage.removeItem(RECOVERY_KEY);}catch{}return;}
-    setBusy(true);setContent(undefined);setSlug(value);setMessage('');setPreview(false);setTransfer(null);setPublication(null);
+    setDishReference(null);setBusy(true);setContent(undefined);setSlug(value);setMessage('');setPreview(false);setTransfer(null);setPublication(null);
     try {const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(value)}`);setContent(d.draft?.content || d.published?.content || d.initial);setRevision(d.draft?.revision || '');setDirty(false);if(d.published?.revision&&d.published.revision===d.draft?.revision)setPublication({state:'pending',message:'Published update found. Checking the live website automatically…'});}catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
   }
   function change(next:Content) {setContent(next);setDirty(true);setPreview(false);setPublication(null);}
@@ -130,6 +134,22 @@ export default function Publisher() {
             <div className={styles.mediaGrid}>
               <div className={styles.mediaCard}><div className={styles.mediaVisual}>{content.image?<Image src={content.image} alt={`${title} current hero`} width={720} height={480} unoptimized/>:<div className={styles.mediaPlaceholder}><ImagePlus size={36}/><span>Your dish takes centre stage</span></div>}<span className={styles.mediaTag}><ImagePlus size={12}/> HERO IMAGE</span></div><div className={styles.mediaDetails}><h4>The cover photo</h4><p>The main image on your recipe page.</p><label className={styles.uploadButton}><ImagePlus size={16}/>{content.image?'Change photo':'Add a photo'}<input type="file" accept="image/jpeg,image/png,image/webp" aria-label="Upload hero image" onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void media(file,'image');}}/></label><small>JPG, PNG or WebP · up to 10 MB</small></div></div>
               <div className={styles.mediaCard}><div className={styles.mediaVisual}>{content.video?<OpeningFrameVideo src={content.video} label="Current recipe video"/>:<div className={styles.mediaPlaceholder}><Film size={36}/><span>A front-row seat in your kitchen</span><small>No video added yet</small></div>}<span className={styles.mediaTag}><Film size={12}/> COOKING VIDEO</span></div><div className={styles.mediaDetails}><div className={styles.mediaTitle}><h4>{content.video?'The cooking video':'Bring the recipe to life'}</h4>{content.video&&<button className={styles.iconButton} aria-label="Remove recipe video" onClick={()=>change({...content,video:''})}><Trash2 size={15}/></button>}</div><p>{content.video?'Your full cooking video, ready to watch.':'Add your finished video to this recipe page.'}</p><label className={styles.uploadButton}><CloudUpload size={16}/>{content.video?'Replace video':'Upload video'}<input type="file" accept="video/mp4,.mp4" aria-label="Upload finished cooking video" onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void media(file,'video');}}/></label><small>Finished MP4 · up to {VIDEO_LIMIT_LABEL}</small></div></div>
+            </div>
+            <div className={styles.mediaCard} style={{marginTop:20,padding:20}}>
+              <div className={styles.mediaDetails}>
+                <h4>AI hero photo · reference workspace</h4>
+                <p>Keep your existing website setting, but show the dish you actually cooked. Your original hero remains unchanged until you approve and upload a replacement.</p>
+                <label className={styles.uploadButton}><ImagePlus size={16}/>Choose actual finished dish
+                  <input type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose actual finished dish reference" onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file){try{checkUpload(file,'image');setDishReference(file);}catch(err){setMessage((err as Error).message);}}}}/>
+                </label>
+                {dishPreview&&<img src={dishPreview} alt="Your actual finished dish reference" style={{width:'100%',maxWidth:360,height:'auto',borderRadius:12,marginTop:12}}/>}
+                <p><strong>Editing instruction</strong></p>
+                <p>{photoPrompt}</p>
+                <button type="button" className={styles.uploadButton} onClick={()=>navigator.clipboard.writeText(photoPrompt).then(()=>setMessage('Image-editing instruction copied.')).catch(()=>setMessage('Could not copy the instruction.'))}>Copy editing instruction</button>
+                <p><small>Automated two-image generation is not enabled: Recraft Studio Auto has no verified equivalent in the existing API token workflow. No credits will be spent here.</small></p>
+                <a href="https://www.recraft.ai/" target="_blank" rel="noopener noreferrer">Open Recraft Studio ↗</a>
+                <p><small>When you have the result, use Change photo above. The publisher saves it privately as a draft for your approval.</small></p>
+              </div>
             </div><div className={styles.tip}><Leaf size={18}/><p>Already happy with the recipe? You can add just a video and leave everything else as it is.</p></div>
           </>:<>
             <div className={styles.sectionIntro}><div><h3>{activeTab==='ingredients'?'Every ingredient, just right':'A method that’s easy to follow'}</h3><p>{activeTab==='ingredients'?'Include the quantity, ingredient and any preparation notes.':'Keep each cooking step clear and in the order your readers need.'}</p></div><span className={styles.count}>{content[activeTab].length} {activeTab==='ingredients'?'ingredients':'steps'}</span></div>
