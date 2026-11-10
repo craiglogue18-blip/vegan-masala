@@ -1,13 +1,15 @@
 import { kv } from '@vercel/kv';
 import { getRecipeBySlug } from '@/lib/recipes';
 import { getRecipeDepth } from '@/lib/recipeDepth';
-export type Content = { ingredients: string[]; instructions: string[]; image: string; video: string };
+export type Content = { title: string; ingredients: string[]; instructions: string[]; image: string; video: string };
 export type Revision = { revision: string; content: Content; updatedAt: string };
 export function configured() { return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN); }
 export function key(slug: string, stage: string) { return `publisher:v1:${slug}:${stage}`; }
 export function validate(value: unknown, original?: Content): Content {
   const v = value as Content;
   if (!v || typeof v !== 'object') throw new Error('Recipe content required');
+  const title = v.title === undefined && original ? original.title : v.title;
+  if (typeof title !== 'string' || !title.trim() || title.trim().length > 180 || /[\x00-\x1f\x7f]/.test(title)) throw new Error('Enter a recipe title (maximum 180 characters)');
   for (const field of ['ingredients', 'instructions'] as const) {
     if (!Array.isArray(v[field]) || !v[field].length || v[field].length > 150 || v[field].some(x => typeof x !== 'string' || !x.trim() || x.length > 4000)) throw new Error(`Check ${field}`);
   }
@@ -20,17 +22,17 @@ export function validate(value: unknown, original?: Content): Content {
       if (url.protocol !== 'https:' || url.username || url.password || url.origin !== process.env.PUBLISHER_MEDIA_ORIGIN) throw new Error('Media must use the configured Blob store');
     }
   }
-  return { ingredients: v.ingredients.map(x=>x.trim()), instructions: v.instructions.map(x=>x.trim()), image: v.image, video: v.video };
+  return { title: title.trim(), ingredients: v.ingredients.map(x=>x.trim()), instructions: v.instructions.map(x=>x.trim()), image: v.image, video: v.video };
 }
 export async function publishedRecipe(slug: string) {
   const base = getRecipeBySlug(slug);
   if (!base || !configured()) return base;
   // Storage errors deliberately surface: never silently serve old content as current.
   const published = await kv.get<Revision>(key(slug, 'published'));
-  return published ? { ...base, ...published.content, publisherRevision: published.revision, updatedAt: published.updatedAt } : base;
+  return published ? { ...base, ...published.content, title: published.content.title || base.title, publisherRevision: published.revision, updatedAt: published.updatedAt } : base;
 }
 export function initialContent(slug: string): Content {
   const r = getRecipeBySlug(slug);
   if (!r) throw new Error('Recipe not found');
-  return { ingredients: r.ingredients || (r.ingredientsMarkdown || '').split('\n').filter(s=>/^\s*[-*+] /.test(s)).map(s=>s.replace(/^\s*[-*+] /,'').trim()), instructions: getRecipeDepth(slug)?.instructions || r.instructions || (r.methodMarkdown || '').split('\n').filter(s=>/^\s*\d+[.)] /.test(s)).map(s=>s.replace(/^\s*\d+[.)] /,'').trim()), image: r.image || '', video: r.video || '' };
+  return { title: r.title, ingredients: r.ingredients || (r.ingredientsMarkdown || '').split('\n').filter(s=>/^\s*[-*+] /.test(s)).map(s=>s.replace(/^\s*[-*+] /,'').trim()), instructions: getRecipeDepth(slug)?.instructions || r.instructions || (r.methodMarkdown || '').split('\n').filter(s=>/^\s*\d+[.)] /.test(s)).map(s=>s.replace(/^\s*\d+[.)] /,'').trim()), image: r.image || '', video: r.video || '' };
 }

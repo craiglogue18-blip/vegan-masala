@@ -9,7 +9,7 @@ import styles from './publisher.module.css';
 import { upload } from '@vercel/blob/client';
 import type { Content, Revision } from '@/lib/publisher/content';
 export default function Publisher() {
-  const [activeTab,setActiveTab]=useState<'media'|'ingredients'|'instructions'>('media');
+  const [activeTab,setActiveTab]=useState<'details'|'media'|'ingredients'|'instructions'>('details');
   const uploadController=useRef<AbortController|null>(null);
   const [transfer,setTransfer]=useState<{name:string;size:number;loaded:number;percentage:number;phase:string}|null>(null);
   const [recipes,setRecipes]=useState<{slug:string;title:string}[]>([]);
@@ -36,7 +36,7 @@ export default function Publisher() {
         if(!saved || !list.recipes.some((r:{slug:string})=>r.slug===saved!.slug))return;
         setBusy(true);setSlug(saved.slug);
         const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(saved.slug)}`);if(cancelled)return;
-        if(saved.dirty){setContent(saved.content);setRevision(saved.revision);setDirty(true);setMessage((d.draft?.revision||'')!==saved.revision?'Your local edits were recovered, but the saved draft changed elsewhere. Reload the saved draft before combining changes.':'Your unsaved edits were recovered. Save the draft when ready.');}
+        if(saved.dirty){setContent({...saved.content,title:saved.content.title || d.initial.title});setRevision(saved.revision);setDirty(true);setMessage((d.draft?.revision||'')!==saved.revision?'Your local edits were recovered, but the saved draft changed elsewhere. Reload the saved draft before combining changes.':'Your unsaved edits were recovered. Save the draft when ready.');}
         else{setContent(d.draft?.content||d.published?.content||d.initial);setRevision(d.draft?.revision||'');setDirty(false);if(d.published?.revision&&d.published.revision===d.draft?.revision)setPublication({state:'pending',message:'Published update found. Checking the live website automatically…'});}
         if(saved.uploading)setMessage('The previous upload was interrupted. Your recipe draft is safe. Choose the video again to retry.');
       }catch(e){if(!cancelled)setMessage((e as Error).message);}finally{if(!cancelled)setBusy(false);}
@@ -55,6 +55,7 @@ export default function Publisher() {
     setBusy(true);setMessage('');
     if(action==='publish')setPublication({state:'publishing',message:'Saving this revision as the published update…'});
     try {const d=await api('/api/admin/publisher',{slug,action,content,revision});if(action==='draft'){setPublication(null);setRevision((d as Revision).revision);setDirty(false);setMessage('Draft saved. Preview before publishing.');}else {
+      setRecipes(prev=>prev.map(item=>item.slug===slug?{...item,title:content?.title || item.title}:item));
       setPublication({state:'checking',message:'Your publication is saved. Checking the live website…'});
       setMessage('Your publication is saved. Checking the live website…');
       try{const verified=await api('/api/admin/publisher/deploy',{action:'verify',slug,revision});setPublication({state:verified.verified?'live':'pending',message:verified.message,url:verified.url});setMessage(verified.message);}catch{const message='Your publication is saved, but the live website could not be verified. Check the production page before assuming it is live.';setPublication({state:'pending',message});setMessage(message);}
@@ -104,8 +105,8 @@ export default function Publisher() {
     };
     void check();const timer=setInterval(()=>void check(),10000);return()=>{cancelled=true;clearInterval(timer);};
   },[publication?.state,slug,revision]);
-  const title=recipes.find(r=>r.slug===slug)?.title || 'Your next recipe update';
-  const tabs=[{id:'media',label:'Photos & video',icon:Film,count:undefined},{id:'ingredients',label:'Ingredients',icon:Utensils,count:content?.ingredients.length},{id:'instructions',label:'Method',icon:ListChecks,count:content?.instructions.length}] as const;
+  const title=content?.title || recipes.find(r=>r.slug===slug)?.title || 'Your next recipe update';
+  const tabs=[{id:'details',label:'Recipe title',icon:Utensils,count:undefined},{id:'media',label:'Photos & video',icon:Film,count:undefined},{id:'ingredients',label:'Ingredients',icon:Utensils,count:content?.ingredients.length},{id:'instructions',label:'Method',icon:ListChecks,count:content?.instructions.length}] as const;
   return <section className={styles.publisher}>
     <header className={styles.header}>
       <div><p className={styles.eyebrow}><Leaf size={14}/> VEGAN MASALA · YOUR RECIPE DESK</p><h1>Recipe Publisher<span>.</span></h1><p className={styles.subtitle}>A little polish. A fresh video. Ready for your readers.</p></div>
@@ -124,7 +125,7 @@ export default function Publisher() {
         <div className={styles.recipeHeading}><div><p className={styles.eyebrow}>EDITING RECIPE</p><h2>{title}</h2></div><span className={`${styles.badge} ${dirty?styles.unsaved:''}`}>{dirty?'Unsaved changes':revision?'Saved draft':'Ready to edit'}</span></div>
         <nav className={styles.tabs} aria-label="Recipe editor sections">{tabs.map(t=><button key={t.id} disabled={busy} aria-current={!preview&&activeTab===t.id?'page':undefined} onClick={()=>{setActiveTab(t.id);setPreview(false);}}><t.icon size={16}/>{t.label}{t.count!==undefined&&<span>{t.count}</span>}</button>)}<button disabled={busy} aria-current={preview?'page':undefined} onClick={()=>setPreview(true)}><Eye size={16}/>Preview</button></nav>
         <fieldset disabled={busy} className={styles.editorBody}>
-          {preview?<article className={styles.preview}><div className={styles.sectionIntro}><div><p className={styles.eyebrow}>BEFORE YOU PUBLISH</p><h3>Your recipe, at a glance</h3><p>Review the content and media for your recipe page.</p></div><span className={styles.badge}>Draft preview</span></div>{content.image&&<Image src={content.image} alt={`${title} hero preview`} width={960} height={540} unoptimized className={styles.previewHero}/>}<h2>{title}</h2>{content.video&&<OpeningFrameVideo src={content.video} className={styles.video} label={`Draft cooking video for ${title}`}/>}<h3>Ingredients</h3><ul>{content.ingredients.map((s,i)=><li key={i}>{s}</li>)}</ul><h3>Method</h3><ol>{content.instructions.map((s,i)=><li key={i}><span>{String(i+1).padStart(2,'0')}</span><p>{s}</p></li>)}</ol></article>:activeTab==='media'?<>
+          {preview?<article className={styles.preview}><div className={styles.sectionIntro}><div><p className={styles.eyebrow}>BEFORE YOU PUBLISH</p><h3>Your recipe, at a glance</h3><p>Review the content and media for your recipe page.</p></div><span className={styles.badge}>Draft preview</span></div>{content.image&&<Image src={content.image} alt={`${title} hero preview`} width={960} height={540} unoptimized className={styles.previewHero}/>}<h2>{title}</h2>{content.video&&<OpeningFrameVideo src={content.video} className={styles.video} label={`Draft cooking video for ${title}`}/>}<h3>Ingredients</h3><ul>{content.ingredients.map((s,i)=><li key={i}>{s}</li>)}</ul><h3>Method</h3><ol>{content.instructions.map((s,i)=><li key={i}><span>{String(i+1).padStart(2,'0')}</span><p>{s}</p></li>)}</ol></article>:activeTab==='details'?<div className={styles.titleEditor}><div className={styles.sectionIntro}><div><h3>Give your recipe its name</h3><p>Update the title shown on the recipe page and in search previews. The recipe URL stays exactly the same.</p></div></div><label htmlFor="publisher-title">Recipe title</label><input id="publisher-title" type="text" maxLength={180} required value={content.title} onChange={e=>change({...content,title:e.target.value})} placeholder="Enter your recipe title"/><small>{content.title.trim().length}/180 characters · The existing recipe URL is preserved.</small></div>:activeTab==='media'?<>
             <div className={styles.sectionIntro}><div><h3>Make it look delicious</h3><p>Choose the first impression. Then show how it’s made.</p></div></div>
             <div className={styles.mediaGrid}>
               <div className={styles.mediaCard}><div className={styles.mediaVisual}>{content.image?<Image src={content.image} alt={`${title} current hero`} width={720} height={480} unoptimized/>:<div className={styles.mediaPlaceholder}><ImagePlus size={36}/><span>Your dish takes centre stage</span></div>}<span className={styles.mediaTag}><ImagePlus size={12}/> HERO IMAGE</span></div><div className={styles.mediaDetails}><h4>The cover photo</h4><p>The main image on your recipe page.</p><label className={styles.uploadButton}><ImagePlus size={16}/>{content.image?'Change photo':'Add a photo'}<input type="file" accept="image/jpeg,image/png,image/webp" aria-label="Upload hero image" onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file)void media(file,'image');}}/></label><small>JPG, PNG or WebP · up to 10 MB</small></div></div>

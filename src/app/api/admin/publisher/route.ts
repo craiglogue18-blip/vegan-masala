@@ -8,10 +8,16 @@ export async function GET(req: Request) {
   const denied = authorize(req); if (denied) return denied;
   if (!configured()) return Response.json({error:'Connect persistent KV storage first'}, {status:503});
   const slug = new URL(req.url).searchParams.get('slug');
-  if (!slug) return Response.json({recipes:getAllRecipeSlugs().map(slug=>({slug,title:getRecipeBySlug(slug)?.title}))}, {headers:{'Cache-Control':'no-store'}});
+  if (!slug) {
+    const slugs = getAllRecipeSlugs();
+    const published = await Promise.all(slugs.map(slug=>kv.get<Revision>(key(slug,'published'))));
+    return Response.json({recipes:slugs.map((slug,i)=>({slug,title:published[i]?.content.title || getRecipeBySlug(slug)?.title}))}, {headers:{'Cache-Control':'no-store'}});
+  }
   if (!getRecipeBySlug(slug)) return Response.json({error:'Unknown recipe'}, {status:404});
   const [draft,published] = await Promise.all([kv.get<Revision>(key(slug,'draft')),kv.get<Revision>(key(slug,'published'))]);
-  return Response.json({draft,published,initial:initialContent(slug)}, {headers:{'Cache-Control':'no-store'}});
+  const initial = initialContent(slug);
+  const withTitle = (item: Revision | null) => item ? { ...item, content: { ...item.content, title: item.content.title || initial.title } } : null;
+  return Response.json({draft:withTitle(draft),published:withTitle(published),initial}, {headers:{'Cache-Control':'no-store'}});
 }
 export async function POST(req: Request) {
   const denied = authorize(req,true); if (denied) return denied;
