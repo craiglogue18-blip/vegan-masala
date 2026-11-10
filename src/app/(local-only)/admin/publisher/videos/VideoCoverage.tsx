@@ -21,7 +21,7 @@ export default function VideoCoverage() {
     finally{setLoading(false);}
   }
   useEffect(()=>{void refresh();},[]);
-  const rows=useMemo(()=>report?.recipes.filter(r=>(filter==='all'||(filter==='with'===r.hasVideo))&&(`${r.title} ${r.slug}`).toLowerCase().includes(query.toLowerCase()))||[],[report,filter,query]);
+  const rows=useMemo(()=>report?.recipes.filter(r=>(filter==='all'||(filter==='with'&&r.hasVideo)||(filter==='without'&&!r.hasVideo))&&(`${r.title} ${r.slug}`).toLowerCase().includes(query.toLowerCase()))||[],[report,filter,query]);
   return <main className="mx-auto max-w-5xl px-5 py-10">
     <p className="text-sm text-[var(--text-soft)]">Vegan Masala · Admin Hub</p>
     <h1 className="mt-2 text-3xl font-bold">Recipe video coverage</h1>
