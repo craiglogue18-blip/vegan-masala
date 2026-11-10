@@ -24,7 +24,7 @@ test('content validation blocks untrusted media and executable schemes; preserve
  assert.equal(validate(content).title,'Delicious Dal');
  assert.throws(()=>validate({...content,title:'   '}),/title/);
  assert.throws(()=>validate({...content,title:'a'.repeat(181)}),/title/);
- assert.throws(()=>validate({...content,title:'Bad\nTitle'}),/title/);
+ assert.throws(()=>validate({...content,title:'Bad\\nTitle'}),/title/);
  assert.equal(validate(content).ingredients[0],'lentils');
  for(const image of ['javascript:alert(1)','https://evil.com/photo.jpg','/images/../../secret','https://user:password@store.public.blob.vercel-storage.com/x'])assert.throws(()=>validate({...content,image}));
  assert.throws(()=>validate({...content,ingredients:[]}));
