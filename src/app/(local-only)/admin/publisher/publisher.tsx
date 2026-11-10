@@ -13,6 +13,9 @@ export default function Publisher() {
   const uploadController=useRef<AbortController|null>(null);
   const [dishReference,setDishReference]=useState<File|null>(null);
   const [combinedReference,setCombinedReference]=useState<File|null>(null);
+  const [sheetPreview,setSheetPreview]=useState('');
+  const [sheetWorking,setSheetWorking]=useState(false);
+  useEffect(()=>{if(!combinedReference){setSheetPreview('');return;}const url=URL.createObjectURL(combinedReference);setSheetPreview(url);return()=>URL.revokeObjectURL(url);},[combinedReference]);
   const [recraftPreview,setRecraftPreview]=useState('');
   const [recraftWorking,setRecraftWorking]=useState(false);
   const [dishPreview,setDishPreview]=useState('');
@@ -54,7 +57,7 @@ export default function Publisher() {
   async function select(value:string) {
     if(dirty && !confirm('Discard unsaved changes?')) return;
     if(!value){setContent(undefined);setSlug('');setDirty(false);try{sessionStorage.removeItem(RECOVERY_KEY);}catch{}return;}
-    setDishReference(null);setBusy(true);setContent(undefined);setSlug(value);setMessage('');setPreview(false);setTransfer(null);setPublication(null);
+    setDishReference(null);setCombinedReference(null);setRecraftPreview('');setBusy(true);setContent(undefined);setSlug(value);setMessage('');setPreview(false);setTransfer(null);setPublication(null);
     try {const d=await api(`/api/admin/publisher?slug=${encodeURIComponent(value)}`);setContent(d.draft?.content || d.published?.content || d.initial);setRevision(d.draft?.revision || '');setDirty(false);if(d.published?.revision&&d.published.revision===d.draft?.revision)setPublication({state:'pending',message:'Published update found. Checking the live website automatically…'});}catch(e){setMessage((e as Error).message);}finally{setBusy(false);}
   }
   function change(next:Content) {setContent(next);setDirty(true);setPreview(false);setPublication(null);}
@@ -92,8 +95,32 @@ export default function Publisher() {
       setTransfer({name:file.name,size:file.size,loaded:file.size,percentage:100,phase:'done'});setMessage('Upload complete and draft saved. Preview it before publishing.');
     }catch(e){setTransfer(t=>t?{...t,phase:uploaded?'save-failed':controller.signal.aborted?'cancelled':'failed'}:null);setMessage(uploaded?`The file uploaded, but saving the draft failed: ${(e as Error).message} Use Save draft to retry without uploading again.`:controller.signal.aborted?'Upload cancelled. Your recipe draft is safe.':`${(e as Error).message} Your edits are kept. You can select the file again to retry.`);}finally{uploadController.current=null;setBusy(false);}
   }
+  async function prepareRecraftSheet() {
+    if (!content?.image || !dishReference || sheetWorking) return;
+    setSheetWorking(true);setCombinedReference(null);setRecraftPreview('');setMessage('Preparing a combined reference from the existing hero and your dish…');
+    const dishUrl=URL.createObjectURL(dishReference);
+    const load=(url:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{
+      const img=new window.Image();img.crossOrigin='anonymous';
+      img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Unable to read a reference image. If the hero is hosted elsewhere, its image server may block cross-origin access.'));img.src=url;
+    });
+    try {
+      const [hero,dish]=await Promise.all([load(new URL(content.image,window.location.href).href),load(dishUrl)]);
+      const canvas=document.createElement('canvas');canvas.width=2048;canvas.height=768;
+      const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Image canvas is unavailable.');
+      ctx.fillStyle='#ffffff';ctx.fillRect(0,0,2048,768);
+      const draw=(img:HTMLImageElement,x:number)=>{
+        const scale=Math.min(1024/img.naturalWidth,768/img.naturalHeight);
+        const w=img.naturalWidth*scale,h=img.naturalHeight*scale;
+        ctx.drawImage(img,x+(1024-w)/2,(768-h)/2,w,h);
+      };
+      draw(hero,0);draw(dish,1024);
+      const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Unable to export combined reference.')),'image/jpeg',0.9));
+      const file=new File([blob],`${slug || 'recipe'}-combined-reference.jpg`,{type:'image/jpeg'});
+      checkUpload(file,'image');setCombinedReference(file);setMessage('Combined reference prepared locally. Review it below before deciding whether to spend API credits.');
+    } catch(e){setMessage((e as Error).message);} finally{URL.revokeObjectURL(dishUrl);setSheetWorking(false);}
+  }
   async function testRecraft() {
-    if (!combinedReference || recraftWorking) return;
+    if (!combinedReference || recraftWorking || sheetWorking) return;
     if (!confirm('Send ONE paid image-to-image request using your Recraft API balance? The result may differ from Studio Auto. No automatic retries or hero-image changes will occur.')) return;
     setRecraftWorking(true);setRecraftPreview('');setMessage('Sending one paid Recraft API test. Please wait…');
     try {
@@ -155,7 +182,7 @@ export default function Publisher() {
                 <h4>AI hero photo · reference workspace</h4>
                 <p>Keep your existing website setting, but show the dish you actually cooked. Your original hero remains unchanged until you approve and upload a replacement.</p>
                 <label className={styles.uploadButton}><ImagePlus size={16}/>Choose actual finished dish
-                  <input type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose actual finished dish reference" onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file){try{checkUpload(file,'image');setDishReference(file);}catch(err){setMessage((err as Error).message);}}}}/>
+                  <input type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose actual finished dish reference" onChange={e=>{const file=e.currentTarget.files?.[0];e.currentTarget.value='';if(file){try{checkUpload(file,'image');setDishReference(file);setCombinedReference(null);setRecraftPreview('');}catch(err){setMessage((err as Error).message);}}}}/>
                 </label>
                 {dishPreview&&<img src={dishPreview} alt="Your actual finished dish reference" style={{width:'100%',maxWidth:360,height:'auto',borderRadius:12,marginTop:12}}/>}
                 <p><strong>Editing instruction</strong></p>
@@ -163,11 +190,11 @@ export default function Publisher() {
                 <button type="button" className={styles.uploadButton} onClick={()=>navigator.clipboard.writeText(photoPrompt).then(()=>setMessage('Image-editing instruction copied.')).catch(()=>setMessage('Could not copy the instruction.'))}>Copy editing instruction</button>
                 <div style={{marginTop:16,padding:16,border:'1px solid currentColor',borderRadius:12}}>
                   <h4>Experimental Recraft API test</h4>
-                  <p>Upload ONE combined reference sheet: styled hero on the left, actual dish on the right. This uses Recraft API credits, not Studio credits. Results are experimental and may not match Studio Auto.</p>
-                  <label className={styles.uploadButton}>Choose combined reference
-                    <input type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose combined reference image" onChange={e=>{const f=e.currentTarget.files?.[0];e.currentTarget.value='';if(f){try{checkUpload(f,'image');setCombinedReference(f);setRecraftPreview('');}catch(err){setMessage((err as Error).message);}}}}/>
-                  </label>
-                  {combinedReference&&<p><small>Selected: {combinedReference.name}</small></p>}
+                  <p>The current hero photograph and your uploaded actual dish are automatically combined into one reference sheet. Review it before sending a paid API request.</p>
+                  <button type="button" className={styles.uploadButton} disabled={!content.image||!dishReference||sheetWorking||recraftWorking||busy} onClick={()=>void prepareRecraftSheet()}>{sheetWorking?'Preparing…':'Prepare reference automatically (free)'}</button>
+                  {!content.image&&<p><small>Add a hero photograph above first.</small></p>}
+                  {!dishReference&&<p><small>Choose your actual finished dish above first.</small></p>}
+                  {sheetPreview&&<div><p><strong>Combined reference preview — no API credits used</strong></p><img src={sheetPreview} alt="Combined reference: existing hero on the left and actual dish on the right" style={{width:'100%',maxWidth:680,height:'auto',borderRadius:12}}/><p><small>Left: current hero · Right: actual dish</small></p></div>}
                   <p><small>One request per click after confirmation. API billing applies; the precise cost is not known in advance. No automatic retries, publishing, or replacement.</small></p>
                   <button type="button" className={styles.uploadButton} disabled={!combinedReference||recraftWorking||busy} onClick={()=>void testRecraft()}>{recraftWorking?'Generating…':'Test Recraft API (paid)'}</button>
                   {recraftPreview&&<div><p><strong>Generated preview — original unchanged</strong></p><img src={recraftPreview} alt="Experimental Recraft API result" style={{width:'100%',maxWidth:520,height:'auto',borderRadius:12}}/><p><a href={recraftPreview} target="_blank" rel="noopener noreferrer">Open generated image</a> · Download it and use Change photo above only if you approve it.</p></div>}
