@@ -20,7 +20,11 @@ test('authentication fails closed locally and in production; rejects cross-origi
 });
 test('content validation blocks untrusted media and executable schemes; preserves original media',()=>{
  process.env.PUBLISHER_MEDIA_ORIGIN='https://store.public.blob.vercel-storage.com';
- const content={ingredients:['  lentils  '],instructions:['Cook until tender'],image:'/images/recipes/dal.webp',video:''};
+ const content={title:'  Delicious Dal  ',ingredients:['  lentils  '],instructions:['Cook until tender'],image:'/images/recipes/dal.webp',video:''};
+ assert.equal(validate(content).title,'Delicious Dal');
+ assert.throws(()=>validate({...content,title:'   '}),/title/);
+ assert.throws(()=>validate({...content,title:'a'.repeat(181)}),/title/);
+ assert.throws(()=>validate({...content,title:'Bad\nTitle'}),/title/);
  assert.equal(validate(content).ingredients[0],'lentils');
  for(const image of ['javascript:alert(1)','https://evil.com/photo.jpg','/images/../../secret','https://user:password@store.public.blob.vercel-storage.com/x'])assert.throws(()=>validate({...content,image}));
  assert.throws(()=>validate({...content,ingredients:[]}));
@@ -36,7 +40,7 @@ test('draft stays separate; stale saves and stale publish requests conflict',asy
    if(keys.length===1){if((old?.revision||'')!==args[0])return 0;records.set(keys[0],JSON.parse(args[1]));return 1;}
    if(!old||old.revision!==args[0])return 0;records.set(keys[1],old);return 1;
  }};
- const base={ingredients:['Lentils'],instructions:['Cook'],image:'',video:''};
+ const base={title:'Dal Curry',ingredients:['Lentils'],instructions:['Cook'],image:'',video:''};
  const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/recipeDepth':{getRecipeDepth:()=>null}});
  process.env.KV_REST_API_URL='https://test';process.env.KV_REST_API_TOKEN='test';
  const routes=load('src/app/api/admin/publisher/route.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/publisher/auth':{authorize:()=>null},'@/lib/publisher/content':content});
@@ -47,6 +51,7 @@ test('draft stays separate; stale saves and stale publish requests conflict',asy
  assert.equal((await post({slug:'dal',action:'publish',revision:'outdated'})).status,409);
  assert.equal((await post({slug:'dal',action:'publish',revision:saved.revision})).status,200);
  assert.equal(records.get(content.key('dal','published')).revision,saved.revision);
+ assert.equal(records.get(content.key('dal','published')).content.title,'Dal Curry');
  assert.equal((await post({slug:'missing',action:'publish',revision:saved.revision})).status,404);
  delete process.env.KV_REST_API_URL;delete process.env.KV_REST_API_TOKEN;
 });
@@ -75,7 +80,7 @@ test('large MP4 exports are accepted up to 10 GB; oversize or invalid files fail
  assert.throws(()=>uploads.checkUpload({name:'hero.png',type:'image/png',size:uploads.IMAGE_MAX_BYTES+1},'image'),/10 MB/);
 });
 test('recovery preserves selected recipe, unsaved edits and interrupted-upload state without accepting corrupt storage',()=>{
- const state={slug:'vegan-roti-chapati',revision:'saved',dirty:true,uploading:true,content:{ingredients:['1.5 cups water'],instructions:['Add water'],image:'',video:''}};
+ const state={slug:'vegan-roti-chapati',revision:'saved',dirty:true,uploading:true,content:{title:'Vegan Roti',ingredients:['1.5 cups water'],instructions:['Add water'],image:'',video:''}};
  assert.equal(recovery.readRecovery(JSON.stringify(state)).content.ingredients[0],'1.5 cups water');
  assert.equal(recovery.readRecovery(JSON.stringify(state)).uploading,true);
  for(const raw of [null,'{broken','{}',JSON.stringify({...state,slug:'../invalid'}),JSON.stringify({...state,content:{}})])assert.equal(recovery.readRecovery(raw),null);
