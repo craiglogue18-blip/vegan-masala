@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getPublicRecipes } from "@/lib/recipes";
+import { publishedRecipe } from "@/lib/publisher/content";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import { RECIPE_COLLECTIONS } from "@/lib/seo/collections";
 import RecipesClient from "./RecipesClient";
@@ -248,12 +249,16 @@ function matchesCollection(r: any, collection: string) {
   }
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function RecipesPage({
   searchParams,
 }: {
   searchParams?: Promise<{ tag?: string | string[]; collection?: string | string[] }>;
 }) {
-  const recipes = getPublicRecipes();
+  // The catalogue must use the same published overrides as each recipe detail page.
+  // Keep the public/indexability filter from the source catalogue.
+  const recipes = (await Promise.all(getPublicRecipes().map(recipe => publishedRecipe(recipe.slug)))).filter((recipe): recipe is NonNullable<typeof recipe> => recipe !== null);
 
   const sp = (await searchParams) ?? {};
   const tagRaw = Array.isArray(sp.tag) ? sp.tag[0] : sp.tag;
