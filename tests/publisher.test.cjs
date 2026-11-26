@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 function load(file,stubs={},globals={}) {
  const source=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
- const exports={};vm.runInNewContext(source,{exports,require:n=>stubs[n]||require(n),process,Response,Buffer,URL,AbortSignal,...globals});return exports;
+ const exports={};vm.runInNewContext(source,{exports,require:n=>stubs[n]||require(n),process,Response,Buffer,URL,AbortSignal,setTimeout,clearTimeout,...globals});return exports;
 }
 const {authorize}=load('src/lib/publisher/auth.ts');
 const {validate}=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv:{}},'@/lib/recipes':{},'@/lib/recipeDepth':{}});
@@ -24,7 +24,7 @@ test('content validation blocks untrusted media and executable schemes; preserve
  assert.equal(validate(content).title,'Delicious Dal');
  assert.throws(()=>validate({...content,title:'   '}),/title/);
  assert.throws(()=>validate({...content,title:'a'.repeat(181)}),/title/);
- assert.throws(()=>validate({...content,title:'Bad\\nTitle'}),/title/);
+ assert.throws(()=>validate({...content,title:'Bad\nTitle'}),/title/);
  assert.equal(validate(content).ingredients[0],'lentils');
  for(const image of ['javascript:alert(1)','https://evil.com/photo.jpg','/images/../../secret','https://user:password@store.public.blob.vercel-storage.com/x'])assert.throws(()=>validate({...content,image}));
  assert.throws(()=>validate({...content,ingredients:[]}));
@@ -111,4 +111,30 @@ test('published recipe dates accept both file dates and full revision timestamps
  assert.equal(dates.formatRecipeUpdateDate('2026-10-27T10:26:57.749Z'),'27 October 2026');
  assert.equal(dates.formatRecipeUpdateDate('2026-10-27T23:30:00-02:00'),'28 October 2026');
  for(const value of [undefined,null,'','not-a-date'])assert.equal(dates.formatRecipeUpdateDate(value),null);
+});
+
+test('public reads preserve published overrides and fall back without writing or claiming a revision',async()=>{
+ const base={slug:'dal',title:'Dal',ingredients:['Lentils'],instructions:['Cook'],image:'',video:''};
+ let value=null,fail=false,reads=0;
+ const kv={get:async()=>{reads++;if(fail)throw Error('provider unavailable');return value;}};
+ const messages=[];
+ const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/recipeDepth':{}},{console:{error:(...args)=>messages.push(args)}});
+ process.env.KV_REST_API_URL='https://test';process.env.KV_REST_API_TOKEN='test';
+ try {
+  assert.equal(await content.publishedRecipe('missing'),null);assert.equal(reads,0);
+  assert.equal(await content.publishedRecipe('dal'),base);
+  value={revision:'published-1',updatedAt:'2026-11-26T10:00:00Z',content:{...base,title:'New Dal',image:'https://legacy.example/hero.webp'}};
+  const published=await content.publishedRecipe('dal');assert.equal(published.title,'New Dal');assert.equal(published.publisherRevision,'published-1');
+  fail=true;assert.equal(await content.publishedRecipe('dal'),base);fail=false;
+  for(const invalid of [{revision:'bad'}, {...value,content:{...base,ingredients:[{}]}}, {...value,content:null}]){
+   value=invalid;const result=await content.publishedRecipe('dal');assert.equal(result,base);assert.equal(result.publisherRevision,undefined);
+  }
+  assert.equal(messages.length,4);
+ } finally {delete process.env.KV_REST_API_URL;delete process.env.KV_REST_API_TOKEN;}
+});
+test('public reads stop waiting when storage hangs',async()=>{
+ const base={title:'Dal'};
+ const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv:{get:()=>new Promise(()=>{})}},'@/lib/recipes':{getRecipeBySlug:()=>base},'@/lib/recipeDepth':{}},{console:{error:()=>{}}});
+ process.env.KV_REST_API_URL='https://test';process.env.KV_REST_API_TOKEN='test';
+ try {assert.equal(await content.publishedRecipe('dal'),base);} finally {delete process.env.KV_REST_API_URL;delete process.env.KV_REST_API_TOKEN;}
 });

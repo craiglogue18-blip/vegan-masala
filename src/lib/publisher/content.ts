@@ -27,9 +27,29 @@ export function validate(value: unknown, original?: Content): Content {
 export async function publishedRecipe(slug: string) {
   const base = getRecipeBySlug(slug);
   if (!base || !configured()) return base;
-  // Storage errors deliberately surface: never silently serve old content as current.
-  const published = await kv.get<Revision>(key(slug, 'published'));
-  return published ? { ...base, ...published.content, title: published.content.title || base.title, publisherRevision: published.revision, updatedAt: published.updatedAt } : base;
+  // Public pages remain available during storage failures. Never claim that the
+  // source-file fallback is a successfully published revision.
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const published = await Promise.race([
+      kv.get<Revision>(key(slug, 'published')),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('Published recipe read timed out')), 2000);
+      }),
+    ]);
+    if (!published) return base;
+    if (!published.content || typeof published.revision !== 'string' || !published.revision ||
+        typeof published.updatedAt !== 'string') throw new Error('Invalid published recipe revision');
+    // Validate shape without rejecting legacy media already present in storage.
+    const content = validate(published.content, { ...published.content, title: base.title });
+    return { ...base, ...content, publisherRevision: published.revision, updatedAt: published.updatedAt };
+  } catch {
+    // Do not log tokens, provider URLs, or stored recipe contents.
+    console.error('[publisher] Published recipe unavailable; serving source recipe', { slug });
+    return base;
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
 }
 export function initialContent(slug: string): Content {
   const r = getRecipeBySlug(slug);
