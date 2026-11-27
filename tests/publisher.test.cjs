@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 function load(file,stubs={},globals={}) {
  const source=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
- const exports={};vm.runInNewContext(source,{exports,require:n=>stubs[n]||require(n),process,Response,Buffer,URL,AbortSignal,setTimeout,clearTimeout,...globals});return exports;
+ const exports={};vm.runInNewContext(source,{exports,require:n=>stubs[n]||({'next/cache':{unstable_cache:fn=>fn,revalidateTag:()=>{}},react:{cache:fn=>fn}}[n])||require(n),process,Response,Buffer,URL,AbortSignal,setTimeout,clearTimeout,...globals});return exports;
 }
 const {authorize}=load('src/lib/publisher/auth.ts');
 const {validate}=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv:{}},'@/lib/recipes':{},'@/lib/recipeDepth':{}});
@@ -41,9 +41,9 @@ test('draft stays separate; stale saves and stale publish requests conflict',asy
    if(!old||old.revision!==args[0])return 0;records.set(keys[1],old);return 1;
  }};
  const base={title:'Dal Curry',ingredients:['Lentils'],instructions:['Cook'],image:'',video:''};
- const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/recipeDepth':{getRecipeDepth:()=>null}});
+ const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getAllRecipeSlugs:()=>['dal'],getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/recipeDepth':{getRecipeDepth:()=>null}});
  process.env.KV_REST_API_URL='https://test';process.env.KV_REST_API_TOKEN='test';
- const routes=load('src/app/api/admin/publisher/route.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/publisher/auth':{authorize:()=>null},'@/lib/publisher/content':content});
+ const routes=load('src/app/api/admin/publisher/route.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getAllRecipeSlugs:()=>['dal'],getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/publisher/auth':{authorize:()=>null},'@/lib/publisher/content':content});
  const post=body=>routes.POST(new Request('https://test/api/admin/publisher',{method:'POST',body:JSON.stringify(body)}));
  const first=await post({slug:'dal',action:'draft',content:base,revision:''});assert.equal(first.status,200);const saved=await first.json();
  assert.equal(records.has(content.key('dal','published')),false);
@@ -116,15 +116,16 @@ test('published recipe dates accept both file dates and full revision timestamps
 test('public reads preserve published overrides and fall back without writing or claiming a revision',async()=>{
  const base={slug:'dal',title:'Dal',ingredients:['Lentils'],instructions:['Cook'],image:'',video:''};
  let value=null,fail=false,reads=0;
- const kv={get:async()=>{reads++;if(fail)throw Error('provider unavailable');return value;}};
+ const kv={mget:async()=>{reads++;if(fail)throw Error('provider unavailable');return [value];}};
  const messages=[];
- const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/recipeDepth':{}},{console:{error:(...args)=>messages.push(args)}});
+ const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv},'@/lib/recipes':{getAllRecipeSlugs:()=>['dal'],getRecipeBySlug:s=>s==='dal'?base:null},'@/lib/recipeDepth':{}},{console:{error:(...args)=>messages.push(args)}});
  process.env.KV_REST_API_URL='https://test';process.env.KV_REST_API_TOKEN='test';
  try {
   assert.equal(await content.publishedRecipe('missing'),null);assert.equal(reads,0);
   assert.equal(await content.publishedRecipe('dal'),base);
   value={revision:'published-1',updatedAt:'2026-11-26T10:00:00Z',content:{...base,title:'New Dal',image:'https://legacy.example/hero.webp'}};
   const published=await content.publishedRecipe('dal');assert.equal(published.title,'New Dal');assert.equal(published.publisherRevision,'published-1');
+  delete value.content.title;assert.equal((await content.publishedRecipe('dal')).title,'Dal');
   fail=true;assert.equal(await content.publishedRecipe('dal'),base);fail=false;
   for(const invalid of [{revision:'bad'}, {...value,content:{...base,ingredients:[{}]}}, {...value,content:null}]){
    value=invalid;const result=await content.publishedRecipe('dal');assert.equal(result,base);assert.equal(result.publisherRevision,undefined);
@@ -134,7 +135,32 @@ test('public reads preserve published overrides and fall back without writing or
 });
 test('public reads stop waiting when storage hangs',async()=>{
  const base={title:'Dal'};
- const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv:{get:()=>new Promise(()=>{})}},'@/lib/recipes':{getRecipeBySlug:()=>base},'@/lib/recipeDepth':{}},{console:{error:()=>{}}});
+ const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv:{mget:()=>new Promise(()=>{})}},'@/lib/recipes':{getAllRecipeSlugs:()=>['dal'],getRecipeBySlug:()=>base},'@/lib/recipeDepth':{}},{console:{error:()=>{}}});
  process.env.KV_REST_API_URL='https://test';process.env.KV_REST_API_TOKEN='test';
  try {assert.equal(await content.publishedRecipe('dal'),base);} finally {delete process.env.KV_REST_API_URL;delete process.env.KV_REST_API_TOKEN;}
+});
+
+test('catalogue uses one batch, preserves filtering/order, and isolates malformed records',async()=>{
+ const bases=['b','a','c'].map(slug=>({slug,title:slug,ingredients:['base'],instructions:['base'],image:'',video:''}));
+ const valid={revision:'new',updatedAt:'2026-11-27T10:00:00Z',content:{title:'Published',ingredients:['new'],instructions:['new'],image:'/images/new.webp',video:''}};
+ let keys,reads=0,fail=false;
+ const content=load('src/lib/publisher/content.ts',{'@vercel/kv':{kv:{mget:async(...args)=>{reads++;keys=args;if(fail)throw Error('offline');return [valid,{content:null},null,null];}}},'@/lib/recipes':{getAllRecipeSlugs:()=>['c','b','a','private']},'@/lib/recipeDepth':{}},{console:{error:()=>{}}});
+ process.env.KV_REST_API_URL='https://test';process.env.KV_REST_API_TOKEN='test';
+ try {
+  const result=await content.publishedRecipes(bases);
+  assert.equal(reads,1);assert.equal(keys.join(','),'publisher:v1:a:published,publisher:v1:b:published,publisher:v1:c:published,publisher:v1:private:published');
+  assert.equal(result.map(r=>r.slug).join(','),'b,a,c');assert.equal(result[1].image,'/images/new.webp');assert.equal(result[0],bases[0]);assert.equal(result[2],bases[2]);
+  fail=true;assert.equal(await content.publishedRecipes(bases),bases);
+  delete process.env.KV_REST_API_TOKEN;assert.equal(await content.publishedRecipes(bases),bases);assert.equal(reads,2);
+ } finally {delete process.env.KV_REST_API_URL;delete process.env.KV_REST_API_TOKEN;}
+});
+test('successful publish requests stale-while-revalidate; conflicts and drafts never invalidate',async()=>{
+ let ok=1,invalidations=[],cacheFails=false;
+ const base={title:'Dal',ingredients:['Lentils'],instructions:['Cook'],image:'',video:''};
+ const routes=load('src/app/api/admin/publisher/route.ts',{'@vercel/kv':{kv:{eval:async()=>ok}},'next/cache':{revalidateTag:(...args)=>{invalidations.push(args);if(cacheFails)throw Error('cache unavailable');}},'@/lib/recipes':{getRecipeBySlug:()=>base},'@/lib/publisher/auth':{authorize:()=>null},'@/lib/publisher/content':{configured:()=>true,key:()=>'',validate:()=>base,initialContent:()=>base,PUBLISHED_RECIPES_TAG:'public-test'}},{console:{error:()=>{}}});
+ const post=action=>routes.POST(new Request('https://test/api/admin/publisher',{method:'POST',body:JSON.stringify({slug:'dal',action,content:base,revision:'r'})}));
+ assert.equal((await post('draft')).status,200);assert.equal(invalidations.length,0);
+ ok=0;assert.equal((await post('publish')).status,409);assert.equal(invalidations.length,0);
+ ok=1;assert.equal((await post('publish')).status,200);assert.equal(JSON.stringify(invalidations),JSON.stringify([['public-test','max']]));
+ cacheFails=true;assert.equal((await post('publish')).status,200);
 });

@@ -1,8 +1,9 @@
 import { kv } from '@vercel/kv';
+import { revalidateTag } from 'next/cache';
 import { randomUUID } from 'node:crypto';
 import { getAllRecipeSlugs, getRecipeBySlug } from '@/lib/recipes';
 import { authorize } from '@/lib/publisher/auth';
-import { configured, initialContent, key, validate, type Revision } from '@/lib/publisher/content';
+import { configured, initialContent, key, validate, PUBLISHED_RECIPES_TAG, type Revision } from '@/lib/publisher/content';
 export const dynamic = 'force-dynamic';
 export async function GET(req: Request) {
   const denied = authorize(req); if (denied) return denied;
@@ -35,6 +36,15 @@ export async function POST(req: Request) {
     }
     if (action === 'publish') {
       const ok = await kv.eval(`local d=redis.call('GET',KEYS[1]); if not d or cjson.decode(d).revision~=ARGV[1] then return 0 end; redis.call('SET',KEYS[2],d); return 1`,[key(slug,'draft'),key(slug,'published')],[revision || '']);
+      if (ok) {
+        try {
+          // Keep the last good snapshot available while the next visit refreshes it.
+          revalidateTag(PUBLISHED_RECIPES_TAG, 'max');
+        } catch {
+          // The publish is already committed. Time-based refresh remains active.
+          console.error('[publisher] Public cache refresh could not be requested');
+        }
+      }
       return ok ? Response.json({ok:true,url:`/recipes/${slug}`}) : Response.json({error:'Save and reload the latest draft before publishing'},{status:409});
     }
     return Response.json({error:'Unknown action'}, {status:400});
