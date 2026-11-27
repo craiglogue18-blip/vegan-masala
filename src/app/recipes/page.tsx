@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getPublicRecipes } from "@/lib/recipes";
+import { publishedRecipes } from "@/lib/publisher/content";
 import { getRecipeImage, isPlaceholderImage } from "@/lib/recipeimages";
 import { RECIPE_COLLECTIONS } from "@/lib/seo/collections";
 import RecipesClient from "./RecipesClient";
@@ -253,8 +254,8 @@ export default async function RecipesPage({
 }: {
   searchParams?: Promise<{ tag?: string | string[]; collection?: string | string[] }>;
 }) {
-  // Emergency rollback: keep the catalogue independent of per-recipe storage reads.
-  const recipes = getPublicRecipes();
+  // Preserve public/indexability filtering; resolve overrides in one cached batch.
+  const recipes = await publishedRecipes(getPublicRecipes());
 
   const sp = (await searchParams) ?? {};
   const tagRaw = Array.isArray(sp.tag) ? sp.tag[0] : sp.tag;
